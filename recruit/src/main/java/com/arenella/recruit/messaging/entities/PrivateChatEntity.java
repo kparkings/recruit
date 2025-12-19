@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,6 +63,12 @@ public class PrivateChatEntity {
 	@Column(name="last_viewed_by_recipient")
 	private LocalDateTime   			lastViewedByRecipient; 
 	
+	@Column(name="last_missed_mgs_alert_sender")
+	private LocalDateTime   			lastMissedMessageAlertSender;
+	
+	@Column(name="last_missed_mgs_alert_recipient")
+	private LocalDateTime   			lastMissedMessageAlertRecipient; 
+	
 	@OneToMany(mappedBy = "chatId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
 	private Set<ChatMessageEntity>	replies 				= new LinkedHashSet<>();
 	
@@ -75,18 +82,20 @@ public class PrivateChatEntity {
 	* @param builder - Contains initialization values
 	*/
 	public PrivateChatEntity(PrivateChatEntityBuilder builder) {
-		this.id 					= builder.id;
-		this.senderId 				= builder.senderId;
-		this.recipientId 			= builder.recipientId;
-		this.created 				= builder.created;
-		this.lastUpdated			= builder.lastUpdated;
-		this.replies 				= builder.replies.values().stream().sorted(Comparator.comparing(ChatMessageEntity::getCreated)).collect(Collectors.toCollection(LinkedHashSet::new));
-		this.lastKeyPressSender 	= builder.lastKeyPressSender;
-		this.lastKeyPressRecipient 	= builder.lastKeyPressRecipient;
-		this.blockedBySender		= builder.blockedBySender;
-		this.blockedByRecipient		= builder.blockedByRecipient;
-		this.lastViewedBySender 	= builder.lastViewedBySender;
-		this.lastViewedByRecipient	= builder.lastViewedByRecipient;
+		this.id 								= builder.id;
+		this.senderId 							= builder.senderId;
+		this.recipientId 						= builder.recipientId;
+		this.created 							= builder.created;
+		this.lastUpdated						= builder.lastUpdated;
+		this.replies 							= builder.replies.values().stream().sorted(Comparator.comparing(ChatMessageEntity::getCreated)).collect(Collectors.toCollection(LinkedHashSet::new));
+		this.lastKeyPressSender 				= builder.lastKeyPressSender;
+		this.lastKeyPressRecipient 				= builder.lastKeyPressRecipient;
+		this.blockedBySender					= builder.blockedBySender;
+		this.blockedByRecipient					= builder.blockedByRecipient;
+		this.lastViewedBySender 				= builder.lastViewedBySender;
+		this.lastViewedByRecipient				= builder.lastViewedByRecipient;
+		this.lastMissedMessageAlertSender 		= builder.lastMissedMessageAlertSender;
+		this.lastMissedMessageAlertRecipient 	= builder.lastMissedMessageAlertRecipient; 
 	}
 	
 	/*
@@ -195,6 +204,24 @@ public class PrivateChatEntity {
 	}
 	
 	/**
+	* Returns the last time a reminder was sent to the User that 
+	* they have unread messages 
+	* @return last notification
+	*/
+	public Optional<LocalDateTime> getLastMissedMessageAlertSender(){
+		return Optional.ofNullable(this.lastMissedMessageAlertSender);
+	}
+	
+	/**
+	* Returns the last time a reminder was sent to the User that 
+	* they have unread messages 
+	* @return last notification
+	*/
+	public Optional<LocalDateTime> getLastMissedMessageAlertRecipient(){
+		return Optional.ofNullable(this.lastMissedMessageAlertRecipient);
+	} 
+	
+	/**
 	* Returns a builder for the Class
 	* @return Builder
 	*/
@@ -219,6 +246,8 @@ public class PrivateChatEntity {
 		private boolean						blockedByRecipient;
 		private LocalDateTime   			lastViewedBySender;
 		private LocalDateTime   			lastViewedByRecipient;
+		private LocalDateTime   			lastMissedMessageAlertSender;
+		private LocalDateTime   			lastMissedMessageAlertRecipient; 
 		
 		/**
 		* Sets the unique id of the Chat
@@ -344,6 +373,28 @@ public class PrivateChatEntity {
 		}
 		
 		/**
+		* Sets the last time the Sender was sent an alert to inform them that 
+		* they have unread messages
+		* @param lastMissedMessageAlertSender - When last reminder was sent
+		* @return Builder
+		*/
+		public PrivateChatEntityBuilder lastMissedMessageAlertSender(LocalDateTime lastMissedMessageAlertSender) {
+			this.lastMissedMessageAlertSender = lastMissedMessageAlertSender;
+			return this;
+		}
+		
+		/**
+		* Sets the last time the Recipient was sent an alert to inform them that 
+		* they have unread messages
+		* @param lastMissedMessageAlertRecipient - When last reminder was sent
+		* @return Builder
+		*/
+		public PrivateChatEntityBuilder lastMissedMessageAlertRecipient(LocalDateTime lastMissedMessageAlertRecipient) {
+			this.lastMissedMessageAlertRecipient = lastMissedMessageAlertRecipient;
+			return this;
+		} 
+		
+		/**
 		* Returns an initialized instance
 		* @return instance 
 		*/
@@ -379,6 +430,8 @@ public class PrivateChatEntity {
 				.blockedByRecipient(entity.isBlockedByRecipient())
 				.lastViewedBySender(entity.getLastViewedBySender())
 				.lastViewedByRecipient(entity.getLastViewedByRecipient())
+				.lastMissedMessageAlertSender(entity.getLastMissedMessageAlertSender().orElse(null))
+				.lastMissedMessageAlertRecipient(entity.getLastMissedMessageAlertRecipient().orElse(null))
 			.build();
 	}
 	
@@ -407,6 +460,8 @@ public class PrivateChatEntity {
 				.blockedByRecipient(entity.isBlockedByRecipient())
 				.lastViewedBySender(entity.getLastViewedBySender())
 				.lastViewedByRecipient(entity.getLastViewedByRecipient())
+				.lastMissedMessageAlertSender(entity.getLastMissedMessageAlertSender().orElse(null))
+				.lastMissedMessageAlertRecipient(entity.getLastMissedMessageAlertRecipient().orElse(null))
 			.build();
 	}
 	
@@ -435,6 +490,8 @@ public class PrivateChatEntity {
 				.blockedByRecipient(chat.isBlockedByRecipient())
 				.lastViewedBySender(chat.getLastViewedBySender().orElse(null))
 				.lastViewedByRecipient(chat.getLastViewedByRecipient().orElse(null))
+				.lastMissedMessageAlertSender(chat.getLastMissedMessageAlertSender().orElse(null))
+				.lastMissedMessageAlertRecipient(chat.getLastMissedMessageAlertRecipient().orElse(null)) 
 			.build();
 		
 	}

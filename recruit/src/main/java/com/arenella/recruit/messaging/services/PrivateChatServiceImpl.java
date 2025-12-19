@@ -221,8 +221,6 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	
 	}
 	
-	
-	
 	/**
 	* Refer to the PrivateChatService for details 
 	*/
@@ -241,6 +239,14 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		
 		return true;
 		
+	}
+	
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
+	public Set<PrivateChat> getUnblockedChatsBeforeCuttoff(LocalDateTime cuttoff) {
+		return this.privateChatDao.getUnblockedChatsBeforeCuttoff(cuttoff);
 	}
 	
 	/**

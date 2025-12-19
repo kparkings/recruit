@@ -30,6 +30,8 @@ class PrivateChatEntityTest {
 	private static final boolean						BLOCKED_BY_RECIPIENT		= false;
 	private static final LocalDateTime   				LAST_VIEWED_BY_SENDER		= LocalDateTime.of(2025,11,24,18,30,05);
 	private static final LocalDateTime   				LAST_VIEWED_BY_RECIPIENT	= LocalDateTime.of(2025,11,24,18,30,05);
+	private static final LocalDateTime   				LAST_REMINDER_SENDER		= LocalDateTime.of(2025,12,18,18,20,21);
+	private static final LocalDateTime   				LAST_REMINDER_RECIPIENT		= LocalDateTime.of(2025,12,18,18,20,22);
 
 	/**
 	* Tests construction via Builder 
@@ -51,6 +53,8 @@ class PrivateChatEntityTest {
 					.blockedByRecipient(BLOCKED_BY_RECIPIENT)
 					.lastViewedBySender(LAST_VIEWED_BY_SENDER)
 					.lastViewedByRecipient(LAST_VIEWED_BY_RECIPIENT)
+					.lastMissedMessageAlertSender(LAST_REMINDER_SENDER)
+					.lastMissedMessageAlertRecipient(LAST_REMINDER_RECIPIENT)
 				.build();
 		
 		assertEquals(ID,chat.getId());
@@ -65,6 +69,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,chat.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,chat.getLastViewedBySender());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,chat.getLastViewedByRecipient());
+		assertEquals(LAST_REMINDER_SENDER,chat.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,chat.getLastMissedMessageAlertRecipient().get());
 		
 	}
 	
@@ -89,6 +95,8 @@ class PrivateChatEntityTest {
 					.blockedByRecipient(BLOCKED_BY_RECIPIENT)
 					.lastViewedBySender(LAST_VIEWED_BY_SENDER)
 					.lastViewedByRecipient(LAST_VIEWED_BY_RECIPIENT)
+					.lastMissedMessageAlertSender(LAST_REMINDER_SENDER)
+					.lastMissedMessageAlertRecipient(LAST_REMINDER_RECIPIENT)
 				.build();
 		
 		assertEquals(ID,						entity.getId());
@@ -103,6 +111,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		entity.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		entity.getLastViewedBySender());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	entity.getLastViewedByRecipient());
+		assertEquals(LAST_REMINDER_SENDER,		entity.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	entity.getLastMissedMessageAlertRecipient().get());
 		
 		PrivateChat chat = PrivateChatEntity.fromEntityWithoutReplies(entity);
 		
@@ -118,6 +128,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		chat.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		chat.getLastViewedBySender().get());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	chat.getLastViewedByRecipient().get());
+		assertEquals(LAST_REMINDER_SENDER,chat.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,chat.getLastMissedMessageAlertRecipient().get());
 		
 	}
 	
@@ -141,6 +153,8 @@ class PrivateChatEntityTest {
 					.blockedByRecipient(BLOCKED_BY_RECIPIENT)
 					.lastViewedBySender(LAST_VIEWED_BY_SENDER)
 					.lastViewedByRecipient(LAST_VIEWED_BY_RECIPIENT)
+					.lastMissedMessageAlertSender(LAST_REMINDER_SENDER)
+					.lastMissedMessageAlertRecipient(LAST_REMINDER_RECIPIENT)
 				.build();
 		
 		assertEquals(ID,						entity.getId());
@@ -155,6 +169,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		entity.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		entity.getLastViewedBySender());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	entity.getLastViewedByRecipient());
+		assertEquals(LAST_REMINDER_SENDER,		entity.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	entity.getLastMissedMessageAlertRecipient().get());
 		
 		PrivateChat chat = PrivateChatEntity.fromEntity(entity);
 		
@@ -170,6 +186,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		chat.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		chat.getLastViewedBySender().get());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	chat.getLastViewedByRecipient().get());
+		assertEquals(LAST_REMINDER_SENDER,		chat.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	chat.getLastMissedMessageAlertRecipient().get());
 		
 	}
 	
@@ -195,6 +213,8 @@ class PrivateChatEntityTest {
 					.blockedByRecipient(BLOCKED_BY_RECIPIENT)
 					.lastViewedBySender(LAST_VIEWED_BY_SENDER)
 					.lastViewedByRecipient(LAST_VIEWED_BY_RECIPIENT)
+					.lastMissedMessageAlertSender(LAST_REMINDER_SENDER)
+					.lastMissedMessageAlertRecipient(LAST_REMINDER_RECIPIENT)
 				.build();
 		
 		assertEquals(ID,						chat.getId());
@@ -209,6 +229,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		chat.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		chat.getLastViewedBySender().get());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	chat.getLastViewedByRecipient().get());
+		assertEquals(LAST_REMINDER_SENDER,		chat.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	chat.getLastMissedMessageAlertRecipient().get());
 		
 		PrivateChatEntity entity = PrivateChatEntity.toEntity(chat);
 		
@@ -224,6 +246,8 @@ class PrivateChatEntityTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		entity.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		entity.getLastViewedBySender());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	entity.getLastViewedByRecipient());
+		assertEquals(LAST_REMINDER_SENDER,		entity.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	entity.getLastMissedMessageAlertRecipient().get());
 		
 	}
 	

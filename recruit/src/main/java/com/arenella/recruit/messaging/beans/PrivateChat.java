@@ -23,25 +23,29 @@ public class PrivateChat {
 	private boolean					blockedBySender;
 	private boolean					blockedByRecipient;
 	private LocalDateTime   		lastViewedBySender;
-	private LocalDateTime   		lastViewedByRecipient; //For unread = not blocked && > 0 messages with created > last viewed
+	private LocalDateTime   		lastViewedByRecipient; 
+	private LocalDateTime   		lastMissedMessageAlertSender;
+	private LocalDateTime   		lastMissedMessageAlertRecipient; 
 
 	/**
 	* Constructor based upon a builder
 	* @param builder - Contains initialization values
 	*/
 	public PrivateChat(PrivateChatBuilder builder) {
-		this.id 					= builder.id;
-		this.senderId 				= builder.senderId;
-		this.recipientId 			= builder.recipientId;
-		this.created 				= builder.created;
-		this.lastUpdated			= builder.lastUpdated;
-		this.replies 				= builder.replies;
-		this.lastKeyPressSender 	= builder.lastKeyPressSender;
-		this.lastKeyPressRecipient 	= builder.lastKeyPressRecipient;
-		this.blockedBySender		= builder.blockedBySender;
-		this.blockedByRecipient		= builder.blockedByRecipient;
-		this.lastViewedBySender 	= builder.lastViewedBySender;
-		this.lastViewedByRecipient	= builder.lastViewedByRecipient;
+		this.id 								= builder.id;
+		this.senderId 							= builder.senderId;
+		this.recipientId 						= builder.recipientId;
+		this.created 							= builder.created;
+		this.lastUpdated						= builder.lastUpdated;
+		this.replies 							= builder.replies;
+		this.lastKeyPressSender 				= builder.lastKeyPressSender;
+		this.lastKeyPressRecipient 				= builder.lastKeyPressRecipient;
+		this.blockedBySender					= builder.blockedBySender;
+		this.blockedByRecipient					= builder.blockedByRecipient;
+		this.lastViewedBySender 				= builder.lastViewedBySender;
+		this.lastViewedByRecipient				= builder.lastViewedByRecipient;
+		this.lastMissedMessageAlertSender 		= builder.lastMissedMessageAlertSender;
+		this.lastMissedMessageAlertRecipient 	= builder.lastMissedMessageAlertRecipient;
 	}
 	
 	/**
@@ -145,6 +149,24 @@ public class PrivateChat {
 	}
 	
 	/**
+	* Returns the last time a reminder was sent to the User that 
+	* they have unread messages 
+	* @return last notification
+	*/
+	public Optional<LocalDateTime> getLastMissedMessageAlertSender(){
+		return Optional.ofNullable(this.lastMissedMessageAlertSender);
+	}
+	
+	/**
+	* Returns the last time a reminder was sent to the User that 
+	* they have unread messages 
+	* @return last notification
+	*/
+	public Optional<LocalDateTime> getLastMissedMessageAlertRecipient(){
+		return Optional.ofNullable(this.lastMissedMessageAlertRecipient);
+	} 
+	
+	/**
 	* Adds a new reply
 	* @param message - reply message
 	*/
@@ -233,7 +255,9 @@ public class PrivateChat {
 		private boolean					blockedByRecipient;
 		private LocalDateTime   		lastViewedBySender;
 		private LocalDateTime   		lastViewedByRecipient;
-		
+		private LocalDateTime   		lastMissedMessageAlertSender;
+		private LocalDateTime   		lastMissedMessageAlertRecipient; 
+
 		/**
 		* Sets the unique id of the Chat
 		* @param id - Unique id of the Chat
@@ -356,7 +380,29 @@ public class PrivateChat {
 			this.lastViewedByRecipient = lastViewedByRecipient;
 			return this;
 		}
+
+		/**
+		* Sets the last time the Sender was sent an alert to inform them that 
+		* they have unread messages
+		* @param lastMissedMessageAlertSender - When last reminder was sent
+		* @return Builder
+		*/
+		public PrivateChatBuilder lastMissedMessageAlertSender(LocalDateTime lastMissedMessageAlertSender) {
+			this.lastMissedMessageAlertSender = lastMissedMessageAlertSender;
+			return this;
+		}
 		
+		/**
+		* Sets the last time the Recipient was sent an alert to inform them that 
+		* they have unread messages
+		* @param lastMissedMessageAlertRecipient - When last reminder was sent
+		* @return Builder
+		*/
+		public PrivateChatBuilder lastMissedMessageAlertRecipient(LocalDateTime lastMissedMessageAlertRecipient) {
+			this.lastMissedMessageAlertRecipient = lastMissedMessageAlertRecipient;
+			return this;
+		} 
+
 		/**
 		* Returns an initialized instance
 		* @return instance 
@@ -385,7 +431,27 @@ public class PrivateChat {
 					.blockedBySender(this.isBlockedBySender())
 					.blockedByRecipient(this.isBlockedByRecipient())
 					.lastViewedBySender(this.getLastViewedBySender().orElse(null))
-					.lastViewedByRecipient(this.getLastViewedByRecipient().orElse(null));
+					.lastViewedByRecipient(this.getLastViewedByRecipient().orElse(null))
+					.lastMissedMessageAlertSender(this.getLastMissedMessageAlertSender().orElse(null))
+					.lastMissedMessageAlertRecipient(this.getLastMissedMessageAlertRecipient().orElse(null));
+	}
+
+	/**
+	* Updates the last time the User was sent a reminder that
+	* there was an unread message
+	*/
+	public void updateLastUnreadMessageReminderSentSender() {
+		this.lastMissedMessageAlertSender = LocalDateTime.now();
+		
+	}
+	
+	/**
+	* Updates the last time the User was sent a reminder that
+	* there was an unread message
+	*/
+	public void updateLastUnreadMessageReminderSentRecipient() {
+		this.lastMissedMessageAlertRecipient = LocalDateTime.now();
+		
 	}
 
 }

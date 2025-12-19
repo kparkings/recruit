@@ -1,6 +1,7 @@
 package com.arenella.recruit.messaging.services;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
@@ -98,5 +99,14 @@ public interface PrivateChatService {
 	* @return whether the User has permissions to use the Private Chat functionality
 	*/
 	boolean canChat(Principal principal, boolean throwIfCannotChat);
+	
+	/**
+	* Returns PrivateChats that has at least one of the Sender or Recipient that 
+	* has messages that have not been read for a given period and now require a 
+	* reminder to be sent
+	* @param cuttoff - cutt-off for last reminder
+	* @return Chats requiring a reminder
+	 */
+	Set<PrivateChat> getUnblockedChatsBeforeCuttoff(LocalDateTime cuttoff);
 	
 }

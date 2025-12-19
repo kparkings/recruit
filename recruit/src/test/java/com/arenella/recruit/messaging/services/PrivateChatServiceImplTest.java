@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -67,8 +68,8 @@ class PrivateChatServiceImplTest {
 	*/
 	@BeforeEach
 	void init() {
-		when(this.mockPrincipal.getAuthorities()).thenReturn(Set.of(mockGrantedAuthority));
-		when(this.mockGrantedAuthority.getAuthority()).thenReturn("ROLE_RECRUITER");
+		lenient().when(this.mockPrincipal.getAuthorities()).thenReturn(Set.of(mockGrantedAuthority));
+		lenient().when(this.mockGrantedAuthority.getAuthority()).thenReturn("ROLE_RECRUITER");
 	}
 	
 	/**
@@ -763,4 +764,22 @@ class PrivateChatServiceImplTest {
 		
 		assertEquals("Blocked", ex.getMessage());
 	}
+	
+	/**
+	* Tests retrieval of Chats possibly needing undread message
+	* reminders to be sent
+	*/
+	@Test
+	void testGetUnblockedChatsBeforeCuttoff() {
+		
+		final LocalDateTime cuttoff 	= LocalDateTime.of(2025, 12, 18, 21, 9);
+		final UUID			chatId 		= UUID.randomUUID();
+		when(this.mockChatDao.getUnblockedChatsBeforeCuttoff(cuttoff)).thenReturn(Set.of(PrivateChat.builder().id(chatId).build()));
+		
+		Set<PrivateChat> chats = this.service.getUnblockedChatsBeforeCuttoff(cuttoff);
+
+		assertTrue(chats.stream().filter(c -> c.getId().equals(chatId)).findAny().isPresent());
+		
+	}
+	
 }

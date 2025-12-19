@@ -59,7 +59,8 @@ export class PrivateMessagingComponent {
 	* Once Chat's are retrieved fetches the Candidate details for each of the Chats
 	*/
 	public openChat(candidateId:string):void{
-		
+		this.currentChat = undefined;
+		this.currentReplies = new Array<ChatMessageAPIOutbound>();
 		this.chatService.hasChatAccess().subscribe(res => {
 					
 			if (res == true) {
@@ -68,24 +69,30 @@ export class PrivateMessagingComponent {
 					
 					this.chats = chats;
 					
-					if (this.chats.filter(c => 
-							c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
-						|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId()).length == 0
-					) {
+					let existingChat:PrivateChatAPIOutbound[] = this.chats.filter(c => 
+												c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
+											|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId());
+					
+					if (existingChat.length == 0 ) {
 						this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
 							this.fetchChats();
 							this.chatService.fetchPrivateChatById(response).subscribe(res => {
 								this.currentChat = res;
+								this.showChatMessages(this.currentChat!);
+								this.startReplyScheduler();
 							});
-							//TOO: [KP] Need to navigate to new Chat. Maybe make backend retun newly created chat and set to currentChat.??
 						})
 					} else {
+						this.currentChat = existingChat[0];
 						this.fetchChats();
+						this.showChatMessages(this.currentChat!);
+						this.startReplyScheduler();
 					}
 				});
 
 				this.chatViewItem = "message";
 				this.appComponent.currentChatWindowState = "maximized";
+				
 			} else {
 				this.appComponent.openNoChatAccessBox();
 			}
@@ -100,45 +107,51 @@ export class PrivateMessagingComponent {
 	*/
 	private fetchChats():void{
 		
-		let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
-		searchRequest.requestFilters.maxNumberOfSuggestions = 100000;
-		let recruiterIds:Array<string> = new Array<string>();			
-		this.chatService.fetchChatsByUserId().subscribe(chats => {
-			
-			this.chats = chats;
-									
-			chats.forEach(c => {
-				searchRequest.candidateFilters.candidateIds.push(c.recipientId);
-				recruiterIds.push(c.senderId);	
-			})
-			
-			/**
-			* Fetch recruiters 
-			*/
-			this.recruiterService.getRecruitersByIds(recruiterIds).subscribe(result => {
-				this.recruiters = result;
-			})
-			
-			/**
-			* Fetch candidates 
-			*/
-			this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
+		if (this.appComponent.isAuthenticated()) {
+		
+			let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
+			searchRequest.requestFilters.maxNumberOfSuggestions = 100000;
+			let recruiterIds:Array<string> = new Array<string>();			
+			this.chatService.fetchChatsByUserId().subscribe(chats => {
 				
-				let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
+				this.chats = chats;
+										
+				chats.forEach(c => {
+					searchRequest.candidateFilters.candidateIds.push(c.recipientId);
+					recruiterIds.push(c.senderId);	
+				})
 				
-				candidates.forEach(candidate => {
+				/**
+				* Fetch recruiters 
+				*/
+				if (recruiterIds.length > 0 && !this.isRecruiter()) {
+					this.recruiterService.getRecruitersByIds(recruiterIds).subscribe(result => {
+						this.recruiters = result;
+					})
+				}
+				
+				/**
+				* Fetch candidates 
+				*/
+				this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
 					
-					let candidateDetails:CandidateSuggestionAPIOutbound = new CandidateSuggestionAPIOutbound();
+					let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
 					
-					candidateDetails.candidateId = candidate.candidateId;
-					candidateDetails.firstname = candidate.firstname;
-					candidateDetails.surname = candidate.surname;
+					candidates.forEach(candidate => {
+						
+						let candidateDetails:CandidateSuggestionAPIOutbound = new CandidateSuggestionAPIOutbound();
+						
+						candidateDetails.candidateId = candidate.candidateId;
+						candidateDetails.firstname = candidate.firstname;
+						candidateDetails.surname = candidate.surname;
+						
+						this.candidates.push(candidateDetails);
+					});
 					
-					this.candidates.push(candidateDetails);
 				});
-				
-			});
-		});			
+			});			
+		
+		}
 	}
 	
 	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
@@ -156,7 +169,7 @@ export class PrivateMessagingComponent {
 		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
 			this.currentChat = chat;
 			
-			this.doScrollTop('boop');
+			//this.doScrollTop('boop');
 			
 			//Last viewed functionality
 			this.chatService.doSetLastViewed(this.currentChat.id).subscribe(res => {
@@ -165,31 +178,39 @@ export class PrivateMessagingComponent {
 			
 			//User typing functionality
 			this.otherUserTypeing = false;
-			this.scheduleOpenChatRefresh = window.setInterval(()=> {
-				this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
-					this.currentChat 		= chat;
-					this.otherUserTypeing 	= false;
-					this.getCurrentChatReplies();
-					if (this.isUserChatRecipient()) {
-						let lastKeyPress:Date =  this.currentChat.lastKeyPressSender;
-						let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
-						if (lastKeyPressSecondsAgo <= 2){
-							this.otherUserTypeing = true 
-						}	
-					} else {
-						let lastKeyPress:Date =  this.currentChat.lastKeyPressRecipient;
-						let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
-						if (lastKeyPressSecondsAgo <= 2){
-							this.otherUserTypeing = true 
-						}
-					}
-					
-					
-				});
-			},1000);
-			
+			this.startReplyScheduler();
 			
 		});
+	}
+	
+	/**@
+	* Polls backend for new messages and updates
+	* for the current chat
+	*/
+	private startReplyScheduler():void{
+		
+		this.scheduleOpenChatRefresh = window.setInterval(()=> {
+			this.chatService.fetchPrivateChatById(this.currentChat!.id).subscribe(chat => {
+				this.currentChat 		= chat;
+				this.otherUserTypeing 	= false;
+				this.getCurrentChatReplies();
+				if (this.isUserChatRecipient()) {
+					let lastKeyPress:Date =  this.currentChat.lastKeyPressSender;
+					let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
+					if (lastKeyPressSecondsAgo <= 2){
+						this.otherUserTypeing = true 
+					}	
+				} else {
+					let lastKeyPress:Date =  this.currentChat.lastKeyPressRecipient;
+					let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
+					if (lastKeyPressSecondsAgo <= 2){
+						this.otherUserTypeing = true 
+					}
+				}
+				
+				
+			});
+		},1000);
 	}
 	
 	private scheduleContactListRefresh = window.setInterval(()=> {},1000);
@@ -203,7 +224,7 @@ export class PrivateMessagingComponent {
 		this.scheduleContactListRefresh = window.setInterval(()=> {
 			this.fetchChats();		
 			this.hasUnreadMessagesTracker = this.hasUnreadMessages();
-		},1000);
+		},20000);
 	}
 	
 	
@@ -502,7 +523,6 @@ export class PrivateMessagingComponent {
 	public scrollOff:boolean = false;
 	
 	public getCurrentChatReplies():void{
-
 		
 		let replies:Array<ChatMessageAPIOutbound> = new Array<ChatMessageAPIOutbound>();
 		
@@ -514,14 +534,9 @@ export class PrivateMessagingComponent {
 		
 		this.currentReplies = replies.sort(this.compareMessages);
 			
-			if(this.scrollOff == false) {
-				this.doScrollTop('boop');
-			}
-		//}
-		
-		
-		
-		//return replies.sort(this.compareMessages);
+		if (this.scrollOff == false) {
+			this.doScrollTop('boop');
+		}
 		
 	}
 	

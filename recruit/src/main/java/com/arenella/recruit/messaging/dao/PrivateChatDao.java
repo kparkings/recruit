@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.dao;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,17 @@ public interface PrivateChatDao extends ListCrudRepository<PrivateChatEntity, UU
 
 	@Query("from PrivateChatEntity where senderId = :userId OR recipientId = :userId")
 	List<PrivateChatEntity> findUserChats(String userId);
+	
+	@Query("from PrivateChatEntity ")
+			//+ "where "
+			//+ "blockedBySender = false "
+			//+ "and blockedByRecipient = false ")
+			//+ "and ("
+			//+ "(lastMissedMessageAlertSender <= :reminderDueTime and lastViewedBySender <= lastUpdated)"
+			//+ "OR "
+			//+ "(lastMissedMessageAlertRecipient <= :reminderDueTime and lastViewedByRecipient <= lastUpdated)"
+			//+ ")")
+	List<PrivateChatEntity> findUnblokedChatsRequiringMissingMessageAlert(LocalDateTime reminderDueTime);
 	
 	/**
 	* Returns all Chats where the User is either the Sender or the 
@@ -46,6 +58,15 @@ public interface PrivateChatDao extends ListCrudRepository<PrivateChatEntity, UU
 	*/
 	default void saveChat(PrivateChat chat) {
 		this.save(PrivateChatEntity.toEntity(chat));
+	}
+	
+	/**
+	* Returns any Chats that have not been disabled by either the Sender or Recipient
+	* @param cuttoff - Last reminder for either the Sender or Recipient must be before this datetime
+	* @return Chats with messages potentially requiring a reminder
+	*/
+	default Set<PrivateChat> getUnblockedChatsBeforeCuttoff(LocalDateTime cuttoff){
+		return this.findUnblokedChatsRequiringMissingMessageAlert(cuttoff).stream().map(PrivateChatEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 }

@@ -29,6 +29,8 @@ class PrivateChatTest {
 	private static final boolean				BLOCKED_BY_RECIPIENT		=false;
 	private static final LocalDateTime   		LAST_VIEWED_BY_SENDER		= LocalDateTime.of(2025,11,24,18,30,05);
 	private static final LocalDateTime   		LAST_VIEWED_BY_RECIPIENT	= LocalDateTime.of(2025,11,24,18,30,05);
+	private static final LocalDateTime   		LAST_REMINDER_SENDER		= LocalDateTime.of(2025,12,18,18,20,21);
+	private static final LocalDateTime   		LAST_REMINDER_RECIPIENT		= LocalDateTime.of(2025,12,18,18,20,22);
 
 	/**
 	* Tests construction via Builder 
@@ -50,6 +52,8 @@ class PrivateChatTest {
 					.blockedByRecipient(BLOCKED_BY_RECIPIENT)
 					.lastViewedBySender(LAST_VIEWED_BY_SENDER)
 					.lastViewedByRecipient(LAST_VIEWED_BY_RECIPIENT)
+					.lastMissedMessageAlertSender(LAST_REMINDER_SENDER)
+					.lastMissedMessageAlertRecipient(LAST_REMINDER_RECIPIENT)
 				.build();
 		
 		assertEquals(ID,chat.getId());
@@ -64,7 +68,8 @@ class PrivateChatTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,chat.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,chat.getLastViewedBySender().get());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,chat.getLastViewedByRecipient().get());
-		
+		assertEquals(LAST_REMINDER_SENDER,chat.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,chat.getLastMissedMessageAlertRecipient().get());
 	}
 	
 	/**
@@ -79,7 +84,7 @@ class PrivateChatTest {
 		final LocalDateTime messageCreated = LocalDateTime.of(2025, 11, 23 , 18, 52 ,01);
 		
 		PrivateChat chat 			= PrivateChat.builder().build();
-		ChatMessage chatMessage 	= ChatMessage.builder().created(messageCreated).build();
+		ChatMessage chatMessage 	= ChatMessage.builder().senderId(SENDER_ID).recipientId(RECIPIENT_ID).created(messageCreated).build();
 
 		chat.addReply(chatMessage);
 		
@@ -95,10 +100,10 @@ class PrivateChatTest {
 	@Test
 	void testDeleteReply() {
 		
-		PrivateChat chat 			= PrivateChat.builder().id(UUID.randomUUID()).build();
-		ChatMessage chatMessage1 	= ChatMessage.builder().id(UUID.randomUUID()).build();
-		ChatMessage chatMessage2 	= ChatMessage.builder().id(UUID.randomUUID()).build();
-		ChatMessage chatMessage3 	= ChatMessage.builder().id(UUID.randomUUID()).build();
+		PrivateChat chat 			= PrivateChat.builder().id(UUID.randomUUID()).senderId(SENDER_ID).recipientId(RECIPIENT_ID).build();
+		ChatMessage chatMessage1 	= ChatMessage.builder().id(UUID.randomUUID()).senderId(SENDER_ID).recipientId(RECIPIENT_ID).build();
+		ChatMessage chatMessage2 	= ChatMessage.builder().id(UUID.randomUUID()).senderId(SENDER_ID).recipientId(RECIPIENT_ID).build();
+		ChatMessage chatMessage3 	= ChatMessage.builder().id(UUID.randomUUID()).senderId(SENDER_ID).recipientId(RECIPIENT_ID).build();
 		
 		chat.addReply(chatMessage1);
 		chat.addReply(chatMessage2);
@@ -216,20 +221,24 @@ class PrivateChatTest {
 		assertTrue(chat.getLastKeyPressRecipient().isEmpty());
 		assertTrue(chat.getLastViewedBySender().isEmpty());
 		assertTrue(chat.getLastViewedByRecipient().isEmpty());
+		assertTrue(chat.getLastMissedMessageAlertSender().isEmpty());
+		assertTrue(chat.getLastMissedMessageAlertRecipient().isEmpty());
 		
 		PrivateChat clone = chat.cloneToBuilder().build();
 	
 		assertEquals(ID,			clone.getId());
 		assertEquals(SENDER_ID,		clone.getSenderId());
 		assertEquals(RECIPIENT_ID,	clone.getRecipientId());
-		assertNull(chat.getCreated());
-		assertNull(chat.getLastUpdated());
-		assertFalse(chat.isBlockedBySender());
-		assertFalse(chat.isBlockedByRecipient());
-		assertTrue(chat.getLastKeyPressSender().isEmpty());
-		assertTrue(chat.getLastKeyPressRecipient().isEmpty());
-		assertTrue(chat.getLastViewedBySender().isEmpty());
-		assertTrue(chat.getLastViewedByRecipient().isEmpty());
+		assertNull(clone.getCreated());
+		assertNull(clone.getLastUpdated());
+		assertFalse(clone.isBlockedBySender());
+		assertFalse(clone.isBlockedByRecipient());
+		assertTrue(clone.getLastKeyPressSender().isEmpty());
+		assertTrue(clone.getLastKeyPressRecipient().isEmpty());
+		assertTrue(clone.getLastViewedBySender().isEmpty());
+		assertTrue(clone.getLastViewedByRecipient().isEmpty());
+		assertTrue(clone.getLastMissedMessageAlertSender().isEmpty());
+		assertTrue(clone.getLastMissedMessageAlertRecipient().isEmpty());
 		
 		
 	}
@@ -254,6 +263,8 @@ class PrivateChatTest {
 					.blockedByRecipient(BLOCKED_BY_RECIPIENT)
 					.lastViewedBySender(LAST_VIEWED_BY_SENDER)
 					.lastViewedByRecipient(LAST_VIEWED_BY_RECIPIENT)
+					.lastMissedMessageAlertSender(LAST_REMINDER_SENDER)
+					.lastMissedMessageAlertRecipient(LAST_REMINDER_RECIPIENT)
 				.build();
 		
 		assertEquals(ID,						chat.getId());
@@ -268,6 +279,8 @@ class PrivateChatTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		chat.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		chat.getLastViewedBySender().get());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	chat.getLastViewedByRecipient().get());
+		assertEquals(LAST_REMINDER_SENDER,		chat.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	chat.getLastMissedMessageAlertRecipient().get());
 		
 		PrivateChat clone = chat.cloneToBuilder().build();
 		
@@ -283,6 +296,46 @@ class PrivateChatTest {
 		assertEquals(BLOCKED_BY_RECIPIENT,		clone.isBlockedByRecipient());
 		assertEquals(LAST_VIEWED_BY_SENDER,		clone.getLastViewedBySender().get());
 		assertEquals(LAST_VIEWED_BY_RECIPIENT,	clone.getLastViewedByRecipient().get());
+		assertEquals(LAST_REMINDER_SENDER,		clone.getLastMissedMessageAlertSender().get());
+		assertEquals(LAST_REMINDER_RECIPIENT,	clone.getLastMissedMessageAlertRecipient().get());
+		
+	}
+	
+	/**
+	* Test updating the lastMissedMessageAlertSender value
+	* to now
+	*/
+	@Test
+	void testUpdateLastUnreadMessageReminderSentSender() {
+		
+		PrivateChat chat = PrivateChat
+				.builder()
+				.build();
+		
+		assertTrue(chat.getLastMissedMessageAlertSender().isEmpty());
+		
+		chat.updateLastUnreadMessageReminderSentSender();
+		
+		assertFalse(chat.getLastMissedMessageAlertSender().isEmpty());
+		
+	}
+	
+	/**
+	* Test updating the lastMissedMessageAlertRecipient value
+	* to now
+	*/
+	@Test
+	void testUpdateLastUnreadMessageReminderSentRecipient() {
+		
+		PrivateChat chat = PrivateChat
+				.builder()
+				.build();
+		
+		assertTrue(chat.getLastMissedMessageAlertRecipient().isEmpty());
+		
+		chat.updateLastUnreadMessageReminderSentRecipient();
+		
+		assertFalse(chat.getLastMissedMessageAlertRecipient().isEmpty());
 		
 	}
 	

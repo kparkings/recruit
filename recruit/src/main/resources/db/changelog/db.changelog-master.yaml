@@ -2729,3 +2729,17 @@ databaseChangeLog:
              referencedTableName: private_chats
              referencedTableSchemaName: chats
              referencedColumnNames: id
+  - changeSet:
+      id: privatechats-undread-alerts
+      author: kparkings
+      changes:
+        - addColumn:
+             tableName: private_chats
+             schemaName: chats
+             columns:
+               - column:
+                   name: last_missed_mgs_alert_sender
+                   type: timestamp
+               - column:
+                   name: last_missed_mgs_alert_recipient
+                   type: timestamp				   

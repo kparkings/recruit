@@ -45,10 +45,10 @@
 						<div class="message-header">{{reply.created | date:  'dd MMM yy - hh:mm'}}
 							<span *ngIf="isOwnMessage(reply) == 'true' && getBlockedStatus() == 'unblocked'" class="message-header-delete material-icons" (click)="deleteReply(reply)" >delete</span>
 						</div>
-						<div class="message-own-{{isOwnMessage(reply)}}">{{reply.message}}</div>
+						<div class="message-own-{{isOwnMessage(reply)}}" style="white-space: pre-wrap;">{{reply.message}}</div>
 						
 					</div>
-					<div id="boop"></div>
+					<div id="boop" style="visibility:hidden">{{this.scrollOff}}</div>
 				</div>
 				<div class="pm-messages-new-message">
 					<form [formGroup]="messageForm">
