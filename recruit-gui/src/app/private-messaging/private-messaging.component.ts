@@ -627,7 +627,7 @@ export class PrivateMessagingComponent {
 	* so that a request is sent max, once every second. 
 	*/
 	public handleIsTyping():void{
-		
+	
 		let currentTime:Date = new Date();
 		let numSecondsSinceBackedLastInformed = (currentTime.getTime() - this.lastKeyPress.getTime())/1000;
 		

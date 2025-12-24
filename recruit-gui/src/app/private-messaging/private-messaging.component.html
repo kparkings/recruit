@@ -44,7 +44,7 @@
 				</div>
 				<div class="pm-messages-messages" (scroll)="setScrollOff()">
 					<div id="reply.id" class="msg-reply" *ngFor="let reply of currentReplies ">
-						<div class="message-header">{{reply.created | date:  'dd MMM yy - hh:mm'}}
+						<div class="message-header">{{reply.created | date:  'dd MMM yy - HH:mm'}}
 							<span *ngIf="isOwnMessage(reply) == 'true' && getBlockedStatus() == 'unblocked'" class="message-header-delete material-icons" (click)="deleteReply(reply)" >delete</span>
 						</div>
 						<div class="message-own-{{isOwnMessage(reply)}}" style="white-space: pre-wrap;">{{reply.message}}</div>
