@@ -60,7 +60,7 @@ public class MissedMessageEmailScheduler {
 				RequestSendEmailCommandBuilder emailCommandBuilder = RequestSendEmailCommand
 						.builder()
 							.emailType(EmailType.SYSTEM_EXTERN)
-							.persistable(true)
+							.persistable(false)
 							.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 							.title("Unread Chat Message")
 							.topic(EmailTopic.MISSED_CHAT_MESSAGE)
