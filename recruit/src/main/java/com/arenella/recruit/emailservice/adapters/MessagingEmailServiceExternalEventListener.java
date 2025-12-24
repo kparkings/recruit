@@ -11,7 +11,7 @@ import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 * Defines functionality for listening to Events from external Services
 * @author K Parkings
 */
-public interface EmailServiceExternalEventListener {
+public interface MessagingEmailServiceExternalEventListener {
 
 	/**
 	* Listens for events requesting an email is sent
@@ -54,5 +54,5 @@ public interface EmailServiceExternalEventListener {
 	* @param event
 	*/
 	public void listenForRecruiterAccountDeletedEvent(RecruiterDeletedEvent recruiterDeletedEvent);
-
+	
 }

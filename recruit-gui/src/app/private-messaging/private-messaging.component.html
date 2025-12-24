@@ -1,3 +1,4 @@
+<div id="pageTop" style="visibility:hidden">{{this.scrollOff}}</div>
 <div class="chatwindow chatwindow-{{getChatWindowState()}}">
 	
 	<div class="chatwindow-header">
@@ -7,6 +8,7 @@
 	</div>
 	
 	<div class="chatwindow-chat">
+		
 		<div class="chatwindow-view">
 			<div class="chatwindow-view-item {{viewItemContactsSeleted}}" (click)="showContactsItemView()" *ngIf="chatViewItem == 'contacts'">Contacts</div>
 			<div class="chatwindow-view-item {{viewItemContactsSeleted}}" (click)="showContactsItemView()" *ngIf="chatViewItem == 'message'">

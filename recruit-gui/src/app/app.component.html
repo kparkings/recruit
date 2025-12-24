@@ -112,7 +112,7 @@
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a class="dropdown-item recruiter-account " routerLink="/recruiter-account">{{'arenella-app-menu-account' | translate}}</a>
         </li>
-        <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated()" (click)="openChat()">
+        <li class="li-arenella-nav {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated()" (click)="openChat()">
            <span class="chat-icon material-icons unread-chats-{{hasUnreadMessages()}}">chat</span>
         </li>      		
       </ul>

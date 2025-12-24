@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand.Attachment;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
@@ -34,7 +34,7 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 public class MonolithListingExternalEventPublisher implements ExternalEventPublisher{
 
 	@Autowired
-	private EmailServiceExternalEventListener 	emailServiceListener;
+	private MessagingEmailServiceExternalEventListener 	emailServiceListener;
 	
 	/**
 	* Refer to ExternalEventPublisher for details 

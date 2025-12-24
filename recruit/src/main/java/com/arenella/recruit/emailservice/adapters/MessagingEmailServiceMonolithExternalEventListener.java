@@ -21,7 +21,7 @@ import com.arenella.recruit.emailservice.services.EmailDispatcherService;
 * @author K Parkings
 */
 @Service
-public class EmailServiceMonolithExternalEventListener implements EmailServiceExternalEventListener{
+public class MessagingEmailServiceMonolithExternalEventListener implements MessagingEmailServiceExternalEventListener{
 
 	@Autowired
 	private EmailDispatcherService 	emailService;

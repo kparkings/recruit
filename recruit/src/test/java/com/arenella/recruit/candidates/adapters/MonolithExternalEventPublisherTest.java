@@ -24,7 +24,7 @@ import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
-import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
@@ -39,7 +39,7 @@ class MonolithExternalEventPublisherTest {
 	private CurriculumExternalEventListener 	mockCurriculumEventListener;
 
 	@Mock
-	private EmailServiceExternalEventListener 	mockEmailServiceListener;
+	private MessagingEmailServiceExternalEventListener 	mockEmailServiceListener;
 	
 	@Mock
 	private NewsFeedExternalEventListener		mockNewsFeedExternalEventListener;

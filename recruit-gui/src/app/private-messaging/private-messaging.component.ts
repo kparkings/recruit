@@ -133,22 +133,24 @@ export class PrivateMessagingComponent {
 				/**
 				* Fetch candidates 
 				*/
-				this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
-					
-					let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
-					
-					candidates.forEach(candidate => {
+				if (searchRequest.candidateFilters.candidateIds.length > 0) {
+					this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
 						
-						let candidateDetails:CandidateSuggestionAPIOutbound = new CandidateSuggestionAPIOutbound();
+						let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
 						
-						candidateDetails.candidateId = candidate.candidateId;
-						candidateDetails.firstname = candidate.firstname;
-						candidateDetails.surname = candidate.surname;
+						candidates.forEach(candidate => {
+							
+							let candidateDetails:CandidateSuggestionAPIOutbound = new CandidateSuggestionAPIOutbound();
+							
+							candidateDetails.candidateId = candidate.candidateId;
+							candidateDetails.firstname = candidate.firstname;
+							candidateDetails.surname = candidate.surname;
+							
+							this.candidates.push(candidateDetails);
+						});
 						
-						this.candidates.push(candidateDetails);
 					});
-					
-				});
+				}
 			});			
 		
 		}
@@ -536,6 +538,7 @@ export class PrivateMessagingComponent {
 			
 		if (this.scrollOff == false) {
 			this.doScrollTop('boop');
+			this.doScrollTop('pageTop');
 		}
 		
 	}

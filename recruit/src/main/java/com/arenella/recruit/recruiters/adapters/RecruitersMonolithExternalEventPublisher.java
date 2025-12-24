@@ -20,7 +20,7 @@ import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
-import com.arenella.recruit.emailservice.adapters.EmailServiceExternalEventListener;
+import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
@@ -48,7 +48,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	private AuthenticationExternalEventListener 	authenticationExternalEventListener;
 	
 	@Autowired
-	private EmailServiceExternalEventListener 		emailServiceExternalEventListener;
+	private MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
 	
 	@Autowired
 	private ListingsExternalEventListener 			listingExternalEventListener;
