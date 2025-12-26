@@ -59,6 +59,7 @@ export class PrivateMessagingComponent {
 	* Once Chat's are retrieved fetches the Candidate details for each of the Chats
 	*/
 	public openChat(candidateId:string):void{
+		this.lastKeyPressSentToBackend = new Date();
 		this.currentChat = undefined;
 		this.currentReplies = new Array<ChatMessageAPIOutbound>();
 		this.chatService.hasChatAccess().subscribe(res => {
@@ -185,32 +186,23 @@ export class PrivateMessagingComponent {
 		});
 	}
 	
+	
+	public tmpChk = 0;
 	/**@
 	* Polls backend for new messages and updates
 	* for the current chat
 	*/
 	private startReplyScheduler():void{
-		
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.chatService.fetchPrivateChatById(this.currentChat!.id).subscribe(chat => {
 				this.currentChat 		= chat;
 				this.otherUserTypeing 	= false;
 				this.getCurrentChatReplies();
 				if (this.isUserChatRecipient()) {
-					let lastKeyPress:Date =  this.currentChat.lastKeyPressSender;
-					let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
-					if (lastKeyPressSecondsAgo <= 2){
-						this.otherUserTypeing = true 
-					}	
+					this.otherUserTypeing = this.currentChat.senderIsTyping; 
 				} else {
-					let lastKeyPress:Date =  this.currentChat.lastKeyPressRecipient;
-					let lastKeyPressSecondsAgo = (new Date().getTime() - new Date(lastKeyPress).getTime())/1000;
-					if (lastKeyPressSecondsAgo <= 2){
-						this.otherUserTypeing = true 
-					}
+					this.otherUserTypeing = this.currentChat.recipientIsTyping;
 				}
-				
-				
 			});
 		},1000);
 	}
@@ -622,22 +614,25 @@ export class PrivateMessagingComponent {
 		return msg.senderId == sessionStorage.getItem("userId") ? "true" : "false";
 	}
 	
+	private lastKeyPressSentToBackend = new Date();
+	
 	/**
 	* Sends a request to the backend to indicate the User is typeing in the Chat. A check is done
 	* so that a request is sent max, once every second. 
 	*/
 	public handleIsTyping():void{
 	
-		let currentTime:Date = new Date();
-		let numSecondsSinceBackedLastInformed = (currentTime.getTime() - this.lastKeyPress.getTime())/1000;
+		//let currentTime:Date = new Date();
+		//let numSecondsSinceBackendLastInformed = (currentTime.getTime() - this.lastKeyPressSentToBackend.getTime())/1000;
 		
-		if (numSecondsSinceBackedLastInformed >= 1) {
-			this.lastKeyPress = currentTime;
+		//if (numSecondsSinceBackendLastInformed >= 1) {
+		//	this.lastKeyPress = currentTime;
 			this.chatService.doSetKeyPressed(this.currentChat!.id).subscribe(res => {
 				
 			});
-		}
+		//}
 		
 	}
+	
 	
 }	

@@ -54,13 +54,14 @@
 				</div>
 				<div class="pm-messages-new-message">
 					<form [formGroup]="messageForm">
-						<textarea formControlName="newMessage" #newMsgBox *ngIf="getBlockedStatus() == 'unblocked'" (keypress)="handleIsTyping()" (click)="setScrollOn()">
+						<textarea formControlName="newMessage" #newMsgBox *ngIf="getBlockedStatus() == 'unblocked'" (input)="handleIsTyping()" (click)="setScrollOn()">
 							
 						</textarea>
 						<div *ngIf="getBlockedStatus() != 'unblocked'">
 							<p>This chat is currently blocked.</p>
 						</div>
 						<button class="btn btn-secondary chatBtn" (click)="sendMessage()" *ngIf="getBlockedStatus() == 'unblocked'">Send</button>
+						<button class="btn btn-secondary chatBtn" (click)="handleIsTyping()" *ngIf="getBlockedStatus() == 'unblocked'">FFS</button>
 					</form>
 				</div>
 			</div>

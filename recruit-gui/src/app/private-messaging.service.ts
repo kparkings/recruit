@@ -152,7 +152,9 @@ export class PrivateChatAPIOutbound {
 	* @param public blockedBySender			- If the Sender has blocked the Chat
 	* @param public blockedByRecipient		- If the Recipient has blocked the Chat
 	* @param public lastViewedBySender		- Last time the Sender viewed the Chat
-	* @param public lastViewedByRecipient	- Last time the Recipient viewed the Chat
+	* @param public recipientIsTyping		- If Recipient is typing in the Chat
+	* @param public senderIsTyping			- If Sender is typing in the Chat
+	* @param public lastViewedByRecipient	- Last time the Recipient viewed the Chat	
 	*/
 	constructor(
 		public id:string,
@@ -166,6 +168,8 @@ export class PrivateChatAPIOutbound {
 		public blockedBySender:boolean,
 		public blockedByRecipient:boolean,
 		public lastViewedBySender:Date,
+		public recipientIsTyping:boolean,
+		public senderIsTyping:boolean,
 		public lastViewedByRecipient:Date){}
 	
 }

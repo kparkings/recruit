@@ -114,6 +114,36 @@ public class PrivateChatAPIOutbound {
 	}
 	
 	/**
+	* Returns if the recipient is currently typing.
+	* Based upon their last keypress
+	* @return if the recipient is currently typing.
+	*/
+	public boolean getRecipientIsTyping() {
+		
+		if (this.getLastKeyPressRecipient().isEmpty()) {
+			return false;
+		}
+		
+		return this.lastKeyPressRecipient.isAfter(LocalDateTime.now().minusSeconds(5));
+		
+	}
+	
+	/**
+	* Returns if the sender is currently typing.
+	* Based upon their last keypress
+	* @return if the sender is currently typing.
+	*/
+	public boolean getSenderIsTyping() {
+		
+		if (this.getLastKeyPressSender().isEmpty()) {
+			return false;
+		}
+		
+		return this.lastKeyPressSender.isAfter(LocalDateTime.now().minusSeconds(5));
+		
+	}
+	
+	/**
 	* Returns whether the Sender has blocked
 	* further contact 
 	* @return whether contact has been blocked
