@@ -61,7 +61,6 @@
 							<p>This chat is currently blocked.</p>
 						</div>
 						<button class="btn btn-secondary chatBtn" (click)="sendMessage()" *ngIf="getBlockedStatus() == 'unblocked'">Send</button>
-						<button class="btn btn-secondary chatBtn" (click)="handleIsTyping()" *ngIf="getBlockedStatus() == 'unblocked'">FFS</button>
 					</form>
 				</div>
 			</div>
