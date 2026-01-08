@@ -2743,3 +2743,42 @@ databaseChangeLog:
                - column:
                    name: last_missed_mgs_alert_recipient
                    type: timestamp				   
+  - changeSet:
+       id: chat_participants
+       author: kparkings
+       changes:
+         - createTable:
+             tableName: chat_participants
+             schemaName: chats
+             columns:
+               - column:
+                   name: id
+                   type: varchar
+                   constraints:
+                     primaryKey: true
+                     nullable: false
+               - column:
+                   name: type
+                   type: varchar
+                   constraints:
+                     nullable: false
+               - column:
+                   name: first_name
+                   type: varchar
+                   constraints:
+                     nullable: false
+               - column:
+                   name: surname
+                   type: varchar
+                   constraints:
+                     nullable: false
+               - column:
+                   name: photo_bytes
+                   type: bytea
+                   constraints:
+                     nullable: true
+               - column:
+                   name: photo_format
+                   type: varchar
+                   constraints:
+                     nullable: true
