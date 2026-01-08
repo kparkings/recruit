@@ -24,7 +24,7 @@ export class CandidateInfoBoxComponent {
 	}
 	
 	public openContatBox() {
-    	//this.openContactBoxEvent.emit('openContactDialogBox');
+    	this.openContactBoxEvent.emit('openContactDialogBox');
   	}
 	
 	public openChat():void{
