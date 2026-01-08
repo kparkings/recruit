@@ -411,8 +411,9 @@ export class RecruiterMarketplaceComponent implements OnInit {
 		this.infoItemConfig = new InfoItemConfig();
 		this.infoItemConfig.setProfilePhoto(this.recruiterProfile?.profilePhoto?.imageBytes);
 		
-		this.infoItemConfig.setShowContactButton(!this.isMyOpenPosition());
-		 
+		this.infoItemConfig.setShowContactButton(false);
+		this.infoItemConfig.setShowEmailButton(!this.isMyOpenPosition());
+		
 		if (this.activeOpenPosition?.recruiter?.recruiterName) {
 			let recruiterBlock:InfoItemBlock = new InfoItemBlock();
 			recruiterBlock.setTitle(this.translate.instant('mp-left-mnu-requested-by'));//"Requested By"

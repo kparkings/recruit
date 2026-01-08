@@ -353,6 +353,7 @@ export class InfoItemConfig{
 	private items:Array<InfoItem> 				= new Array<InfoItem>();
 	private profilePhoto:any;
 	private contactButton:boolean				= false;
+	private emailButton:boolean					= false;
 	
 	/**
 	* Sets the bytes of Poto to be displayed
@@ -409,12 +410,44 @@ export class InfoItemConfig{
 	public showContactButton():boolean{
 		return this.contactButton;
 	}
-	
+
+	/**
+	* Returns whether to show Email button
+	*/
+	public showEmailButton():boolean{
+		return this.emailButton;
+	}
+		
 	/**
 	* Sets whether to show Contact button
 	*/
 	public setShowContactButton(showContactButton:boolean):boolean{
 		return this.contactButton = showContactButton;
+	}
+	
+	public setShowEmailButton(showEmailButton:boolean):boolean{
+		return this.emailButton = showEmailButton;
+	}
+	
+	/**
+	* Whether or not User is a Recruiter
+	*/
+	public isRecruiter():boolean{
+		return sessionStorage.getItem('isRecruiter') === 'true';
+	}
+	
+	/**
+	* Whether or not the recruiter that has no open Subscriptiion
+	*/
+	public isRecruiterNoSubscription():boolean{
+		return sessionStorage.getItem('isRecruiterNoSubscription') === 'true';
+	}
+	
+	/**
+	* Whether or not the recruiter that has no open Subscriptiion
+	*/
+	public hasUnpaidSubscription():boolean{
+		return sessionStorage.getItem('hasUnpaidSubscription') === 'true';
 	}
 	
 }

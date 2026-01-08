@@ -230,7 +230,8 @@ export class RecruiterProfileComponent {
 		
 		this.infoItemConfig = new InfoItemConfig();
 		this.infoItemConfig.setProfilePhoto(this.selectedRecruiterProfile?.profilePhoto?.imageBytes);
-		this.infoItemConfig.setShowContactButton(true);
+		this.infoItemConfig.setShowContactButton(false);
+		this.infoItemConfig.setShowEmailButton(true);
 		
 		let recruiterBlock:InfoItemBlock = new InfoItemBlock();
 		
