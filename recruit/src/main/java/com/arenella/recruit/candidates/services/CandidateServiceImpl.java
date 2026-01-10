@@ -802,6 +802,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.firstName(candidate.getFirstname())
 					.surname(candidate.getSurname())
 					.roleSought(candidate.getRoleSought())
+					.photo(photo)
 				.build(); 
 		
 		externalEventPublisher.publishCandidateUpdateEvent(event);

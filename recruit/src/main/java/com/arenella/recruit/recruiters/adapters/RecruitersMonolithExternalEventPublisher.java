@@ -11,10 +11,16 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.adapters.events.OfferedCandidateContactRequestEvent;
 import com.arenella.recruit.adapters.events.OpenPositionContactRequestEvent;
+import com.arenella.recruit.adapters.events.PHOTO_FORMAT;
+import com.arenella.recruit.adapters.events.Photo;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterProfileCreatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterProfileCreatedEvent.RecruiterProfileCreatedEventBuilder;
+import com.arenella.recruit.adapters.events.RecruiterProfileUpdatedEvent;
+import com.arenella.recruit.adapters.events.RecruiterProfileUpdatedEvent.RecruiterProfileUpdatedEventBuilder;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
@@ -28,6 +34,8 @@ import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.messaging.adapters.MessagingMessagingServiceExternalEventListener;
+import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 
 /**
 * An implementation of ExternalEventPublisher optimised to work when the 
@@ -45,22 +53,25 @@ import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 public class RecruitersMonolithExternalEventPublisher implements RecruitersExternalEventPublisher{
 
 	@Autowired
-	private AuthenticationExternalEventListener 	authenticationExternalEventListener;
+	private AuthenticationExternalEventListener 			authenticationExternalEventListener;
 	
 	@Autowired
 	private MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
 	
 	@Autowired
-	private ListingsExternalEventListener 			listingExternalEventListener;
+	private ListingsExternalEventListener 					listingExternalEventListener;
 	
 	@Autowired
-	private RecruitersExternalEventListener			recruitersInternalEventListener;
+	private RecruitersExternalEventListener					recruitersInternalEventListener;
 	
 	@Autowired
-	private CandidateExternalEventListener			candidateExternalEventListener;
+	private CandidateExternalEventListener					candidateExternalEventListener;
 	
 	@Autowired
-	private CurriculumExternalEventListener			curriculumExternalEventListener;
+	private CurriculumExternalEventListener					curriculumExternalEventListener;
+	
+	@Autowired
+	private MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
 	
 	/**
 	* Refer to the ExternalEventPublisher interface for details 
@@ -70,10 +81,10 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.authenticationExternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.emailServiceExternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.candidateExternalEventListener.listenForRecruiterCreatedEvent(event);
-		
 		this.listingExternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.recruitersInternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.curriculumExternalEventListener.listenForRecruiterCreatedEvent(event);
+		this.messagingMessagingServiceExternalEventListener.listenForRecruiterCreatedEvent(event);
 		
 	}
 
@@ -126,6 +137,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	public void publishRecruiterAccountUpdatedEvent(RecruiterUpdatedEvent event) {
 		this.emailServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
 		this.candidateExternalEventListener.listenForRecruiterUpdatedEvent(event);
+		this.messagingMessagingServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
 	}
 
 	/**
@@ -270,6 +282,43 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.listingExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
 		this.candidateExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent); 
 		this.curriculumExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
+		this.messagingMessagingServiceExternalEventListener.listenForRecruiterDeletedEvent(recruiterDeletedEvent);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishRecruiterProfileCreatedEvent(RecruiterProfile recruiterProfile) {
+		
+		//Photo photo = recruiterProfile.getProfilePhoto().isEmpty() ? null : new Photo(recruiterProfile.getProfilePhoto().get().);
+		
+		RecruiterProfileCreatedEventBuilder event = RecruiterProfileCreatedEvent.builder();
+		event.recruiterId(recruiterProfile.getRecruiterId());
+		
+		recruiterProfile.getProfilePhoto().ifPresent(profileImage -> {
+			event.profileImage(new Photo(PHOTO_FORMAT.valueOf(profileImage.getFormat().toString()),profileImage.getImageBytes()));
+		});
+		
+		this.messagingMessagingServiceExternalEventListener.listenForRecruiterProfileCreatedEvent(event.build());
+		
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishRecruiterProfileUpdatedEvent(RecruiterProfile recruiterProfile) {
+		
+		RecruiterProfileUpdatedEventBuilder event = RecruiterProfileUpdatedEvent.builder();
+		event.recruiterId(recruiterProfile.getRecruiterId());
+		
+		recruiterProfile.getProfilePhoto().ifPresent(profileImage -> {
+			event.profileImage(new Photo(PHOTO_FORMAT.valueOf(profileImage.getFormat().toString()),profileImage.getImageBytes()));
+		});
+		
+		this.messagingMessagingServiceExternalEventListener.listenForRecruiterProfileUpdatedEvent(event.build());
+		
 	}
 
 }

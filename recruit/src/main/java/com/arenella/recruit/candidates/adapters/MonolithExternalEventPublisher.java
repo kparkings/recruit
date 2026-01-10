@@ -25,6 +25,7 @@ import com.arenella.recruit.emailservice.beans.Email.EmailTopic;
 import com.arenella.recruit.emailservice.beans.Email.EmailType;
 import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
+import com.arenella.recruit.messaging.adapters.MessagingMessagingServiceExternalEventListener;
 import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
 /**
@@ -43,16 +44,19 @@ import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 
 	@Autowired
-	private CurriculumExternalEventListener 		curriculumExternalEventListener;
+	private CurriculumExternalEventListener 				curriculumExternalEventListener;
 	
 	@Autowired
-	private AuthenticationExternalEventListener 	authenticationExternalEventListener;
+	private AuthenticationExternalEventListener 			authenticationExternalEventListener;
 	
 	@Autowired
 	private MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
 	
 	@Autowired
-	private NewsFeedExternalEventListener			newsFeedExternalEventListener;
+	private NewsFeedExternalEventListener					newsFeedExternalEventListener;
+	
+	@Autowired
+	private MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
@@ -78,6 +82,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	public void publishCandidateCreatedEvent(CandidateCreatedEvent event) {
 		this.curriculumExternalEventListener.listenForCandidateCreatedEvent(event);
 		this.emailServiceExternalEventListener.listenForCandidateCreatedEvent(event);
+		this.messagingMessagingServiceExternalEventListener.listenForCandidateCreatedEvent(event);
 	}
 
 	/**
@@ -153,7 +158,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		this.emailServiceExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		this.curriculumExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		this.authenticationExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
-		
+		this.messagingMessagingServiceExternalEventListener.listenForCandidateDeletedEvent(candidateDeletedEvent);
 	}
 
 	/**
@@ -205,9 +210,8 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	*/
 	@Override
 	public void publishCandidateUpdateEvent(CandidateUpdateEvent candidateUpdateEvent) {
-		
 		this.newsFeedExternalEventListener.listenForEventCandidateUpdate(candidateUpdateEvent);
-		
+		this.messagingMessagingServiceExternalEventListener.listenForCandidateUpdateEvent(candidateUpdateEvent);
 	}
 	
 	

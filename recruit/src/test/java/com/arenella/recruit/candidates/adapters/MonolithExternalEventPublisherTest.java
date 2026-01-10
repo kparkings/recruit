@@ -1,6 +1,8 @@
 package com.arenella.recruit.candidates.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
 import java.util.Set;
@@ -19,13 +21,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
+import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.messaging.adapters.MessagingMessagingServiceExternalEventListener;
 import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
 /**
@@ -36,16 +41,22 @@ import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 class MonolithExternalEventPublisherTest {
 	
 	@Mock
-	private CurriculumExternalEventListener 	mockCurriculumEventListener;
+	private CurriculumExternalEventListener 				mockCurriculumEventListener;
 
 	@Mock
-	private MessagingEmailServiceExternalEventListener 	mockEmailServiceListener;
+	private MessagingEmailServiceExternalEventListener 		mockEmailServiceListener;
 	
 	@Mock
-	private NewsFeedExternalEventListener		mockNewsFeedExternalEventListener;
+	private NewsFeedExternalEventListener					mockNewsFeedExternalEventListener;
+	
+	@Mock
+	private AuthenticationExternalEventListener 			mockAuthenticationExternalEventListener;
+	
+	@Mock
+	private MessagingMessagingServiceExternalEventListener	mockMessagingMessagingServiceExternalEventListener;
 	
 	@InjectMocks
-	private MonolithExternalEventPublisher 		publisher;
+	private MonolithExternalEventPublisher 					publisher;
 	
 	/**
 	* Tests publishing of Event representing searched skills 
@@ -127,11 +138,12 @@ class MonolithExternalEventPublisherTest {
 		
 		CandidateCreatedEvent event = CandidateCreatedEvent.builder().build();
 		
-		Mockito.doNothing().when(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(Mockito.any());
+		doNothing().when(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(Mockito.any());
 		
 		publisher.publishCandidateCreatedEvent(event);
 		
-		Mockito.verify(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(event);
+		verify(this.mockCurriculumEventListener).listenForCandidateCreatedEvent(event);
+		verify(this.mockMessagingMessagingServiceExternalEventListener).listenForCandidateCreatedEvent(event);
 		
 	}
 	
@@ -151,7 +163,7 @@ class MonolithExternalEventPublisherTest {
 		
 		publisher.publishRequestSendAlertDailySummaryEmailCommand(command);
 		
-		Mockito.verify(this.mockEmailServiceListener).listenForSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
+		verify(this.mockEmailServiceListener).listenForSendEmailCommand(Mockito.any(RequestSendEmailCommand.class));
 		
 	}
 	
@@ -171,7 +183,7 @@ class MonolithExternalEventPublisherTest {
 		
 		this.publisher.publishContactRequestEvent(event);
 		
-		Mockito.verify(this.mockEmailServiceListener, Mockito.times(2)).listenForSendEmailCommand(Mockito.any());
+		verify(this.mockEmailServiceListener, Mockito.times(2)).listenForSendEmailCommand(Mockito.any());
 		
 	}
 	
@@ -186,7 +198,26 @@ class MonolithExternalEventPublisherTest {
 		
 		this.publisher.publishCandidateUpdateEvent(candidateUpdateEvent);
 	
-		Mockito.verify(this.mockNewsFeedExternalEventListener).listenForEventCandidateUpdate(candidateUpdateEvent);
+		verify(this.mockNewsFeedExternalEventListener).listenForEventCandidateUpdate(candidateUpdateEvent);
+		verify(this.mockMessagingMessagingServiceExternalEventListener).listenForCandidateUpdateEvent(candidateUpdateEvent);
+		
+	}
+	
+	/**
+	* Tests publishing of Event
+	* @throws Exception
+	*/
+	@Test
+	void testPublishCandidateDeletedEvent() {
+		
+		CandidateDeletedEvent candidatDeletedEvent = new CandidateDeletedEvent("");
+		
+		this.publisher.publishCandidateDeletedEvent(candidatDeletedEvent);
+	
+		verify(this.mockEmailServiceListener).listenForCandidteDeletedEvent(candidatDeletedEvent);
+		verify(this.mockCurriculumEventListener).listenForCandidteDeletedEvent(candidatDeletedEvent);
+		verify(this.mockAuthenticationExternalEventListener).listenForCandidteDeletedEvent(candidatDeletedEvent);
+		verify(this.mockMessagingMessagingServiceExternalEventListener).listenForCandidateDeletedEvent(candidatDeletedEvent);
 		
 	}
 	

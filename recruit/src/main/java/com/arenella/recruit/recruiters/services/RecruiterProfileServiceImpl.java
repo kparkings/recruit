@@ -48,6 +48,8 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 			throw new IllegalStateException("Cannot add an already existing Profile");
 		}
 		
+		Photo photo = null;
+		
 		if (recruiterProfile.getProfilePhoto().isPresent()) {
 			
 			if (!imageFileSecruityParser.isSafe(recruiterProfile.getProfilePhoto().get().getImageBytes())) {
@@ -56,13 +58,15 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 		
 			byte[] photoBytes = this.imageManipulator.toProfileImage(recruiterProfile.getProfilePhoto().get().getImageBytes(), recruiterProfile.getProfilePhoto().get().getFormat());
 					
-			Photo photo = new Photo(photoBytes, recruiterProfile.getProfilePhoto().get().getFormat());
+			photo = new Photo(photoBytes, recruiterProfile.getProfilePhoto().get().getFormat());
 			
 			recruiterProfile.setProfilePhoto(photo);
 			
 		}  
 		
 		this.recruiterProfileDao.saveRecruiterProfile(recruiterProfile);
+		
+		this.eventPublisher.publishRecruiterProfileCreatedEvent(recruiterProfile);
 		
 	}
 
@@ -76,6 +80,8 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 			throw new IllegalStateException("Cannot update a non exintent Profile");
 		}
 		
+		Photo photo = null;
+		
 		if (recruiterProfile.getProfilePhoto().isPresent()) {
 			
 			if (!imageFileSecruityParser.isSafe(recruiterProfile.getProfilePhoto().get().getImageBytes())) {
@@ -84,13 +90,13 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 		
 			byte[] photoBytes = this.imageManipulator.toProfileImage(recruiterProfile.getProfilePhoto().get().getImageBytes(), recruiterProfile.getProfilePhoto().get().getFormat());
 					
-			Photo photo = new Photo(photoBytes, recruiterProfile.getProfilePhoto().get().getFormat());
+			photo = new Photo(photoBytes, recruiterProfile.getProfilePhoto().get().getFormat());
 			
 			recruiterProfile.setProfilePhoto(photo);
 			
 		} else {
 			
-			Recruiter 			recruiter;
+			Recruiter recruiter;
 			
 			/**
 			* [KP]  I know its ugly but for the admin user there is no recruiter object and 
@@ -111,6 +117,7 @@ public class RecruiterProfileServiceImpl implements RecruiterProfileService{
 		}
 		
 		this.recruiterProfileDao.saveRecruiterProfile(recruiterProfile);
+		this.eventPublisher.publishRecruiterProfileUpdatedEvent(recruiterProfile);
 		
 	}
 

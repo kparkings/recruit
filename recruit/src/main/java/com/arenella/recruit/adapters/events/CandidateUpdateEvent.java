@@ -1,5 +1,7 @@
 package com.arenella.recruit.adapters.events;
 
+import java.util.Optional;
+
 import com.arenella.recruit.newsfeed.beans.NewsFeedItem.NEWSFEED_ITEM_TYPE;
 
 /**
@@ -13,6 +15,7 @@ public class CandidateUpdateEvent {
 	private String 					firstName;
 	private String					surname;
 	private String					roleSought;
+	private Photo					photo;
 	
 	/**
 	* Constructor based upon a builder
@@ -24,6 +27,7 @@ public class CandidateUpdateEvent {
 		this.firstName		= builder.firstName;
 		this.surname		= builder.surname;
 		this.roleSought		= builder.roleSought;
+		this.photo			= builder.photo;
 	}
 	
 	/**
@@ -67,6 +71,14 @@ public class CandidateUpdateEvent {
 	}
 	
 	/**
+	* If exists returns Candidates profile image
+	* @return profile image
+	*/
+	public Optional<Photo> getPhoto() {
+		return Optional.ofNullable(this.photo);
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return builder
 	*/
@@ -85,6 +97,7 @@ public class CandidateUpdateEvent {
 		private String 					firstName;
 		private String					surname;
 		private String					roleSought;
+		private Photo					photo;
 		
 		/**
 		* Sets the type of Candidate update that occurred
@@ -137,13 +150,31 @@ public class CandidateUpdateEvent {
 		}
 		
 		/**
+		* Sets user profile image
+		* @param photo - Users profile image
+		* @return Builder
+		*/
+		public CandidateUpdateEventBuilder photo(com.arenella.recruit.candidates.beans.Candidate.Photo photo) {
+			
+			try {
+				PHOTO_FORMAT format = PHOTO_FORMAT.valueOf(photo.getFormat().toString());
+				this.photo = new Photo(format, photo.getImageBytes());
+			} catch(Exception e) {
+				e.printStackTrace();
+				//If image fails we send without image
+			}
+			
+			return this;
+		}
+		
+		/**
 		* Returns an initialized instance of the CandidateUpdateEvent
 		* @return initialized instance
 		*/
 		public CandidateUpdateEvent build() {
 			return new CandidateUpdateEvent(this);
 		}
-		
+
 	}
 	
 }

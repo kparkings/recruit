@@ -2,6 +2,9 @@ package com.arenella.recruit.recruiters.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +57,7 @@ class RecruiterProfileServiceImplTest {
 		RecruiterProfile recruiterProfile = RecruiterProfile.builder().recruiterId("kparkings").build();
 		
 		assertThrows(IllegalStateException.class, () -> service.addRecruiterProfile(recruiterProfile));
-		
+		verify(this.mockEeventPublisher, never()).publishRecruiterProfileCreatedEvent(any());
 	}
 	
 	/**
@@ -70,6 +73,7 @@ class RecruiterProfileServiceImplTest {
 		
 		RecruiterProfile recruiterProfile = RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build();
 		assertThrows(RuntimeException.class, () -> service.addRecruiterProfile(recruiterProfile));
+		verify(this.mockEeventPublisher, never()).publishRecruiterProfileCreatedEvent(any());
 		
 	}
 	
@@ -92,6 +96,7 @@ class RecruiterProfileServiceImplTest {
 		service.addRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build());
 		
 		assertEquals(resizedImage, argRecProf.getValue().getProfilePhoto().get().getImageBytes());
+		verify(this.mockEeventPublisher).publishRecruiterProfileCreatedEvent(any());
 		
 	}
 	
@@ -106,6 +111,7 @@ class RecruiterProfileServiceImplTest {
 		
 		RecruiterProfile recruiterProfile = RecruiterProfile.builder().recruiterId("kparkings").build(); 
 		assertThrows(IllegalStateException.class, () -> service.updateRecruiterProfile(recruiterProfile));
+		verify(this.mockEeventPublisher, never()).publishRecruiterProfileCreatedEvent(any());
 		
 	}
 	
@@ -123,6 +129,7 @@ class RecruiterProfileServiceImplTest {
 		RecruiterProfile recruiterProfile= RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build();
 		
 		assertThrows(RuntimeException.class, () -> service.updateRecruiterProfile(recruiterProfile));
+		verify(this.mockEeventPublisher, never()).publishRecruiterProfileUpdatedEvent(any());
 		
 	}
 	
@@ -145,6 +152,7 @@ class RecruiterProfileServiceImplTest {
 		service.updateRecruiterProfile(RecruiterProfile.builder().recruiterId("kparkings").profilePhoto(new Photo(new byte[]{}, PHOTO_FORMAT.jpeg)).build());
 		
 		assertEquals(resizedImage, argRecProf.getValue().getProfilePhoto().get().getImageBytes());
+		verify(this.mockEeventPublisher).publishRecruiterProfileUpdatedEvent(any());
 		
 	}
 	

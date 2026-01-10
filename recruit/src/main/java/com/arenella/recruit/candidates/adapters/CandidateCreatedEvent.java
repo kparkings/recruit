@@ -1,10 +1,13 @@
 package com.arenella.recruit.candidates.adapters;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
+import com.arenella.recruit.adapters.events.PHOTO_FORMAT;
+import com.arenella.recruit.adapters.events.Photo;
 import com.arenella.recruit.candidates.beans.Candidate;
 import com.arenella.recruit.candidates.beans.Language;
 import com.arenella.recruit.candidates.enums.COUNTRY;
@@ -12,13 +15,14 @@ import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
 
+
 /**
 * Event to inform the world that a new Candidate has been added to the 
 * System.
 * @author K Parkings
 */
 public class CandidateCreatedEvent {
-
+	
 	private String 			candidateId;
 	private String			roleSought;
 	private Set<FUNCTION>	functions					= new LinkedHashSet<>();
@@ -32,10 +36,11 @@ public class CandidateCreatedEvent {
 	private String			firstname;
 	private String 			surname;
 	private String			email;
+	private Photo			photo;
 	
 	/**
 	* Constructor based upon Builder
-	* @param builder - Contains initialzation values
+	* @param builder - Contains initialization values
 	*/
 	public CandidateCreatedEvent(CandidateCreatedEventBuilder builder) {
 		
@@ -51,6 +56,7 @@ public class CandidateCreatedEvent {
 		this.firstname			= builder.firstname;
 		this.surname			= builder.surname;
 		this.email				= builder.email;
+		this.photo				= builder.photo;
 		
 		this.functions.clear();
 		this.functions.addAll(builder.functions);
@@ -161,6 +167,14 @@ public class CandidateCreatedEvent {
 	}
 	
 	/**
+	* Returns Users profile image photo if present
+	* @return Profile image
+	*/
+	public Optional<Photo> getPhoto(){
+		return Optional.ofNullable(this.photo);
+	}
+	
+	/**
 	* Returns a Builder for the CandidateCreatedEvent class
 	* @return Builder for the CandidateCreatedEvent class
 	*/
@@ -187,6 +201,7 @@ public class CandidateCreatedEvent {
 		private String			firstname;
 		private String 			surname;
 		private String			email;
+		private Photo			photo;
 		
 		/**
 		* Initializes the builder with values in the Candidate
@@ -217,6 +232,16 @@ public class CandidateCreatedEvent {
 			this.firstname 			= candidate.getFirstname();
 			this.surname 			= candidate.getSurname();
 			this.email 				= candidate.getEmail();
+			
+			candidate.getPhoto().ifPresent(profileImage -> {	
+				try {
+					PHOTO_FORMAT format = PHOTO_FORMAT.valueOf(profileImage.getFormat().toString());
+					this.photo = new Photo(format, profileImage.getImageBytes());
+				} catch(Exception e) {
+					e.printStackTrace();
+					//If image fails we send without image
+				}
+			});
 			
 			return this;
 		}

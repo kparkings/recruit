@@ -18,6 +18,9 @@ import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
 
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
+
 /**
 * Unit tests for the CandidateCreatedEvent class
 * @author K Parkings
@@ -43,6 +46,7 @@ class CandidateCreatedEventTest {
 	private static final Language		LANGUAGE_VAL			= Language.builder().language(LANGUAGE.DUTCH).level(LEVEL.PROFICIENT).build();
 	private static final Set<String>	SKILLS					= Set.of(SKILL);
 	private static final Set<Language>	LANGUAGES				= Set.of(LANGUAGE_VAL);
+	private static final Photo			PHOTO					= new Photo(new byte[] {}, PHOTO_FORMAT.png);
 	private static final Candidate 		CANDIDATE 				= Candidate
 																		.builder()
 																			.candidateId(CANDIDATE_ID)
@@ -62,6 +66,7 @@ class CandidateCreatedEventTest {
 																			.languages(LANGUAGES)
 																			.firstname(FIRST_NAME)
 																			.surname(SURNAME)
+																			.photo(PHOTO)
 																			.build();
 																
 	/**
@@ -86,6 +91,8 @@ class CandidateCreatedEventTest {
 		assertEquals(EMAIL, 			event.getEmail());
 		assertTrue(event.getSkills().contains(SKILL));
 		event.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
+		
+		assertTrue(event.getPhoto().isPresent());
 		
 	}
 	

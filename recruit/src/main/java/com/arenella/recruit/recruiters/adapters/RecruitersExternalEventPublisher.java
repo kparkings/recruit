@@ -9,6 +9,7 @@ import com.arenella.recruit.adapters.events.RecruiterPasswordUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
+import com.arenella.recruit.recruiters.beans.RecruiterProfile;
 
 /**
 * Defines functionality for publishing Events to external services 
@@ -75,8 +76,20 @@ public interface RecruitersExternalEventPublisher {
 
 	/**
 	* Sends an Event informing other services that a Recruiters account was deleted
-	* @param recruiterDeletedEvent - Event informing of Recruiter account deleton
+	* @param recruiterDeletedEvent - Event informing of Recruiter account deletion
 	*/
 	public void publishRecruiterAccountDeleted(RecruiterDeletedEvent recruiterDeletedEvent);
+	
+	/**
+	* Sends an event informing other services that a Recruiter Profile was created
+	* @param recruiterProfile - Event
+	*/
+	public void publishRecruiterProfileCreatedEvent(RecruiterProfile recruiterProfile);
+	
+	/**
+	* Sends an event informing other services that a Recruiter Profile was updated
+	* @param recruiterProfile - Event
+	*/
+	public void publishRecruiterProfileUpdatedEvent(RecruiterProfile recruiterProfile);
 	
 }
