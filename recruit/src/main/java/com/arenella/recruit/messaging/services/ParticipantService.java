@@ -1,5 +1,7 @@
 package com.arenella.recruit.messaging.services;
 
+import java.util.Optional;
+
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 
 /**
@@ -18,5 +20,12 @@ public interface ParticipantService {
 	* @param participantId - Id of Participant to delete
 	*/
 	void deletePartipant(String participantId);
+	
+	/**
+	* If exists returns the participant matching the given id
+	* @param participantId - unique Id
+	* @return ChatParticipant if available
+	*/
+	Optional<ChatParticipant> fetchById(String participantId);
 	
 }

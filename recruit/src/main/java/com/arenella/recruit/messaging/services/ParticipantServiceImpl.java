@@ -1,5 +1,7 @@
 package com.arenella.recruit.messaging.services;
 
+import java.util.Optional;
+
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 
 public class ParticipantServiceImpl implements ParticipantService{
@@ -17,6 +19,12 @@ public class ParticipantServiceImpl implements ParticipantService{
 	public void deletePartipant(String participantId) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Optional<ChatParticipant> fetchById(String participantId) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 
 }

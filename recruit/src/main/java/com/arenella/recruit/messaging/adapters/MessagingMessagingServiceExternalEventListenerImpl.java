@@ -58,17 +58,20 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 	*/
 	@Override
 	public void listenForCandidateUpdateEvent(CandidateUpdateEvent event) {
-		ChatParticipant participant = 
-				ChatParticipant
-				.builder()
-					.participantId(String.valueOf(event.getCandidateId()))
-					.type(CHAT_PARTICIPANT_TYPE.CANDIDATE)
-					.firstName(event.getFirstName())
-					.surname(event.getSurname())
-					.photo(extractAndConvertPhoto(event.getPhoto()))
-				.build();
-		
-		this.participantService.persistParticpant(participant);
+			
+		this.participantService.fetchById(String.valueOf(event.getCandidateId())).ifPresent(existingParticipant -> {
+			ChatParticipant participant = 
+					ChatParticipant
+					.builder()
+						.participantId(String.valueOf(event.getCandidateId()))
+						.type(CHAT_PARTICIPANT_TYPE.CANDIDATE)
+						.photo(extractAndConvertPhoto(event.getPhoto()))
+						.firstName(event.getFirstName())
+						.surname(event.getSurname())
+					.build();
+			
+			this.participantService.persistParticpant(participant);
+		});
 	}
 
 	/**
@@ -95,16 +98,19 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 	@Override
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
 		
-		ChatParticipant participant = 
-				ChatParticipant
-				.builder()
-					.participantId(String.valueOf(event.getRecruiterId()))
-					.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
-					.firstName(event.getFirstName())
-					.surname(event.getSurname())
-				.build();
-		
-		this.participantService.persistParticpant(participant);
+		this.participantService.fetchById(event.getRecruiterId()).ifPresent(existingParticipant -> {
+			ChatParticipant participant = 
+					ChatParticipant
+					.builder()
+						.participantId(String.valueOf(event.getRecruiterId()))
+						.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
+						.photo(existingParticipant.getPhoto().orElse(null))
+						.firstName(event.getFirstName())
+						.surname(event.getSurname())
+					.build();
+			
+			this.participantService.persistParticpant(participant);
+		});
 	}
 
 	/**
@@ -129,15 +135,19 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 	*/
 	@Override
 	public void listenForRecruiterProfileCreatedEvent(RecruiterProfileCreatedEvent event) {
-		ChatParticipant participant = 
-				ChatParticipant
-				.builder()
-					.participantId(String.valueOf(event.getRecruiterId()))
-					.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
-					.photo(extractAndConvertPhoto(event.getProfileImage()))
-				.build();
-		
-		this.participantService.persistParticpant(participant);
+		this.participantService.fetchById(event.getRecruiterId()).ifPresent(existingParticipant -> {
+			ChatParticipant participant = 
+					ChatParticipant
+					.builder()
+						.participantId(String.valueOf(event.getRecruiterId()))
+						.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
+						.photo(extractAndConvertPhoto(event.getProfileImage()))
+						.firstName(existingParticipant.getFirstName())
+						.surname(existingParticipant.getSurame())
+					.build();
+			
+			this.participantService.persistParticpant(participant);
+		});
 	}
 
 	/**
@@ -145,15 +155,21 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 	*/
 	@Override
 	public void listenForRecruiterProfileUpdatedEvent(RecruiterProfileUpdatedEvent event) {
-		ChatParticipant participant = 
-				ChatParticipant
-				.builder()
-					.participantId(String.valueOf(event.getRecruiterId()))
-					.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
-					.photo(extractAndConvertPhoto(event.getProfileImage()))
-				.build();
 		
-		this.participantService.persistParticpant(participant);
+		this.participantService.fetchById(event.getRecruiterId()).ifPresent(existingParticipant -> {
+			ChatParticipant participant = 
+					ChatParticipant
+					.builder()
+						.participantId(String.valueOf(event.getRecruiterId()))
+						.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
+						.photo(extractAndConvertPhoto(event.getProfileImage()))
+						.firstName(existingParticipant.getFirstName())
+						.surname(existingParticipant.getSurame())
+					.build();
+			
+			this.participantService.persistParticpant(participant);
+		});
+		
 	}
 	
 	/**
@@ -167,7 +183,7 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 		
 		if (eventPhoto.isPresent()) {
 			try {
-				PHOTO_FORMAT format = PHOTO_FORMAT.valueOf(eventPhoto.get().format().toString());
+				PHOTO_FORMAT format = PHOTO_FORMAT.valueOf(eventPhoto.get().format().toString().toUpperCase());
 				photo = new Photo(eventPhoto.get().bytes(), format);
 			} catch(Exception e) {
 				e.printStackTrace();

@@ -1,9 +1,14 @@
 package com.arenella.recruit.messaging.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +26,8 @@ import com.arenella.recruit.adapters.events.RecruiterProfileUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.beans.Candidate;
+import com.arenella.recruit.candidates.beans.Candidate.Photo;
+import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.ChatParticipant.CHAT_PARTICIPANT_TYPE;
 import com.arenella.recruit.messaging.services.ParticipantService;
@@ -42,6 +49,43 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 	private MessagingMessagingServiceExternalEventListenerImpl listener;;
 
 	//TODO: Version with Photo
+	/**
+	* Test lister for when Candidate is Created ( photo provided )
+	*/
+	@Test
+	void testListenForCandidateCreatedEventWithPhoto() {
+		
+		final String firstName 	= "Kevin";
+		final String surname 	= "Parkings";
+		
+		ArgumentCaptor<ChatParticipant> participantCaptr = ArgumentCaptor.forClass(ChatParticipant.class);
+		
+		CandidateCreatedEvent event = CandidateCreatedEvent
+				.builder()
+					.candidate(Candidate
+							.builder()
+								.firstname(firstName)
+								.surname(surname)
+								.candidateId(CANDIDATE_ID)
+								.photo(new Photo(new byte[] {}, PHOTO_FORMAT.png))
+							.build())
+				.build();
+		
+		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
+		
+		this.listener.listenForCandidateCreatedEvent(event);
+		
+		verify(this.mockParticipantService).persistParticpant(any(ChatParticipant.class));
+		
+		ChatParticipant chatParticipant = participantCaptr.getValue();
+		
+		assertEquals(CANDIDATE_ID, 						chatParticipant.getParticipantId());
+		assertEquals(firstName, 						chatParticipant.getFirstName());
+		assertEquals(surname, 							chatParticipant.getSurame());
+		assertEquals(CHAT_PARTICIPANT_TYPE.CANDIDATE, 	chatParticipant.getType());	
+		assertTrue(chatParticipant.getPhoto().isPresent());
+	}
+	
 	/**
 	* Test lister for when Candidate is Created ( No photo provided )
 	*/
@@ -75,9 +119,51 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		assertEquals(firstName, 						chatParticipant.getFirstName());
 		assertEquals(surname, 							chatParticipant.getSurame());
 		assertEquals(CHAT_PARTICIPANT_TYPE.CANDIDATE, 	chatParticipant.getType());	
+		assertFalse(chatParticipant.getPhoto().isPresent());
 	}
 	
-	//TODO: Version with Photo
+	/**
+	* Test lister for when Candidate is Updated ( photo provided )
+	*/
+	@Test
+	void testListenForCandidateUpdateEventWithPhoto() {
+	
+		final int	 	candidateId 	= 1101;
+		final String 	firstName 		= "Kevin";
+		final String 	surname 		= "Parkings";
+		
+		ArgumentCaptor<ChatParticipant> participantCaptr = ArgumentCaptor.forClass(ChatParticipant.class);
+		
+		CandidateUpdateEvent event = CandidateUpdateEvent
+				.builder()
+					.candidateId(candidateId)
+					.firstName(firstName)
+					.surname(surname)
+					.photo(new Photo(new byte[] {}, PHOTO_FORMAT.png))
+				.build();
+		
+		when(this.mockParticipantService.fetchById(String.valueOf(candidateId)))
+			.thenReturn(Optional.of(ChatParticipant
+				.builder()
+					.firstName(firstName)
+					.surname(surname)
+				.build()));
+		
+		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
+		
+		this.listener.listenForCandidateUpdateEvent(event);
+		
+		verify(this.mockParticipantService).persistParticpant(any(ChatParticipant.class));
+		
+		ChatParticipant chatParticipant = participantCaptr.getValue();
+		
+		assertEquals(String.valueOf(candidateId), 		chatParticipant.getParticipantId());
+		assertEquals(firstName, 						chatParticipant.getFirstName());
+		assertEquals(surname, 							chatParticipant.getSurame());
+		assertEquals(CHAT_PARTICIPANT_TYPE.CANDIDATE, 	chatParticipant.getType());	
+		assertTrue(chatParticipant.getPhoto().isPresent());
+	}
+	
 	/**
 	* Test lister for when Candidate is Updated ( No photo provided )
 	*/
@@ -97,6 +183,13 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 					.surname(surname)
 				.build();
 		
+		when(this.mockParticipantService.fetchById(String.valueOf(candidateId)))
+			.thenReturn(Optional.of(ChatParticipant
+				.builder()
+					.firstName(firstName)
+					.surname(surname)
+				.build()));
+		
 		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
 		
 		this.listener.listenForCandidateUpdateEvent(event);
@@ -109,10 +202,13 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		assertEquals(firstName, 						chatParticipant.getFirstName());
 		assertEquals(surname, 							chatParticipant.getSurame());
 		assertEquals(CHAT_PARTICIPANT_TYPE.CANDIDATE, 	chatParticipant.getType());	
+		assertFalse(chatParticipant.getPhoto().isPresent());
 		
 	}
 	
-	//TODO: Version with Photo
+	/**
+	* Tests event results in Participant being created
+	*/
 	@Test
 	void testListenForRecruiterCreatedEvent() {
 		
@@ -143,7 +239,9 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		
 	}
 	
-	//TODO: Version with Photo
+	/**
+	* Tests event results in Participant being updated
+	*/
 	@Test
 	void testListenForRecruiterUpdatedEvent() {
 		
@@ -158,6 +256,13 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 					.firstName(firstName)
 					.surname(surname)
 				.build();
+		
+		when(this.mockParticipantService.fetchById(RECRUITER_ID))
+			.thenReturn(Optional.of(ChatParticipant
+				.builder()
+					.firstName(firstName)
+					.surname(surname)
+				.build()));
 		
 		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
 		
@@ -198,7 +303,50 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		
 	}
 	
-	//TODO: When service implemented enable this and check Photo included
+	/**
+	* Tests event results in Participant photo being added
+	*/
+	@Test
+	void testListenForRecruiterProfileCreatedEventWithPhoto() {
+		
+		final String firstName 	= "Kevin";
+		final String surname 	= "Parkings";
+		
+		ArgumentCaptor<ChatParticipant> participantCaptr = ArgumentCaptor.forClass(ChatParticipant.class);
+		
+		RecruiterProfileCreatedEvent event = RecruiterProfileCreatedEvent
+				.builder()
+					.recruiterId(RECRUITER_ID)
+					.profileImage(new com.arenella.recruit.adapters.events.Photo(com.arenella.recruit.adapters.events.PHOTO_FORMAT.png, new byte[] {}))
+				.build();
+		
+		when(this.mockParticipantService.fetchById(RECRUITER_ID))
+			.thenReturn(Optional.of(ChatParticipant
+				.builder()
+					.type(CHAT_PARTICIPANT_TYPE.RECRUITER)
+					.firstName(firstName)
+					.surname(surname)
+				.build()));
+		
+		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
+		
+		this.listener.listenForRecruiterProfileCreatedEvent(event);
+		
+		verify(this.mockParticipantService).persistParticpant(any(ChatParticipant.class));
+		
+		ChatParticipant chatParticipant = participantCaptr.getValue();
+		
+		assertEquals(RECRUITER_ID, 						chatParticipant.getParticipantId());
+		assertEquals(firstName, 						chatParticipant.getFirstName());
+		assertEquals(surname, 							chatParticipant.getSurame());
+		assertEquals(CHAT_PARTICIPANT_TYPE.RECRUITER, 	chatParticipant.getType());	
+		assertTrue(chatParticipant.getPhoto().isPresent());
+		
+	}
+	
+	/**
+	* Tests event where profile created but no photo was provided
+	*/
 	@Test
 	void testListenForRecruiterProfileCreatedEvent() {
 		
@@ -209,11 +357,17 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		
 		RecruiterProfileCreatedEvent event = RecruiterProfileCreatedEvent
 				.builder()
-					.recruiterId(surname)
+					.recruiterId(RECRUITER_ID)
 					.profileImage(null)
 				.build();
 		
-		//TODO: Need when() to get existing ChatParticipant from the service
+		when(this.mockParticipantService.fetchById(RECRUITER_ID))
+			.thenReturn(Optional.of(ChatParticipant
+				.builder()
+					.firstName(firstName)
+					.surname(surname)
+				.build()));
+			
 		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
 		
 		this.listener.listenForRecruiterProfileCreatedEvent(event);;
@@ -222,14 +376,56 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		
 		ChatParticipant chatParticipant = participantCaptr.getValue();
 		
-		assertEquals(CANDIDATE_ID, 						chatParticipant.getParticipantId());
+		assertEquals(RECRUITER_ID, 						chatParticipant.getParticipantId());
 		assertEquals(firstName, 						chatParticipant.getFirstName());
 		assertEquals(surname, 							chatParticipant.getSurame());
-		assertEquals(CHAT_PARTICIPANT_TYPE.CANDIDATE, 	chatParticipant.getType());	
+		assertEquals(CHAT_PARTICIPANT_TYPE.RECRUITER, 	chatParticipant.getType());	
+		assertFalse(chatParticipant.getPhoto().isPresent());
+	}
+	
+	/**
+	* Tests event where profile updated and photo was provided
+	*/
+	@Test
+	void testListenForRecruiterProfileUpdatedEventWithPhoto() {
+		
+		final String firstName 	= "Kevin";
+		final String surname 	= "Parkings";
+		
+		ArgumentCaptor<ChatParticipant> participantCaptr = ArgumentCaptor.forClass(ChatParticipant.class);
+		
+		RecruiterProfileUpdatedEvent event = RecruiterProfileUpdatedEvent
+				.builder()
+					.recruiterId(RECRUITER_ID)
+					.profileImage(new com.arenella.recruit.adapters.events.Photo(com.arenella.recruit.adapters.events.PHOTO_FORMAT.png, new byte[] {}))
+				.build();
+		
+		when(this.mockParticipantService.fetchById(RECRUITER_ID))
+			.thenReturn(Optional.of(ChatParticipant
+				.builder()
+					.firstName(firstName)
+					.surname(surname)
+				.build()));
+		
+		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
+		
+		this.listener.listenForRecruiterProfileUpdatedEvent(event);;
+		
+		verify(this.mockParticipantService).persistParticpant(any(ChatParticipant.class));
+		
+		ChatParticipant chatParticipant = participantCaptr.getValue();
+		
+		assertEquals(RECRUITER_ID, 						chatParticipant.getParticipantId());
+		assertEquals(firstName, 						chatParticipant.getFirstName());
+		assertEquals(surname, 							chatParticipant.getSurame());
+		assertEquals(CHAT_PARTICIPANT_TYPE.RECRUITER, 	chatParticipant.getType());	
+		assertTrue(chatParticipant.getPhoto().isPresent());
 		
 	}
 	
-	//TODO: When service implemented enable this and check Photo included
+	/**
+	* Tests event where profile updated but no photo was provided
+	*/
 	@Test
 	void testListenForRecruiterProfileUpdatedEvent() {
 		
@@ -240,11 +436,16 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		
 		RecruiterProfileUpdatedEvent event = RecruiterProfileUpdatedEvent
 				.builder()
-					.recruiterId(surname)
+					.recruiterId(RECRUITER_ID)
 					.profileImage(null)
 				.build();
 		
-		//TODO: Need when() to get existing ChatParticipant from the service
+		when(this.mockParticipantService.fetchById(RECRUITER_ID))
+			.thenReturn(Optional.of(ChatParticipant
+					.builder()
+						.firstName(firstName)
+						.surname(surname)
+					.build()));
 		
 		doNothing().when(mockParticipantService).persistParticpant(participantCaptr.capture());
 		
@@ -254,10 +455,11 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 		
 		ChatParticipant chatParticipant = participantCaptr.getValue();
 		
-		assertEquals(CANDIDATE_ID, 						chatParticipant.getParticipantId());
+		assertEquals(RECRUITER_ID, 						chatParticipant.getParticipantId());
 		assertEquals(firstName, 						chatParticipant.getFirstName());
 		assertEquals(surname, 							chatParticipant.getSurame());
-		assertEquals(CHAT_PARTICIPANT_TYPE.CANDIDATE, 	chatParticipant.getType());	
+		assertEquals(CHAT_PARTICIPANT_TYPE.RECRUITER, 	chatParticipant.getType());	
+		assertFalse(chatParticipant.getPhoto().isPresent());
 		
 	}
 	
