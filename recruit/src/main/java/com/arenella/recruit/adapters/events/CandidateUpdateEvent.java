@@ -156,13 +156,16 @@ public class CandidateUpdateEvent {
 		*/
 		public CandidateUpdateEventBuilder photo(com.arenella.recruit.candidates.beans.Candidate.Photo photo) {
 			
-			try {
-				PHOTO_FORMAT format = PHOTO_FORMAT.valueOf(photo.getFormat().toString());
-				this.photo = new Photo(format, photo.getImageBytes());
-			} catch(Exception e) {
-				e.printStackTrace();
-				//If image fails we send without image
-			}
+			Optional.ofNullable(photo).ifPresent(_ -> {
+				try {
+					PHOTO_FORMAT format = PHOTO_FORMAT.valueOf(photo.getFormat().toString());
+					this.photo = new Photo(format, photo.getImageBytes());
+				} catch(Exception e) {
+					e.printStackTrace();
+					//If image fails we send without image
+				}
+			});
+			
 			
 			return this;
 		}

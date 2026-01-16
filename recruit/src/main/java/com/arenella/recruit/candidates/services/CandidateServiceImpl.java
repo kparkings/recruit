@@ -263,6 +263,7 @@ public class CandidateServiceImpl implements CandidateService{
 						.firstName(candidate.getFirstname())
 						.surname(candidate.getSurname())
 						.roleSought(candidate.getRoleSought())
+						.photo(candidate.getPhoto().isPresent() ? candidate.getPhoto().get() : null)
 					.build(); 
 			
 			externalEventPublisher.publishCandidateUpdateEvent(event);

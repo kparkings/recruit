@@ -45,6 +45,12 @@ public class ChatParticipantEntity {
 	private PHOTO_FORMAT 			photoFormat;
 	
 	/**
+	* Default constructor 
+	*/
+	public ChatParticipantEntity() {
+		//Hibernate
+	}
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization details
 	*/

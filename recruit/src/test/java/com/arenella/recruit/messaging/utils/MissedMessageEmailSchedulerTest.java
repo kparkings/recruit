@@ -1,3 +1,5 @@
+package com.arenella.recruit.messaging.utils;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -19,7 +21,6 @@ import com.arenella.recruit.messaging.adapters.MessagingMonolithExternalEventPub
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.dao.PrivateChatDao;
 import com.arenella.recruit.messaging.services.PrivateChatService;
-import com.arenella.recruit.messaging.utils.MissedMessageEmailScheduler;
 
 /**
 * Unit tests for the MissedMessageEmailScheduler class
