@@ -93,6 +93,15 @@ public class ChatParticipant {
 		private String					surname;
 		private Photo 					photo;
 		
+		public ChatParticipantBuilder chatParticipant(ChatParticipant participant) {
+			this.participantId 	= participant.participantId;
+			this.type 			= participant.type;
+			this.firstName		= participant.firstName;
+			this.surname		= participant.surname;
+			this.photo			= participant.photo;
+			return this;
+		}
+		
 		/**
 		* 
 		* @param participantId

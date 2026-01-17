@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.dao.ChatParticipantDao;
+import com.arenella.recruit.messaging.utils.MessagingCandidateImageManipulator;
 
 /**
 * Services for interacting with ChatParticipants 
@@ -14,13 +15,15 @@ import com.arenella.recruit.messaging.dao.ChatParticipantDao;
 public class ParticipantServiceImpl implements ParticipantService{
 
 	private ChatParticipantDao chatParticipantDao;
+	private MessagingCandidateImageManipulator imageManipulator;
 	
 	/**
 	* Constructor
 	* @param participantDao - Dao for Chat Participants
 	*/
-	public ParticipantServiceImpl(ChatParticipantDao chatParticipantDao) {
+	public ParticipantServiceImpl(ChatParticipantDao chatParticipantDao, MessagingCandidateImageManipulator imageManipulator) {
 		this.chatParticipantDao = chatParticipantDao;
+		this.imageManipulator 	= imageManipulator;
 	}
 	
 	/**
@@ -28,7 +31,15 @@ public class ParticipantServiceImpl implements ParticipantService{
 	*/
 	@Override
 	public void persistParticpant(ChatParticipant participant) {
-		this.chatParticipantDao.persistChatParticipant(participant);
+		
+		ChatParticipant chatParticipant = ChatParticipant
+				.builder()
+				.chatParticipant(participant)
+				.photo(imageManipulator.resizeToThumbnail(participant.getPhoto().orElse(null)))
+				.build();
+		
+		this.chatParticipantDao.persistChatParticipant(chatParticipant);
+		
 	}
 
 	/**
