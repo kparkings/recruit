@@ -71,8 +71,8 @@ export class PrivateMessagingComponent {
 					this.chats = chats;
 					
 					let existingChat:PrivateChatAPIOutbound[] = this.chats.filter(c => 
-												c.senderId == this.currentUserAuth.getLoggedInUserId() 	&& c.recipientId == candidateId
-											|| 	c.senderId == candidateId 								&& c.recipientId == this.currentUserAuth.getLoggedInUserId());
+												c.sender.id == this.currentUserAuth.getLoggedInUserId() 	&& c.recipient.id == candidateId
+											|| 	c.sender.id == candidateId 								&& c.recipient.id == this.currentUserAuth.getLoggedInUserId());
 					
 					if (existingChat.length == 0 ) {
 						this.chatService.createChat(this.currentUserAuth.getLoggedInUserId(), candidateId).subscribe(response => {
@@ -118,8 +118,8 @@ export class PrivateMessagingComponent {
 				this.chats = chats;
 										
 				chats.forEach(c => {
-					searchRequest.candidateFilters.candidateIds.push(c.recipientId);
-					recruiterIds.push(c.senderId);	
+					searchRequest.candidateFilters.candidateIds.push(c.recipient.id);
+					recruiterIds.push(c.sender.id);	
 				})
 				
 				/**
@@ -259,7 +259,7 @@ export class PrivateMessagingComponent {
 		
 		let user = sessionStorage.getItem("userId");
 		
-		return chat.recipientId == user;
+		return chat.recipient.id == user;
 	}
 	
 	/**
@@ -269,7 +269,7 @@ export class PrivateMessagingComponent {
 		
 		let user = sessionStorage.getItem("userId");
 		
-		return this.currentChat?.recipientId == user;
+		return this.currentChat?.recipient.id == user;
 	}
 	
 	/**
@@ -280,7 +280,7 @@ export class PrivateMessagingComponent {
 		let user = sessionStorage.getItem("userId");
 				
 		
-		return this.currentChat?.senderId == user;
+		return this.currentChat?.sender.id == user;
 	}
 	
 	/**
@@ -288,7 +288,7 @@ export class PrivateMessagingComponent {
 	* currently selected chat.
 	*/
 	public getSelectedChatOtherUserName():string {
-		return this.getUserName(this.currentChat?.senderId || '-', this.currentChat?.recipientId || '-');
+		return this.getUserName(this.currentChat?.sender.id || '-', this.currentChat?.recipient.id || '-');
 	}
 	
 	/**
@@ -569,11 +569,11 @@ export class PrivateMessagingComponent {
 				return this.UNBLOCKED;
 			}
 			
-			if (this.currentChat!.blockedByRecipient && sessionStorage.getItem("userId") == this.currentChat!.recipientId) {
+			if (this.currentChat!.blockedByRecipient && sessionStorage.getItem("userId") == this.currentChat!.recipient.id) {
 				return this.BLOCKED;	
 			}
 			
-			if (this.currentChat!.blockedBySender && sessionStorage.getItem("userId") == this.currentChat!.senderId) {
+			if (this.currentChat!.blockedBySender && sessionStorage.getItem("userId") == this.currentChat!.sender.id) {
 				return this.BLOCKED;	
 			}
 		}

@@ -142,8 +142,8 @@ export class PrivateChatAPIOutbound {
 	/**
 	* Constructor
 	* @param public id						- Unique id of the Chat
-	* @param public senderId				- User who created the Chat
-	* @param public recipientId				- User who Chat was created to chat with
+	* @param public sender					- User who created the Chat
+	* @param public recipient				- User who Chat was created to chat with
 	* @param public created					- When the Chat was created
 	* @param public lastUpdated				- When the Chat was last updated. Including a new reply
 	* @param public replies					- Messages between User's
@@ -158,8 +158,8 @@ export class PrivateChatAPIOutbound {
 	*/
 	constructor(
 		public id:string,
-		public senderId:string,
-		public recipientId:string,
+		public sender:ChatParticipantAPIOutbound,
+		public recipient:ChatParticipantAPIOutbound,
 		public created:Date,
 		public lastUpdated:Date,
 		public replies:Map<string,ChatMessageAPIOutbound> = new Map<string,ChatMessageAPIOutbound>([]),
@@ -199,6 +199,19 @@ export class ChatMessageAPIOutbound {
 		public likes:Array<string>		= new Array<string>()
 	){}
 	
+}
+
+/**
+* Represents a Participant in the Chat 
+*/
+export class ChatParticipantAPIOutbound {
+	
+	constructor(
+		public id:string,
+		public firstName:string,
+		public surname:string
+	){}
+		
 }
 
 /**

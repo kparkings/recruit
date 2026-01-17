@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 
 /**
@@ -15,18 +16,18 @@ import com.arenella.recruit.messaging.beans.PrivateChat;
 */
 public class PrivateChatAPIOutbound {
 
-	private UUID 					id;
-	private String					senderId;
-	private String					recipientId;
-	private LocalDateTime 			created;
-	private LocalDateTime			lastUpdated;
+	private UUID 								id;
+	private ChatParticipantAPIOutbound			sender;
+	private ChatParticipantAPIOutbound			recipient;
+	private LocalDateTime 						created;
+	private LocalDateTime						lastUpdated;
 	private Map<UUID,ChatMessageAPIOutbound>	replies 				= new LinkedHashMap<>();
-	private LocalDateTime			lastKeyPressSender;
-	private LocalDateTime			lastKeyPressRecipient;
-	private boolean					blockedBySender;
-	private boolean					blockedByRecipient;
-	private LocalDateTime   		lastViewedBySender;
-	private LocalDateTime   		lastViewedByRecipient; 
+	private LocalDateTime						lastKeyPressSender;
+	private LocalDateTime						lastKeyPressRecipient;
+	private boolean								blockedBySender;
+	private boolean								blockedByRecipient;
+	private LocalDateTime   					lastViewedBySender;
+	private LocalDateTime   					lastViewedByRecipient; 
 
 	/**
 	* Constructor based upon a builder
@@ -34,8 +35,8 @@ public class PrivateChatAPIOutbound {
 	*/
 	public PrivateChatAPIOutbound(PrivateChatAPIOutboundBuilder builder) {
 		this.id 					= builder.id;
-		this.senderId 				= builder.senderId;
-		this.recipientId 			= builder.recipientId;
+		this.sender 				= builder.sender;
+		this.recipient 				= builder.recipient;
 		this.created 				= builder.created;
 		this.lastUpdated			= builder.lastUpdated;
 		this.replies 				= builder.replies;
@@ -56,19 +57,19 @@ public class PrivateChatAPIOutbound {
 	}
 	
 	/**
-	* Returns the id of the Sender
+	* Returns the Sender
 	* @return unique id
 	*/
-	public String getSenderId() {
-		return this.senderId;
+	public ChatParticipantAPIOutbound getSender() {
+		return this.sender;
 	}
 	
 	/**
-	* Returns the id of the recipient
+	* Returns the recipient
 	* @return unique id
 	*/
-	public String getRecipientId() {
-		return this.recipientId;
+	public ChatParticipantAPIOutbound getRecipient() {
+		return this.recipient;
 	}
 	
 	/**
@@ -191,8 +192,8 @@ public class PrivateChatAPIOutbound {
 	public static class PrivateChatAPIOutboundBuilder {
 		
 		private UUID 								id						= UUID.randomUUID();
-		private String								senderId;
-		private String								recipientId;
+		private ChatParticipantAPIOutbound			sender;
+		private ChatParticipantAPIOutbound			recipient;
 		private LocalDateTime 						created;
 		private LocalDateTime						lastUpdated;
 		private Map<UUID,ChatMessageAPIOutbound>	replies 				= new LinkedHashMap<>();
@@ -214,22 +215,22 @@ public class PrivateChatAPIOutbound {
 		}
 		
 		/**
-		* Sets the uniqueId of the sender that initiated the chat
+		* Sets the Sender that initiated the chat
 		* @param senderId - Unique id
 		* @return Builder
 		*/
-		public PrivateChatAPIOutboundBuilder senderId(String senderId) {
-			this.senderId = senderId;
+		public PrivateChatAPIOutboundBuilder sender(ChatParticipantAPIOutbound sender) {
+			this.sender = sender;
 			return this;
 		}
 		
 		/**
-		* Sends the Recipient of the Chat
+		* Sets the Recipient of the Chat
 		* @param recipientId - UniqueId
 		* @return Builder
 		*/
-		public PrivateChatAPIOutboundBuilder recipientId(String recipientId){
-			this.recipientId = recipientId;
+		public PrivateChatAPIOutboundBuilder recipient(ChatParticipantAPIOutbound recipient){
+			this.recipient = recipient;
 			return this;
 		}
 		
@@ -342,7 +343,7 @@ public class PrivateChatAPIOutbound {
 	* @param chat - To be converted
 	* @return converted
 	*/
-	public static PrivateChatAPIOutbound fromDomain(PrivateChat chat) {
+	public static PrivateChatAPIOutbound fromDomain(PrivateChat chat, ChatParticipant sender, ChatParticipant recipient) {
 		
 		Map<UUID, ChatMessageAPIOutbound> replies = new LinkedHashMap<>();
 		
@@ -351,8 +352,8 @@ public class PrivateChatAPIOutbound {
 		return PrivateChatAPIOutbound
 			.builder()
 			.id(chat.getId())
-			.senderId(chat.getSenderId())
-			.recipientId(chat.getRecipientId())
+			.sender(ChatParticipantAPIOutbound.builder().chatParticipant(sender).build())
+			.recipient(ChatParticipantAPIOutbound.builder().chatParticipant(recipient).build())
 			.created(chat.getCreated())
 			.lastUpdate(chat.getLastUpdated())
 			.lastKeyPressSender(chat.getLastKeyPressSender().orElse(null))

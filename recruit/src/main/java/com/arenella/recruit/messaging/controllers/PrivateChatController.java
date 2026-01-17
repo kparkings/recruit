@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
+import com.arenella.recruit.messaging.beans.PrivateChat;
+import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PrivateChatService;
 
 /**
@@ -27,12 +29,16 @@ public class PrivateChatController {
 
 	private PrivateChatService privateChatService;
 	
+	private ParticipantService participantService;
+	
 	/**
 	* Constructor
 	* @param privateChatService - Provides services related to private chat's
+	* @param ParticipantService - Services for participants of Chat's
 	*/
-	public PrivateChatController(PrivateChatService privateChatService) {
+	public PrivateChatController(PrivateChatService privateChatService, ParticipantService participantService) {
 		this.privateChatService = privateChatService;
+		this.participantService = participantService;
 	}
 	
 	/**
@@ -56,7 +62,13 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="privatechat/{chatId}", produces="application/json")
 	public ResponseEntity<PrivateChatAPIOutbound> fetchPrivateChatById(@PathVariable("chatId") UUID chatId, Principal principal) {
-		return ResponseEntity.ok(PrivateChatAPIOutbound.fromDomain(this.privateChatService.getChat(chatId, principal)));
+		
+		PrivateChat 		chat		= this.privateChatService.getChat(chatId, principal);
+		ChatParticipant 	sender 		= this.participantService.fetchById(chat.getSenderId()).orElseThrow(()    -> new IllegalStateException());
+		ChatParticipant 	recipient 	= this.participantService.fetchById(chat.getRecipientId()).orElseThrow(() -> new IllegalStateException());
+		
+		return ResponseEntity.ok(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient));
+		
 	}
 	
 	/**
@@ -67,7 +79,18 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@GetMapping(path="privatechat", produces="application/json")
 	public ResponseEntity<Set<PrivateChatAPIOutbound>> fetchChatsByUserId(Principal principal) {
-		return ResponseEntity.ok(this.privateChatService.getUsersChats(principal).stream().map(PrivateChatAPIOutbound::fromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
+		
+		Set<PrivateChatAPIOutbound> chats = new LinkedHashSet<>();
+		
+		this.privateChatService.getUsersChats(principal).stream().forEach(chat -> {
+			this.participantService.fetchById(chat.getSenderId()).ifPresent(sender -> {
+				this.participantService.fetchById(chat.getRecipientId()).ifPresent(recipient -> {
+					chats.add(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient));
+				});
+			});
+		});
+		
+		return ResponseEntity.ok(chats);
 	}
 	
 	/**

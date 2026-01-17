@@ -1,11 +1,13 @@
 package com.arenella.recruit.messaging.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.security.Principal;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,7 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PrivateChat;
+import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PrivateChatService;
 
 /**
@@ -30,6 +34,9 @@ class PrivateChatControllerTest {
 
 	@Mock
 	private PrivateChatService 		mockPrivateChatService;
+	
+	@Mock
+	private ParticipantService		mockParticipantService;
 	
 	@Mock
 	private Principal				mockPrincipal;
@@ -64,15 +71,67 @@ class PrivateChatControllerTest {
 	@Test
 	void testFetchPrivateChatById() {
 		
-		final UUID chatId = UUID.randomUUID();
-		final PrivateChat chat = PrivateChat.builder().id(chatId).build();
+		final String 			senderId 	= "rec1";
+		final String 			receiverId 	= "can1";
+		final UUID 				chatId 		= UUID.randomUUID();
+		final PrivateChat 		chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(receiverId).build();
+		
+		final ChatParticipant 	sender 		= ChatParticipant.builder().participantId("rec1").firstName("Bob").surname("Parkings").build();
+		final ChatParticipant 	receiver 	= ChatParticipant.builder().participantId("can1").firstName("Lorraine").surname("Parkings").build();
 		
 		when(this.mockPrivateChatService.getChat(chatId, mockPrincipal)).thenReturn(chat);
+		when(this.mockParticipantService.fetchById(senderId)).thenReturn(Optional.of(sender));
+		when(this.mockParticipantService.fetchById(receiverId)).thenReturn(Optional.of(receiver));
 		
 		ResponseEntity<PrivateChatAPIOutbound> response = controller.fetchPrivateChatById(chatId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(chatId, response.getBody().getId());
+		
+		assertEquals(senderId,   response.getBody().getSender().getId());
+		assertEquals(receiverId, response.getBody().getRecipient().getId());
+	}
+	
+	/**
+	* Tests if Sender is not available an exception is thrown
+	*/
+	@Test
+	void testFetchPrivateChatByIdNoSender() {
+		
+		final String 			senderId 	= "rec1";
+		final String 			receiverId 	= "can1";
+		final UUID 				chatId 		= UUID.randomUUID();
+		final PrivateChat 		chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(receiverId).build();
+		
+		when(this.mockPrivateChatService.getChat(chatId, mockPrincipal)).thenReturn(chat);
+		when(this.mockParticipantService.fetchById(senderId)).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalStateException.class, () -> {
+			controller.fetchPrivateChatById(chatId, mockPrincipal);
+		});
+		
+	}
+	
+	/**
+	* Tests if Recipient is not available an exception is thrown 
+	*/
+	@Test
+	void testFetchPrivateChatByIdNoRecipient() {
+		
+		final String 			senderId 	= "rec1";
+		final String 			receiverId 	= "can1";
+		final UUID 				chatId 		= UUID.randomUUID();
+		final PrivateChat 		chat 		= PrivateChat.builder().id(chatId).senderId(senderId).recipientId(receiverId).build();
+		
+		final ChatParticipant 	sender 		= ChatParticipant.builder().participantId("rec1").firstName("Bob").surname("Parkings").build();
+		
+		when(this.mockPrivateChatService.getChat(chatId, mockPrincipal)).thenReturn(chat);
+		when(this.mockParticipantService.fetchById(senderId)).thenReturn(Optional.of(sender));
+		when(this.mockParticipantService.fetchById(receiverId)).thenReturn(Optional.empty());
+		
+		assertThrows(IllegalStateException.class, () -> {
+			controller.fetchPrivateChatById(chatId, mockPrincipal);
+		});
 		
 	}
 	
@@ -82,15 +141,83 @@ class PrivateChatControllerTest {
 	@Test
 	void testFetchChatsByUserId() {
 		
-		final UUID chatId = UUID.randomUUID();
-		final PrivateChat chat = PrivateChat.builder().id(chatId).build();
+		final String			senderId1 		= "s1";
+		final String			recipientId1 	= "r1";
+		final ChatParticipant	sender1			= ChatParticipant.builder().participantId(senderId1).build();
+		final ChatParticipant	recipient1		= ChatParticipant.builder().participantId(recipientId1).build();
+		final UUID 				chatId1 		= UUID.randomUUID();
+		final PrivateChat 		chat1 			= PrivateChat.builder().id(chatId1).senderId(senderId1).recipientId(recipientId1).build();
 		
-		when(this.mockPrivateChatService.getUsersChats(mockPrincipal)).thenReturn(Set.of(chat));
-		
+		when(this.mockPrivateChatService.getUsersChats(mockPrincipal)).thenReturn(Set.of(chat1));
+		when(this.mockParticipantService.fetchById(senderId1)).thenReturn(Optional.of(sender1));
+		when(this.mockParticipantService.fetchById(recipientId1)).thenReturn(Optional.of(recipient1));
 		ResponseEntity<Set<PrivateChatAPIOutbound>> response = controller.fetchChatsByUserId(mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(chatId, response.getBody().stream().findFirst().get().getId());
+		assertEquals(chatId1, response.getBody().stream().findFirst().get().getId());
+		
+	}
+	
+	/**
+	* Tests retrieval of Chat's for a specific User where one of the Chats has no 
+	* associated Sender. In this case the Chat should be excluded from the results
+	*/
+	@Test
+	void testFetchChatsByUserIdChatWithMissingSender() {
+		
+		final String			senderId1 		= "s1";
+		final String			recipientId1 	= "r1";
+		final UUID 				chatId1 		= UUID.randomUUID();
+		final PrivateChat 		chat1 			= PrivateChat.builder().id(chatId1).senderId(senderId1).recipientId(recipientId1).build();
+		
+		final String			senderId2		= "s2";
+		final String			recipientId2 	= "r2";
+		final ChatParticipant	sender2			= ChatParticipant.builder().participantId(senderId2).build();
+		final ChatParticipant	recipient2		= ChatParticipant.builder().participantId(recipientId2).build();
+		final UUID 				chatId2 		= UUID.randomUUID();
+		final PrivateChat 		chat2 			= PrivateChat.builder().id(chatId2).senderId(senderId2).recipientId(recipientId2).build();
+		
+		when(this.mockPrivateChatService.getUsersChats(mockPrincipal)).thenReturn(Set.of(chat1, chat2));
+		when(this.mockParticipantService.fetchById(senderId1)).thenReturn(Optional.empty());
+		when(this.mockParticipantService.fetchById(senderId2)).thenReturn(Optional.of(sender2));
+		when(this.mockParticipantService.fetchById(recipientId2)).thenReturn(Optional.of(recipient2));
+		ResponseEntity<Set<PrivateChatAPIOutbound>> response = controller.fetchChatsByUserId(mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(chatId2, response.getBody().stream().findFirst().get().getId());
+		assertEquals(1, response.getBody().size());
+	}
+	
+	/**
+	* Tests retrieval of Chat's for a specific User where one of the Chats has no 
+	* associated Receiver. In this case the Chat should be excluded from the results
+	*/
+	@Test
+	void testFetchChatsByUserIdChatWithMissinRecipient() {
+		
+		final String			senderId1 		= "s1";
+		final String			recipientId1 	= "r1";
+		final ChatParticipant	sender1			= ChatParticipant.builder().participantId(senderId1).build();
+		final UUID 				chatId1 		= UUID.randomUUID();
+		final PrivateChat 		chat1 			= PrivateChat.builder().id(chatId1).senderId(senderId1).recipientId(recipientId1).build();
+		
+		final String			senderId2		= "s2";
+		final String			recipientId2 	= "r2";
+		final ChatParticipant	sender2			= ChatParticipant.builder().participantId(senderId2).build();
+		final ChatParticipant	recipient2		= ChatParticipant.builder().participantId(recipientId2).build();
+		final UUID 				chatId2 		= UUID.randomUUID();
+		final PrivateChat 		chat2 			= PrivateChat.builder().id(chatId2).senderId(senderId2).recipientId(recipientId2).build();
+		
+		when(this.mockPrivateChatService.getUsersChats(mockPrincipal)).thenReturn(Set.of(chat1, chat2));
+		when(this.mockParticipantService.fetchById(senderId1)).thenReturn(Optional.of(sender1));
+		when(this.mockParticipantService.fetchById(recipientId1)).thenReturn(Optional.empty());
+		when(this.mockParticipantService.fetchById(senderId2)).thenReturn(Optional.of(sender2));
+		when(this.mockParticipantService.fetchById(recipientId2)).thenReturn(Optional.of(recipient2));
+		ResponseEntity<Set<PrivateChatAPIOutbound>> response = controller.fetchChatsByUserId(mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(chatId2, response.getBody().stream().findFirst().get().getId());
+		assertEquals(1, response.getBody().size());
 		
 	}
 	

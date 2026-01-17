@@ -27,7 +27,7 @@
 				<div class="contacts" *ngIf="chats.length != 0">
 					<div class="chat-list-box" style="clear:both" *ngFor="let chat of getChats()" (click)="showChatMessages(chat)">
 						<div>
-							<div style="float:left;">{{getUserName(chat.senderId, chat.recipientId)}}</div>
+							<div style="float:left;">{{getUserName(chat.sender.id, chat.recipient.id)}}</div>
 							<div><span class="chat-iconX material-icons private-chat-bubble unread-messages-{{hasUnviewedMessages(chat)}}">chat_bubble</span></div>
 						</div>
 						
