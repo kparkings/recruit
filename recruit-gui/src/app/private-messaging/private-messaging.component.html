@@ -27,7 +27,9 @@
 				<div class="contacts" *ngIf="chats.length != 0">
 					<div class="chat-list-box" style="clear:both" *ngFor="let chat of getChats()" (click)="showChatMessages(chat)">
 						<div>
-							<div style="float:left;">{{getUserName(chat.sender.id, chat.recipient.id)}}</div>
+							<img style="float:left;width:33px;height:33px;margin-top:8px;margin-right:10px;"*ngIf="hasImage(chat)" id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhoto(chat)}}' />
+							<img style="float:left;width:33px;height:33px;margin-top:8px;margin-right:10px;"*ngIf="!hasImage(chat)" id='base64image'  />
+							<div style="float:left;">{{getUserName(chat)}}</div>
 							<div><span class="chat-iconX material-icons private-chat-bubble unread-messages-{{hasUnviewedMessages(chat)}}">chat_bubble</span></div>
 						</div>
 						
@@ -36,6 +38,8 @@
 			</div>
 			<div class="chat-view-item-panel" *ngIf="chatViewItem == 'message'">
 				<div class="pm-messages-header">
+					<img style="float:left;width:33px;height:33px;margin-top:0px;margin-right:10px;margin-left:5px;"*ngIf="hasImageCurrentChat()" id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhotoCurrentChat()}}' />
+					<img style="float:left;width:33px;height:33px;margin-top:0px;margin-right:10px;margin-left:5px;"*ngIf="!hasImageCurrentChat()" id='base64image'  />
 					<span class="pm-messages-header-username">
 						{{getSelectedChatOtherUserName()}}
 						<span class="chat-header-{{getBlockedStatus()}} material-icons " (click)="toggleBlockUserChat()">block</span>

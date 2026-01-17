@@ -28,8 +28,6 @@ export class PrivateMessagingComponent {
 	public viewItemMessageSeleted:string 							= "";
 	public currentUserAuth:CurrentUserAuth 							= new CurrentUserAuth();
 	public chats:Array<PrivateChatAPIOutbound>						= new Array<PrivateChatAPIOutbound>();
-	public candidates:Array<CandidateSuggestionAPIOutbound>			= new Array<CandidateSuggestionAPIOutbound>();
-	public recruiters:Array<RecruiterBasicInfoAPIOutbound>			= new Array<RecruiterBasicInfoAPIOutbound>();
 	public currentChat:PrivateChatAPIOutbound | undefined;
 	public userHasChatAccess:boolean								= false;	
 	public lastKeyPress:Date										= new Date();
@@ -107,53 +105,10 @@ export class PrivateMessagingComponent {
 	* retrieve all the Candidates involved in the Chat's 
 	*/
 	private fetchChats():void{
-		
 		if (this.appComponent.isAuthenticated()) {
-		
-			let searchRequest:SuggestionsSearchRequest = new SuggestionsSearchRequest();
-			searchRequest.requestFilters.maxNumberOfSuggestions = 100000;
-			let recruiterIds:Array<string> = new Array<string>();			
 			this.chatService.fetchChatsByUserId().subscribe(chats => {
-				
 				this.chats = chats;
-										
-				chats.forEach(c => {
-					searchRequest.candidateFilters.candidateIds.push(c.recipient.id);
-					recruiterIds.push(c.sender.id);	
-				})
-				
-				/**
-				* Fetch recruiters 
-				*/
-				if (recruiterIds.length > 0 && !this.isRecruiter()) {
-					this.recruiterService.getRecruitersByIds(recruiterIds).subscribe(result => {
-						this.recruiters = result;
-					})
-				}
-				
-				/**
-				* Fetch candidates 
-				*/
-				if (searchRequest.candidateFilters.candidateIds.length > 0) {
-					this.candidateService.getCandidateSuggestions(searchRequest).subscribe(response => {
-						
-						let candidates:Array<CandidateSuggestionAPIOutbound> = response.body.content;
-						
-						candidates.forEach(candidate => {
-							
-							let candidateDetails:CandidateSuggestionAPIOutbound = new CandidateSuggestionAPIOutbound();
-							
-							candidateDetails.candidateId = candidate.candidateId;
-							candidateDetails.firstname = candidate.firstname;
-							candidateDetails.surname = candidate.surname;
-							
-							this.candidates.push(candidateDetails);
-						});
-						
-					});
-				}
 			});			
-		
 		}
 	}
 	
@@ -171,13 +126,7 @@ export class PrivateMessagingComponent {
 		this.showMessageItemView();
 		this.chatService.fetchPrivateChatById(currentChat.id).subscribe(chat => {
 			this.currentChat = chat;
-			
-			//this.doScrollTop('boop');
-			
-			//Last viewed functionality
-			this.chatService.doSetLastViewed(this.currentChat.id).subscribe(res => {
-				
-			})
+			this.chatService.doSetLastViewed(this.currentChat.id).subscribe(res => {})
 			
 			//User typing functionality
 			this.otherUserTypeing = false;
@@ -288,48 +237,88 @@ export class PrivateMessagingComponent {
 	* currently selected chat.
 	*/
 	public getSelectedChatOtherUserName():string {
-		return this.getUserName(this.currentChat?.sender.id || '-', this.currentChat?.recipient.id || '-');
+		return this.getUserName(this.currentChat!);
+	}
+	
+	/**
+	* Returns current Users Id
+	*/
+	private getCurrentUsersId():string{
+		return ""+sessionStorage.getItem("userId");
+	}
+	
+	public hasImage(chat:PrivateChatAPIOutbound):boolean{
+		
+		if (this.getCurrentUsersId() == chat.sender.id) {
+			if(chat.recipient.photo ) {
+				return true;
+			} else {
+				return false;
+			}
+		
+		} else {
+			if(chat.sender.photo ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+	}
+	
+	public getChatParticipantPhoto(chat:PrivateChatAPIOutbound):any{
+		
+		if (this.getCurrentUsersId() == chat.sender.id) {
+			return chat.recipient.photo.imageBytes;
+		} else {
+			return chat.sender.photo.imageBytes;
+		}
+		
+	}
+	
+	public hasImageCurrentChat():boolean{
+			
+		if (this.getCurrentUsersId() == this.currentChat!.sender.id) {
+			if(this.currentChat!.recipient.photo ) {
+				return true;
+			} else {
+				return false;
+			}
+		
+		} else {
+			if(this.currentChat!.sender.photo ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
+	}
+		
+	public getChatParticipantPhotoCurrentChat():any{
+		
+		if (this.getCurrentUsersId() == this.currentChat!.sender.id) {
+			return this.currentChat!.recipient.photo.imageBytes;
+		} else {
+			return this.currentChat!.sender.photo.imageBytes;
+		}
+		
 	}
 	
 	/**
 	* Display name of the User in the Chat
 	*/
-	public getUserName(senderId:string,recipientId:string):string{
+	public getUserName(chat:PrivateChatAPIOutbound):string{
 		
 		let fn:string | undefined;
 		let sn:string | undefined;
 		
-		if (this.isCandidate()) {
-		
-			if (senderId == "kparkings") {
-				return "Kevin Parkings";
-			}
-			
-			let recruiter = this.recruiters.filter(c => c.recruiterId == senderId)[0];
-			
-			if (!recruiter) {
-				return "-";
-			}
-			
-			fn = recruiter.firstname.charAt(0).toUpperCase() + recruiter.firstname.slice(1);
-			sn = recruiter.surname.charAt(0).toUpperCase() + recruiter.surname.slice(1);
-						
+		if (this.getCurrentUsersId() == chat.sender.id) {
+			fn = chat.recipient.firstName;
+			sn = chat.recipient.surname;
 		} else {
-			
-			if (recipientId == "kparkings") {
-				return "Kevin Parkings";
-			}
-						
-			let candidate = this.candidates.filter(c => c.candidateId == recipientId)[0];
-					
-			if (!candidate) {
-				return "-";
-			}
-			
-			fn = candidate.firstname.charAt(0).toUpperCase() + candidate.firstname.slice(1);
-			sn = candidate.surname.charAt(0).toUpperCase() + candidate.surname.slice(1);
-
-						
+			fn = chat.sender.firstName;
+			sn = chat.sender.surname;
 		}
 		
 		let fullName = fn + " " + sn;
@@ -621,18 +610,7 @@ export class PrivateMessagingComponent {
 	* so that a request is sent max, once every second. 
 	*/
 	public handleIsTyping():void{
-	
-		//let currentTime:Date = new Date();
-		//let numSecondsSinceBackendLastInformed = (currentTime.getTime() - this.lastKeyPressSentToBackend.getTime())/1000;
-		
-		//if (numSecondsSinceBackendLastInformed >= 1) {
-		//	this.lastKeyPress = currentTime;
-			this.chatService.doSetKeyPressed(this.currentChat!.id).subscribe(res => {
-				
-			});
-		//}
-		
+		this.chatService.doSetKeyPressed(this.currentChat!.id).subscribe(res => {});
 	}
-	
 	
 }	

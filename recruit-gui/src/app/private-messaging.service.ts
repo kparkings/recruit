@@ -209,9 +209,17 @@ export class ChatParticipantAPIOutbound {
 	constructor(
 		public id:string,
 		public firstName:string,
-		public surname:string
+		public surname:string,
+		public photo:Photo
 	){}
 		
+}
+
+/**
+* Photo of Chat participant
+*/
+export class Photo{
+	constructor(public imageBytes:any, format:string){}
 }
 
 /**

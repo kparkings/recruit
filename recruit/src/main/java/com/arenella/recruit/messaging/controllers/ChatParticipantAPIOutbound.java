@@ -1,6 +1,7 @@
 package com.arenella.recruit.messaging.controllers;
 
 import com.arenella.recruit.messaging.beans.ChatParticipant;
+import com.arenella.recruit.messaging.beans.Photo;
 
 /**
 * Represents a Participant in an instant Chat message 
@@ -10,6 +11,7 @@ public class ChatParticipantAPIOutbound {
 	private String id;
 	private String firstName;
 	private String surname;
+	private Photo photo;
 	
 	/**
 	* Constructor
@@ -19,6 +21,7 @@ public class ChatParticipantAPIOutbound {
 		this.id 		= builder.id;
 		this.firstName 	= builder.firstName;
 		this.surname 	= builder.surname;
+		this.photo		= builder.photo;
 	}
 	
 	/**
@@ -46,6 +49,14 @@ public class ChatParticipantAPIOutbound {
 	}
 	
 	/**
+	* Returns Participants Photo
+	* @return photo
+	*/
+	public Photo getPhoto() {
+		return this.photo;
+	}
+	
+	/**
 	* Returns a Builder for the class
 	* @return BUilder
 	*/
@@ -61,6 +72,7 @@ public class ChatParticipantAPIOutbound {
 		private String id;
 		private String firstName;
 		private String surname;
+		private Photo photo;
 		
 		/**
 		* Populates builder with values from a ChatParticipant
@@ -71,6 +83,9 @@ public class ChatParticipantAPIOutbound {
 			this.id 		= chatParticipant.getParticipantId();
 			this.firstName 	= chatParticipant.getFirstName();
 			this.surname 	= chatParticipant.getSurame();
+			
+			chatParticipant.getPhoto().ifPresent(p -> photo = p);
+			
 			return this;
 		}
 		
