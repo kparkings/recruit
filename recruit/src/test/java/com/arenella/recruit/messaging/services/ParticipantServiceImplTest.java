@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.services;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.dao.ChatParticipantDao;
+import com.arenella.recruit.messaging.utils.MessagingCandidateImageManipulator;
 
 /**
 * Unit tests for the ParticipantServiceImpl class 
@@ -22,7 +24,10 @@ import com.arenella.recruit.messaging.dao.ChatParticipantDao;
 class ParticipantServiceImplTest {
 
 	@Mock
-	private ChatParticipantDao mockDao;
+	private ChatParticipantDao 					mockDao;
+	
+	@Mock
+	private MessagingCandidateImageManipulator 	mockMessagingCandidateImageManipulator;
 	
 	@InjectMocks
 	private ParticipantServiceImpl service;
@@ -37,7 +42,7 @@ class ParticipantServiceImplTest {
 		
 		this.service.persistParticpant(chatParticipant);
 		
-		verify(mockDao).persistChatParticipant(chatParticipant);
+		verify(mockDao).persistChatParticipant(any(ChatParticipant.class));
 		
 	}
 	
