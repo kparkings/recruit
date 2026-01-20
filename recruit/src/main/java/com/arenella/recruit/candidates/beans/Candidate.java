@@ -1,6 +1,7 @@
 package com.arenella.recruit.candidates.beans;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -89,6 +90,7 @@ public class Candidate {
 	private UUID 						lastAvailabilityCheckIdSent;
 	private LocalDate 					lastAvailabilityCheckConfirmedOn;
 	private Set<Industry> 				industries					= new LinkedHashSet<>();
+	private LocalDateTime				lastProfileUpdate;
 	
 	/**
 	* Constructor based upon a builder
@@ -128,9 +130,11 @@ public class Candidate {
 		this.lastAvailabilityCheckIdSent 		= builder.lastAvailabilityCheckIdSent;
 		this.lastAvailabilityCheckConfirmedOn 	= builder.lastAvailabilityCheckConfirmedOn;
 		this.industries							= builder.industries;
+		this.lastProfileUpdate					= builder.lastProfileUpdate;
 		this.skills.addAll(builder.skills);
 		this.languages.addAll(builder.languages);
 		this.functions.addAll(builder.functions);
+		
 	}
 	
 	/**
@@ -395,6 +399,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns last manual update of the Candidate
+	* @return last update
+	*/
+	public Optional<LocalDateTime> getLastProfileUpdate() {
+		return Optional.ofNullable(this.lastProfileUpdate);
+	}
+	
+	/**
 	* Returns the Date the Candidate account was last refreshed
 	* @return Date of last refresh
 	*/
@@ -522,6 +534,14 @@ public class Candidate {
 	}
 	
 	/**
+	* Updates the time the Candidates profile was last updated
+	* by an non system actor
+	*/
+	public void profileUpdated() {
+		this.lastProfileUpdate = LocalDateTime.now();
+	}
+	
+	/**
 	* Updates the last time the Candidate had their availability checked
 	*/
 	public void setCandidateAvailabilityChecked() {
@@ -638,6 +658,7 @@ public class Candidate {
 		private UUID 						lastAvailabilityCheckIdSent;
 		private LocalDate 					lastAvailabilityCheckConfirmedOn;
 		private Set<Industry> 				industries					= new LinkedHashSet<>();
+		private LocalDateTime				lastProfileUpdate;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -1005,6 +1026,17 @@ public class Candidate {
 		public CandidateBuilder industries(Set<Industry> industries) {
 			this.industries.clear();
 			this.industries.addAll(industries);
+			return this;
+		}
+		
+		/**
+		* Sets when the Candidate was last updated by a non system entity
+		* I.E The Candidate themselves, the recruiter if managed or the Admin
+		* @param lastProfileUpdate - Last update
+		* @return Builder
+		*/
+		public CandidateBuilder lastProfileUpdate(LocalDateTime lastProfileUpdate) {
+			this.lastProfileUpdate = lastProfileUpdate;
 			return this;
 		}
 		

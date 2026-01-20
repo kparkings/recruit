@@ -2,6 +2,7 @@ package com.arenella.recruit.candidates.entities;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -149,7 +150,10 @@ public class CandidateDocument {
 	private Set<LanguageDocument> 	languages					= new LinkedHashSet<>();
 	
 	@Field(type = FieldType.Keyword)
-	private Set<Industry> 		industries					= new LinkedHashSet<>();
+	private Set<Industry> 		industries						= new LinkedHashSet<>();
+	
+	@Field(type = FieldType.Date)
+	private Date lastProfileUpdate;
 	
 	/**
 	* Check if we need this. with Hibernate yes but with ES maybe not
@@ -192,6 +196,7 @@ public class CandidateDocument {
 		this.lastAvailabilityCheckIdSent		= builder.lastAvailabilityCheckIdSent;
 		this.lastAvailabilityCheckConfirmedOn	= builder.lastAvailabilityCheckConfirmedOn;
 		this.industries							= builder.industries;
+		this.lastProfileUpdate					= Optional.ofNullable(builder.lastProfileUpdate).isEmpty() ? null : Date.from(builder.lastProfileUpdate.atZone(DEFAULT_ZONE_ID).toInstant());;
 		
 		if (Optional.ofNullable(builder.lastAccountRefresh).isPresent()) {
 			this.lastAccountRefresh			= Date.from(builder.lastAccountRefresh.atStartOfDay(DEFAULT_ZONE_ID).toInstant());
@@ -345,6 +350,14 @@ public class CandidateDocument {
 	}
 	
 	/**
+	* Returns the last time the Candidates profile was updated 
+	* @return
+	*/
+	public Date getLastProfileUpdate() {
+		return this.lastProfileUpdate;
+	}
+	
+	/**
 	* Returns the industries that the Candidate has 
 	* worked in 
 	* @return Inductries Candidate has experience in
@@ -352,6 +365,12 @@ public class CandidateDocument {
 	public Set<Industry> getIndustries() {
 		return this.industries;
 	}
+	
+	//CODE WART START - Used in migration. Can not be removed
+	public void tmpOkToDeleteInitLastProfileUpdate() {
+		this.lastProfileUpdate = this.registerd;
+	}
+	//CODE WART END
 	
 	/**
 	* Returns the Date the Candidates account last had its data refreshed
@@ -578,6 +597,7 @@ public class CandidateDocument {
 		private UUID 					lastAvailabilityCheckIdSent;
 		private Date 					lastAvailabilityCheckConfirmedOn;
 		private Set<Industry> 			industries					= new LinkedHashSet<>();
+		private LocalDateTime			lastProfileUpdate;
 		
 		/**
 		* Sets the candidates Unique identifier in the System
@@ -919,6 +939,16 @@ public class CandidateDocument {
 		}
 		
 		/**
+		* Sets last time Candidates profile was updated by non system entity
+		* @param lastProfileUpdate - last update
+		* @return Builder
+		*/
+		public CandidateDocumentBuilder lastProfileUpdate(LocalDateTime lastProfileUpdate) {
+			this.lastProfileUpdate = lastProfileUpdate;
+			return this;
+		}
+		
+		/**
 		* Returns an instance of CandidateDocument initialized with the 
 		* values in the builder
 		* @return Initialized instance of CandidateDocument
@@ -980,8 +1010,10 @@ public class CandidateDocument {
 						      .toLocalDate())
 					.lastAvailabilityCheckIdSent(doc.getLastAvailabilityCheckIdSent())
 					.industries(doc.getIndustries())
+					.lastProfileUpdate(Optional.ofNullable(doc.getLastProfileUpdate()).map(d -> d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()).orElse(null))
 				.build();
 
+		
 	}
 	
 	/**
@@ -1025,6 +1057,7 @@ public class CandidateDocument {
 					.lastAvailabilityCheckConfirmedOn(candidate.getLastAvailabilityCheckConfirmedOn().isEmpty() ? null : Date.from(candidate.getLastAvailabilityCheckConfirmedOn().get().atStartOfDay(DEFAULT_ZONE_ID).toInstant()))
 					.lastAvailabilityCheckIdSent(candidate.getLastAvailabilityCheckIdSent().isEmpty() ? null : candidate.getLastAvailabilityCheckIdSent().get())
 					.industries(candidate.getIndustries())
+					.lastProfileUpdate(candidate.getLastProfileUpdate().orElse(null))
 				.build();
 		
 	}

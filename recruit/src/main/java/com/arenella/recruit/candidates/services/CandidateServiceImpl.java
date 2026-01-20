@@ -61,6 +61,7 @@ import com.arenella.recruit.candidates.dao.PendingCandidateDao;
 import com.arenella.recruit.candidates.dao.RecruiterContactDao;
 import com.arenella.recruit.candidates.entities.PendingCandidateEntity;
 import com.arenella.recruit.candidates.enums.FUNCTION;
+import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.extractors.DocumentFilterExtractionUtil;
 import com.arenella.recruit.candidates.extractors.SkillExtractor;
 import com.arenella.recruit.candidates.repos.CandidateRepository;
@@ -227,7 +228,7 @@ public class CandidateServiceImpl implements CandidateService{
 		
 		candidate.setLatitude(city.getLat());
 		candidate.setLongitude(city.getLon());
-		
+		candidate.profileUpdated();
 		long candidateId = candidateRepo.saveCandidate(candidate);
 		
 		String password 			= PasswordUtil.generatePassword();
@@ -546,10 +547,21 @@ public class CandidateServiceImpl implements CandidateService{
 			return new PageImpl<>(suggestions.stream().limit(maxSuggestions).collect(Collectors.toCollection(LinkedList::new)));			
 		}
 		
+		/**
+		* If no specific ordering provided and not an unfiltered search 
+		* use the last time the profile was updated to ensure well maintained
+		* profiles are given priority in the search results
+		*/
+		if (filterOptions.getOrderAttribute().isEmpty()) {
+			filterOptions.setOrder(RESULT_ORDER.desc);
+			filterOptions.setOrderAttribute("lastProfileUpdate");
+		}
+		
 		CandidateResultAccumulatorUtil accumulator = new CandidateResultAccumulatorUtil(suggestionUtil, suggestionFilterOptions, searchTermKeywords, filterOptions.getMaxResults());
 		
 		while (true) {
-				
+			//TODO: KP Set Order Attribute to leastupdated date
+			
 			Page<Candidate> candidates = candidateRepo.findAll(filterOptions, this.esClient, pageCounter, pageFetchSize);
 			List<Candidate> toProcess = candidates.getContent();
 			
@@ -793,6 +805,7 @@ public class CandidateServiceImpl implements CandidateService{
 					.industries(candidate.getIndustries())
 				.build();
 		
+		updatedCandidate.profileUpdated();
 		this.candidateRepo.saveCandidate(updatedCandidate);
 		this.externalEventPublisher.publishCandidateAccountUpdatedEvent(new CandidateUpdatedEvent(candidate.getCandidateId(), candidate.getFirstname(), candidate.getSurname(), candidate.getEmail()));
 		

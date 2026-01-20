@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Set;
@@ -69,6 +70,7 @@ class CandidateDocumentTest {
 	private static final double						LATITUDE					= -2;
 	private static final double						LONGITUDE					= 1;
 	private static final Set<Industry> 				INDUSTRIES					= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
+	private static final LocalDateTime				LAST_PROFILE_UPDATE			= LocalDateTime.parse("2026-01-11T00:17:00");
 	
 	/**
 	* Tests construction
@@ -113,6 +115,7 @@ class CandidateDocumentTest {
 					.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
 					.lastAvailabilityCheckConfirmedOn(Date.from(AVAILABIILTY_CHK_RESPONSE.atStartOfDay(CandidateDocument.DEFAULT_ZONE_ID).toInstant()))
 					.industries(INDUSTRIES)
+					.lastProfileUpdate(LAST_PROFILE_UPDATE)
 				.build();
 		
 		assertEquals(CANDIDATE_ID,																		doc.getCandidateId());
@@ -148,6 +151,7 @@ class CandidateDocumentTest {
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE,														doc.getLastAvailabilityCheckEmailSent().get());
 		assertEquals(AVAILABILITY_CHK_TOKEN_ID,															doc.getLastAvailabilityCheckIdSent());
 		assertEquals(Date.from(AVAILABIILTY_CHK_RESPONSE.atStartOfDay(CandidateDocument.DEFAULT_ZONE_ID).toInstant()),	doc.getLastAvailabilityCheckConfirmedOn());
+		assertEquals(LAST_PROFILE_UPDATE,																doc.getLastProfileUpdate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 		
 		assertTrue(doc.getIndustries().contains(Industry.AGRICULTURE));
 		assertTrue(doc.getIndustries().contains(Industry.CYBER_SECURITY));
@@ -198,6 +202,7 @@ class CandidateDocumentTest {
 					.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
 					.lastAvailabilityCheckConfirmedOn(Date.from(AVAILABIILTY_CHK_RESPONSE.atStartOfDay(CandidateDocument.DEFAULT_ZONE_ID).toInstant()))
 					.industries(INDUSTRIES)
+					.lastProfileUpdate(LAST_PROFILE_UPDATE)
 				.build();
 		
 		Candidate candidate = CandidateDocument.convertFromDocument(doc);
@@ -249,6 +254,7 @@ class CandidateDocumentTest {
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
 		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		candidate.getLastAvailabilityCheckIdSent().get());
 		assertEquals(AVAILABIILTY_CHK_RESPONSE,		candidate.getLastAvailabilityCheckConfirmedOn().get());
+		assertEquals(LAST_PROFILE_UPDATE, 			candidate.getLastProfileUpdate().get());		
 		
 		assertTrue(candidate.getIndustries().contains(Industry.AGRICULTURE));
 		assertTrue(candidate.getIndustries().contains(Industry.CYBER_SECURITY));
@@ -319,6 +325,7 @@ class CandidateDocumentTest {
 					.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
 					.lastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE)
 					.industries(INDUSTRIES)
+					.lastProfileUpdate(LAST_PROFILE_UPDATE)
 				.build();
 		
 		CandidateDocument doc = CandidateDocument.convertToDocument(candidate);
@@ -370,6 +377,7 @@ class CandidateDocumentTest {
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	doc.getLastAvailabilityCheckEmailSent().get());
 		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		doc.getLastAvailabilityCheckIdSent());
 		assertEquals(AVAILABIILTY_CHK_RESPONSE,		doc.getLastAvailabilityCheckConfirmedOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+		assertEquals(LAST_PROFILE_UPDATE, 			doc.getLastProfileUpdate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());		
 		
 		assertTrue(doc.getIndustries().contains(Industry.AGRICULTURE));
 		assertTrue(doc.getIndustries().contains(Industry.CYBER_SECURITY));

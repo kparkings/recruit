@@ -407,6 +407,23 @@ public class CandidateFilterOptions {
 	}
 	
 	/**
+	* Sets the search order of the results
+	* @param order asc / desc
+	*/
+	public void setOrder(RESULT_ORDER order) {
+		this.order = order;
+		
+	}
+	
+	/**
+	* Sets which attribute to order results on 
+	* @param orderAttribute - name of the attribute to sort on
+	*/
+	public void setOrderAttribute(String orderAttribute) {
+		this.orderAttribute = orderAttribute;
+	}
+	
+	/**
 	* Returns a Builder for the CandidateFilterOptions class
 	* @return
 	*/

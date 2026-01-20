@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -70,6 +71,7 @@ class CandidateTest {
 	private static final double						LONGITUDE					= 1;
 	private static final double						LATITUDE					= -2;
 	private static final Set<Industry> 				INDUSTRIES					= Set.of(Industry.AGRICULTURE, Industry.CYBER_SECURITY);
+	private static final LocalDateTime				LAST_PROFILE_UPDATE			= LocalDateTime.parse("2026-01-11T00:17:00");
 	
 	/**
 	* Sets up test environment 
@@ -121,6 +123,7 @@ class CandidateTest {
 							.lastAvailabilityCheckIdSent(AVAILABILITY_CHK_TOKEN_ID)
 							.lastAvailabilityCheckConfirmedOn(AVAILABIILTY_CHK_RESPONSE)
 							.industries(INDUSTRIES)
+							.lastProfileUpdate(LAST_PROFILE_UPDATE)
 							.build();
 		
 		assertEquals(CANDIDATE_ID, 					candidate.getCandidateId());
@@ -153,6 +156,7 @@ class CandidateTest {
 		assertEquals(AVAILABIILTY_CHK_EMAIL_DATE, 	candidate.getLastAvailabilityCheckEmailSent().get());
 		assertEquals(AVAILABILITY_CHK_TOKEN_ID,		candidate.getLastAvailabilityCheckIdSent().get());
 		assertEquals(AVAILABIILTY_CHK_RESPONSE,		candidate.getLastAvailabilityCheckConfirmedOn().get());
+		assertEquals(LAST_PROFILE_UPDATE, 			candidate.getLastProfileUpdate().get());
 		
 		assertTrue(candidate.getSkills().contains(SKILL));
 		candidate.getLanguages().stream().filter(l -> l.getLanguage() == LANGUAGE_VAL.getLanguage()).findAny().orElseThrow();
@@ -240,6 +244,7 @@ class CandidateTest {
 		
 		assertTrue(candidate.getLastAvailabilityCheckIdSent().isEmpty());
 		assertTrue(candidate.getLastAvailabilityCheckConfirmedOn().isEmpty());
+		assertTrue(candidate.getLastProfileUpdate().isEmpty());
 		
 		assertEquals(candidate.getAvailableFromDate(), LocalDate.now()); //[KP] Small chance of failure if test run in exactly midnight
 		
@@ -329,6 +334,22 @@ class CandidateTest {
 	
 		assertTrue(candidate.getFunctions().contains(FUNCTION.ANDROID));
 	
+	}
+	
+	/**
+	* Test marking Candidate as being update
+	*/
+	@Test
+	void testProfileUpdated() {
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		assertNull(candidate.getLastProfileUpdate().orElse(null));
+		
+		candidate.profileUpdated();
+		
+		assertNotNull(candidate.getLastProfileUpdate().orElse(null));
+		
 	}
 	
 }

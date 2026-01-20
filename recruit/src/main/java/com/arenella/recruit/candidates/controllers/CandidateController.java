@@ -168,12 +168,12 @@ public class CandidateController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PostMapping(path="submitCandidateSearchRequest/")
 	public Page<CandidateAPIOutbound> getCandidates(
-			@RequestBody CandidateSearchRequest 	searchRequest, 
-			@RequestParam("orderAttribute") 		String 				orderAttribute,
-			@RequestParam("order") 					RESULT_ORDER		order,
-						 Pageable 					pageable,
-						 Principal 					principal,
-						 HttpServletResponse	 	response) throws Exception{
+			@RequestBody CandidateSearchRequest 						searchRequest, 
+			@RequestParam(value="orderAttribute", 	required = false) 	String 				orderAttribute,
+			@RequestParam(value="order", 			required=false) 	RESULT_ORDER		order,
+						 Pageable 										pageable,
+						 Principal 										principal,
+						 HttpServletResponse	 						response) throws Exception{
 		
 			Set<String> candidateIdFilters = new LinkedHashSet<>();
 			
