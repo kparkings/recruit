@@ -1,0 +1,436 @@
+package com.arenella.recruit.messaging.services;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.arenella.recruit.messaging.beans.PublicChat;
+import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
+import com.arenella.recruit.messaging.dao.PublicChatDao;
+
+/**
+* Unit tests for the PublicChatServiceImpl class 
+*/
+@ExtendWith(MockitoExtension.class)
+class PublicChatServiceImplTest {
+
+	private static final UUID 				ID 						= UUID.randomUUID();
+	private static final AUDIENCE_TYPE		AUDIENCE_TYPE_VAL 		= AUDIENCE_TYPE.RECRUITER;
+	private static final UUID				PARENT_ID 				= UUID.randomUUID();
+	private static final String				OWNER_ID 				= "aRec1";
+	private static final LocalDateTime 		CREATED 				= LocalDateTime.of(2026, 1, 15, 11, 02);
+	private static final String 			MESSAGE 				= "A message";
+	private static final Set<String>		likes					= Set.of("rec2","can33");
+	
+	@Mock
+	private Principal mockPrincipal;
+	
+	@Mock
+	private PublicChatDao mockChatDao; 
+	
+	@InjectMocks
+	private PublicChatServiceImpl service;
+	
+	/**
+	* Tests successful creating on a new Chat 
+	*/
+	@Test
+	void testSaveChatHappyPathNewChat() {
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		when(this.mockChatDao.existsById(ID)).thenReturn(false);
+		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(true);
+		
+		PublicChat chat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(MESSAGE)
+					.likes(likes)
+				.build();
+		
+		this.service.saveChat(chat, this.mockPrincipal);
+		
+		verify(this.mockChatDao).saveChat(any(PublicChat.class));
+		
+	}
+	
+	/**
+	* Tests failure case where Chat is new but has a parent that 
+	* doesn't exist
+	*/
+	@Test
+	void testSaveNewChatUnknownParent() {
+		
+		when(this.mockChatDao.existsById(ID)).thenReturn(false);
+		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(false);
+		
+		PublicChat chat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(MESSAGE)
+					.likes(likes)
+				.build();
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.saveChat(chat, this.mockPrincipal);
+		});
+		
+		assertEquals(PublicChatService.ERR_MSG_UNKNOWN_PARENT, ex.getMessage());
+			
+		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
+		
+	}
+	
+	/**
+	* Tests failure case where Chat is new but the owner is not the 
+	* authenticated User
+	*/
+	@Test
+	void testSaveNewChatNotAuthenticatedUser() {
+		
+		when(this.mockPrincipal.getName()).thenReturn("notTheUserInTheChatId");
+		when(this.mockChatDao.existsById(ID)).thenReturn(false);
+		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(true);
+		
+		PublicChat chat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(MESSAGE)
+					.likes(likes)
+				.build();
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.saveChat(chat, this.mockPrincipal);
+		});
+		
+		assertEquals(PublicChatService.ERR_MSG_CANT_CREATE_CHAT_FOR_ANOTHER_USER, ex.getMessage());
+			
+		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
+		
+	}
+	
+	/**
+	* Tests successful update of an existing Chat 
+	*/
+	@Test
+	void testSaveChatHappyPathExistingChat() {
+		
+		final String newMessage = "a new Messaeg";
+		
+		ArgumentCaptor<PublicChat> argCaptChat = ArgumentCaptor.forClass(PublicChat.class);
+		
+		PublicChat oldChat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(MESSAGE)
+					.likes(likes)
+				.build();
+		
+		PublicChat chat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(newMessage)
+					.likes(likes)
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		when(this.mockChatDao.existsById(ID)).thenReturn(true);
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(oldChat));
+		
+		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
+		
+		this.service.saveChat(chat, this.mockPrincipal);
+		
+		verify(this.mockChatDao).saveChat(any(PublicChat.class));
+		
+		PublicChat persistedChat = argCaptChat.getValue();
+		
+		assertEquals(oldChat.getId(), 				persistedChat.getId());
+		assertEquals(oldChat.getAudienceType(), 	persistedChat.getAudienceType());
+		assertEquals(oldChat.getParentChat(), 		persistedChat.getParentChat());
+		assertEquals(oldChat.getOwnerId(), 			persistedChat.getOwnerId());
+		assertEquals(oldChat.getCreated(), 			persistedChat.getCreated());
+		assertEquals(newMessage, 					chat.getMessage());
+		assertEquals(oldChat.getLikes().size(), 	persistedChat.getLikes().size());
+		
+	}
+	
+	/**
+	* Tests failure case where attempt is made to update 
+	* another users Chat 
+	*/
+	@Test
+	void testExistingChatUpdateOtherUsersChat() {
+		
+		PublicChat chat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(MESSAGE)
+					.likes(likes)
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn("notTheUserInTheChatId");
+		when(this.mockChatDao.existsById(ID)).thenReturn(true);
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(chat));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.saveChat(chat, this.mockPrincipal);
+		});
+		
+		assertEquals(PublicChatService.ERR_MSG_CANT_UPDATE_CHAT_FOR_ANOTHER_USER, ex.getMessage());
+			
+		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
+		
+	}
+	
+	/**
+	* Tests that only the message is able to be updated. All the other values are considered immutable 
+	*/
+	@Test
+	void testUpdateChatOnlyMessageCanBeChanged() {
+		
+		final String newMessage = "a new Messaeg";
+		
+		final UUID parentId = UUID.randomUUID();
+		
+		ArgumentCaptor<PublicChat> argCaptChat = ArgumentCaptor.forClass(PublicChat.class);
+		
+		PublicChat oldChat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE_VAL)
+					.parentChat(PARENT_ID)
+					.ownerId(OWNER_ID)
+					.created(CREATED)
+					.message(MESSAGE)
+					.likes(likes)
+				.build();
+		
+		PublicChat chat = PublicChat
+				.builder()
+					.id(ID)
+					.audienceType(AUDIENCE_TYPE.CANDIDATE)
+					.parentChat(parentId)
+					.ownerId(OWNER_ID)
+					.created(LocalDateTime.of(2026, 1, 13, 15, 35, 11))
+					.message(newMessage)
+					.likes(Set.of())
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		when(this.mockChatDao.existsById(ID)).thenReturn(true);
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(oldChat));
+		
+		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
+		
+		this.service.saveChat(chat, this.mockPrincipal);
+		
+		verify(this.mockChatDao).saveChat(any(PublicChat.class));
+		
+		PublicChat persistedChat = argCaptChat.getValue();
+		
+		assertEquals(oldChat.getId(), 				persistedChat.getId());
+		assertEquals(oldChat.getAudienceType(), 	persistedChat.getAudienceType());
+		assertEquals(oldChat.getParentChat(), 		persistedChat.getParentChat());
+		assertEquals(oldChat.getOwnerId(), 			persistedChat.getOwnerId());
+		assertEquals(oldChat.getCreated(), 			persistedChat.getCreated());
+		assertEquals(newMessage, 					chat.getMessage());
+		assertEquals(oldChat.getLikes().size(), 	persistedChat.getLikes().size());
+		
+	}
+	
+	/**
+	* Tests happy path deletion of Chat and children
+	*/
+	@Test
+	void testDeleteChat() {
+		
+		final UUID childCahat1Id 		= UUID.randomUUID();
+		final UUID childCahat2Id 		= UUID.randomUUID();
+		final UUID grandChildCahat1Id 	= UUID.randomUUID();
+		final UUID grandChildCahat2Id 	= UUID.randomUUID();
+		
+		PublicChat parentChat 		= PublicChat.builder().id(ID).ownerId(OWNER_ID).build();
+		PublicChat childChat1 		= PublicChat.builder().id(childCahat1Id).parentChat(ID).ownerId("can19").build();
+		PublicChat childChat2 		= PublicChat.builder().id(childCahat2Id).parentChat(ID).ownerId(OWNER_ID).build();
+		PublicChat gandchildChat1 	= PublicChat.builder().id(grandChildCahat1Id).parentChat(childCahat1Id).ownerId(OWNER_ID).build();
+		PublicChat gandchildChat2 	= PublicChat.builder().id(grandChildCahat2Id).parentChat(childCahat2Id).ownerId("rec33").build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		when(this.mockChatDao.existsById(ID)).thenReturn(true);
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(parentChat));
+		
+		when(this.mockChatDao.fetchChatChildren(ID)).thenReturn(Set.of(childChat1, childChat2));
+		when(this.mockChatDao.fetchChatChildren(childCahat1Id)).thenReturn(Set.of(gandchildChat1));
+		when(this.mockChatDao.fetchChatChildren(childCahat2Id)).thenReturn(Set.of(gandchildChat2));
+		when(this.mockChatDao.fetchChatChildren(grandChildCahat1Id)).thenReturn(Set.of());
+		when(this.mockChatDao.fetchChatChildren(grandChildCahat2Id)).thenReturn(Set.of());
+		
+		this.service.deleteChat(ID, mockPrincipal);
+		
+		verify(this.mockChatDao).deleteById(ID);
+		verify(this.mockChatDao).deleteById(childCahat1Id);
+		verify(this.mockChatDao).deleteById(childCahat2Id);
+		verify(this.mockChatDao).deleteById(grandChildCahat1Id);
+		verify(this.mockChatDao).deleteById(grandChildCahat2Id);
+		
+	}
+	
+	/**
+	* Tests exception is thrown if attempt is made to delete
+	* a non existing Chat
+	*/
+	@Test
+	void testDeleteChatDoesntExist() {
+		
+		when(this.mockChatDao.existsById(ID)).thenReturn(false);
+		
+		assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteChat(ID, mockPrincipal);
+		});
+		
+	}
+	
+	/**
+	* Tests exception is thrown if attempt is made to delete
+	* a Chat belonging to another USer
+	*/
+	@Test
+	void testDeleteChatUserIsNoOwner() {
+		
+		when(this.mockChatDao.existsById(ID)).thenReturn(true);
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(PublicChat.builder().ownerId("notIt").build()));
+		
+		assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteChat(ID, mockPrincipal);
+		});
+		
+	}
+	
+	/**
+	* Tests fetching a Chat where the Chat exists
+	*/
+	@Test
+	void testFetchChatExists() {
+		
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(PublicChat.builder().build()));
+
+		assertNotNull(this.service.fetchChat(ID));
+		
+	}
+	
+	/**
+	* Test fetch of top level chats
+	*/
+	@Test
+	void testFetchTopLevelChats() {
+		
+		when(this.mockChatDao.fetchTopLevelChats(1, 20)).thenReturn(Set.of(PublicChat.builder().build(),PublicChat.builder().build()));
+
+		assertEquals(2, this.service.fetchTopLevelChats(1, 20).size());
+	}
+	
+	/**
+	* Tests exception thrown if not existed Chat is requested
+	*/
+	@Test
+	void testFetchChatDoesNoExists() {
+		
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.empty());
+		
+		assertThrows(RuntimeException.class, () -> {
+			this.service.fetchChat(ID);
+		});
+		
+	}
+	
+	/**
+	* Tests return of direct Children for a given Chat. 
+	*/
+	@Test
+	void testChatChildren() {
+		
+		when(this.mockChatDao.fetchChatChildren(ID)).thenReturn(Set.of(PublicChat.builder().build(), PublicChat.builder().build()));
+		
+		assertEquals(2, this.service.fetchChatChildren(ID).size());
+	}
+	
+	/**
+	* Tests deletion of Chats older than or equal to a given date
+	*/
+	@Test
+	void testDeleteChatsOlderThan() {
+		
+		final UUID childCahat1Id 		= UUID.randomUUID();
+		final UUID childCahat2Id 		= UUID.randomUUID();
+		final UUID grandChildCahat1Id 	= UUID.randomUUID();
+		final UUID grandChildCahat2Id 	= UUID.randomUUID();
+		
+		PublicChat parentChat 		= PublicChat.builder().id(ID).ownerId(OWNER_ID).build();
+		PublicChat childChat1 		= PublicChat.builder().id(childCahat1Id).parentChat(ID).ownerId("can19").build();
+		PublicChat childChat2 		= PublicChat.builder().id(childCahat2Id).parentChat(ID).ownerId(OWNER_ID).build();
+		PublicChat gandchildChat1 	= PublicChat.builder().id(grandChildCahat1Id).parentChat(childCahat1Id).ownerId(OWNER_ID).build();
+		PublicChat gandchildChat2 	= PublicChat.builder().id(grandChildCahat2Id).parentChat(childCahat2Id).ownerId("rec33").build();
+	
+		when(this.mockChatDao.fetchTopLevelChatsOlderThanOrEqualTo(LocalDate.of(2026, 1, 23))).thenReturn(Set.of(parentChat));
+		
+		when(this.mockChatDao.fetchChatChildren(ID)).thenReturn(Set.of(childChat1, childChat2));
+		when(this.mockChatDao.fetchChatChildren(childCahat1Id)).thenReturn(Set.of(gandchildChat1));
+		when(this.mockChatDao.fetchChatChildren(childCahat2Id)).thenReturn(Set.of(gandchildChat2));
+		when(this.mockChatDao.fetchChatChildren(grandChildCahat1Id)).thenReturn(Set.of());
+		when(this.mockChatDao.fetchChatChildren(grandChildCahat2Id)).thenReturn(Set.of());
+		
+		this.service.deleteChatsOlderThan(LocalDate.of(2026, 1, 23));
+		
+		verify(this.mockChatDao).deleteById(ID);
+		verify(this.mockChatDao).deleteById(childCahat1Id);
+		verify(this.mockChatDao).deleteById(childCahat2Id);
+		verify(this.mockChatDao).deleteById(grandChildCahat1Id);
+		verify(this.mockChatDao).deleteById(grandChildCahat2Id);
+		
+	}
+	
+}

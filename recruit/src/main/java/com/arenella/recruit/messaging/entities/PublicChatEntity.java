@@ -1,4 +1,4 @@
-package com.arenella.recruit.messaging.beans;
+package com.arenella.recruit.messaging.entities;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -6,31 +6,57 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.messaging.beans.PublicChat;
+import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
+
 /**
-* Represents a conversation via text based messages between
-* two users of the system
+* Entity representation of a PublicChat 
 */
-public class PublicChat {
+@Entity
+@Table(schema="chats", name="public_chats")
+public class PublicChatEntity {
 	
-	//TODO: 1. How to track if owner has unread reply ( Email and show in Notifications)
-	//TODO: 2. How to track if owner has unseen likes ( Don't email do show in notifications )
-	
-	//Potentially high traffic. Separate table. Send email if notification older than x minutes. When user logs in and views response then remove from table
-	public enum AUDIENCE_TYPE {ALL, RECRUITER, CANDIDATE}
-	
+	@Id
+	@Column(name="id")
 	private UUID 				id;
+	
+	@Column(name="audience_type")
+	@Enumerated(EnumType.STRING)
 	private AUDIENCE_TYPE		audienceType;
+	
+	@Column(name="parent_chat")
 	private UUID				parentChat;
+	
+	@Column(name="owner_id")
 	private String				ownerId;
+	
+	@Column(name="created")
 	private LocalDateTime 		created;
+	
+	@Column(name="message")
 	private String 				message;
+	
+	@Column(name="user_id")
+	@ElementCollection(targetClass=String.class, fetch = FetchType.EAGER)
+	@CollectionTable(schema="chats", name="public_chat_likes", joinColumns=@JoinColumn(name="chat_id"))
 	private Set<String>			likes					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	public PublicChat(PublicChatBuilder builder) {
+	public PublicChatEntity(PublicChatEntityBuilder builder) {
 		
 		this.id 			= builder.id;
 		this.audienceType 	= builder.audienceType;
@@ -68,7 +94,7 @@ public class PublicChat {
 	}
 	
 	/**
-	* Returns the id of the owner/cretor of the Chat
+	* Returns the id of the owner/creator of the Chat
 	* @return Id
 	*/
 	public String getOwnerId() {
@@ -103,14 +129,14 @@ public class PublicChat {
 	* Returns a builder for the class
 	* @return
 	*/
-	public static PublicChatBuilder builder() {
-		return new PublicChatBuilder();
+	public static PublicChatEntityBuilder builder() {
+		return new PublicChatEntityBuilder();
 	}
 	
 	/**
 	* Builder for the Class 
 	*/
-	public static class PublicChatBuilder {
+	public static class PublicChatEntityBuilder {
 		
 		private UUID 				id;
 		private AUDIENCE_TYPE		audienceType;
@@ -121,29 +147,11 @@ public class PublicChat {
 		private Set<String>			likes					= new LinkedHashSet<>();
 		
 		/**
-		* Populates builder with values from existing
-		* PublicChat
-		* @param chat - Contains initialization values
-		* @return Builder
-		*/
-		public PublicChatBuilder publicChat(PublicChat chat) {
-			this.id 				= chat.id;
-			this.audienceType 		= chat.audienceType;
-			this.parentChat 		= chat.parentChat;
-			this.ownerId 			= chat.ownerId;
-			this.created 			= chat.created;
-			this.message 			= chat.message;
-			this.likes.clear();
-			this.likes.addAll(chat.likes);
-			return this;
-		}
-		
-		/**
 		* Sets the Unique Identifier of the Chat
 		* @param id - Chat Id
 		* @return Builder
 		*/
-		public PublicChatBuilder id(UUID id) {
+		public PublicChatEntityBuilder id(UUID id) {
 			this.id = id;
 			return this;
 		}
@@ -154,7 +162,7 @@ public class PublicChat {
 		* @param audienceType - Type of Audience
 		* @return Builder
 		*/
-		public PublicChatBuilder audienceType(AUDIENCE_TYPE audienceType) {
+		public PublicChatEntityBuilder audienceType(AUDIENCE_TYPE audienceType) {
 			this.audienceType = audienceType;
 			return this;
 		}
@@ -164,7 +172,7 @@ public class PublicChat {
 		* @param parentChat - Id of the parten chat 
 		* @return Builder
 		*/
-		public PublicChatBuilder parentChat(UUID parentChat) {
+		public PublicChatEntityBuilder parentChat(UUID parentChat) {
 			this.parentChat = parentChat;
 			return this;
 		}
@@ -174,7 +182,7 @@ public class PublicChat {
 		* @param ownerId - Who created the Message
 		* @return Builder
 		*/
-		public PublicChatBuilder ownerId(String ownerId) {
+		public PublicChatEntityBuilder ownerId(String ownerId) {
 			this.ownerId = ownerId;
 			return this;
 		}
@@ -184,7 +192,7 @@ public class PublicChat {
 		* @param created - creation date
 		* @return Builder
 		*/
-		public PublicChatBuilder created(LocalDateTime created) {
+		public PublicChatEntityBuilder created(LocalDateTime created) {
 			this.created = created;
 			return this;
 		}
@@ -194,17 +202,17 @@ public class PublicChat {
 		* @param message - message
 		* @return Builder
 		*/
-		public PublicChatBuilder message(String message) {
+		public PublicChatEntityBuilder message(String message) {
 			this.message = message;
 			return this;
 		}
-		
+	
 		/**
 		* Sets the likes left by other Users
 		* @param likes - Likes for Post
 		* @return Builder
 		*/
-		public PublicChatBuilder likes(Set<String> likes) {
+		public PublicChatEntityBuilder likes(Set<String> likes) {
 			this.likes.clear();
 			this.likes.addAll(likes);
 			return this;
@@ -214,10 +222,46 @@ public class PublicChat {
 		* Returns an initialized instance of the class
 		* @return instance
 		*/
-		public PublicChat build() {
-			return new PublicChat(this);
+		public PublicChatEntity build() {
+			return new PublicChatEntity(this);
 		}
 		
 	}
-
+	
+	/**
+	* Converts from Entity to Domain representation
+	* @param entity - Entity representation
+	* @return Domain representation
+	*/
+	public static PublicChat fromEntity(PublicChatEntity entity) {
+		return PublicChat
+				.builder()
+					.audienceType(entity.getAudienceType())
+					.created(entity.getCreated())
+					.id(entity.getId())
+					.message(entity.getMessage())
+					.likes(entity.getLikes())
+					.ownerId(entity.getOwnerId())
+					.parentChat(entity.getParentChat().orElse(null))
+				.build();
+	}
+	
+	/**
+	* Converts from Domain to Entity representation
+	* @param chat - Domain representation
+	* @return Entity representation
+	*/
+	public static PublicChatEntity toEntity(PublicChat chat) {
+		return PublicChatEntity
+				.builder()
+					.audienceType(chat.getAudienceType())
+					.created(chat.getCreated())
+					.id(chat.getId())
+					.message(chat.getMessage())
+					.likes(chat.getLikes())
+					.ownerId(chat.getOwnerId())
+					.parentChat(chat.getParentChat().orElse(null))
+				.build();
+	}
+	
 }

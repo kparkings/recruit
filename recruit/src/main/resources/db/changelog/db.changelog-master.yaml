@@ -2782,3 +2782,67 @@ databaseChangeLog:
                    type: varchar
                    constraints:
                      nullable: true
+  - changeSet:
+       id: public_chats
+       author: kparkings
+       changes:
+         - createTable:
+             tableName: public_chats
+             schemaName: chats
+             columns:
+               - column:
+                   name: id
+                   type: UUID
+                   constraints:
+                     primaryKey: true
+                     nullable: false
+               - column:
+                   name: audience_type
+                   type: varchar(100)
+                   constraints:
+                     nullable: false
+               - column:
+                   name: parent_chat
+                   type: UUID
+                   constraints:
+                     nullable: true
+               - column:
+                   name: owner_id
+                   type: varchar(255)
+                   constraints:
+                     nullable: false
+                     foreignKeyName: fk_pub_chat_contact
+                     references: chats.chat_participants(id)
+               - column:
+                   name: created
+                   type: timestamp
+                   constraints:
+                     nullable: false
+               - column:
+                   name: message
+                   type: varchar
+                   constraints:
+                     nullable: false
+         - createTable:
+             tableName: public_chat_likes
+             schemaName: chats
+             columns:
+               - column:
+                   name: user_id
+                   type: varchar
+                   constraints:
+                     nullable: false
+                     foreignKeyName: fk_pub_chat_likes_contact
+                     references: chats.chat_participants(id)
+               - column:
+                   name: chat_id
+                   type: UUID
+                   constraints:
+                     nullable: false
+                     foreignKeyName: fk_pub_chat_likes_chat
+                     references: chats.public_chats(id)
+         - addPrimaryKey:  
+             columnNames:  user_id, chat_id  
+             constraintName:  pk_public_chat_likes  
+             tableName:  public_chat_likes  
+             schemaName: chats
