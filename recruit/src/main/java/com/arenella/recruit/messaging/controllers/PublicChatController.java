@@ -114,7 +114,7 @@ public class PublicChatController {
 	* @return Page of top level Chat's
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
-	@PostMapping(path="publicchat", produces="application/json")
+	@PostMapping(path="publicchat/toplevel", produces="application/json")
 	public ResponseEntity<Set<PublicChatAPIOutbound>>fetchTopLevelChats(Pageable pageable) {
 		
 		Set<PublicChatAPIOutbound> outbound = this.publicChatService.fetchTopLevelChats(pageable.getPageNumber(), pageable.getPageSize())

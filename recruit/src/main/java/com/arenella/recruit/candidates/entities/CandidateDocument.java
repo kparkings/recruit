@@ -366,12 +366,6 @@ public class CandidateDocument {
 		return this.industries;
 	}
 	
-	//CODE WART START - Used in migration. Can not be removed
-	public void tmpOkToDeleteInitLastProfileUpdate() {
-		this.lastProfileUpdate = this.registerd;
-	}
-	//CODE WART END
-	
 	/**
 	* Returns the Date the Candidates account last had its data refreshed
 	* @return Date of last refresh

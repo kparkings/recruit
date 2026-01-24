@@ -1,16 +1,16 @@
 package com.arenella.recruit.messaging.utils;
 
-import java.util.concurrent.atomic.AtomicInteger;
+//import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.springframework.stereotype.Component;
+//import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.candidates.repos.CandidateRepository;
 
 //@Component
 public class TemporaryDataMigrationScheduler {
 	
-	private CandidateRepository canidateRepository;
+	//private CandidateRepository canidateRepository;
 	
 	
 	//private RecruiterDao recruiterDao;
@@ -18,7 +18,7 @@ public class TemporaryDataMigrationScheduler {
 	//private RecruiterProfileDao rpDao;
 	
 	public TemporaryDataMigrationScheduler(CandidateRepository canidateRepository) {
-		this.canidateRepository 	= canidateRepository;
+		//this.canidateRepository 	= canidateRepository;
 		this.doRun();
 	}
 	
@@ -32,10 +32,7 @@ public class TemporaryDataMigrationScheduler {
 			try {
 				
 				
-				this.canidateRepository.findById(count.longValue()).ifPresent(candidate -> {
-					candidate.tmpOkToDeleteInitLastProfileUpdate();
-					this.canidateRepository.save(candidate);
-				});	
+				
 					
 					
 			}catch(Exception e) {
