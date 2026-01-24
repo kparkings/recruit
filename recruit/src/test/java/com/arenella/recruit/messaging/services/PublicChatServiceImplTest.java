@@ -3,6 +3,7 @@ package com.arenella.recruit.messaging.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
@@ -54,26 +55,27 @@ class PublicChatServiceImplTest {
 	* Tests successful creating on a new Chat 
 	*/
 	@Test
-	void testSaveChatHappyPathNewChat() {
+	void testCreateChatHappyPathNewChat() {
+		
+		ArgumentCaptor<PublicChat> argCapt = ArgumentCaptor.forClass(PublicChat.class);
 		
 		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
-		when(this.mockChatDao.existsById(ID)).thenReturn(false);
 		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(true);
 		
-		PublicChat chat = PublicChat
-				.builder()
-					.id(ID)
-					.audienceType(AUDIENCE_TYPE_VAL)
-					.parentChat(PARENT_ID)
-					.ownerId(OWNER_ID)
-					.created(CREATED)
-					.message(MESSAGE)
-					.likes(likes)
-				.build();
+		this.service.createChat(PARENT_ID, MESSAGE, this.mockPrincipal);
 		
-		this.service.saveChat(chat, this.mockPrincipal);
+		verify(this.mockChatDao).saveChat(argCapt.capture());
 		
-		verify(this.mockChatDao).saveChat(any(PublicChat.class));
+		PublicChat chat = argCapt.getValue();
+		
+		assertEquals(AUDIENCE_TYPE.ALL, 	chat.getAudienceType());
+		assertEquals(PARENT_ID, 			chat.getParentChat().orElse(null));
+		assertEquals(OWNER_ID, 				chat.getOwnerId());
+		assertEquals(MESSAGE, 				chat.getMessage());
+		
+		assertNotNull(chat.getId());
+		assertNotNull(chat.getCreated());
+		assertTrue(chat.getLikes().isEmpty());
 		
 	}
 	
@@ -82,24 +84,12 @@ class PublicChatServiceImplTest {
 	* doesn't exist
 	*/
 	@Test
-	void testSaveNewChatUnknownParent() {
+	void testCreateNewChatUnknownParent() {
 		
-		when(this.mockChatDao.existsById(ID)).thenReturn(false);
 		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(false);
 		
-		PublicChat chat = PublicChat
-				.builder()
-					.id(ID)
-					.audienceType(AUDIENCE_TYPE_VAL)
-					.parentChat(PARENT_ID)
-					.ownerId(OWNER_ID)
-					.created(CREATED)
-					.message(MESSAGE)
-					.likes(likes)
-				.build();
-		
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			this.service.saveChat(chat, this.mockPrincipal);
+			this.service.createChat(PARENT_ID, MESSAGE, this.mockPrincipal);
 		});
 		
 		assertEquals(PublicChatService.ERR_MSG_UNKNOWN_PARENT, ex.getMessage());
@@ -109,42 +99,10 @@ class PublicChatServiceImplTest {
 	}
 	
 	/**
-	* Tests failure case where Chat is new but the owner is not the 
-	* authenticated User
-	*/
-	@Test
-	void testSaveNewChatNotAuthenticatedUser() {
-		
-		when(this.mockPrincipal.getName()).thenReturn("notTheUserInTheChatId");
-		when(this.mockChatDao.existsById(ID)).thenReturn(false);
-		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(true);
-		
-		PublicChat chat = PublicChat
-				.builder()
-					.id(ID)
-					.audienceType(AUDIENCE_TYPE_VAL)
-					.parentChat(PARENT_ID)
-					.ownerId(OWNER_ID)
-					.created(CREATED)
-					.message(MESSAGE)
-					.likes(likes)
-				.build();
-		
-		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			this.service.saveChat(chat, this.mockPrincipal);
-		});
-		
-		assertEquals(PublicChatService.ERR_MSG_CANT_CREATE_CHAT_FOR_ANOTHER_USER, ex.getMessage());
-			
-		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
-		
-	}
-	
-	/**
 	* Tests successful update of an existing Chat 
 	*/
 	@Test
-	void testSaveChatHappyPathExistingChat() {
+	void testUPdateChatHappyPathExistingChat() {
 		
 		final String newMessage = "a new Messaeg";
 		
@@ -178,7 +136,7 @@ class PublicChatServiceImplTest {
 		
 		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
 		
-		this.service.saveChat(chat, this.mockPrincipal);
+		this.service.updateChat(ID, MESSAGE,  this.mockPrincipal);
 		
 		verify(this.mockChatDao).saveChat(any(PublicChat.class));
 		
@@ -217,7 +175,7 @@ class PublicChatServiceImplTest {
 		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(chat));
 		
 		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-			this.service.saveChat(chat, this.mockPrincipal);
+			this.service.updateChat(ID, MESSAGE, this.mockPrincipal);
 		});
 		
 		assertEquals(PublicChatService.ERR_MSG_CANT_UPDATE_CHAT_FOR_ANOTHER_USER, ex.getMessage());
@@ -266,7 +224,7 @@ class PublicChatServiceImplTest {
 		
 		doNothing().when(this.mockChatDao).saveChat(argCaptChat.capture());
 		
-		this.service.saveChat(chat, this.mockPrincipal);
+		this.service.updateChat(ID, MESSAGE, this.mockPrincipal);
 		
 		verify(this.mockChatDao).saveChat(any(PublicChat.class));
 		
@@ -432,5 +390,80 @@ class PublicChatServiceImplTest {
 		verify(this.mockChatDao).deleteById(grandChildCahat2Id);
 		
 	}
+	
+	/**
+	* Tests adding Like to an existing post
+	*/
+	@Test
+	void testToggleLikeForChatLike() {
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		
+		ArgumentCaptor<PublicChat> argCapt = ArgumentCaptor.forClass(PublicChat.class);
+		
+		Set<String> chatLikes = Set.of("rec33", "can44");
+		
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(PublicChat.builder().likes(chatLikes).build()));
+		
+		doNothing().when(this.mockChatDao).saveChat(argCapt.capture());
+		
+		this.service.toggleLikeForChat(ID, this.mockPrincipal.getName());
+		
+		verify(this.mockChatDao).saveChat(any(PublicChat.class));
+		
+		PublicChat chat = argCapt.getValue();
+		
+		assertEquals(3, chat.getLikes().size());
+		assertTrue(chat.getLikes().contains("rec33"));
+		assertTrue(chat.getLikes().contains("can44"));
+		assertTrue(chat.getLikes().contains(this.mockPrincipal.getName()));
+		
+	}
+	
+	/**
+	* Tests removing like from an existing post 
+	*/
+	@Test
+	void testToggleLikeForChatUnlike() {
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		
+		ArgumentCaptor<PublicChat> argCapt = ArgumentCaptor.forClass(PublicChat.class);
+		
+		Set<String> likes = Set.of("rec33", "can44", this.mockPrincipal.getName());
+		
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(PublicChat.builder().likes(likes).build()));
+		
+		doNothing().when(this.mockChatDao).saveChat(argCapt.capture());
+		
+		this.service.toggleLikeForChat(ID, this.mockPrincipal.getName());
+		
+		verify(this.mockChatDao).saveChat(any(PublicChat.class));
+		
+		PublicChat chat = argCapt.getValue();
+		
+		assertEquals(2, chat.getLikes().size());
+		assertTrue(chat.getLikes().contains("rec33"));
+		assertTrue(chat.getLikes().contains("can44"));
+		
+	}
+	
+	/**
+	* Tests adding like to an non existent post
+	*/
+	@Test
+	void testToggleLikeForChatUnknownChat() {
+		
+		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
+		
+		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.empty());
+		
+		this.service.toggleLikeForChat(ID, this.mockPrincipal.getName());
+		
+		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
+		
+	}
+	
+	
 	
 }

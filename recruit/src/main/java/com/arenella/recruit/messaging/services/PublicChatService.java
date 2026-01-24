@@ -15,14 +15,25 @@ public interface PublicChatService {
 	public static final String ERR_MSG_UNKNOWN_PARENT 						= "Reference to unknown parent";
 	public static final String ERR_MSG_CANT_CREATE_CHAT_FOR_ANOTHER_USER 	= "Cant create a Chat for another User";
 	public static final String ERR_MSG_CANT_UPDATE_CHAT_FOR_ANOTHER_USER 	= "Cant update other Users Chat";
+	public static final String ERR_MSG_UKNOWN_CHAT 							= "Reference to unknown Chat";
 	
 	/**
-	* Saves a Chat
-	* @param chat - Chat to be Saved
-	* @param user - Currently authenticated User
-	* @return Id of the chat
+	* Creates a mew Chat  
+	* @param parentChat - If exists parent chat ID
+	* @param message	- Test body of the Chat
+	* @param user		- Authenticated user
+	* @return ID of new PublicChat
 	*/
-	UUID saveChat(PublicChat chat, Principal user); 
+	UUID createChat(UUID parentChat, String message, Principal user); 
+	
+	/**
+	* Updates an existing Chat  
+	* @param message	- Test body of the Chat
+	* @param user		- Authenticated user
+	* @return ID of new PublicChat
+	*/
+	void updateChat(UUID chatId, String message, Principal user); 
+	
 	
 	/**
 	* Deletes an existing Chat and any Child chats
@@ -61,5 +72,12 @@ public interface PublicChatService {
 	* @param date - Date to delete from
 	*/
 	void deleteChatsOlderThan(LocalDate date);
+
+	/**
+	* Toggles the authenticated users like for a given Chat
+	* @param chatId - Unique Id of Chat to like/unlike
+	* @param name	- Id if authenticated user
+	*/
+	void toggleLikeForChat(UUID chatId, String name);
 	
 }

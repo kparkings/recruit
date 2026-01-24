@@ -2,12 +2,14 @@ package com.arenella.recruit.messaging.services;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.messaging.beans.PublicChat;
+import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 import com.arenella.recruit.messaging.dao.PublicChatDao;
 
 /**
@@ -30,43 +32,60 @@ public class PublicChatServiceImpl implements PublicChatService {
 	* Refer to the PublicChatService interface for details 
 	*/
 	@Override
-	public UUID saveChat(PublicChat chat, Principal user) {
+	public UUID createChat(UUID parentChat, String message, Principal user) {
 		
-		if (this.chatDao.existsById(chat.getId())) {
-			
-			this.chatDao.fetchChatById(chat.getId()).ifPresent(existingChat -> {
-				
-				if ( !chat.getOwnerId().equals(user.getName())) {
-					throw new IllegalArgumentException(PublicChatService.ERR_MSG_CANT_UPDATE_CHAT_FOR_ANOTHER_USER);
-				}
-				
-				PublicChat newChat = PublicChat
-						.builder()
-							.publicChat(existingChat)
-							.message(chat.getMessage()).build();
-				
-				this.chatDao.saveChat(newChat);
-				
-			});
-			
-		} else {
-			
-			chat.getParentChat().ifPresent(parentId -> {
-				if (!this.chatDao.existsById(parentId))  {
-					throw new IllegalArgumentException(PublicChatService.ERR_MSG_UNKNOWN_PARENT);
-				}
-			});
-			
-			if (!chat.getOwnerId().equals(user.getName())) {
-				throw new IllegalArgumentException(PublicChatService.ERR_MSG_CANT_CREATE_CHAT_FOR_ANOTHER_USER);
+		PublicChat chat = PublicChat
+				.builder()
+					.id(UUID.randomUUID())
+					.created(LocalDateTime.now())
+					.audienceType(AUDIENCE_TYPE.ALL)
+					.message(message)
+					.ownerId(user.getName())
+					.parentChat(parentChat)
+				.build();
+		
+		chat.getParentChat().ifPresent(parentId -> {
+			if (!this.chatDao.existsById(parentId))  {
+				throw new IllegalArgumentException(PublicChatService.ERR_MSG_UNKNOWN_PARENT);
 			}
-				
-			this.chatDao.saveChat(chat);
-			
+		});
+		
+		if (!chat.getOwnerId().equals(user.getName())) {
+			throw new IllegalArgumentException(PublicChatService.ERR_MSG_CANT_CREATE_CHAT_FOR_ANOTHER_USER);
 		}
+			
+		this.chatDao.saveChat(chat);
 		
 		return chat.getId();
 		
+	}
+	
+	/**
+	* Refer to the PublicChatService interface for details 
+	*/
+	@Override
+	public void updateChat(UUID chatId, String message, Principal user) {
+		
+		if (!this.chatDao.existsById(chatId)) {
+			throw new IllegalArgumentException(PublicChatService.ERR_MSG_UKNOWN_CHAT);
+		}
+		
+		this.chatDao.fetchChatById(chatId).ifPresent(existingChat -> {
+			
+			if (!existingChat.getOwnerId().equals(user.getName())) {
+				throw new IllegalArgumentException(PublicChatService.ERR_MSG_CANT_UPDATE_CHAT_FOR_ANOTHER_USER);
+			}
+			
+			PublicChat newChat = PublicChat
+					.builder()
+						.publicChat(existingChat)
+						.message(message)
+					.build();
+			
+			this.chatDao.saveChat(newChat);
+			
+		});
+			
 	}
 
 	/**
@@ -128,6 +147,27 @@ public class PublicChatServiceImpl implements PublicChatService {
 	}
 	
 	/**
+	* Refer to the PublicChatService interface for details 
+	*/
+	@Override
+	public void toggleLikeForChat(UUID chatId, String name) {
+		
+		this.chatDao.fetchChatById(chatId).ifPresent(chat -> {
+			
+			Set<String> likes = chat.getLikes();
+			
+			if (chat.getLikes().contains(name)) {
+				likes.remove(name);
+			} else {
+				likes.add(name);
+			}
+			
+			this.chatDao.saveChat(PublicChat.builder().publicChat(chat).likes(likes).build());
+		});
+		
+	}
+	
+	/**
 	* Recursive function that will delete all child Chats to n levels
 	* and then delete the current Chat
 	* @param Chat - Chat to delete
@@ -138,5 +178,7 @@ public class PublicChatServiceImpl implements PublicChatService {
 			this.chatDao.deleteById(child.getId());
 		});
 	}
+
+	
 	
 }
