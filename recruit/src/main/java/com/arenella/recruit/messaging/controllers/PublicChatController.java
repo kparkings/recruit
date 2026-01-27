@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
+import com.arenella.recruit.messaging.beans.ChatParticipant.CHAT_PARTICIPANT_TYPE;
+import com.arenella.recruit.messaging.beans.PublicChat;
+import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PublicChatService;
 
 /**
@@ -26,14 +30,19 @@ import com.arenella.recruit.messaging.services.PublicChatService;
 @RestController
 public class PublicChatController {
 
-	private PublicChatService publicChatService;
+	public static final ChatParticipant MISSING_PARTICIPANT = ChatParticipant.builder().firstName("Unknown").surname("Unknown").participantId("NA").type(CHAT_PARTICIPANT_TYPE.SYSTEM).build();
+	
+	private PublicChatService 	publicChatService;
+	private ParticipantService 	participantService;
 	
 	/**
 	* Constructor
 	* @param publicChatService - Services for working with PublicChat's
+	* @param participantService - Services for working with ChatParticipants
 	*/
-	public PublicChatController(PublicChatService publicChatService) {
+	public PublicChatController(PublicChatService publicChatService, ParticipantService participantService) {
 		this.publicChatService = publicChatService;
+		this.participantService = participantService;
 	}
 	
 	/**
@@ -83,9 +92,12 @@ public class PublicChatController {
 	@GetMapping(path="publicchat/{chatId}", produces="application/json")
 	public ResponseEntity<PublicChatAPIOutbound> fetchChat(@PathVariable UUID chatId) {
 		
+		PublicChat 		chat 	= this.publicChatService.fetchChat(chatId);
+		ChatParticipant owner 	= this.participantService.fetchById(chat.getOwnerId()).orElse(MISSING_PARTICIPANT);
+		
 		PublicChatAPIOutbound outbound = PublicChatAPIOutbound
 			.builder()
-				.publicChat(this.publicChatService.fetchChat(chatId))
+				.publicChat(chat, owner)
 				.build();
 		
 		return ResponseEntity.ok(outbound);
@@ -102,7 +114,7 @@ public class PublicChatController {
 		
 		Set<PublicChatAPIOutbound> outbound = this.publicChatService.fetchChatChildren(chatId)
 				.stream()
-				.map(chat -> PublicChatAPIOutbound.builder().publicChat(chat).build()).collect(Collectors.toCollection(LinkedHashSet::new));
+				.map(chat -> PublicChatAPIOutbound.builder().publicChat(chat, this.participantService.fetchById(chat.getOwnerId()).orElse(MISSING_PARTICIPANT)).build()).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		return ResponseEntity.ok(outbound);
 	}
@@ -114,12 +126,12 @@ public class PublicChatController {
 	* @return Page of top level Chat's
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
-	@PostMapping(path="publicchat/toplevel", produces="application/json")
+	@GetMapping(path="publicchat/toplevel", produces="application/json")
 	public ResponseEntity<Set<PublicChatAPIOutbound>>fetchTopLevelChats(Pageable pageable) {
 		
 		Set<PublicChatAPIOutbound> outbound = this.publicChatService.fetchTopLevelChats(pageable.getPageNumber(), pageable.getPageSize())
 				.stream()
-				.map(chat -> PublicChatAPIOutbound.builder().publicChat(chat).build()).collect(Collectors.toCollection(LinkedHashSet::new));
+				.map(chat -> PublicChatAPIOutbound.builder().publicChat(chat, this.participantService.fetchById(chat.getOwnerId()).orElse(MISSING_PARTICIPANT)).build()).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		return ResponseEntity.ok(outbound);
 	}
@@ -131,8 +143,8 @@ public class PublicChatController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
-	@PutMapping(path="publicchat/like", produces="application/json")
-	public ResponseEntity<Void> toggleLikeForChat(UUID chatId, Principal principal) {
+	@PutMapping(path="publicchat/{chatId}/like", produces="application/json")
+	public ResponseEntity<Void> toggleLikeForChat(@PathVariable("chatId") UUID chatId, Principal principal) {
 		this.publicChatService.toggleLikeForChat(chatId, principal.getName());
 		return ResponseEntity.ok().build();
 	}

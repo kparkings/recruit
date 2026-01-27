@@ -1,34 +1,31 @@
 <div class="page">
-	<!-- View Candidate of selected Item -->
-	<div *ngIf="candidateId.length > 0">
-		<app-suggestions [parentComponent]="'newsfeed'" [externalProvileViewCandidateId]="candidateId" (switchViewEvent)="handleswitchViewEvent()"></app-suggestions>
+	
+	<div class="newsfeed-boop-panel">
+	
 	</div>
-	<!-- Main newsfeed -->
-	<div *ngIf="candidateId.length == 0">
-		<div class="nav-tabs-bar"></div>
-		<div class="page-body">	
-			<div class="news-feed">
-				<div>
-					<div class="news-feed-item" *ngFor="let item of newsFeedItems" id="{{item.id}}">
-						<div class="news-feed-item-header">{{getHumanReadableType(item)}}</div>
-						<!-- Candidate Available -->
-						<div class="news-feed-item-body">
-							<div *ngFor="let line of item.lines">
-								<div *ngIf="line.type == 'TEXT'">
-									
-									<span *ngIf="isUnread(item)" class="news-item-body-unread">{{line.text}}</span>
-									<span *ngIf="!isUnread(item)">{{line.text}}</span>
-								</div>
-								<div *ngIf="line.type == 'INTERNAL_URL'">
-									<button *ngIf="item.itemType != 'CANDIDATE_BECAME_UNAVAILABLE'" class="btn btn-secondary arenella-btn" (click)="viewCandidateProfile(line.url, item.id)">{{'arenella-newsfeed-view-profile' | translate}}</button>
-								</div>
-							</div>
-						</div>
-					</div>
+	
+	<div class="newsfeed-notification-panel">
+	
+	</div>
+	
+	<div class="newsfeed-messages-panel">
+		<div class="new-message-panel">
+			<form [formGroup]="newMessageForm">
+				<div class="new-message-panel-textarea">
+					<textarea formControlName="message"></textarea>
+					<button class="btn btn-secondary arenella-btn" (click)="createNewMessage()">Post</button>
 				</div>
-			</div>	
-			<div class="newsfeed-footer">&nbsp;</div>
-		</div>	
+			</form>
+		</div>
+		
+		<div class="posts-panel">
+			<div class="post" *ngFor="let chat of topLevelPosts">
+				{{chat.message}}
+			</div>
+		</div>
 	</div>
+
+	
+	
 </div>
 	

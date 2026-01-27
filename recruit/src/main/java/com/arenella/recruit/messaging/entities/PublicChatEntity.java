@@ -53,6 +53,13 @@ public class PublicChatEntity {
 	private Set<String>			likes					= new LinkedHashSet<>();
 	
 	/**
+	* Default constructor 
+	*/
+	public PublicChatEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/

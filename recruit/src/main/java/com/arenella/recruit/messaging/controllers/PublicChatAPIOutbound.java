@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChat;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 
@@ -14,13 +15,13 @@ import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 */
 public class PublicChatAPIOutbound {
 
-	private UUID 				id;
-	private AUDIENCE_TYPE		audienceType;
-	private UUID				parentChat;
-	private String				ownerId;
-	private LocalDateTime 		created;
-	private String 				message;
-	private Set<String>			likes					= new LinkedHashSet<>();
+	private UUID 							id;
+	private AUDIENCE_TYPE					audienceType;
+	private UUID							parentChat;
+	private ChatParticipantAPIOutbound		owner;
+	private LocalDateTime 					created;
+	private String 							message;
+	private Set<String>						likes					= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
@@ -31,7 +32,7 @@ public class PublicChatAPIOutbound {
 		this.id 			= builder.id;
 		this.audienceType 	= builder.audienceType;
 		this.parentChat 	= builder.parentChat;
-		this.ownerId 		= builder.ownerId;
+		this.owner 			= builder.owner;
 		this.created 		= builder.created;
 		this.message 		= builder.message;
 		this.likes			= builder.likes;
@@ -67,8 +68,8 @@ public class PublicChatAPIOutbound {
 	* Returns the id of the owner/cretor of the Chat
 	* @return Id
 	*/
-	public String getOwnerId() {
-		return this.ownerId;
+	public ChatParticipantAPIOutbound getOwner() {
+		return this.owner;
 	}
 	
 	/**
@@ -108,13 +109,13 @@ public class PublicChatAPIOutbound {
 	*/
 	public static class PublicChatAPIOutboundBuilder {
 		
-		private UUID 				id;
-		private AUDIENCE_TYPE		audienceType;
-		private UUID				parentChat;
-		private String				ownerId;
-		private LocalDateTime 		created;
-		private String 				message;
-		private Set<String>			likes					= new LinkedHashSet<>();
+		private UUID 							id;
+		private AUDIENCE_TYPE					audienceType;
+		private UUID							parentChat;
+		private ChatParticipantAPIOutbound		owner;
+		private LocalDateTime 					created;
+		private String 							message;
+		private Set<String>						likes					= new LinkedHashSet<>();
 		
 		/**
 		* Populates builder with values from existing
@@ -122,11 +123,11 @@ public class PublicChatAPIOutbound {
 		* @param chat - Contains initialization values
 		* @return Builder
 		*/
-		public PublicChatAPIOutboundBuilder publicChat(PublicChat chat) {
+		public PublicChatAPIOutboundBuilder publicChat(PublicChat chat, ChatParticipant owner) {
 			this.id 				= chat.getId();
 			this.audienceType 		= chat.getAudienceType();
 			this.parentChat 		= chat.getParentChat().orElse(null);
-			this.ownerId 			= chat.getOwnerId();
+			this.owner 				= ChatParticipantAPIOutbound.builder().chatParticipant(owner).build();
 			this.created 			= chat.getCreated();
 			this.message 			= chat.getMessage();
 			this.likes.clear();
@@ -166,12 +167,12 @@ public class PublicChatAPIOutbound {
 		}
 		
 		/**
-		* Sets the Unique Id of the Owner of the Chat.
+		* Sets the Owner of the Chat.
 		* @param ownerId - Who created the Message
 		* @return Builder
 		*/
-		public PublicChatAPIOutboundBuilder ownerId(String ownerId) {
-			this.ownerId = ownerId;
+		public PublicChatAPIOutboundBuilder owner(ChatParticipantAPIOutbound owner) {
+			this.owner = owner;
 			return this;
 		}
 		

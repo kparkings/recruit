@@ -1,10 +1,12 @@
 package com.arenella.recruit.messaging.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.security.Principal;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,7 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChat;
+import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PublicChatService;
 
 /**
@@ -32,6 +36,9 @@ class PublicChatControllerTest {
 	
 	@Mock
 	private PublicChatService 		mockService;
+	
+	@Mock
+	private ParticipantService 		mockParticipantService;
 	
 	@Mock
 	private Principal 				mockPrincipal;
@@ -94,7 +101,8 @@ class PublicChatControllerTest {
 	@Test 
 	void testFetchChat() {
 		
-		when(this.mockService.fetchChat(ID)).thenReturn(PublicChat.builder().id(ID).build());
+		when(this.mockService.fetchChat(ID)).thenReturn(PublicChat.builder().id(ID).ownerId("r1").build());
+		when(this.mockParticipantService.fetchById(anyString())).thenReturn(Optional.of(ChatParticipant.builder().build()));
 		
 		ResponseEntity<PublicChatAPIOutbound> response = this.controller.fetchChat(ID);
 	
@@ -104,17 +112,52 @@ class PublicChatControllerTest {
 	}
 	
 	/**
+	* Test fetch of single Chat where the owner cant be found
+	*/
+	@Test 
+	void testFetchChatOwnerMissing() {
+		
+		when(this.mockService.fetchChat(ID)).thenReturn(PublicChat.builder().id(ID).ownerId("r1").build());
+		when(this.mockParticipantService.fetchById(anyString())).thenReturn(Optional.empty());
+		
+		ResponseEntity<PublicChatAPIOutbound> response = this.controller.fetchChat(ID);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(ID, response.getBody().getId());
+		assertEquals("NA", response.getBody().getOwner().getId());
+		
+	}
+	
+	/**
 	* Test fetch of single Chats Children
 	*/
 	@Test 
 	void testFetchChatChildren() {
 		
-		when(this.mockService.fetchChatChildren(ID)).thenReturn(Set.of(PublicChat.builder().id(ID).build(),PublicChat.builder().id(ID).build()));
+		when(this.mockService.fetchChatChildren(ID)).thenReturn(Set.of(PublicChat.builder().id(ID).ownerId("r1").build(),PublicChat.builder().id(ID).ownerId("r2").build()));
+		when(this.mockParticipantService.fetchById(anyString())).thenReturn(Optional.of(ChatParticipant.builder().build()));
 		
 		ResponseEntity<Set<PublicChatAPIOutbound>> response = this.controller.fetchChatChildren(ID);
 	
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(2, response.getBody().size());
+		
+	}
+	
+	/**
+	* Test fetch of single Chats Children where the Owner is missing 
+	*/
+	@Test 
+	void testFetchChatChildrenMissingOwner() {
+		
+		when(this.mockService.fetchChatChildren(ID)).thenReturn(Set.of(PublicChat.builder().id(ID).ownerId("r1").build(),PublicChat.builder().id(ID).ownerId("r2").build()));
+		when(this.mockParticipantService.fetchById(anyString())).thenReturn(Optional.empty());
+		
+		ResponseEntity<Set<PublicChatAPIOutbound>> response = this.controller.fetchChatChildren(ID);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(2, response.getBody().size());
+		assertEquals("NA", response.getBody().stream().findAny().get().getOwner().getId());
 		
 	}
 	
@@ -129,14 +172,37 @@ class PublicChatControllerTest {
 		
 		when(this.mockPageable.getPageNumber()).thenReturn(page);
 		when(this.mockPageable.getPageSize()).thenReturn(maxResults);
+		when(this.mockParticipantService.fetchById(anyString())).thenReturn(Optional.of(ChatParticipant.builder().build()));
 		
-		when(this.mockService.fetchTopLevelChats(page, maxResults)).thenReturn(Set.of(PublicChat.builder().id(ID).build(),PublicChat.builder().id(ID).build()));
+		when(this.mockService.fetchTopLevelChats(page, maxResults)).thenReturn(Set.of(PublicChat.builder().id(ID).ownerId("r1").build(),PublicChat.builder().id(ID).ownerId("r2").build()));
 		
 		ResponseEntity<Set<PublicChatAPIOutbound>> response = this.controller.fetchTopLevelChats(this.mockPageable);
 	
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(2, response.getBody().size());
 		
+	}
+	
+	/**
+	* Test fetch of single Chats Children
+	*/
+	@Test 
+	void testFetchTopLevelChatsOwnerMissing() {
+		
+		final int page = 1;
+		final int maxResults = 59;
+		
+		when(this.mockPageable.getPageNumber()).thenReturn(page);
+		when(this.mockPageable.getPageSize()).thenReturn(maxResults);
+		when(this.mockParticipantService.fetchById(anyString())).thenReturn(Optional.empty());
+		
+		when(this.mockService.fetchTopLevelChats(page, maxResults)).thenReturn(Set.of(PublicChat.builder().id(ID).ownerId("r1").build(),PublicChat.builder().id(ID).ownerId("r2").build()));
+		
+		ResponseEntity<Set<PublicChatAPIOutbound>> response = this.controller.fetchTopLevelChats(this.mockPageable);
+	
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(2, response.getBody().size());
+		assertEquals("NA", response.getBody().stream().findAny().get().getOwner().getId());
 	}
 	
 	/**

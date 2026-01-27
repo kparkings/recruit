@@ -9,21 +9,25 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChat;
+import com.arenella.recruit.messaging.beans.ChatParticipant.CHAT_PARTICIPANT_TYPE;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 
 /**
 * Unit tests for the PublicChatAPIOutbound class 
 */
-public class PublicChatAPIOutboundTest {
-
-	private static final UUID 				ID					= UUID.randomUUID();
-	private static final AUDIENCE_TYPE		AUDIENCE_TYPE_VAL	= AUDIENCE_TYPE.ALL;
-	private static final UUID				PARENT_CHAT			= UUID.randomUUID();
-	private static final String				OWNER_ID			= "rec001";
-	private static final LocalDateTime 		CREATED				= LocalDateTime.of(2026, 1, 20, 19, 10, 1);
-	private static final String 			MESSAGE				= "Some message";
-	private static final Set<String>		LIKES				= Set.of("rec2","112");
+class PublicChatAPIOutboundTest {
+	
+	private static final UUID 							ID					= UUID.randomUUID();
+	private static final AUDIENCE_TYPE					AUDIENCE_TYPE_VAL	= AUDIENCE_TYPE.ALL;
+	private static final UUID							PARENT_CHAT			= UUID.randomUUID();
+	private static final String							OWNER_ID			= "rec001";
+	private static final LocalDateTime 					CREATED				= LocalDateTime.of(2026, 1, 20, 19, 10, 1);
+	private static final String 						MESSAGE				= "Some message";
+	private static final Set<String>					LIKES				= Set.of("rec2","112");
+	private static final ChatParticipant 				PARTICIPANT 		= ChatParticipant.builder().firstName("Unknown").surname("Unknown").participantId(OWNER_ID).type(CHAT_PARTICIPANT_TYPE.RECRUITER).build();
+	private static final ChatParticipantAPIOutbound 	OWNER 				= ChatParticipantAPIOutbound.builder().chatParticipant(PARTICIPANT).build();
 	
 	/**
 	* Tests construction via Builder
@@ -38,7 +42,7 @@ public class PublicChatAPIOutboundTest {
 					.created(CREATED)
 					.likes(LIKES)
 					.message(MESSAGE)
-					.ownerId(OWNER_ID)
+					.owner(OWNER)
 					.parentChat(PARENT_CHAT)
 				.build();
 		
@@ -47,7 +51,7 @@ public class PublicChatAPIOutboundTest {
 		assertEquals(CREATED, 				chat.getCreated());
 		assertEquals(MESSAGE, 				chat.getMessage());
 		assertEquals(PARENT_CHAT, 			chat.getParentChat().orElseThrow());
-		assertEquals(OWNER_ID, 				chat.getOwnerId());
+		assertEquals(OWNER_ID, 				chat.getOwner().getId());
 		
 		assertTrue(chat.getLikes().contains("rec2"));
 		assertTrue(chat.getLikes().contains("112"));
@@ -83,7 +87,7 @@ public class PublicChatAPIOutboundTest {
 		
 		PublicChatAPIOutbound newChat = PublicChatAPIOutbound
 				.builder()
-					.publicChat(chat)
+					.publicChat(chat, PARTICIPANT)
 				.build();
 		
 		assertEquals(ID, 					newChat.getId());
@@ -91,7 +95,7 @@ public class PublicChatAPIOutboundTest {
 		assertEquals(CREATED, 				newChat.getCreated());
 		assertEquals(MESSAGE, 				newChat.getMessage());
 		assertEquals(PARENT_CHAT, 			newChat.getParentChat().orElseThrow());
-		assertEquals(OWNER_ID, 				newChat.getOwnerId());
+		assertEquals(OWNER_ID, 				newChat.getOwner().getId());
 		
 		assertTrue(newChat.getLikes().contains("rec2"));
 		assertTrue(newChat.getLikes().contains("112"));

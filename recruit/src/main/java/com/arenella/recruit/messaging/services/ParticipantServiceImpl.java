@@ -14,8 +14,8 @@ import com.arenella.recruit.messaging.utils.MessagingCandidateImageManipulator;
 @Service
 public class ParticipantServiceImpl implements ParticipantService{
 
-	private ChatParticipantDao chatParticipantDao;
-	private MessagingCandidateImageManipulator imageManipulator;
+	private ChatParticipantDao 					chatParticipantDao;
+	private MessagingCandidateImageManipulator 	imageManipulator;
 	
 	/**
 	* Constructor
