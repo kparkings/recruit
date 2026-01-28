@@ -1,18 +1,19 @@
 <div class="page">
 	
 	<div class="newsfeed-boop-panel">
-	
+		<div class="header"></div>
+		
 	</div>
 	
 	<div class="newsfeed-notification-panel">
-	
+		<div class="header">Notifications</div>
 	</div>
 	
 	<div class="newsfeed-messages-panel">
 		<div class="new-message-panel">
 			<form [formGroup]="newMessageForm">
 				<div class="new-message-panel-textarea">
-					<textarea formControlName="message"></textarea>
+					<textarea class="new-message-panel-textarea-textarea" formControlName="message"></textarea>
 					<button class="btn btn-secondary arenella-btn" (click)="createNewMessage()">Post</button>
 				</div>
 			</form>
@@ -20,7 +21,20 @@
 		
 		<div class="posts-panel">
 			<div class="post" *ngFor="let chat of topLevelPosts">
-				{{chat.message}}
+				<div class="post-header">
+					<img class="public-chat-image" *ngIf="hasImage(chat)"  id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhoto(chat)}}' />
+					<img class="public-chat-image" *ngIf="!hasImage(chat)" id='base64image'  />
+					<div class="public-chat-owner-name">{{chat.owner.firstName}} {{chat.owner.surname}}</div>
+					<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessage(chat)" (click)="openChat(chat)">chat</div>
+					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="deleteChat(chat)">delete</div>
+					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)">edit</div>
+				</div>
+				<div class="post-message">{{chat.message}}</div>
+				<div class="post-footer">
+					<span class="post-footer-item-left">replies</span>
+					<span class="post-footer-item-left">Likes ({{chat.likes.length}})</span>
+					<span class="post-footer-item-right">reply</span>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -15,10 +15,16 @@
 	margin: 0 auto;
 	width:95%;
 }
+
+.new-message-panel-textarea-textarea{
+ padding:8px;	
+}
+
 .new-message-panel textarea{
 	margin-top:10px;
 	height:100px;
 	resize: none;
+	padding:2px;
 }
 
 .new-message-panel button{
@@ -28,13 +34,69 @@
 
 .posts-panel{
 	width:100%;
-	margin-top:30px;
+	margin-top:25px;
 }
 
 .post{
+	margin-top:15px;
+	border:1px solid grey;
+}
+
+.post-header{
+	height:43px;
+	background:#E8E8E8;
+}
+
+.public-chat-owner-name{
+	padding-top:10px;
+	font-weight:bold;
+	float:left;
+	margin-left:10px;	
+
+}
+
+.public-chat-option{
+	float:right;
+	margin-right:10px;
 	margin-top:10px;
-	border-bottom:1px solid grey;
+	cursor:pointer;
+}
+
+.post-message{
+	padding:8px;
+	min-height:100px;
+	 white-space:pre-wrap;
+}
+
+.post-footer{
+	height:50px;
+	background:light-grey;
+	border-top:1px solid grey;
+}
+
+.post-footer-item-left{
+	float:left;
+	margin:5px;
+	color:purple;
 	padding:5px;
+	cursor:pointer;
+}
+
+.post-footer-item-right{
+	float:right;
+	margin:5px;
+	color:purple;
+	padding:5px;	
+	cursor:pointer;
+}
+
+.public-chat-image{
+	float:left;
+	width:32px;
+	height:32px;
+	margin-left:5px;
+	margin-top:5px;
+	margin-right:10px;
 }
 
 .newsfeed-boop-panel{
@@ -45,13 +107,21 @@
 	min-height:300px;
 }
 
-
 .newsfeed-notification-panel{
 	width:23%;
 	float:right;
 	border:1px solid grey;
 	margin-right:1%;
 	min-height:300px;
+}
+
+.header{
+	background:#002549;
+	height:50px;
+	font-weight:bold;
+	color:white;
+	text-align:center;
+	line-height:50px;
 }
 
 

@@ -51,7 +51,7 @@ export class PublicMessagingService {
 	/**
 	* Sends a command to delete an existing Pubilc Chat
 	*/
-	public deleteChat(chatId:string, message:string): Observable<any>{
+	public deleteChat(chatId:string): Observable<any>{
 		
 		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId;
 

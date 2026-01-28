@@ -10,7 +10,7 @@ export class PublicChat{
 	* @param id 			- Unique id of the Chat
 	* @param audienceType 	- Which type of User can view the Chat
 	* @param parentChat 	- If empty top level Chat. If present Chat is a reply and this is the parent Id
-	* @param ownerId 		- Id of User who created the Chat
+	* @param owner 			- User who created the Chat
 	* @param created 		- When the Chat was created
 	* @param message 		- Textual body of the Chat
 	* @param likes 			- Ids of User's who liked the Chat
@@ -18,7 +18,7 @@ export class PublicChat{
 	constructor(public id:string,
 			public audienceType:AUDIENCE_TYPE,
 			public parentChat:string,
-			public ownerId:string,
+			public owner:ChatParticipant,
 			public created:Date,
 			public message:string,
 			public likes:Array<string>){

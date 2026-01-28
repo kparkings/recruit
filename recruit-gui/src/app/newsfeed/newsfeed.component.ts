@@ -3,6 +3,7 @@ import { NewsFeedItem, NewsFeedItemLine } 			from './news-feed-item';
 import { PublicMessagingService}					from '../public-messaging.service';
 import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
 import { PublicChat}								from './public-chat';
+import { AppComponent } 							from 'src/app/app.component';
 
 @Component({
   selector: 'app-newsfeed',
@@ -18,11 +19,15 @@ export class NewsfeedComponent {
 	* Constructor
 	* @oaramparam service  - Services for PublicMessages 
 	*/
-	public constructor(public service:PublicMessagingService){
+	public constructor(public service:PublicMessagingService, private appComponent:AppComponent){
+		this.refreshPosts();
+	}
+	
+	private refreshPosts():void{
 		this.service.fetchPageOfTopLevelChats(0,10000).subscribe(chats => {
 			this.topLevelPosts = chats;
 			this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-		});
+		});	
 	}
 	
 	public newMessageForm:UntypedFormGroup = new UntypedFormGroup({
@@ -37,10 +42,22 @@ export class NewsfeedComponent {
 			this.service.fetchPageOfTopLevelChats(0,10000).subscribe(chats => {
 				this.topLevelPosts = chats;
 				this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+				this.newMessageForm = new UntypedFormGroup({
+					message: new UntypedFormControl(),
+				});
 			});
 		});
 	}
 	
+	public deleteChat(chat:PublicChat):void{
+		this.service.deleteChat(chat.id).subscribe(response => {
+			this.refreshPosts();
+		});
+	}
+	
+	/**
+	* Comparator to sort Chats in descending creation time order 
+	*/
 	private isGreater(one:PublicChat, two:PublicChat):number{
 		console.log(one.created < two.created);
 		
@@ -55,7 +72,40 @@ export class NewsfeedComponent {
 		return 0;
 	}
 	
+	/**
+	* Returns whether the Chat contains a profile
+	* image for the owner 
+	*/
+	public hasImage(chat:PublicChat):boolean{
+		if (chat.owner.photo ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
+	/**
+	* Returns the bytes of the profile image of the owner 
+	*/
+	public getChatParticipantPhoto(chat:PublicChat):any{
+		return chat.owner.photo.imageBytes;
+	}
+	
+	/**
+	* Returns whether a given message was created by the authenticated
+	* user or another user
+	* @param msg: Message to be checked
+	*/
+	public isOwnMessage(chat:PublicChat):boolean{
+		return chat.owner.id == sessionStorage.getItem("userId") ? true : false;
+	}
+	
+	/**
+	* Opens Chat session with the owner of the Chat 
+	*/
+	public openChat(chat:PublicChat):void{
+		this.appComponent.privateChat.openChat(chat.owner.id);	
+	}
 	
 	
 	
