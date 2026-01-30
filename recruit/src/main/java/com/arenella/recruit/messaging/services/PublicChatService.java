@@ -77,7 +77,8 @@ public interface PublicChatService {
 	* Toggles the authenticated users like for a given Chat
 	* @param chatId - Unique Id of Chat to like/unlike
 	* @param name	- Id if authenticated user
+	* @return Update PublicChat
 	*/
-	void toggleLikeForChat(UUID chatId, String name);
+	PublicChat toggleLikeForChat(UUID chatId, String name);
 	
 }

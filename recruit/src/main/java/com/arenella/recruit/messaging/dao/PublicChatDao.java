@@ -23,7 +23,7 @@ import com.arenella.recruit.messaging.entities.PublicChatEntity;
 @Repository
 public interface PublicChatDao extends ListCrudRepository<PublicChatEntity, UUID>{
 	
-	@Query("from PublicChatEntity where parentChat is null")
+	@Query("from PublicChatEntity where parentChat is null order by created desc")
 	List<PublicChatEntity> findTopLevelChats(Pageable pageable);
 	
 	@Query("from PublicChatEntity where parentChat = :parentId")

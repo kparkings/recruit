@@ -26,7 +26,7 @@
 					<img class="public-chat-image" *ngIf="!hasImage(chat)" id='base64image'  />
 					<div class="public-chat-owner-name">{{chat.owner.firstName}} {{chat.owner.surname}}</div>
 					<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessage(chat)" (click)="openChat(chat)">chat</div>
-					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="deleteChat(chat)">delete</div>
+					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="openDeleteOptionBox(chat)">delete</div>
 					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="showEditView(chat)">edit</div>
 				</div>
 				
@@ -44,8 +44,18 @@
 				
 				<div class="post-footer">
 					<div *ngIf="!isInEditMode(chat)">
-						<span class="post-footer-item-left">replies</span>
-						<span class="post-footer-item-left">Likes ({{chat.likes.length}})</span>
+					
+					
+						<div class="post-footer-item-left">
+							<span class="chat-footer-total">(0)</span>
+							<span>replies</span>
+						</div>
+					
+						<div class="post-footer-item-left">
+							<span class="chat-footer-total" (click)="openLikesOptionBox(chat)">({{chat.likes.length}})</span>
+							<span class="chat-icon material-icons public-chat-option-footer chat-liked-{{isLikedByUser(chat)}}" (click)="toggleLikeForChat(chat)">thumb_up</span>
+						</div>
+						
 						<span class="post-footer-item-right">reply</span>
 					</div>
 					<div *ngIf="isInEditMode(chat)">
@@ -57,3 +67,37 @@
 		</div>
 	</div>
 </div>
+
+<dialog #publicChatDeleteConfirmBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'confirm-box-header' | translate}}</h4>
+		<div class="filter-close-box" (click)="closeDeleteOptionBox()">X</div>
+	</div>
+	<div class="modal-body">
+		<div class="confirm-chat-delete-box">
+			<button class="btn btn-secondary arenella-btn" (click)="closeDeleteOptionBox()">{{'cancel-btn' | translate}}</button>
+			<button class="btn btn-secondary arenella-btn" (click)="deleteChat()">{{'confirm-btn' | translate}}</button>
+		</div>
+	</div>	
+</dialog>
+
+<dialog #publicChatLikes>
+	<div class="modal-header">
+		<h4 class="modal-title"></h4>
+		<div class="filter-close-box" (click)="closeLikesOptionBox()">X</div>
+	</div>
+	<div class="modal-body participant-likes">
+		<div *ngFor="let participant of likeChatParticipants">
+		
+			<div style="clear:both">
+				<div style="float:left;">
+					<img class="public-chat-image" *ngIf="participant.photo"  id='base64image' src='data:image/jpeg;base64, {{participant.photo.imageBytes}}' />
+					<img class="public-chat-image" *ngIf="!participant.photo" id='base64image'/>
+				</div>
+				<div style="float:left;">
+					{{participant.firstName}} {{participant.surname}}
+				</div>
+			</div>
+		</div>
+	</div>	
+</dialog>

@@ -2,7 +2,7 @@ import { Injectable } 								from '@angular/core';
 import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment }								from './../environments/environment';
-import { PublicChat }								from './newsfeed/public-chat';
+import { PublicChat, ChatParticipant }				from './newsfeed/public-chat';
 
 /**
 * Services for interaction with public Chats ( message board posts )
@@ -95,12 +95,20 @@ export class PublicMessagingService {
 	/**
 	* Toggles like for given chat for the authenticated User
 	*/
-	public toggleLikeForChat(chatId:string): Observable<Array<PublicChat>>{
+	public toggleLikeForChat(chatId:string): Observable<PublicChat>{
 		
 		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId+'/like';
 
 		return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
 
+	}
+	
+	/**
+	* Returns Chat participants that likes the Chat
+	*/
+	public fetchLikeParticipantsForChat(chatId:string):Observable<Array<ChatParticipant>>{
+		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId+'/likes';
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 	}
 	
 }

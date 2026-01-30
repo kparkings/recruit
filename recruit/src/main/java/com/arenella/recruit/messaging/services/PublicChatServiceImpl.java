@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 
@@ -150,7 +151,9 @@ public class PublicChatServiceImpl implements PublicChatService {
 	* Refer to the PublicChatService interface for details 
 	*/
 	@Override
-	public void toggleLikeForChat(UUID chatId, String name) {
+	public PublicChat toggleLikeForChat(UUID chatId, String name) {
+		
+		AtomicReference<PublicChat> atomicChat = new AtomicReference<>();
 		
 		this.chatDao.fetchChatById(chatId).ifPresent(chat -> {
 			
@@ -162,8 +165,15 @@ public class PublicChatServiceImpl implements PublicChatService {
 				likes.add(name);
 			}
 			
-			this.chatDao.saveChat(PublicChat.builder().publicChat(chat).likes(likes).build());
+			PublicChat updatedChat = PublicChat.builder().publicChat(chat).likes(likes).build();
+			
+			this.chatDao.saveChat(updatedChat);
+			
+			atomicChat.set(updatedChat);
+			
 		});
+		
+		return atomicChat.get();
 		
 	}
 	

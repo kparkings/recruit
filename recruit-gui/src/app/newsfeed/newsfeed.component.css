@@ -63,6 +63,12 @@
 	cursor:pointer;
 }
 
+.public-chat-option-footer{
+	float:right;
+	margin-right:10px;
+	cursor:pointer;
+}
+
 .post-message{
 	padding:8px;
 	min-height:100px;
@@ -89,6 +95,38 @@
 	color:purple;
 	padding:5px;	
 	cursor:pointer;
+}
+
+.chat-footer-total{
+	margin-right:3px;
+}
+
+.chat-liked{
+	color:grey;
+}
+
+.participant-likes{
+	height:200px;
+	overflow-y:scroll;
+	width:100%;
+}
+
+.like-info{
+	width:100%;
+}
+
+.like-info-image{
+	width:50px;
+	float:left;
+}
+
+.like-info-name{
+	float:left;
+	margin-left:10px;
+}
+
+.chat-liked-true{
+	color:green;
 }
 
 .public-chat-image{

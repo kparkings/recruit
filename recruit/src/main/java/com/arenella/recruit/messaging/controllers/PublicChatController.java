@@ -144,9 +144,31 @@ public class PublicChatController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	@PutMapping(path="publicchat/{chatId}/like", produces="application/json")
-	public ResponseEntity<Void> toggleLikeForChat(@PathVariable("chatId") UUID chatId, Principal principal) {
-		this.publicChatService.toggleLikeForChat(chatId, principal.getName());
-		return ResponseEntity.ok().build();
+	public ResponseEntity<PublicChatAPIOutbound> toggleLikeForChat(@PathVariable("chatId") UUID chatId, Principal principal) {
+	
+		PublicChat 		chat 	= this.publicChatService.toggleLikeForChat(chatId, principal.getName());
+		ChatParticipant owner 	= this.participantService.fetchById(chat.getOwnerId()).orElse(MISSING_PARTICIPANT);
+		
+		PublicChatAPIOutbound outbound = PublicChatAPIOutbound
+			.builder()
+				.publicChat(chat, owner)
+				.build();
+		
+		return ResponseEntity.ok(outbound);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	@GetMapping(path="publicchat/{chatId}/likes", produces="application/json")
+	public ResponseEntity<Set<ChatParticipantAPIOutbound>> fetchLIikes(@PathVariable("chatId")UUID chatId) {
+		
+		PublicChat 						chat 				= this.publicChatService.fetchChat(chatId);
+		Set<ChatParticipantAPIOutbound> likeParticipants 	= new LinkedHashSet<>();
+		
+		chat.getLikes().stream().forEach(participant -> {
+			likeParticipants.add(ChatParticipantAPIOutbound.builder().chatParticipant(this.participantService.fetchById(participant).orElse(MISSING_PARTICIPANT)).build());
+		});
+		
+		return ResponseEntity.ok(likeParticipants);
 	}
 	
 }
