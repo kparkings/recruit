@@ -12,7 +12,8 @@ import { AppComponent } 							from 'src/app/app.component';
   styleUrl: './newsfeed.component.css'
 })
 export class NewsfeedComponent {
-
+	
+	public currentChat:PublicChat | undefined;
 	public topLevelPosts:Array<PublicChat> = new Array<PublicChat>();
 	
 	/**
@@ -23,6 +24,10 @@ export class NewsfeedComponent {
 		this.refreshPosts();
 	}
 	
+	/**
+	* Re-fetches posts including new and updated versions
+	* TODO: [KP] Need to tak into account individual page loads already made 
+	*/
 	private refreshPosts():void{
 		this.service.fetchPageOfTopLevelChats(0,10000).subscribe(chats => {
 			this.topLevelPosts = chats;
@@ -31,6 +36,10 @@ export class NewsfeedComponent {
 	}
 	
 	public newMessageForm:UntypedFormGroup = new UntypedFormGroup({
+		message: 			new UntypedFormControl(),
+	});
+	
+	public editChatForm:UntypedFormGroup = new UntypedFormGroup({
 		message: 			new UntypedFormControl(),
 	});
 	
@@ -107,96 +116,53 @@ export class NewsfeedComponent {
 		this.appComponent.privateChat.openChat(chat.owner.id);	
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//public		candidateId:string 					= "";
-	//private 	itemDivId:string 					= "";
-	//public 		lastNewsfeedView:Date				= new Date();
-	//public 		newsFeedItems:Array<NewsFeedItem> 	= new Array<NewsFeedItem>();
-	
-	//public handleswitchViewEvent():void{
-	//	this.candidateId 	= "";	
-	//}
-	
-
-	
-	//ngAfterViewChecked(){
-		
-	//	let id:string = ""+sessionStorage.getItem("news-item-div-id");
-
-	//	if (id != null && id != "") {
-	//		if(document.getElementById(id)){
-	//			this.doScrollHere(id);
-	//		}
-	//	}
-	//}
-	
-	//public isUnread(item:NewsFeedItem):boolean{
-	//	return (item.created > this.lastNewsfeedView);
-	//}
-	
+	/**
+	* Shows the Edit view for the Chat
+	* @param chat - Chat to be edited 
+	*/
+	public showEditView(chat:PublicChat):void{
+		this.currentChat = chat;
+		this.editChatForm = new UntypedFormGroup({
+			message: new UntypedFormControl(),
+		});
+		this.editChatForm.get('message')?.setValue(chat.message);
+	}
 	
 	/**
-	* Constructor
+	* Updates the selected Chat
+	* @param chat - Chat to be updated 
 	*/
-	//public constructor(private newsFeedService:NewsfeedService, private translate:TranslateService){
-	//	sessionStorage.removeItem("news-item-div-id");
-	//	this.newsFeedService.getNewsFeedItems().subscribe(newsFeedItems => {
-	//		this.newsFeedItems = newsFeedItems;
-	//	});
+	public saveChatUpdate(chat:PublicChat):void{
+		this.service.updateChat(chat.id, this.editChatForm.get('message')?.value).subscribe(res => {
+			this.editChatForm = new UntypedFormGroup({
+				message: new UntypedFormControl(),
+			});
+			this.service.fetchPageOfTopLevelChats(0,10000).subscribe(chats => {
+				this.topLevelPosts = chats;
+				this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+				this.newMessageForm = new UntypedFormGroup({
+					message: new UntypedFormControl(),
+				});
+			});
+			this.showFeedView();	
+		});
 		
-	//	this.newsFeedService.getLastViewRecord().subscribe(record => {
-	//		this.lastNewsfeedView = record.lastViewed;
-	//		this.newsFeedService.updateLastViewedRecord().subscribe(respone => {
-	//		});
-	//	});
-	//}
+	}
 	
 	/**
-	* Sets candidateId to show candidate profile
+	* Shows the FEED 
 	*/
-	//public viewCandidateProfile(candidateId:string, itemDivId:string):void{
-	//	this.candidateId 	= candidateId.replace('/','');
-	//	sessionStorage.setItem("news-item-div-id", itemDivId);
-	//}
+	public showFeedView():void{
+		this.currentChat = undefined;
+	}
 	
-	/**
-	* Returns human readable version of Enum values
-	*/
-	//public getHumanReadableType(item:NewsFeedItem):string{
-	//	
-	//	switch(item.itemType){
-	//		case "CANDIDATE_CV_UPDATED":{			return this.translate.instant('newsfeed-cv-updated');}//"Candidate - CV Updated";}
-	//		case "CANDIDATE_PROFILE_UPDATED":{		return this.translate.instant('newsfeed-candidate-updated');}//"Candidate - Updated";}
-	//		case "TODAYS_CANDIDATES":{				return this.translate.instant('newsfeed-todays-candidates');}//"Todays Candidates";}
-	//		case "CANDIDATE_ADDED":{				return this.translate.instant('newsfeed-candidate-added');}//Candidate - Added";}
-	//		case "CANDIDATE_DELETED":{				return this.translate.instant('newsfeed-candidate-deleted');}//"Candidate - Deleted";} 
-	//		case "CANDIDATE_BECAME_UNAVAILABLE":{	return this.translate.instant('newsfeed-candidate-unavailable');}//"Candidate - Unavailable";}
-	//		case "CANDIDATE_BECAME_AVAILABLE":{		return this.translate.instant('newsfeed-candidate-available');}//"Candidate - Available";}
-	//		case "USER_POST":{						return this.translate.instant('newsfeed-na');}//"Na");}
-	//		default:{
-	//			return item.itemType;
-	//		} 
-	//								
-	//	}
+	public isInEditMode(chat:PublicChat):boolean{
 		
-	//}
-	
-	//public doScrollHere(id:string):void{
-	//	(<HTMLInputElement>document.getElementById(id)).scrollIntoView({
-	//		block: "start",
-	//		inline: "nearest"
-	//		});
-	//}
+		if (!this.currentChat) {
+			return false;
+		}
+		
+		return this.currentChat.id == chat.id;
+	}
 	
 }

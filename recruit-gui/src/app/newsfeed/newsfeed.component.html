@@ -9,7 +9,7 @@
 		<div class="header">Notifications</div>
 	</div>
 	
-	<div class="newsfeed-messages-panel">
+	<div class="newsfeed-messages-panel" >
 		<div class="new-message-panel">
 			<form [formGroup]="newMessageForm">
 				<div class="new-message-panel-textarea">
@@ -27,19 +27,33 @@
 					<div class="public-chat-owner-name">{{chat.owner.firstName}} {{chat.owner.surname}}</div>
 					<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessage(chat)" (click)="openChat(chat)">chat</div>
 					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="deleteChat(chat)">delete</div>
-					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)">edit</div>
+					<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="showEditView(chat)">edit</div>
 				</div>
-				<div class="post-message">{{chat.message}}</div>
+				
+				<!-- View Mode -->
+				<div class="post-message" *ngIf="!isInEditMode(chat)">{{chat.message}}</div>
+				
+				<!-- Edit Mode -->
+				<div class="edit-post-panel" *ngIf="isInEditMode(chat)">
+					<form [formGroup]="editChatForm">
+						<div class="edit-message-panel-textarea">
+							<textarea class="edit-message-panel-textarea-textarea" formControlName="message">{{chat.message}}</textarea>
+						</div>
+					</form>
+				</div>
+				
 				<div class="post-footer">
-					<span class="post-footer-item-left">replies</span>
-					<span class="post-footer-item-left">Likes ({{chat.likes.length}})</span>
-					<span class="post-footer-item-right">reply</span>
+					<div *ngIf="!isInEditMode(chat)">
+						<span class="post-footer-item-left">replies</span>
+						<span class="post-footer-item-left">Likes ({{chat.likes.length}})</span>
+						<span class="post-footer-item-right">reply</span>
+					</div>
+					<div *ngIf="isInEditMode(chat)">
+						<button class="btn btn-secondary arenella-btn edit-chat-button" (click)="showFeedView()">Back</button>
+						<button class="btn btn-secondary arenella-btn edit-chat-button" (click)="saveChatUpdate(chat)">Save</button>
+					</div>	
 				</div>
 			</div>
 		</div>
 	</div>
-
-	
-	
 </div>
-	

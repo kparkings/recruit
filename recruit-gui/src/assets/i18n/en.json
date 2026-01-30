@@ -1052,6 +1052,7 @@
 	"saved-qry-name": "Name",
 	"SCRUM_MASTER": "Scrum Master",
 	"SCRUM_MASTER_SHORT": "Scrum Master",
+	"search-by-spec-test": "Paste or type Job specification Text here…\n\nExample:\n\nSenior Dutch speaking Java developer in Amsterdam with Spring and Angular",
 	"Show": "Show",
 	"show-filters": "Show Filters",
 	"show-options": "Show Options",

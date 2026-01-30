@@ -5,6 +5,7 @@
     width:50%;
     margin-top:20px;
 }
+
 .new-message-panel{
 	width:100%;
 	border:1px solid grey;
@@ -124,7 +125,48 @@
 	line-height:50px;
 }
 
+.edit-message-panel-textarea{
+	margin-top:10px;
+	resize: none;
+	padding:2px;
+	border:1px solid grey;
+	padding:5px;
+}
+
+.edit-message-panel-textarea-textarea{
+	margin: 0 auto;
+	width:100%;
+	height:200px;
+}
+
+.edit-chat-button{
+	float:right;
+	margin-right:10px;	
+}
 
 @media (max-width: 768px) {
+	.newsfeed-boop-panel{
+		display:none;
+	}
+	
+	.newsfeed-notification-panel{
+		display:none;
+	}
+	
+	.new-message-panel textarea{
+		margin-top:10px;
+		height:100px;
+		width:100%;
+		resize: none;
+		padding:2px;
+	}
+	
+	.newsfeed-messages-panel{
+		width:100%;
+	}
+	
+	.arenella-btn {
+        width: 70px;
+    }
 	
 }

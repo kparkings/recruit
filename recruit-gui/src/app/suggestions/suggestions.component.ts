@@ -39,6 +39,8 @@ import { ViewportScroller } 														from '@angular/common';
 })
 export class SuggestionsComponent implements OnInit {
 
+	private searchBySpecText:String = this.translate.instant('search-by-spec-test');
+	
 	private maxResultsOnPage:number = 21;
 	private maxWidthMobileDevice = 700;
 	
@@ -111,7 +113,7 @@ export class SuggestionsComponent implements OnInit {
 		skill: 													new UntypedFormControl(''),
 	});
 	public filterByJobSpecForm:UntypedFormGroup 				= new UntypedFormGroup({
-		specAsText:												new UntypedFormControl('Enter Job specification Text here...'),
+		specAsText:												new UntypedFormControl(this.searchBySpecText),
 	});
 	
 	public filterTypeFormGroup:UntypedFormGroup					= new UntypedFormGroup({
@@ -147,6 +149,7 @@ export class SuggestionsComponent implements OnInit {
 		this.init();
 		
 		this.infoPaneUtil = new InfoPaneUtil(this.candidateProfile, this.translate, this.supportedCountries);
+		this.searchBySpecText = this.translate.instant('search-by-spec-test');
 		
 	}
 		
@@ -238,7 +241,7 @@ export class SuggestionsComponent implements OnInit {
 		this.searchBar.resetSearchFilters();
 		this.searchBar.addChangeListener(true);
 		this.filterByJobSpecForm = new UntypedFormGroup({
-			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
+			specAsText: new UntypedFormControl(this.searchBySpecText),
 		});
 		this.doScrollTop();
 	}
@@ -523,7 +526,7 @@ export class SuggestionsComponent implements OnInit {
 		
 		let jobSpecText = this.filterByJobSpecForm.get('specAsText')?.value;
 		
-		if (jobSpecText == 'Enter Job specification Text here...'){
+		if (jobSpecText == this.searchBySpecText){
 			this.filterByJobSpecForm.get('specAsText')?.setValue(''); 
 		}
 		 
@@ -576,7 +579,7 @@ export class SuggestionsComponent implements OnInit {
 	public extractFiltersFromJobSpec():void{
 		
 		this.filterByJobSpecForm = new UntypedFormGroup({
-			specAsText: new UntypedFormControl('Enter Job specification Text here...'),
+			specAsText: new UntypedFormControl(this.searchBySpecText),
 		});
 				
 		this.candidateService.extractFiltersFromDocument(this.jobSpecFile).subscribe(extractedFilters=>{
