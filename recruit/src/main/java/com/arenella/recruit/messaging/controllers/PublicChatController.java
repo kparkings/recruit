@@ -109,7 +109,7 @@ public class PublicChatController {
 	* @return Child Chats
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
-	@PostMapping(path="publicchat/{chatId}/children", produces="application/json")
+	@GetMapping(path="publicchat/{chatId}/children", produces="application/json")
 	public ResponseEntity<Set<PublicChatAPIOutbound>> fetchChatChildren(@PathVariable UUID chatId) {
 		
 		Set<PublicChatAPIOutbound> outbound = this.publicChatService.fetchChatChildren(chatId)

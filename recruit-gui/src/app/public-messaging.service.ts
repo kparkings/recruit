@@ -123,7 +123,7 @@ export class NewMessage {
 	* @param parentChatId 	- Optional of of Parent if this is a reply and not top level message
 	* @param message 		- Text of the message 
 	*/
-	constructor(public parentChatId:string | undefined, public message:string) {
+	constructor(public parentChat:string | undefined, public message:string) {
 		
 	}
 }

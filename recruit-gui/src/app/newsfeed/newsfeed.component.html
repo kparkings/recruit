@@ -18,6 +18,7 @@
 			</form>
 		</div>
 		
+		<!-- TODO: THis post-panel section needs to be in separate component so we can use it recursively for nested replies -->
 		<div class="posts-panel">
 			<div class="post" *ngFor="let chat of topLevelPosts">
 				<div class="post-header">
@@ -41,12 +42,21 @@
 					</form>
 				</div>
 				
+				<!-- Reply Mode -->
+				<div class="reply-post-panel" *ngIf="isInReplyMode(chat)">
+					<form [formGroup]="replyChatForm">
+						<div class="reply-message-panel-textarea">
+							<textarea class="edit-message-panel-textarea-textarea" formControlName="message">{{chat.message}}</textarea>
+						</div>
+					</form>
+				</div>
+				
 				<div class="post-footer">
-					<div *ngIf="!isInEditMode(chat)">
+					<div *ngIf="!isInEditMode(chat) && !isInReplyMode(chat)">
 					
 					
-						<div class="post-footer-item-left">
-							<span class="chat-footer-total">(0)</span>
+						<div class="post-footer-item-left" (click)="toggleReplies(chat)">
+							<span class="chat-footer-total">({{getReplyCount(chat)}})</span>
 							<span>replies</span>
 						</div>
 					
@@ -55,13 +65,26 @@
 							<span class="chat-icon material-icons public-chat-option-footer chat-liked-{{isLikedByUser(chat)}}" (click)="toggleLikeForChat(chat)">thumb_up</span>
 						</div>
 						
-						<span class="post-footer-item-right">reply</span>
+						<span class="post-footer-item-right" (click)="showReplyView(chat)">reply</span>
+						
 					</div>
+					
 					<div *ngIf="isInEditMode(chat)">
 						<button class="btn btn-secondary arenella-btn edit-chat-button" (click)="showFeedView()">Back</button>
 						<button class="btn btn-secondary arenella-btn edit-chat-button" (click)="saveChatUpdate(chat)">Save</button>
 					</div>	
+					<div *ngIf="isInReplyMode(chat)">
+						<button class="btn btn-secondary arenella-btn edit-chat-button" (click)="showFeedView()">Back</button>
+						<button class="btn btn-secondary arenella-btn edit-chat-button" (click)="saveChatReply(chat)">Save</button>
+					</div>	
 				</div>
+				
+				<div class="post-replies" *ngIf="chat.showReplies">
+					<div class="post-reply" *ngFor="let reply of chat.replies">
+						{{reply.message}}
+					</div>
+				</div>
+				
 			</div>
 		</div>
 	</div>

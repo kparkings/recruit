@@ -21,7 +21,9 @@ export class PublicChat{
 			public owner:ChatParticipant,
 			public created:Date,
 			public message:string,
-			public likes:Array<string>){
+			public likes:Array<string>,
+			public replies:Array<PublicChat>,
+			public showReplies:boolean){
 				
 	}
 	

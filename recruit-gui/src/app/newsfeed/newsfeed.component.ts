@@ -21,6 +21,7 @@ export class NewsfeedComponent {
 		
 	public currentChat:PublicChat | undefined;
 	public currentChatForDelete:PublicChat | undefined;
+	public currentChatForReply:PublicChat | undefined;
 	public topLevelPosts:Array<PublicChat> = new Array<PublicChat>();
 	
 	/**
@@ -44,6 +45,12 @@ export class NewsfeedComponent {
 			this.newMessageForm = new UntypedFormGroup({
 				message: new UntypedFormControl(),
 			});
+			this.topLevelPosts.forEach(tlp => {
+				this.service.fetchChatChildren(tlp.id).subscribe(replies => {
+					tlp.replies = replies;
+					tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+				});
+			})
 		});	
 	}
 	
@@ -52,6 +59,10 @@ export class NewsfeedComponent {
 	});
 	
 	public editChatForm:UntypedFormGroup = new UntypedFormGroup({
+		message: 			new UntypedFormControl(),
+	});
+	
+	public replyChatForm:UntypedFormGroup = new UntypedFormGroup({
 		message: 			new UntypedFormControl(),
 	});
 	
@@ -180,6 +191,7 @@ export class NewsfeedComponent {
 	* @param chat - Chat to be edited 
 	*/
 	public showEditView(chat:PublicChat):void{
+		this.showFeedView();
 		this.currentChat = chat;
 		this.editChatForm = new UntypedFormGroup({
 			message: new UntypedFormControl(),
@@ -194,6 +206,21 @@ export class NewsfeedComponent {
 	public saveChatUpdate(chat:PublicChat):void{
 		this.service.updateChat(chat.id, this.editChatForm.get('message')?.value).subscribe(res => {
 			this.editChatForm = new UntypedFormGroup({
+				message: new UntypedFormControl(),
+			});
+			this.refreshPosts();
+			this.showFeedView();	
+		});
+		
+	}
+	
+	/**
+	* Updates the selected Chat
+	* @param chat - Chat to be updated 
+	*/
+	public saveChatReply(chat:PublicChat):void{
+		this.service.createChat(chat.id, this.replyChatForm.get('message')?.value).subscribe(res => {
+			this.replyChatForm = new UntypedFormGroup({
 				message: new UntypedFormControl(),
 			});
 			this.refreshPosts();
@@ -235,6 +262,7 @@ export class NewsfeedComponent {
 	*/
 	public showFeedView():void{
 		this.currentChat = undefined;
+		this.currentChatForReply = undefined;
 	}
 	
 	/**
@@ -249,6 +277,21 @@ export class NewsfeedComponent {
 		
 		return this.currentChat.id == chat.id;
 	}
+	
+	/**
+	* Returns whether or not the chat is currently being edited 
+	* or just viewd 
+	*/
+	public isInReplyMode(chat:PublicChat):boolean{
+		
+		if (!this.currentChatForReply) {
+			return false;
+		}
+		
+		return this.currentChatForReply.id == chat.id;
+	}
+	
+	
 	
 	private pageYPos = 0;
 			
@@ -268,6 +311,29 @@ export class NewsfeedComponent {
 			});	
 		}
 
+	}
+	
+	/**
+	* Returns number of direct replies to a message
+	*/
+	public getReplyCount(chat:PublicChat):number{
+		if (!chat.replies){
+			return 0;
+		}
+		
+		return chat.replies.length;
+	}
+	
+	/**
+	* Shows/Hides replies to Chat
+	*/
+	public toggleReplies(chat:PublicChat):void{
+		chat.showReplies = !chat.showReplies;
+	}
+	
+	public showReplyView(chat:PublicChat):void{
+		this.showFeedView();
+		this.currentChatForReply = chat;
 	}
 
 	
