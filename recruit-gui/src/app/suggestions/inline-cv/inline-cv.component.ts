@@ -14,6 +14,7 @@ import { Candidate } from '../candidate';
 export class InlineCvComponent {
 
 	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
+	@Input() 	cssClass: 				string						= "";
 	@Input() 	candidate:				Candidate 					= new Candidate();
 	@Output() 	switchViewEvent:		EventEmitter<string> 		= new EventEmitter<string>();
 	
@@ -29,6 +30,10 @@ export class InlineCvComponent {
 	*/
 	public handleswitchViewEvent():void{
 		this.switchViewEvent.emit();
+	}
+	
+	public getCssClass():string{
+		return this.cssClass;
 	}
 
 }

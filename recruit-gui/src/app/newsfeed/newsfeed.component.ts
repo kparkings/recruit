@@ -1,9 +1,9 @@
-import { Component, ElementRef, ViewChild, HostListener } 		from '@angular/core';
-import { PublicMessagingService}								from '../public-messaging.service';
-import { UntypedFormGroup, UntypedFormControl }					from '@angular/forms';
-import { PublicChat, ChatParticipant}							from './public-chat';
-import { AppComponent } 										from 'src/app/app.component';
-	
+import { Component, ElementRef, ViewChild, HostListener } 							from '@angular/core';
+import { PublicMessagingService}										from '../public-messaging.service';
+import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
+import { PublicChat, ChatParticipant}									from './public-chat';
+import { AppComponent } 												from 'src/app/app.component';
+
 @Component({
   selector: 'app-newsfeed',
   standalone: false,
@@ -14,10 +14,10 @@ export class NewsfeedComponent {
 	
 	@ViewChild('publicChatDeleteConfirmBox', {static:true})	confirmDeleteModal!: 	ElementRef<HTMLDialogElement>;
 	@ViewChild('publicChatLikes', {static:true})			publicChatLikesModal!: 	ElementRef<HTMLDialogElement>;
-		
 	
 	public loadedPages:number = 0;
 	public pageSize:number = 5;
+	public mainViewPane:string = "FEED"; //FEED or CV
 		
 	public currentChat:PublicChat | undefined;
 	public currentChatForDelete:PublicChat | undefined;
@@ -27,7 +27,8 @@ export class NewsfeedComponent {
 	* Constructor
 	* @oaramparam service  - Services for PublicMessages 
 	*/
-	public constructor(public service:PublicMessagingService, private appComponent:AppComponent){
+	public constructor(	public service:PublicMessagingService, 
+						private appComponent:AppComponent){
 		this.refreshPosts();
 	}
 	
@@ -158,6 +159,23 @@ export class NewsfeedComponent {
 	}
 	
 	/**
+	* Returns whether a given message was created by the authenticated
+	* user or another user
+	* @param msg: Message to be checked
+	*/
+	public isOwnMessageChatParticipant(chatParticipant:ChatParticipant):boolean{
+		return chatParticipant.id == sessionStorage.getItem("userId") ? true : false;
+	}
+	
+	/**
+	* Opens Chat session with ChatParticipant
+	*/
+	public openChatChatParticipant(chatParticipant:ChatParticipant):void{
+		this.closeLikesOptionBox();
+		this.appComponent.privateChat.openChat(chatParticipant.id);	
+	}
+	
+	/**
 	* Shows the Edit view for the Chat
 	* @param chat - Chat to be edited 
 	*/
@@ -211,7 +229,6 @@ export class NewsfeedComponent {
 			this.publicChatLikesModal.nativeElement.showModal();
 		});
 	}
-	
 	
 	/**
 	* Shows the FEED 

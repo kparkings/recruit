@@ -1,4 +1,4 @@
-import { Component, ViewChild }				from '@angular/core';
+import { Component, ViewChild, Input }				from '@angular/core';
 import { Router}							from '@angular/router';
 import { CookieService } 					from 'ngx-cookie-service';
 import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
@@ -13,6 +13,10 @@ import { TranslateService} 					from "@ngx-translate/core";
 import { CurrentUserAuth }					from './current-user-auth';
 import { PrivateMessagingComponent }		from './private-messaging/private-messaging.component';
 
+import { CurriculumService } 											from 'src/app/curriculum.service';
+import { DomSanitizer, SafeResourceUrl } 								from '@angular/platform-browser';	
+
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -21,6 +25,8 @@ import { PrivateMessagingComponent }		from './private-messaging/private-messagin
 }) 
 export class AppComponent {
 
+	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
+	
 	@ViewChild('validationExBox', { static: false }) 	private validationExBox:any;
 	@ViewChild('noCreditsBox', { static: false }) 	 	private noCreditsBox:any;
 	@ViewChild('quickActionsBox', { static: false }) 	private quickActionsBox:any;
@@ -70,8 +76,12 @@ export class AppComponent {
 				private newsfeedService:		NewsfeedService,
 				private translate: 				TranslateService,
 				private listingService:			ListingService,
+				private readonly sanitizer:DomSanitizer, 
+				readonly curriculumService:CurriculumService
 			){
 		
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+				
 		translate.setDefaultLang('en');
     	translate.use(""+translate.getBrowserLang());
     
@@ -406,6 +416,20 @@ export class AppComponent {
 		return false;
 		
 		
+	}
+	
+	
+	public showInlineCVView:boolean = false;
+	
+	public hideInliceCV():void{
+		this.showInlineCVView = false;		
+	}
+	
+	public showInlineCV(candidateId:string):void{
+		
+		let url = this.curriculumService.getCurriculumUrlForInlinePdf(candidateId); 
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+		this.showInlineCVView = true;
 	}
 	
 }

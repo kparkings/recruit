@@ -44,6 +44,7 @@
 						{{getSelectedChatOtherUserName()}}
 						<span class="chat-header-{{getBlockedStatus()}} material-icons " (click)="toggleBlockUserChat()">block</span>
 						<span class="chat-header-other-user-typing material-icons " *ngIf="otherUserTypeing == true">chat</span>
+						<span class="chatwindow-header-item material-icons" *ngIf="showBtnShowCV()" (click)="showInlineCV()">description</span>
 					</span>
 				</div>
 				<div class="pm-messages-messages" (scroll)="setScrollOff()">

@@ -166,7 +166,6 @@
 .edit-message-panel-textarea{
 	margin-top:10px;
 	resize: none;
-	padding:2px;
 	border:1px solid grey;
 	padding:5px;
 }
@@ -180,6 +179,18 @@
 .edit-chat-button{
 	float:right;
 	margin-right:10px;	
+}
+
+.like-participant-name{
+	float:left;
+	margin-top:5px;
+	margin-left:10px;
+}
+
+.like-participant-chat{
+	float:right;
+	margin-top:5px;
+	margin-right:10px;
 }
 
 @media (max-width: 768px) {

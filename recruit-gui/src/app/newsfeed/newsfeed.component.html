@@ -2,7 +2,6 @@
 	
 	<div class="newsfeed-boop-panel">
 		<div class="header"></div>
-		
 	</div>
 	
 	<div class="newsfeed-notification-panel">
@@ -68,6 +67,7 @@
 	</div>
 </div>
 
+
 <dialog #publicChatDeleteConfirmBox>
 	<div class="modal-header">
 		<h4 class="modal-title">{{'confirm-box-header' | translate}}</h4>
@@ -94,8 +94,11 @@
 					<img class="public-chat-image" *ngIf="participant.photo"  id='base64image' src='data:image/jpeg;base64, {{participant.photo.imageBytes}}' />
 					<img class="public-chat-image" *ngIf="!participant.photo" id='base64image'/>
 				</div>
-				<div style="float:left;">
+				<div class="like-participant-name">
 					{{participant.firstName}} {{participant.surname}}
+				</div>
+				<div class="like-participant-chat">
+					<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessageChatParticipant(participant)" (click)="openChatChatParticipant(participant)">chat</div>
 				</div>
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-import { Component, ViewChild } 																from '@angular/core';
+import { Component, ViewChild, HostListener } 													from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } 												from '@angular/forms';
 import { AppComponent } 																		from 'src/app/app.component';
 import { PrivateChatAPIOutbound, ChatMessageAPIOutbound, PrivateMessagingService } 				from '../private-messaging.service';
@@ -6,7 +6,7 @@ import { CandidateServiceService, CandidateSuggestionAPIOutbound} 								from '
 import { RecruiterService, RecruiterBasicInfoAPIOutbound} 										from '../recruiter.service';
 import { CurrentUserAuth }																		from '../current-user-auth';
 import { SuggestionsSearchRequest }																from '../suggestions/suggestion-search-request';
-	
+
 /**
 * Backing Component for the Chat window 
 */
@@ -18,7 +18,7 @@ import { SuggestionsSearchRequest }																from '../suggestions/suggesti
   
 })
 export class PrivateMessagingComponent {
-	
+		
 	public readonly UNBLOCKED:string 		= "unblocked";
 	public readonly BLOCKED:string 			= "blocked";
 	public readonly BLOCKED_BY_OTHER_USER 	= "blocked-by-other-user";
@@ -611,6 +611,43 @@ export class PrivateMessagingComponent {
 	*/
 	public handleIsTyping():void{
 		this.chatService.doSetKeyPressed(this.currentChat!.id).subscribe(res => {});
+	}
+	
+	public showInlineCV():void{
+		
+		let userId:any = undefined;
+		if (this.isUserChatRecipient()) {
+			userId = this.currentChat?.sender.id; 
+		} else {
+			userId = this.currentChat?.recipient.id; 
+		}
+				
+		this.appComponent.showInlineCV(""+userId);
+	}
+
+	/**
+	* Only recruiters and admin should be able to 
+	* view the Candidates curriculum. 
+	* QUick and dirty fix relying on the fact 
+	* Candidates have numberic IDs and Recruiters string 
+	* based IDs
+	*/
+	public showBtnShowCV():boolean{
+		//1. Only show if User is a recruiter or admin
+		if (this.isCandidate()) {
+			return false;
+		}
+		
+		//2. only show if other user is candidate
+		let userId:any = undefined;
+		if (this.isUserChatRecipient()) {
+			userId = this.currentChat?.sender.id; 
+		} else {
+			userId = this.currentChat?.recipient.id; 
+		}
+		
+		return !isNaN(userId); 
+		
 	}
 	
 }	

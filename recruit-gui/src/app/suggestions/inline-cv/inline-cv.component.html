@@ -1,5 +1,7 @@
-<div class="action-buttons">
-	<button class="btn btn-secondary arenella-btn" (click)=handleswitchViewEvent()>{{'arenella-suggestions-inlinecv-btn-back' | translate}}</button>
+<div class="{{getCssClass()}}">
+	<div class="action-buttons action-buttons-{{getCssClass()}}">
+		<button class="btn btn-secondary arenella-btn" (click)=handleswitchViewEvent()>{{'arenella-suggestions-inlinecv-btn-back' | translate}}</button>
+	</div>		
+	<object id="content"  class="cv-inline content-{{getCssClass()}}" [attr.data]="trustedResourceUrl"></object>
 </div>
-		
-<object id="content"  class="cv-inline" [attr.data]="trustedResourceUrl"></object>
+

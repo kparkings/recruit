@@ -121,6 +121,8 @@
 
 <router-outlet></router-outlet>
 
+<app-inline-cv class="global-inline-cv-panel" *ngIf="showInlineCVView" [cssClass]="'cv-inline-chat'" [trustedResourceUrl]="trustedResourceUrl" (switchViewEvent)="hideInliceCV()"></app-inline-cv>
+
 <app-private-messaging #privateChat></app-private-messaging>
 
 <dialog #tandcBox class="terms-and-conditions-box">
