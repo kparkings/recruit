@@ -13,9 +13,16 @@ import { TranslateService} 					from "@ngx-translate/core";
 import { CurrentUserAuth }					from './current-user-auth';
 import { PrivateMessagingComponent }		from './private-messaging/private-messaging.component';
 
-import { CurriculumService } 											from 'src/app/curriculum.service';
-import { DomSanitizer, SafeResourceUrl } 								from '@angular/platform-browser';	
+import { CurriculumService } 				from 'src/app/curriculum.service';
+import { DomSanitizer, SafeResourceUrl } 	from '@angular/platform-browser';	
 
+import { InfoItemConfig } 					from 'src/app/candidate-info-box/info-item';
+import { CandidateProfile } 				from 'src/app/candidate-profile';
+import { Candidate } 						from 'src/app/candidate';
+import { CandidateServiceService}			from './candidate-service.service';
+import { InfoPaneUtil } 					from './suggestions/info-pane-util';
+import { SupportedCountry } 				from './supported-candidate';
+import { CandidateMiniOverviewComponent} 	from './candidate-mini-overview/candidate-mini-overview.component';
 
 @Component({
     selector: 'app-root',
@@ -32,6 +39,7 @@ export class AppComponent {
 	@ViewChild('quickActionsBox', { static: false }) 	private quickActionsBox:any;
 	@ViewChild('tandcBox', { static: false }) 	 		private tandcBox:any;
 	@ViewChild(PrivateMessagingComponent) 				public privateChat!:PrivateMessagingComponent;
+	@ViewChild(CandidateMiniOverviewComponent) 			public miniOverview!:CandidateMiniOverviewComponent;
 	@ViewChild('noChatAccessBox')						private noChatAccessBox:any;
 	
 	public currentChatWindowState:string = "closed";
@@ -78,6 +86,7 @@ export class AppComponent {
 				private listingService:			ListingService,
 				private readonly sanitizer:DomSanitizer, 
 				readonly curriculumService:CurriculumService
+				
 			){
 		
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -430,6 +439,34 @@ export class AppComponent {
 		let url = this.curriculumService.getCurriculumUrlForInlinePdf(candidateId); 
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		this.showInlineCVView = true;
+		this.hideCandidateProfile();
+	}
+	
+	
+	
+	//@Input()  infoItemConfig:InfoItemConfig 			= new InfoItemConfig();
+	//@Input()  suggestedCandidate:Candidate 				= new Candidate();
+	//@Input()  skillFilters:Array<string>				= new Array<string>();
+	//@Input()  candidateProfile:CandidateProfile 		= new CandidateProfile();
+	//@Input()  externalProvileViewCandidateId:string 	= "";
+	//@Input()  isViewOnly:boolean 						= false;
+	//@Input()  parentComponent:string 					= "";
+		
+	public showCandidateProfileView:boolean = false;
+	
+	
+	public hideCandidateProfile():void{
+		this.showCandidateProfileView = false;		
+	}
+		
+	
+		public miniProfileCandidateId:string = "60";
+	public showCandidateProfile(candidateId:string):void{
+		this.hideInliceCV();
+		this.miniProfileCandidateId = candidateId;
+		this.showCandidateProfileView = true;
+		this.miniOverview.loadCandidate(candidateId);
+		
 	}
 	
 }

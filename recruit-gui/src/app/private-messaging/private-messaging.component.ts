@@ -18,7 +18,7 @@ import { SuggestionsSearchRequest }																from '../suggestions/suggesti
   
 })
 export class PrivateMessagingComponent {
-		
+	
 	public readonly UNBLOCKED:string 		= "unblocked";
 	public readonly BLOCKED:string 			= "blocked";
 	public readonly BLOCKED_BY_OTHER_USER 	= "blocked-by-other-user";
@@ -623,6 +623,22 @@ export class PrivateMessagingComponent {
 		}
 				
 		this.appComponent.showInlineCV(""+userId);
+		this.appComponent.hideCandidateProfile();
+	}
+	
+	public showCandidateProfile():void{
+		
+		let userId:any = undefined;
+		
+		if (this.isUserChatRecipient()) {
+			userId = this.currentChat?.sender.id; 
+		} else {
+			userId = this.currentChat?.recipient.id; 
+		}
+
+		this.appComponent.showCandidateProfile(""+userId);
+		
+		this.appComponent.hideInliceCV();
 	}
 
 	/**

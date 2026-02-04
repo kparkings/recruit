@@ -21,30 +21,33 @@ import { RecruiterStatsComponent } 						from './recruiter-stats/recruiter-stats
 import { NewsfeedComponent } 							from './newsfeed/newsfeed.component';
 import { ContactComponent } 							from './contact/contact.component';
 import { CandidateStatisticsComponent } 				from './candidate-statistics/candidate-statistics.component';
+import { CandidateMiniOverviewComponent }				from './candidate-mini-overview/candidate-mini-overview.component';
 
 const routes: Routes = [
-	{path: '', 						component: ListingComponent},
-	{path: 'about', 				component: HomeComponent},
-	{path: 'faq', 					component: FaqComponent},
-	{path: 'contact', 				component: ContactComponent},
-	{path: 'new-candidate', 		component: NewCandidateComponent, 						canActivate: [AuthGuardService]},
-	{path: 'suggestions',	 		component: SuggestionsComponent, 						canActivate: [AuthGuardService]},
-	{path: 'email',	 				component: EmailComponent, 								canActivate: [AuthGuardService]},
-	{path: 'statistics', 			component: StatisticsComponent, 						canActivate: [AuthGuardService, AdminGuardGuard]},
-	{path: 'accounts', 				component: AccountsComponent, 							canActivate: [AuthGuardService, AdminGuardGuard]},
-	{path: 'recruiter-account', 	component: RecruiterAccountComponent, 					canActivate: [AuthGuardService]},
-	{path: 'recruiter-stats', 		component: RecruiterStatsComponent, 					canActivate: [AuthGuardService]},
-	{path: 'recruiter-listings', 	component: RecruiterListingsComponent, 					canActivate: [AuthGuardService]},
-	{path: 'recruiter-marketplace', component: RecruiterMarketplaceComponent, 				canActivate: [AuthGuardService]},
-	{path: 'recruiter-profile', 	component: RecruiterProfileComponent, 					canActivate: [AuthGuardService]},
-	{path: 'newsfeed', 				component: NewsfeedComponent, 							canActivate: [AuthGuardService]},
-	{path: 'candidate-statistics', 	component: CandidateStatisticsComponent, 				canActivate: [AuthGuardService]},
-	{path: 'login-user', 			component: LoginUserComponent},
-	{path: 'login-user', 			component: LoginUserComponent},
-	{path: 'listing/:id',		 	component: ListingComponent},
-	{path: 'listing',		 		component: ListingComponent},
-	{path: 'create-candidate', 		component: CreateCandidateComponent},
-	{path: 'recruiter-signup', 		component: RecruiterSignupComponent}
+	{path: '', 								component: ListingComponent},
+	{path: 'about', 						component: HomeComponent},
+	{path: 'faq', 							component: FaqComponent},
+	{path: 'contact', 						component: ContactComponent},
+	{path: 'new-candidate', 				component: NewCandidateComponent, 						canActivate: [AuthGuardService]},
+	{path: 'suggestions',	 				component: SuggestionsComponent, 						canActivate: [AuthGuardService]},
+	{path: 'email',	 						component: EmailComponent, 								canActivate: [AuthGuardService]},
+	{path: 'statistics', 					component: StatisticsComponent, 						canActivate: [AuthGuardService, AdminGuardGuard]},
+	{path: 'accounts', 						component: AccountsComponent, 							canActivate: [AuthGuardService, AdminGuardGuard]},
+	{path: 'app-candidate-mini-overview', 	component: CandidateMiniOverviewComponent, 				canActivate: [AuthGuardService]},
+	{path: 'recruiter-account', 			component: RecruiterAccountComponent, 					canActivate: [AuthGuardService]},
+	{path: 'recruiter-stats', 				component: RecruiterStatsComponent, 					canActivate: [AuthGuardService]},
+	{path: 'recruiter-listings', 			component: RecruiterListingsComponent, 					canActivate: [AuthGuardService]},
+	{path: 'recruiter-marketplace', 		component: RecruiterMarketplaceComponent, 				canActivate: [AuthGuardService]},
+	{path: 'recruiter-profile', 			component: RecruiterProfileComponent, 					canActivate: [AuthGuardService]},
+	{path: 'newsfeed', 						component: NewsfeedComponent, 							canActivate: [AuthGuardService]},
+	{path: 'candidate-statistics', 			component: CandidateStatisticsComponent, 				canActivate: [AuthGuardService]},
+	{path: 'login-user', 					component: LoginUserComponent},
+	{path: 'login-user', 					component: LoginUserComponent},
+	{path: 'listing/:id',		 			component: ListingComponent},
+	{path: 'listing',		 				component: ListingComponent},
+	{path: 'create-candidate', 				component: CreateCandidateComponent},
+	{path: 'recruiter-signup', 				component: RecruiterSignupComponent},
+	
 ];
 
 @NgModule({

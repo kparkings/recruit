@@ -1,0 +1,38 @@
+<div class="candidate-mini-profile-panel">
+	<div class="action-buttons arenella-buttons-inline">
+		<button class="btn btn-secondary arenella-btn" (click)="back()">{{'arenella-suggestions-profile-btn-back' | translate}}</button>
+	</div>
+	
+<div>			
+	<!-- div class="details-right" -->
+	<div class="candidate-mini-profile-panel-body">
+		<div style="width:100%"><h1>{{candidate.roleSought}}</h1></div>
+	
+		<div style="float:left; width:50%">
+			<div *ngIf="candidate.introduction && candidate.introduction.length != 0" style="margin-bottom:50px;">
+				<div style="width:100%;">
+					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidate.introduction}}</pre>
+				</div>
+			</div>		
+			<div *ngIf="!candidate.introduction || candidate.introduction.length == 0" style="margin-bottom:50px;">
+				<div style="width:100%;">
+					<div style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">
+					{{'arenella-suggestions-profile-intro-text' | translate}} {{this.candidate.firstname}} 
+					{{'arenella-suggestions-profile-intro-text-2' | translate}} {{this.candidate.yearsExperience}} {{'arenella-suggestions-profile-intro-text-3' | translate}}
+				
+					{{'arenella-suggestions-profile-intro-text-4' | translate}} {{this.candidate.country | enumToHumanReadableValue}} 
+					</div>
+				</div>
+			</div>	
+		</div>
+	
+		<div style="float:right">
+			<app-candidate-info-box [config]="infoItemConfig" [candidateId]="candidate.candidateId" stye="float:right"></app-candidate-info-box>
+		</div>
+		
+		
+		
+		
+	</div>
+</div>
+</div>

@@ -54,6 +54,8 @@ import { ListingService } 					from './listing.service';
 import { ClipboardModule } 					from '@angular/cdk/clipboard'
 import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
+import { CandidateMiniOverviewComponent } from './candidate-mini-overview/candidate-mini-overview.component'
+
 
 @NgModule({
   declarations: [
@@ -90,6 +92,8 @@ import { PrivateMessagingComponent } 		from './private-messaging/private-messagi
 	CitiesComponent,
 	CandidateStatisticsComponent,
 	PrivateMessagingComponent,
+	CandidateMiniOverviewComponent
+	
 	
   ],
   imports: [
