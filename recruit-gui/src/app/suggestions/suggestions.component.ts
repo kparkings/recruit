@@ -638,19 +638,5 @@ export class SuggestionsComponent implements OnInit {
 	public isAuthenticatedAsCandidate():boolean {
 		return sessionStorage.getItem('isCandidate') === 'true';
 	}
-
-	/**
-	* Shows basic view in publicity popup 
-	*/
-	//public showPublicityBasic():void {
-	//	this.publicityView = 'basic';
-	//}
-	
-	/**
-	* Shows advanced view in publicity popup 
-	*/
-	//public showPublicityAdvanced():void {
-	//	this.publicityView = 'advanced';
-	//}
 	
 }

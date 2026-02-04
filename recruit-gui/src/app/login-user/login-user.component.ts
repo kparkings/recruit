@@ -8,6 +8,7 @@ import { NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/n
 import { TranslateService } from '@ngx-translate/core';
 import { CreditsService } from '../credits.service';
 import { CandidateServiceService } from '../candidate-service.service';
+import { AppComponent} from '../app.component';
 
 @Component({
     selector: 'app-login-user',
@@ -46,7 +47,8 @@ export class LoginUserComponent implements OnInit {
   				private modalService: NgbModal, 
   				private router: Router,
   				private translate: TranslateService,
-  				private creditService:CreditsService) { }
+  				private creditService:CreditsService,
+				private appComponent:AppComponent) { }
 
   /**
   * Performs initialization
@@ -56,6 +58,9 @@ export class LoginUserComponent implements OnInit {
 		  this.showSubscriptionMsg = true;
 		  sessionStorage.setItem('beforeAuthPage', '/suggestions');
 	  }
+	  this.appComponent.hideCandidateProfile();
+	  this.appComponent.hideInliceCV();
+	  	  
   }
 
 	/**

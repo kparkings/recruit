@@ -40,18 +40,17 @@
 	margin:20px;
 	width:60%;
 	border:3px solid black;
-	background:#002549;
 	z-index:1000;
 	position:fixed;
 	top:20%;
 	margin-left:0%;
 	background:white;
-	height:450px;
+	height:555px;
 }
 
 .candidate-mini-profile-panel-body{
 	overflow-y:scroll;
-	height:370px;
+	height:475px;
 	padding:10px;
 }
 

@@ -441,17 +441,7 @@ export class AppComponent {
 		this.showInlineCVView = true;
 		this.hideCandidateProfile();
 	}
-	
-	
-	
-	//@Input()  infoItemConfig:InfoItemConfig 			= new InfoItemConfig();
-	//@Input()  suggestedCandidate:Candidate 				= new Candidate();
-	//@Input()  skillFilters:Array<string>				= new Array<string>();
-	//@Input()  candidateProfile:CandidateProfile 		= new CandidateProfile();
-	//@Input()  externalProvileViewCandidateId:string 	= "";
-	//@Input()  isViewOnly:boolean 						= false;
-	//@Input()  parentComponent:string 					= "";
-		
+
 	public showCandidateProfileView:boolean = false;
 	
 	
