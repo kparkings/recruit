@@ -55,7 +55,7 @@ import { ClipboardModule } 					from '@angular/cdk/clipboard'
 import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
 import { CandidateMiniOverviewComponent } from './candidate-mini-overview/candidate-mini-overview.component'
-
+import { PublicPostsComponent } from './newsfeed/public-posts/public-posts.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +92,8 @@ import { CandidateMiniOverviewComponent } from './candidate-mini-overview/candid
 	CitiesComponent,
 	CandidateStatisticsComponent,
 	PrivateMessagingComponent,
-	CandidateMiniOverviewComponent
+	CandidateMiniOverviewComponent,
+	PublicPostsComponent
 	
 	
   ],
