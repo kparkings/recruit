@@ -122,17 +122,9 @@
 <router-outlet></router-outlet>
 
 <app-inline-cv class="global-inline-cv-panel" *ngIf="showInlineCVView" [cssClass]="'cv-inline-chat'" [trustedResourceUrl]="trustedResourceUrl" (switchViewEvent)="hideInliceCV()"></app-inline-cv>
-
-<!-- [suggestedCandidate]="suggestedCandidate" -->
-
-<!-- 
-<app-candidate-profile class="profile-inline-chat" *ngIf="showCandidateProfileView" (backEvent)="hideCandidateProfile()" [parentComponent]="parentComponent" [isViewOnly]="isViewOnly" [infoItemConfig]="infoItemConfig"  [candidateProfile]="candidateProfile" [skillFilters]="skillFilters"></app-candidate-profile>
--->
-
-
 <app-private-messaging #privateChat></app-private-messaging>
 <app-candidate-mini-overview *ngIf="showCandidateProfileView" class="profile-inline-chat" [candidateId]="miniProfileCandidateId"></app-candidate-mini-overview>
-]
+
 <dialog #tandcBox class="terms-and-conditions-box">
 
 		<div class="cookie-policy-hdr">

@@ -20,7 +20,7 @@
 		
 		<!-- TODO: THis post-panel section needs to be in separate component so we can use it recursively for nested replies	 -->
 		<div class="posts-panel">
-			<app-public-posts [topLevelPosts]="topLevelPosts" [topLevel]="'true'"></app-public-posts>
+			<app-public-posts [topLevelPosts]="topLevelPosts" [topLevel]="'true'" (replyAddedEvent)="resetScroll()"></app-public-posts>
 		</div>  	
 	</div>
 </div>

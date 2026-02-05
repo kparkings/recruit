@@ -6,9 +6,9 @@
 <div>			
 	<!-- div class="details-right" -->
 	<div class="candidate-mini-profile-panel-body">
-		<div style="width:100%"><h1>{{candidate.roleSought}}</h1></div>
+		<div class="mini-profile-job-title"><h1>{{candidate.roleSought}}</h1></div>
 	
-		<div style="float:left; width:50%">
+		<div class="mini-profile-intro-panel">
 			<div *ngIf="candidate.introduction && candidate.introduction.length != 0" style="margin-bottom:50px;">
 				<div style="width:100%;">
 					<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{candidate.introduction}}</pre>
@@ -26,7 +26,7 @@
 			</div>	
 		</div>
 	
-		<div style="float:right">
+		<div class="mini-profile-infobox">
 			<app-candidate-info-box [config]="infoItemConfig" [candidateId]="candidate.candidateId" stye="float:right"></app-candidate-info-box>
 		</div>
 		

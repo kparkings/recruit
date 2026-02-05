@@ -1,7 +1,7 @@
 <div class="post" *ngFor="let chat of topLevelPosts">
 	<div class="post-header replyCssClass{{replyCssClass}}">
 		<img class="public-chat-image" *ngIf="hasImage(chat)"  id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhoto(chat)}}' />
-		<img class="public-chat-image" *ngIf="!hasImage(chat)" id='base64image'  />
+		<img class="public-chat-image" *ngIf="!hasImage(chat)" id='base64image' src="../assets/img/default-user-image.jpg"  />
 		<div class="public-chat-owner-name">{{chat.owner.firstName}} {{chat.owner.surname}}</div>
 		<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessage(chat)" (click)="openChat(chat)">chat</div>
 		<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="openDeleteOptionBox(chat)">delete</div>

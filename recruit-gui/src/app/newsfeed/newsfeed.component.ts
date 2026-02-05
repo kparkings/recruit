@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, HostListener } 							from '@angular/core';
+import { Component, ElementRef, ViewChild, HostListener } 				from '@angular/core';
 import { PublicMessagingService}										from '../public-messaging.service';
 import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
 import { PublicChat, ChatParticipant}									from './public-chat';
@@ -30,6 +30,19 @@ export class NewsfeedComponent {
 	*/
 	public constructor(	public service:PublicMessagingService, 
 						private appComponent:AppComponent){
+		//this.refreshPosts();
+	}
+	
+	ngOnInit(){
+		//this.refreshPosts();
+		
+	}
+	
+	ngAfterViewInit(){
+		this.refreshPosts();
+	}
+	
+	public resetScroll():void{
 		this.refreshPosts();
 	}
 	
@@ -60,10 +73,6 @@ export class NewsfeedComponent {
 		message: 			new UntypedFormControl(),
 	});
 	
-	//public replyChatForm:UntypedFormGroup = new UntypedFormGroup({
-	//	message: 			new UntypedFormControl(),
-	//});
-	
 	/**
 	* Creates a new message
 	*/
@@ -82,44 +91,9 @@ export class NewsfeedComponent {
 	}
 	
 	/**
-	* Opens the likes Dialog box 
-	*/
-	//public openLikesOptionBox(chat:PublicChat):void{
-	//	this.loadLikeParticipantsForChat(chat);
-	//}
-	
-	/**
-	* Deletes Chat 
-	*/
-	//public deleteChat():void{
-	//	this.service.deleteChat(""+this.currentChatForDelete?.id).subscribe(response => {
-	//		this.topLevelPosts = this.topLevelPosts.filter(p => p.id != ""+this.currentChatForDelete?.id);
-	//		this.currentChatForDelete = undefined;
-	//		this.confirmDeleteModal.nativeElement.close();
-			
-	//	});
-	//}
-	
-	/**
-	* Closed Delete Chat confirmation box 
-	*/
-	//public closeDeleteOptionBox():void{
-	//	this.confirmDeleteModal.nativeElement.close();
-	//	this.currentChatForDelete = undefined;
-	//}
-	
-	/**
-	* Closes Likes box 
-	*/
-	//public closeLikesOptionBox():void{
-	//	this.publicChatLikesModal.nativeElement.close();
-	//}
-	
-	/**
 	* Comparator to sort Chats in descending creation time order 
 	*/
 	private isGreater(one:PublicChat, two:PublicChat):number{
-		console.log(one.created < two.created);
 		
 		if(one.created > two.created){
 			return -1;
@@ -133,56 +107,11 @@ export class NewsfeedComponent {
 	}
 	
 	/**
-	* Returns whether the Chat contains a profile
-	* image for the owner 
-	*/
-	//public hasImage(chat:PublicChat):boolean{
-	//	if (chat.owner.photo ) {
-	//		return true;
-	//	} else {
-	//		return false;
-	//	}
-	//}
-	
-	/**
-	* Returns the bytes of the profile image of the owner 
-	*/
-	//public getChatParticipantPhoto(chat:PublicChat):any{
-	//	return chat.owner.photo.imageBytes;
-	//}
-	
-	/**
-	* Returns whether a given message was created by the authenticated
-	* user or another user
-	* @param msg: Message to be checked
-	*/
-	//public isOwnMessage(chat:PublicChat):boolean{
-	//	return chat.owner.id == sessionStorage.getItem("userId") ? true : false;
-	//}
-	
-	/**
 	* Opens Chat session with the owner of the Chat 
 	*/
 	public openChat(chat:PublicChat):void{
 		this.appComponent.privateChat.openChat(chat.owner.id);	
 	}
-	
-	/**
-	* Returns whether a given message was created by the authenticated
-	* user or another user
-	* @param msg: Message to be checked
-	*/
-	//public isOwnMessageChatParticipant(chatParticipant:ChatParticipant):boolean{
-	//	return chatParticipant.id == sessionStorage.getItem("userId") ? true : false;
-	//}
-	
-	/**
-	* Opens Chat session with ChatParticipant
-	*/
-	//public openChatChatParticipant(chatParticipant:ChatParticipant):void{
-	//	this.closeLikesOptionBox();
-	//	this.appComponent.privateChat.openChat(chatParticipant.id);	
-	//}
 	
 	/**
 	* Shows the Edit view for the Chat
@@ -198,64 +127,6 @@ export class NewsfeedComponent {
 	}
 	
 	/**
-	* Updates the selected Chat
-	* @param chat - Chat to be updated 
-	*/
-	//public saveChatUpdate(chat:PublicChat):void{
-	//	this.service.updateChat(chat.id, this.editChatForm.get('message')?.value).subscribe(res => {
-	//		this.editChatForm = new UntypedFormGroup({
-	//			message: new UntypedFormControl(),
-	//		});
-	//		this.refreshPosts();
-	//		this.showFeedView();	
-	//	});
-		
-	//}
-	
-	/**
-	* Updates the selected Chat
-	* @param chat - Chat to be updated 
-	*/
-	//public saveChatReply(chat:PublicChat):void{
-	//	this.service.createChat(chat.id, this.replyChatForm.get('message')?.value).subscribe(res => {
-	//		this.replyChatForm = new UntypedFormGroup({
-	//			message: new UntypedFormControl(),
-	//		});
-	//		this.refreshPosts();
-	//		this.showFeedView();	
-	//	});
-		
-	//}
-	
-	/**
-	* Returns whether the User has liked the Chat
-	* @param chat - Chat to be updated 
-	*/
-	//public isLikedByUser(chat:PublicChat):boolean{
-	//	let userId:string = ""+sessionStorage.getItem("userId");
-	//	return chat.likes.indexOf(userId) > -1;
-	//}
-
-	/**
-	* Toggles whether the current User has liked the Chat
-	* @param chat - Chat to be updated 
-	*/	
-	//public toggleLikeForChat(chat:PublicChat):void{
-	//	this.service.toggleLikeForChat(chat.id).subscribe(res =>{
-	//		this.topLevelPosts.filter(p => p.id == chat.id).forEach(match => match.likes = res.likes);
-	//	});
-	//}
-	
-	//public likeChatParticipants:Array<ChatParticipant> = new Array<ChatParticipant>();
-	
-	//public loadLikeParticipantsForChat(chat:PublicChat):void{
-	//	this.service.fetchLikeParticipantsForChat(chat.id).subscribe(participants => {
-	//		this.likeChatParticipants = participants;		
-	//		this.publicChatLikesModal.nativeElement.showModal();
-	//	});
-	//}
-	
-	/**
 	* Shows the FEED 
 	*/
 	public showFeedView():void{
@@ -263,76 +134,33 @@ export class NewsfeedComponent {
 		this.currentChatForReply = undefined;
 	}
 	
-	/**
-	* Returns whether or not the chat is currently being edited 
-	* or just viewd 
-	*/
-	//public isInEditMode(chat:PublicChat):boolean{
-		
-	//	if (!this.currentChat) {
-	//		return false;
-	//	}
-		
-	//	return this.currentChat.id == chat.id;
-	//}
-	
-	/**
-	* Returns whether or not the chat is currently being edited 
-	* or just viewd 
-	*/
-	//public isInReplyMode(chat:PublicChat):boolean{
-		
-	//	if (!this.currentChatForReply) {
-	//		return false;
-	//	}
-		
-	//	return this.currentChatForReply.id == chat.id;
-	//}
-	
-	
-	
 	private pageYPos = 0;
 			
 	@HostListener('window:scroll', ['$event']) onWindowScroll(e:any) {
 	   	 
-		let yPos = window.pageYOffset;
-	
-		if (yPos > this.pageYPos) {
-			this.pageYPos = yPos +  500; 
-			this.loadedPages=this.loadedPages + 1;
-			console.log("Adding page " + this.loadedPages);
-			this.service.fetchPageOfTopLevelChats(this.loadedPages,this.pageSize).subscribe(chats => {
-				chats.forEach(chat => {
-					this.topLevelPosts.push(chat);
-				});
-				this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-			});	
+		try{
+			let yPos = window.pageYOffset;
+		
+			if (yPos > this.pageYPos) {
+				this.pageYPos = yPos +  500; 
+				this.loadedPages=this.loadedPages + 1;
+				console.log("Adding page " + this.loadedPages);
+				this.service.fetchPageOfTopLevelChats(this.loadedPages,this.pageSize).subscribe(chats => {
+					chats.forEach(chat => {
+						this.topLevelPosts.push(chat);
+					});
+					this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+				});	
+			}
+			
+			//console.log("DDD yPos " + yPos + " this.pageYPos " + this.pageYPos);
+			//this.refreshPosts();
+			
+		
+		} catch(error) {
+			console.log(error);
 		}
 
 	}
-	
-	/**
-	* Returns number of direct replies to a message
-	*/
-	//public getReplyCount(chat:PublicChat):number{
-	//	if (!chat.replies){
-	//		return 0;
-	//	}
-		
-	//	return chat.replies.length;
-	//}
-	
-	/**
-	* Shows/Hides replies to Chat
-	*/
-	//public toggleReplies(chat:PublicChat):void{
-	//	chat.showReplies = !chat.showReplies;
-	//}
-	
-	//public showReplyView(chat:PublicChat):void{
-	//	this.showFeedView();
-	//	this.currentChatForReply = chat;
-	//}
-
 	
 }

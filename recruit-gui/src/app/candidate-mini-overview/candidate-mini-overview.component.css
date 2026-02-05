@@ -54,6 +54,17 @@
 	padding:10px;
 }
 
+.mini-profile-job-title{
+	width:100%;	
+}
 
+.mini-profile-intro-panel{
+	float:left;
+	width:50%;
+}
+
+.mini-profile-infobox{
+	float:right;
+}
 	
 	

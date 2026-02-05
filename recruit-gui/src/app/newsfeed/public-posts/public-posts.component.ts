@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
 import { PublicChat, ChatParticipant}									from '../public-chat';
 
@@ -17,11 +17,12 @@ export class PublicPostsComponent {
 	@ViewChild('publicChatDeleteConfirmBox', {static:true})	confirmDeleteModal!: 	ElementRef<HTMLDialogElement>;
 	@ViewChild('publicChatLikes', {static:true})			publicChatLikesModal!: 	ElementRef<HTMLDialogElement>;
 		
-		
 	@Input()  public topLevelPosts:Array<PublicChat> = new Array();
 	@Input()  public topLevel:string = "false";
 	@Input()  public currentTopLevelChatId:string = "";
 	@Input()  public parentCss:string = "Even";
+	
+	@Output() replyAddedEvent 		= new EventEmitter<string>();
 
 	public loadedPages:number = 0;
 	public pageSize:number = 5;
@@ -29,8 +30,6 @@ export class PublicPostsComponent {
 	public currentChatForDelete:PublicChat | undefined;
 	public currentChatForReply:PublicChat | undefined;
 	public replyCssClass:string = "Even";
-	
-	
 		
 	public replyChatForm:UntypedFormGroup = new UntypedFormGroup({
 		message: 			new UntypedFormControl(),
@@ -38,17 +37,20 @@ export class PublicPostsComponent {
 			
 	/**
 	* Constructor
-	* @oaramparam service  - Services for PublicMessages 
+	* @oaram service  		- Services for PublicMessages 
+	* @param appComponent 	- Main system component
 	*/
-	public constructor(	public service:PublicMessagingService, 
-						private appComponent:AppComponent){
-		
-		
+	public constructor(	public service:PublicMessagingService, private readonly appComponent:AppComponent){
+			
 	}
 	
+	/**
+	* Angular lifecycle method
+	*/
 	ngOnInit(){
 	
 		this.refreshPosts();
+		
 		if(this.parentCss == 'Odd') {
 			this.replyCssClass = 'Even';
 		} else {
@@ -61,15 +63,11 @@ export class PublicPostsComponent {
 	* Re-fetches posts including new and updated versions
 	*/
 	private refreshPosts():void{
-		console.log("loadedPages " + 0 + " pageSize " + ((this.loadedPages+1) * this.pageSize));
-			
+		
 		if (this.topLevel == 'true') {
 			this.service.fetchPageOfTopLevelChats(0,((this.loadedPages+1) * this.pageSize)).subscribe(chats => {
 				this.topLevelPosts = chats;
 				this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-				//this.newMessageForm = new UntypedFormGroup({
-				//	message: new UntypedFormControl(),
-				//});
 				this.topLevelPosts.forEach(tlp => {
 					this.service.fetchChatChildren(tlp.id).subscribe(replies => {
 						tlp.replies = replies;
@@ -78,11 +76,7 @@ export class PublicPostsComponent {
 				})
 			});	
 		} else {
-			console.log("CURRENT CHAT = " + this.currentTopLevelChatId);
 			this.service.fetchChatChildren(""+this.currentTopLevelChatId).subscribe(chats => {
-				
-				
-				
 				this.topLevelPosts = chats;
 				this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
 				this.topLevelPosts.forEach(tlp => {
@@ -290,6 +284,7 @@ export class PublicPostsComponent {
 			});
 			this.refreshPosts();
 			this.showFeedView();	
+			this.replyAddedEvent.emit('replyAddedEvent');
 		});
 		
 	}
@@ -325,7 +320,6 @@ export class PublicPostsComponent {
 			this.topLevelPosts = this.topLevelPosts.filter(p => p.id != ""+this.currentChatForDelete?.id);
 			this.currentChatForDelete = undefined;
 			this.confirmDeleteModal.nativeElement.close();
-			
 		});
 	}
 	
