@@ -33,16 +33,12 @@ export class NewsfeedComponent {
 		//this.refreshPosts();
 	}
 	
-	ngOnInit(){
-		//this.refreshPosts();
-		
-	}
-	
 	ngAfterViewInit(){
 		this.refreshPosts();
 	}
 	
 	public resetScroll():void{
+		this.pageYPos = window.pageYOffset;
 		this.refreshPosts();
 	}
 	

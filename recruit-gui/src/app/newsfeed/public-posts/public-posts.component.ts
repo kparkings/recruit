@@ -285,6 +285,7 @@ export class PublicPostsComponent {
 			this.refreshPosts();
 			this.showFeedView();	
 			this.replyAddedEvent.emit('replyAddedEvent');
+			
 		});
 		
 	}
