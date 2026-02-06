@@ -2846,3 +2846,58 @@ databaseChangeLog:
              constraintName:  pk_public_chat_likes  
              tableName:  public_chat_likes  
              schemaName: chats
+  - changeSet:
+     id: public_chat_notifications
+     author: kparkings
+     changes:
+       - createTable:
+           tableName: public_chat_notifications
+           schemaName: chats
+           columns:
+             - column:
+                 name: notification_id
+                 type: UUID
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: created
+                 type: timestamp
+                 constraints:
+                   nullable: false
+             - column:
+                 name: chat_id
+                 type: UUID
+                 constraints:
+                   nullable: false
+             - column:
+                 name: initiating_user_id
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: viewed
+                 type: boolean
+                 constraints:
+                   nullable: false
+             - column:
+                 name: notification_email_sent
+                 type: boolean
+                 constraints:
+                   nullable: false
+       - addForeignKeyConstraint:  
+              constraintName: fk_chat_notification
+              baseColumnNames: chat_id
+              baseTableName: public_chat_notifications
+              baseTableSchemaName: chats
+              referencedTableName: public_chats
+              referencedTableSchemaName: chats
+              referencedColumnNames: id
+       - addForeignKeyConstraint:  
+              constraintName: fk_chat_notification_participants
+              baseColumnNames: initiating_user_id
+              baseTableName: public_chat_notifications
+              baseTableSchemaName: chats
+              referencedTableName: chat_participants
+              referencedTableSchemaName: chats
+              referencedColumnNames: id
