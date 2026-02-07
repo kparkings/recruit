@@ -25,13 +25,13 @@ import com.arenella.recruit.messaging.dao.PublicChatNotificationDao;
 * Unit tests for the PublicChatNotificationImp class 
 */
 @ExtendWith(MockitoExtension.class)
-class PublicChatNotificationImplTest {
+class PublicChatNotificationServiceImplTest {
 
 	@Mock
 	private PublicChatNotificationDao mockDao;
 	
 	@InjectMocks
-	private PublicChatNotificationImpl service;
+	private PublicChatNotificationServiceImpl service;
 	
 	/**
 	* Tests persisting a new Notification 
@@ -129,10 +129,10 @@ class PublicChatNotificationImplTest {
 	}
 	
 	/**
-	* Tests deleting all Notifications for a specific chat
+	* Tests deleting all Notifications for a specific User
 	*/
 	@Test
-	void testFetchNotificationsForChat() {
+	void testFetchNotificationsForUser() {
 		
 		final UUID 		notificationId1 	= UUID.randomUUID();
 		final UUID 		notificationId2 	= UUID.randomUUID();
@@ -202,6 +202,22 @@ class PublicChatNotificationImplTest {
 		assertThrows(RuntimeException.class, () -> {
 			this.service.fetchNotificationById(notificationId, userId);
 		});
+		
+	}
+	
+	/**
+	* Tests fetching of Notification for a specific Chat
+	*/
+	@Test
+	void testFetchNotificationsForChat() {
+		
+		final UUID 		chatId 			= UUID.randomUUID();
+		
+		when(this.mockDao.fetchNotificationsForChat(chatId)).thenReturn(Set.of(PublicChatNotification.builder().initiatingUserId("otherUserId").build()));
+		
+		Set<PublicChatNotification> results = this.service.fetchNotificationsForChat(chatId);
+		
+		assertEquals(1, results.size());
 		
 	}
 	

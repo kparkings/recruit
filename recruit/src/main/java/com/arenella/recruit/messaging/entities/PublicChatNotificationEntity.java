@@ -47,6 +47,12 @@ public class PublicChatNotificationEntity {
 	private boolean notificationEmailSent;
 
 	/**
+	* Default constructor 
+	*/
+	public PublicChatNotificationEntity() {
+		//Hibernate
+	}
+	/**
 	* Constructor based on a builder
 	* @param builder - Contains initialization values
 	*/

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -26,6 +27,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.messaging.beans.PublicChat;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
+import com.arenella.recruit.messaging.beans.PublicChatNotification;
+import com.arenella.recruit.messaging.beans.PublicChatNotification.NotificationType;
 import com.arenella.recruit.messaging.dao.PublicChatDao;
 
 /**
@@ -43,10 +46,13 @@ class PublicChatServiceImplTest {
 	private static final Set<String>		likes					= Set.of("rec2","can33");
 	
 	@Mock
-	private Principal mockPrincipal;
+	private Principal 						mockPrincipal;
 	
 	@Mock
-	private PublicChatDao mockChatDao; 
+	private PublicChatDao 					mockChatDao; 
+	
+	@Mock
+	private PublicChatNotificationService 	mockNotificationService;
 	
 	@InjectMocks
 	private PublicChatServiceImpl service;
@@ -61,6 +67,7 @@ class PublicChatServiceImplTest {
 		
 		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
 		when(this.mockChatDao.existsById(PARENT_ID)).thenReturn(true);
+		when(this.mockChatDao.fetchPublicChat(any())).thenReturn(Optional.of(PublicChat.builder().build()));
 		
 		this.service.createChat(PARENT_ID, MESSAGE, this.mockPrincipal);
 		
@@ -76,6 +83,8 @@ class PublicChatServiceImplTest {
 		assertNotNull(chat.getId());
 		assertNotNull(chat.getCreated());
 		assertTrue(chat.getLikes().isEmpty());
+		
+		verify(this.mockNotificationService).persistNotification(any(PublicChatNotification.class));
 		
 	}
 	
@@ -95,6 +104,7 @@ class PublicChatServiceImplTest {
 		assertEquals(PublicChatService.ERR_MSG_UNKNOWN_PARENT, ex.getMessage());
 			
 		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
+		verify(this.mockNotificationService, never()).persistNotification(any(PublicChatNotification.class));
 		
 	}
 	
@@ -398,7 +408,7 @@ class PublicChatServiceImplTest {
 	void testToggleLikeForChatLike() {
 		
 		when(this.mockPrincipal.getName()).thenReturn(OWNER_ID);
-		
+		when(this.mockChatDao.fetchPublicChat(any())).thenReturn(Optional.of(PublicChat.builder().build()));
 		ArgumentCaptor<PublicChat> argCapt = ArgumentCaptor.forClass(PublicChat.class);
 		
 		Set<String> chatLikes = Set.of("rec33", "can44");
@@ -418,6 +428,7 @@ class PublicChatServiceImplTest {
 		assertTrue(chat.getLikes().contains("can44"));
 		assertTrue(chat.getLikes().contains(this.mockPrincipal.getName()));
 		
+		verify(this.mockNotificationService).persistNotification(any(PublicChatNotification.class));
 	}
 	
 	/**
@@ -434,6 +445,10 @@ class PublicChatServiceImplTest {
 		
 		when(this.mockChatDao.fetchChatById(ID)).thenReturn(Optional.of(PublicChat.builder().likes(likes).build()));
 		
+		PublicChatNotification notification = PublicChatNotification.builder().type(NotificationType.LIKE).initiatingUserId(this.mockPrincipal.getName()).build();
+		when(this.mockNotificationService.fetchNotificationsForChat(any(UUID.class))).thenReturn(Set.of(notification));
+			
+		
 		doNothing().when(this.mockChatDao).saveChat(argCapt.capture());
 		
 		this.service.toggleLikeForChat(ID, this.mockPrincipal.getName());
@@ -446,6 +461,8 @@ class PublicChatServiceImplTest {
 		assertTrue(chat.getLikes().contains("rec33"));
 		assertTrue(chat.getLikes().contains("can44"));
 		
+		verify(this.mockNotificationService, never()).persistNotification(any(PublicChatNotification.class));
+		verify(this.mockNotificationService).deleteNotification(any(), anyString());
 	}
 	
 	/**

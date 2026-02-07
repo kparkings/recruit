@@ -15,7 +15,7 @@ import com.arenella.recruit.messaging.dao.PublicChatNotificationDao;
 * Services for interacting with PublicChatNotification's 
 */
 @Service
-public class PublicChatNotificationImpl implements PublicChatNotificationService{
+public class PublicChatNotificationServiceImpl implements PublicChatNotificationService{
 
 	private PublicChatNotificationDao dao;
 	
@@ -23,7 +23,7 @@ public class PublicChatNotificationImpl implements PublicChatNotificationService
 	* Constructor
 	* @param dao - Repository for PublicChatNotification's
 	*/
-	public PublicChatNotificationImpl(PublicChatNotificationDao dao) {
+	public PublicChatNotificationServiceImpl(PublicChatNotificationDao dao) {
 		this.dao = dao;
 	}
 	
@@ -107,6 +107,14 @@ public class PublicChatNotificationImpl implements PublicChatNotificationService
 			//TODO: Call email service
 		});
 		
+	}
+
+	/**
+	* Refer to the PublicChatNotificationService interface for details 
+	*/
+	@Override
+	public Set<PublicChatNotification> fetchNotificationsForChat(UUID chatId) {
+		return this.dao.fetchNotificationsForChat(chatId);
 	}
 
 }

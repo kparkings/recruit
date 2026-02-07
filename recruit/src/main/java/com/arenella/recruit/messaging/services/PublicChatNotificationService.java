@@ -57,5 +57,12 @@ public interface PublicChatNotificationService {
 	* @param cuttoff - lte date/time
 	*/
 	public void mailNotificationReminders(LocalDateTime cuttoff);
+	
+	/**
+	* Retrieves all the Notification for a specific Chat
+	* @param chatId - Id of Chat to fetch Notification for
+	* @return Chat notifications
+	*/
+	public Set<PublicChatNotification> fetchNotificationsForChat(UUID chatId);
 		
 }
