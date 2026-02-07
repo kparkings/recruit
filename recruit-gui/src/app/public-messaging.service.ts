@@ -1,8 +1,8 @@
-import { Injectable } 								from '@angular/core';
-import { HttpClient, HttpHeaders }  				from '@angular/common/http';
-import { Observable }                 				from 'rxjs';
-import { environment }								from './../environments/environment';
-import { PublicChat, ChatParticipant }				from './newsfeed/public-chat';
+import { Injectable } 												from '@angular/core';
+import { HttpClient, HttpHeaders }  								from '@angular/common/http';
+import { Observable }                 								from 'rxjs';
+import { environment }												from './../environments/environment';
+import { PublicChat, ChatParticipant, PublicChatNotification }		from './newsfeed/public-chat';
 
 /**
 * Services for interaction with public Chats ( message board posts )
@@ -12,6 +12,8 @@ import { PublicChat, ChatParticipant }				from './newsfeed/public-chat';
 })
 export class PublicMessagingService {
   
+	public unreadNotifications:number = 0;
+	
 	/**
 	* Constructor
 	* @param - Utility for sending messages to backend API 
@@ -109,6 +111,14 @@ export class PublicMessagingService {
 	public fetchLikeParticipantsForChat(chatId:string):Observable<Array<ChatParticipant>>{
 		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId+'/likes';
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Returns notification for the User 
+	*/
+	public fetchNotificationsForUser():Observable<Array<PublicChatNotification>>{
+		const backendUrl:string = environment.backendUrl + 'publicchatnotification';
+		return this.httpClient.get<Array<PublicChatNotification>>(backendUrl, this.httpOptions);
 	}
 	
 }

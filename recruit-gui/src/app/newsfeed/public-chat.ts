@@ -67,11 +67,39 @@ export class ChatParticipant {
 	/**
 	* Constructor
 	* @paran id 		- Unique Id of the Participant
+	* @param type		- Type of Participant ( RECRUIER, CANDIDATE, SYSTEM)
 	* @param firstName 	- Participants first name
 	* @param surname 	- Participants surname
 	* @param photo 		- Participants profile image
 	*/
-	constructor(public id:string, public firstName:string, public surname:string, public photo:Photo){}
+	constructor(public id:string, public type:string, public firstName:string, public surname:string, public photo:Photo){}
+	
+}
+
+/**
+* A Notification for a User relating to Public Chats 
+*/
+export class PublicChatNotification {
+
+	/**
+	* Constructor
+	* @paran notificationId 	- Unique Id of the Notification
+	* @param type				- Type of Notification. What action its notifying
+	* @param created 			- When the Notification was created
+	* @param chatId 			- Chat the Notification relates to
+	* @param destinationUserId	- User notification is intended for
+	* @param initiatingUser		- User whose action resulted in the Notification
+	* @param viewed				- Whethere the destination user has viewed the Notification
+	*/
+	constructor(
+		public notificationId:string, 
+		public type:string,
+		public created:Date,
+		public chatId:string,
+		public destinationUserId:string,
+		public initiatingUser:ChatParticipant,
+		public viewed:boolean)
+	{}
 	
 }
 

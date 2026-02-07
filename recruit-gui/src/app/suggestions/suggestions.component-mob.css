@@ -1,10 +1,10 @@
 @media (max-width:700px)  {
 
-	    .page-body {
-        	width: 96%;
-        	margin: auto;
-         	margin-top: 20px;
-    	}
+	.page-body {
+		width: 96%;
+		margin: auto;
+		margin-top: 20px;
+	}
     
 	 .suggestion-icon{
 	 	width:100%;

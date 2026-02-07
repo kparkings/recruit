@@ -23,6 +23,7 @@ import { CandidateServiceService}			from './candidate-service.service';
 import { InfoPaneUtil } 					from './suggestions/info-pane-util';
 import { SupportedCountry } 				from './supported-candidate';
 import { CandidateMiniOverviewComponent} 	from './candidate-mini-overview/candidate-mini-overview.component';
+import { PublicMessagingService }			from './public-messaging.service';
 
 @Component({
     selector: 'app-root',
@@ -56,6 +57,7 @@ export class AppComponent {
 	
 	public unseenMpPosts:number = 0;
 	public unseenEmails:number 	= 0;
+	public unseenNotifications:number=0;
 	
 	public validationExceptions:Array<string> 	= new Array<string>();
 	public menuItemMobileCss 					= '';
@@ -81,12 +83,12 @@ export class AppComponent {
 				public  popupsService:			PopupsService,
 				private candidateNavService: 	CandidateNavService,
 				public  creditsService:			CreditsService,
-				private newsfeedService:		NewsfeedService,
+				public newsfeedService:		NewsfeedService,
 				private translate: 				TranslateService,
 				private listingService:			ListingService,
 				private readonly sanitizer:DomSanitizer, 
-				readonly curriculumService:CurriculumService
-				
+				readonly curriculumService:CurriculumService,
+				private readonly publicMessagingService:PublicMessagingService,
 			){
 		
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -128,6 +130,7 @@ export class AppComponent {
 			this.tandcBox.nativeElement.showModal();
 		}
 		this.privateChat.startChatContactListPolling();
+	
 	}
 	
 	/**
@@ -450,13 +453,17 @@ export class AppComponent {
 	}
 		
 	
-		public miniProfileCandidateId:string = "60";
+	public miniProfileCandidateId:string = "60";
 	public showCandidateProfile(candidateId:string):void{
 		this.hideInliceCV();
 		this.miniProfileCandidateId = candidateId;
 		this.showCandidateProfileView = true;
 		this.miniOverview.loadCandidate(candidateId);
 		
+	}
+	
+	public getUnreadNewsFeedNotifications():number{
+		return this.publicMessagingService.unreadNotifications;
 	}
 	
 }

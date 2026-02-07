@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, HostListener } 				from '@angular/core';
 import { PublicMessagingService}										from '../public-messaging.service';
 import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
-import { PublicChat, ChatParticipant}									from './public-chat';
+import { PublicChat, ChatParticipant, PublicChatNotification}			from './public-chat';
 import { AppComponent } 												from 'src/app/app.component';
 
 @Component({
@@ -24,6 +24,8 @@ export class NewsfeedComponent {
 	public currentChatForReply:PublicChat | undefined;
 	public topLevelPosts:Array<PublicChat> = new Array<PublicChat>();
 	
+	public notifications:Array<PublicChatNotification> = new Array<PublicChatNotification>();
+	
 	/**
 	* Constructor
 	* @oaramparam service  - Services for PublicMessages 
@@ -35,6 +37,10 @@ export class NewsfeedComponent {
 	
 	ngAfterViewInit(){
 		this.refreshPosts();
+		this.service.fetchNotificationsForUser().subscribe(notifications => {
+			this.notifications = notifications;
+			this.service.unreadNotifications = notifications.filter(n => n.viewed == false).length;
+		});
 	}
 	
 	public resetScroll():void{

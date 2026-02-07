@@ -2,7 +2,7 @@
 	<div class="post-header replyCssClass{{replyCssClass}}">
 		<img class="public-chat-image" *ngIf="hasImage(chat)"  id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhoto(chat)}}' />
 		<img class="public-chat-image" *ngIf="!hasImage(chat)" id='base64image' src="../assets/img/default-user-image.jpg"  />
-		<div class="public-chat-owner-name">{{chat.owner.firstName}} {{chat.owner.surname}}</div>
+		<div class="public-chat-owner-name">[ {{chat.owner.type | translate}} ] - {{chat.owner.firstName}} {{chat.owner.surname}}</div>
 		<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessage(chat)" (click)="openChat(chat)">chat</div>
 		<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="openDeleteOptionBox(chat)">delete</div>
 		<div class="chat-icon material-icons public-chat-option" *ngIf="isOwnMessage(chat)" (click)="showEditView(chat)">edit</div>
@@ -31,15 +31,20 @@
 	
 	<div class="post-footer">
 		<div *ngIf="!isInEditMode(chat) && !isInReplyMode(chat)">
-		
-		
-			<div class="post-footer-item-left" (click)="toggleReplies(chat)">
+			
+			<div class="post-footer-item-left post-footer-item-left-disabled" *ngIf="getReplyCount(chat) == 0">
+				<span class="chat-footer-total">({{getReplyCount(chat)}})</span>
+				<span>replies</span>
+			</div>
+			
+			<div class="post-footer-item-left" (click)="toggleReplies(chat)" *ngIf="getReplyCount(chat) != 0">
 				<span class="chat-footer-total">({{getReplyCount(chat)}})</span>
 				<span>replies</span>
 			</div>
 		
 			<div class="post-footer-item-left">
-				<span class="chat-footer-total" (click)="openLikesOptionBox(chat)">({{chat.likes.length}})</span>
+				<span class="chat-footer-total" *ngIf="chat.likes.length != 0" (click)="openLikesOptionBox(chat)">({{chat.likes.length}})</span>
+				<span class="chat-footer-total post-footer-item-left-disabled" *ngIf="chat.likes.length == 0" >({{chat.likes.length}})</span>
 				<span class="chat-icon material-icons public-chat-option-footer chat-liked-{{isLikedByUser(chat)}}" (click)="toggleLikeForChat(chat)">thumb_up</span>
 			</div>
 			
@@ -58,8 +63,10 @@
 	</div>
 	
 	<div *ngIf="chat.showReplies">
+		<div style="border-top:1px solid grey;margin-top:5px;width:100%;height:30px;" (click)="toggleReplies(chat)">
+			<span style="float:right;font-weight:bold;cursor:pointer;margin-top:10px;margin-right:10px;">Close</span>
+		</div>
 		<div>
-			<b style="margin-left:10px;">Replies: <span (click)="toggleReplies(chat)" style="cursor:pointer;">X</span></b>
 			<app-public-posts [topLevel]="'False'" [currentTopLevelChatId]="chat.id" [parentCss]="replyCssClass"></app-public-posts>
 		</div>
 		

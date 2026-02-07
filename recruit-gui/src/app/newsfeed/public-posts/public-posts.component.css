@@ -89,6 +89,12 @@
 	cursor:pointer;
 }
 
+.post-footer-item-left-disabled{
+	color:grey;
+	padding:5px;
+	cursor:default;
+}
+
 .post-footer-item-right{
 	float:right;
 	margin:5px;
@@ -199,6 +205,13 @@
 
 .replyCssClassEven{
 	background:#A39C94;
+}
+
+.close-replies{
+	font-weight:bold;
+	cursor:pointer;
+	float:right;
+	margin-right:20px;
 }
 
 @media (max-width: 768px) {

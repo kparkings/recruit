@@ -3,15 +3,18 @@ package com.arenella.recruit.messaging.controllers;
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.Photo;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant.CHAT_PARTICIPANT_TYPE;
+
 /**
 * Represents a Participant in an instant Chat message 
 */
 public class ChatParticipantAPIOutbound {
 
-	private String id;
-	private String firstName;
-	private String surname;
-	private Photo photo;
+	private String 					id;
+	private CHAT_PARTICIPANT_TYPE 	type;
+	private String 					firstName;
+	private String 					surname;
+	private Photo 					photo;
 	
 	/**
 	* Constructor
@@ -19,6 +22,7 @@ public class ChatParticipantAPIOutbound {
 	*/
 	public ChatParticipantAPIOutbound(ChatParticipantAPIOutboundBuilder builder) {
 		this.id 		= builder.id;
+		this.type		= builder.type;
 		this.firstName 	= builder.firstName;
 		this.surname 	= builder.surname;
 		this.photo		= builder.photo;
@@ -30,6 +34,14 @@ public class ChatParticipantAPIOutbound {
 	*/
 	public String getId() {
 		return this.id;
+	}
+	
+	/**
+	* Returns what type of user the Participant is
+	* @return type of Participant
+	*/
+	public CHAT_PARTICIPANT_TYPE getType() {
+		return this.type;
 	}
 	
 	/**
@@ -70,6 +82,7 @@ public class ChatParticipantAPIOutbound {
 	public static class ChatParticipantAPIOutboundBuilder{
 	
 		private String id;
+		private CHAT_PARTICIPANT_TYPE type;
 		private String firstName;
 		private String surname;
 		private Photo photo;
@@ -81,6 +94,7 @@ public class ChatParticipantAPIOutbound {
 		*/
 		public ChatParticipantAPIOutboundBuilder chatParticipant(ChatParticipant chatParticipant) {
 			this.id 		= chatParticipant.getParticipantId();
+			this.type		= chatParticipant.getType();
 			this.firstName 	= chatParticipant.getFirstName();
 			this.surname 	= chatParticipant.getSurame();
 			

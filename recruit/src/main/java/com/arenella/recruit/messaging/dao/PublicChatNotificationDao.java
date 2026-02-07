@@ -21,7 +21,7 @@ import com.arenella.recruit.messaging.entities.PublicChatNotificationEntity;
 @Repository
 public interface PublicChatNotificationDao extends ListCrudRepository<PublicChatNotificationEntity, UUID>{
 
-	@Query("from PublicChatNotificationEntity where initiatingUserId = :userId")
+	@Query("from PublicChatNotificationEntity where destinationUserId = :userId")
 	List<PublicChatNotificationEntity> findByUserId(String userId);
 	
 	@Query("from PublicChatNotificationEntity where chatId = :chatId")

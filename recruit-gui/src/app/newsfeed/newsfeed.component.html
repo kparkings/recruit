@@ -6,6 +6,22 @@
 	
 	<div class="newsfeed-notification-panel">
 		<div class="header">Notifications</div>
+		<div>
+			<div *ngFor="let notification of notifications" class="public-chat-notification-panel-notifications">
+			
+				<div *ngIf="notification.initiatingUser" >
+					
+					<div class="notification-public-chat">
+						<div style="float:left">
+							<img class="notification-public-chat-image" id='base64image' *ngIf="notification.initiatingUser.photo" src='data:image/jpeg;base64, {{notification.initiatingUser.photo.imageBytes}}' />
+							<img class="notification-public-chat-image" *ngIf="!notification.initiatingUser.photo" id='base64image' src="../assets/img/default-user-image.jpg" />
+						</div>
+						<div class="notification-public-chat-name">{{notification.initiatingUser.firstName}} {{notification.initiatingUser.surname}}</div>
+					</div>
+					<div style="clear:both"></div>					
+				</div>
+			</div>
+		</div>
 	</div>
 	
 	<div class="newsfeed-messages-panel" >

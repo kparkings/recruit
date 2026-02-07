@@ -27,8 +27,8 @@
 				<div class="contacts" *ngIf="chats.length != 0">
 					<div class="chat-list-box" style="clear:both" *ngFor="let chat of getChats()" (click)="showChatMessages(chat)">
 						<div>
-							<img style="float:left;width:33px;height:33px;margin-top:8px;margin-right:10px;"*ngIf="hasImage(chat)" id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhoto(chat)}}' />
-							<img style="float:left;width:33px;height:33px;margin-top:8px;margin-right:10px;"*ngIf="!hasImage(chat)" id='base64image' src="../assets/img/default-user-image.jpg"  />
+							<img style="float:left;width:33px;height:33px;margin-top:8px;margin-right:10px;" *ngIf="hasImage(chat)" id='base64image' src='data:image/jpeg;base64, {{getChatParticipantPhoto(chat)}}' />
+							<img style="float:left;width:33px;height:33px;margin-top:8px;margin-right:10px;" *ngIf="!hasImage(chat)" id='base64image' src="../assets/img/default-user-image.jpg"  />
 							<div style="float:left;">{{getUserName(chat)}}</div>
 							<div><span class="chat-iconX material-icons private-chat-bubble unread-messages-{{hasUnviewedMessages(chat)}}">chat_bubble</span></div>
 						</div>
@@ -44,7 +44,7 @@
 						{{getSelectedChatOtherUserName()}}
 						<span class="chat-header-{{getBlockedStatus()}} material-icons " (click)="toggleBlockUserChat()">block</span>
 						<span class="chat-header-other-user-typing material-icons " *ngIf="otherUserTypeing == true">chat</span>
-						<span class="chatwindow-header-item material-icons" *ngIf="showBtnShowCV()" (click)="showInlineCV()">description</span>
+						<span class="chatwindow-header-item material-icons hide-for-mobile" *ngIf="showBtnShowCV()" (click)="showInlineCV()">description</span>
 						<span class="chatwindow-header-item material-icons" *ngIf="showBtnShowCV()" (click)="showCandidateProfile()">info</span>
 						
 						
