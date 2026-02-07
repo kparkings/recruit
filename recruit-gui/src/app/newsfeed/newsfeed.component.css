@@ -222,6 +222,11 @@
 
 }
 
+.notification-type-icon{
+	float:left; 
+	margin-right:5px;
+}
+
 @media (max-width: 768px) {
 	.newsfeed-boop-panel{
 		display:none;

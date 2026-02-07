@@ -16,7 +16,11 @@
 							<img class="notification-public-chat-image" id='base64image' *ngIf="notification.initiatingUser.photo" src='data:image/jpeg;base64, {{notification.initiatingUser.photo.imageBytes}}' />
 							<img class="notification-public-chat-image" *ngIf="!notification.initiatingUser.photo" id='base64image' src="../assets/img/default-user-image.jpg" />
 						</div>
-						<div class="notification-public-chat-name">{{notification.initiatingUser.firstName}} {{notification.initiatingUser.surname}}</div>
+						<div class="notification-public-chat-name">
+							<span class="material-icons notification-type-icon" *ngIf="notification.type == 'REPLY'">chat_bubble</span>
+							<span class="material-icons notification-type-icon" *ngIf="notification.type == 'LIKE'">thumb_up</span>
+							{{notification.initiatingUser.firstName}} {{notification.initiatingUser.surname}}
+						</div>
 					</div>
 					<div style="clear:both"></div>					
 				</div>

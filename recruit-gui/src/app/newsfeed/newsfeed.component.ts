@@ -40,6 +40,8 @@ export class NewsfeedComponent {
 		this.refreshPosts();
 		this.service.fetchNotificationsForUser().subscribe(notifications => {
 			this.notifications = notifications;
+			this.notifications.sort((one:PublicChatNotification, two:PublicChatNotification) => this.isGreaterNotification(one,two));
+			this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
 			this.service.unreadNotifications = notifications.filter(n => n.viewed == false).length;
 		});
 	}
@@ -121,6 +123,22 @@ export class NewsfeedComponent {
 	* Comparator to sort Chats in descending creation time order 
 	*/
 	private isGreater(one:PublicChat, two:PublicChat):number{
+		
+		if(one.created > two.created){
+			return -1;
+		}
+		
+		if(one.created < two.created){
+			return 1;
+		}
+		
+		return 0;
+	}
+	
+	/**
+	* Comparator to sort Notifications in descending creation time order 
+	*/
+	private isGreaterNotification(one:PublicChatNotification, two:PublicChatNotification):number{
 		
 		if(one.created > two.created){
 			return -1;
