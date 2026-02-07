@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.messaging.beans.PublicChatNotification;
+import com.arenella.recruit.messaging.beans.PublicChatNotification.NotificationType;
 import com.arenella.recruit.messaging.dao.PublicChatNotificationDao;
 
 /**
@@ -102,7 +103,7 @@ public class PublicChatNotificationImpl implements PublicChatNotificationService
 	*/
 	@Override
 	public void mailNotificationReminders(LocalDateTime cuttoff) {
-		this.dao.fetchUnviewedNotificationsBefore(cuttoff).stream().forEach(notification -> {
+		this.dao.fetchUnviewedNotificationsBefore(cuttoff).stream().filter(n -> n.getType() == NotificationType.REPLY).forEach(notification -> {
 			//TODO: Call email service
 		});
 		

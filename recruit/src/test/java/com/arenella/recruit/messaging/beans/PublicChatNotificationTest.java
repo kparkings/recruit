@@ -7,14 +7,18 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.messaging.beans.PublicChatNotification.NotificationType;
+
 /**
 * Unit tests for the PublicChatNotification class 
 */
 class PublicChatNotificationTest {
 
 	private static final UUID 				NOTIFICATION_ID 			= UUID.randomUUID();
+	private static final NotificationType	TYPE						= NotificationType.LIKE;
 	private static final LocalDateTime 		CREATED 					= LocalDateTime.of(2026, 2, 6, 18, 11, 01);
 	private static final UUID 				CHAT_ID 					= UUID.randomUUID();
+	private static final String 			DESTINATION_USER_ID 		= "rec2";
 	private static final String 			INITIATING_USER_ID 			= "rec1";
 	private static final boolean 			VIEWED 						= false;
 	private static final boolean 			NOTIFICATION_EMAIL_SENT		= true;
@@ -28,16 +32,20 @@ class PublicChatNotificationTest {
 		PublicChatNotification notification = PublicChatNotification
 				.builder()
 					.notificationId(NOTIFICATION_ID)
+					.type(TYPE)
 					.created(CREATED)
 					.chatId(CHAT_ID)
+					.destinationUserId(DESTINATION_USER_ID)
 					.initiatingUserId(INITIATING_USER_ID)
 					.viewed(VIEWED)
 					.notificationEmailSent(NOTIFICATION_EMAIL_SENT)
 				.build();
 		
 		assertEquals(NOTIFICATION_ID, 			notification.getNotificationId());
+		assertEquals(TYPE, 						notification.getType());
 		assertEquals(CREATED, 					notification.getCreated());
 		assertEquals(CHAT_ID, 					notification.getChatId());
+		assertEquals(DESTINATION_USER_ID, 		notification.getDestinationUserId());
 		assertEquals(INITIATING_USER_ID, 		notification.getInitiatingUserId());
 		assertEquals(VIEWED, 					notification.isViewed());
 		assertEquals(NOTIFICATION_EMAIL_SENT, 	notification.isNotificationEmailSent());
@@ -53,16 +61,20 @@ class PublicChatNotificationTest {
 		PublicChatNotification old = PublicChatNotification
 				.builder()
 					.notificationId(NOTIFICATION_ID)
+					.type(TYPE)
 					.created(CREATED)
 					.chatId(CHAT_ID)
+					.destinationUserId(DESTINATION_USER_ID)
 					.initiatingUserId(INITIATING_USER_ID)
 					.viewed(VIEWED)
 					.notificationEmailSent(NOTIFICATION_EMAIL_SENT)
 				.build();
 		
 		assertEquals(NOTIFICATION_ID, 			old.getNotificationId());
+		assertEquals(TYPE, 						old.getType());
 		assertEquals(CREATED, 					old.getCreated());
 		assertEquals(CHAT_ID, 					old.getChatId());
+		assertEquals(DESTINATION_USER_ID, 		old.getDestinationUserId());
 		assertEquals(INITIATING_USER_ID, 		old.getInitiatingUserId());
 		assertEquals(VIEWED, 					old.isViewed());
 		assertEquals(NOTIFICATION_EMAIL_SENT, 	old.isNotificationEmailSent());
@@ -70,8 +82,10 @@ class PublicChatNotificationTest {
 		PublicChatNotification notification = PublicChatNotification.builder().publicChatNotification(old).build();
 		
 		assertEquals(NOTIFICATION_ID, 			notification.getNotificationId());
+		assertEquals(TYPE, 						notification.getType());
 		assertEquals(CREATED, 					notification.getCreated());
 		assertEquals(CHAT_ID, 					notification.getChatId());
+		assertEquals(DESTINATION_USER_ID, 		notification.getDestinationUserId());
 		assertEquals(INITIATING_USER_ID, 		notification.getInitiatingUserId());
 		assertEquals(VIEWED, 					notification.isViewed());
 		assertEquals(NOTIFICATION_EMAIL_SENT, 	notification.isNotificationEmailSent());

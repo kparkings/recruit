@@ -11,12 +11,16 @@ import java.util.UUID;
 */
 public class PublicChatNotification {
 
-	private UUID 			notificationId;
-	private LocalDateTime 	created;
-	private UUID 			chatId;
-	private String 			initiatingUserId;
-	private boolean 		viewed;
-	private boolean 		notificationEmailSent;
+	public enum NotificationType {REPLY, LIKE}
+	
+	private UUID 				notificationId;
+	private NotificationType 	type;
+	private LocalDateTime 		created;
+	private UUID 				chatId;
+	private String 				destinationUserId;	//This so we can get users notifications
+	private String 				initiatingUserId;	//This so we can show who replied
+	private boolean 			viewed;
+	private boolean 			notificationEmailSent;
 
 	/**
 	* Constructor based on a builder
@@ -24,8 +28,10 @@ public class PublicChatNotification {
 	*/
 	public PublicChatNotification(PublicChatNotificationBuilder builder) {
 		this.notificationId 			= builder.notificationId;
+		this.type						= builder.type;
 		this.created 					= builder.created;
 		this.chatId 					= builder.chatId;
+		this.destinationUserId			= builder.destinationUserId;
 		this.initiatingUserId 			= builder.initiatingUserId;
 		this.viewed 					= builder.viewed;
 		this.notificationEmailSent 		= builder.notificationEmailSent;
@@ -37,6 +43,14 @@ public class PublicChatNotification {
 	*/
 	public UUID getNotificationId() {
 		return this.notificationId;
+	}
+	
+	/**
+	* Returns the type of the Notification
+	* @return - type of action being notified
+	*/
+	public NotificationType getType() {
+		return this.type;
 	}
 	
 	/**
@@ -55,6 +69,16 @@ public class PublicChatNotification {
 	*/
 	public UUID getChatId() {
 		return this.chatId;
+	}
+	
+	
+	/**
+	* Returns the unique Id of the User who the Notification 
+	* is intended for
+	* @return Id of notification recipient
+	*/
+	public String getDestinationUserId() {
+		return this.destinationUserId;
 	}
 	
 	/**
@@ -97,12 +121,14 @@ public class PublicChatNotification {
 	*/
 	public static class PublicChatNotificationBuilder{
 		
-		private UUID 			notificationId;
-		private LocalDateTime 	created;
-		private UUID 			chatId;
-		private String 			initiatingUserId;
-		private boolean 		viewed;
-		private boolean 		notificationEmailSent;
+		private UUID 				notificationId;
+		private NotificationType 	type;
+		private LocalDateTime 		created;
+		private UUID 				chatId;
+		private String 				destinationUserId;
+		private String 				initiatingUserId;
+		private boolean 			viewed;
+		private boolean 			notificationEmailSent;
 		
 		/**
 		* Initializes Builder from existing instance
@@ -111,8 +137,10 @@ public class PublicChatNotification {
 		*/
 		public PublicChatNotificationBuilder publicChatNotification(PublicChatNotification publicChatNotification){
 			this.notificationId 		= publicChatNotification.notificationId;
+			this.type					= publicChatNotification.type;
 			this.created 				= publicChatNotification.created;
 			this.chatId 				= publicChatNotification.chatId;
+			this.destinationUserId		= publicChatNotification.destinationUserId;
 			this.initiatingUserId 		= publicChatNotification.initiatingUserId;
 			this.viewed 				= publicChatNotification.viewed;
 			this.notificationEmailSent 	= publicChatNotification.notificationEmailSent;
@@ -127,6 +155,17 @@ public class PublicChatNotification {
 		*/
 		public PublicChatNotificationBuilder notificationId(UUID notificationId) {
 			this.notificationId = notificationId;
+			return this;
+			
+		}
+		
+		/**
+		* Sets the type of action the notification is related to
+		* @param type - type of Notification
+		* @return Builder
+		*/
+		public PublicChatNotificationBuilder type(NotificationType type) {
+			this.type = type;
 			return this;
 			
 		}
@@ -148,6 +187,16 @@ public class PublicChatNotification {
 		*/
 		public PublicChatNotificationBuilder chatId(UUID chatId) {
 			this.chatId = chatId;
+			return this;
+		}
+		
+		/**
+		* Sets the Id of the User that the notification is intended for
+		* @param destinationUserId - Unique id of User whose the notification is intended for
+		* @return Builder
+		*/
+		public PublicChatNotificationBuilder destinationUserId(String destinationUserId) {
+			this.destinationUserId = destinationUserId;
 			return this;
 		}
 		

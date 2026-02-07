@@ -2861,6 +2861,11 @@ databaseChangeLog:
                    primaryKey: true
                    nullable: false
              - column:
+                 name: type
+                 type: varchar(20)
+                 constraints:
+                   nullable: false
+             - column:
                  name: created
                  type: timestamp
                  constraints:
@@ -2871,7 +2876,12 @@ databaseChangeLog:
                  constraints:
                    nullable: false
              - column:
-                 name: initiating_user_id
+                 name: destination_user
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: initiating_user
                  type: varchar
                  constraints:
                    nullable: false
@@ -2895,7 +2905,15 @@ databaseChangeLog:
               referencedColumnNames: id
        - addForeignKeyConstraint:  
               constraintName: fk_chat_notification_participants
-              baseColumnNames: initiating_user_id
+              baseColumnNames: initiating_user
+              baseTableName: public_chat_notifications
+              baseTableSchemaName: chats
+              referencedTableName: chat_participants
+              referencedTableSchemaName: chats
+              referencedColumnNames: id
+       - addForeignKeyConstraint:  
+              constraintName: fk_chat_notification_dest_participant
+              baseColumnNames: destination_user
               baseTableName: public_chat_notifications
               baseTableSchemaName: chats
               referencedTableName: chat_participants
