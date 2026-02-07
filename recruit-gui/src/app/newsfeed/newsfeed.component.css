@@ -143,15 +143,15 @@
 	float:left;
 	border:1px solid grey;
 	margin-left:1%;
-	min-height:300px;
+	height:300px;
 }
 
 .newsfeed-notification-panel{
 	width:23%;
 	float:right;
 	border:1px solid grey;
-	margin-right:1%;
-	min-height:300px;
+	margin-right:1%;	
+	height:300px;
 }
 
 .header{
@@ -194,7 +194,8 @@
 }
 
 .public-chat-notification-panel-notifications{
-	overflow-y:true;
+	overflow-y:scroll;
+	height:250px;
 }
 
 .notification-public-chat{

@@ -18,12 +18,12 @@ export class NewsfeedComponent {
 	public loadedPages:number = 0;
 	public pageSize:number = 5;
 	public mainViewPane:string = "FEED"; //FEED or CV
+	public newsFeedPane:string = "NEWSFEED"; //NEWSFEED or SINGLEPOST
 		
 	public currentChat:PublicChat | undefined;
 	public currentChatForDelete:PublicChat | undefined;
 	public currentChatForReply:PublicChat | undefined;
 	public topLevelPosts:Array<PublicChat> = new Array<PublicChat>();
-	
 	public notifications:Array<PublicChatNotification> = new Array<PublicChatNotification>();
 	
 	/**
@@ -36,6 +36,7 @@ export class NewsfeedComponent {
 	}
 	
 	ngAfterViewInit(){
+		
 		this.refreshPosts();
 		this.service.fetchNotificationsForUser().subscribe(notifications => {
 			this.notifications = notifications;
@@ -46,6 +47,30 @@ export class NewsfeedComponent {
 	public resetScroll():void{
 		this.pageYPos = window.pageYOffset;
 		this.refreshPosts();
+		this.newsFeedPane = "NEWSFEED";
+	}
+	
+	public handleReplyForNotification():void{
+		//this.pageYPos = window.pageYOffset;
+		//this.refreshPosts();
+	}
+	
+	
+	public loadNotification(notification:PublicChatNotification):void{
+		this.newsFeedPane = "SINGLEPOST"
+		this.topLevelPosts = new Array<PublicChat>();
+		this.service.fetchChatById(notification.chatId).subscribe(chat =>{
+			this.topLevelPosts.push(chat);
+		});
+	}
+	
+	public closeNotificationView():void{
+		window.location.reload();
+	}
+	
+	public closeNotification():void{
+		this.newsFeedPane = "NEWSFEED";
+		this.resetScroll();
 	}
 	
 	/**
@@ -53,18 +78,18 @@ export class NewsfeedComponent {
 	*/
 	private refreshPosts():void{
 		this.service.fetchPageOfTopLevelChats(0,((this.loadedPages+1) * this.pageSize)).subscribe(chats => {
-			this.topLevelPosts = chats;
-			this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-			this.newMessageForm = new UntypedFormGroup({
-				message: new UntypedFormControl(),
-			});
-			this.topLevelPosts.forEach(tlp => {
-				this.service.fetchChatChildren(tlp.id).subscribe(replies => {
-					tlp.replies = replies;
-					tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-				});
-			})
-		});	
+					this.topLevelPosts = chats;
+					this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+					this.newMessageForm = new UntypedFormGroup({
+						message: new UntypedFormControl(),
+					});
+					this.topLevelPosts.forEach(tlp => {
+						this.service.fetchChatChildren(tlp.id).subscribe(replies => {
+							tlp.replies = replies;
+							tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+						});
+					})
+				});			
 	}
 	
 	public newMessageForm:UntypedFormGroup = new UntypedFormGroup({
@@ -140,6 +165,10 @@ export class NewsfeedComponent {
 			
 	@HostListener('window:scroll', ['$event']) onWindowScroll(e:any) {
 	   	 
+		if(this.newsFeedPane == "SINGLEPOST") {
+			return;
+		}
+		
 		try{
 			let yPos = window.pageYOffset;
 		
@@ -154,11 +183,7 @@ export class NewsfeedComponent {
 					this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
 				});	
 			}
-			
-			//console.log("DDD yPos " + yPos + " this.pageYPos " + this.pageYPos);
-			//this.refreshPosts();
-			
-		
+
 		} catch(error) {
 			console.log(error);
 		}

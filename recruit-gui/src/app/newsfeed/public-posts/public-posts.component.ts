@@ -73,7 +73,7 @@ export class PublicPostsComponent {
 						tlp.replies = replies;
 						tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
 					});
-				})
+				});
 			});	
 		} else {
 			this.service.fetchChatChildren(""+this.currentTopLevelChatId).subscribe(chats => {
@@ -278,6 +278,9 @@ export class PublicPostsComponent {
 	* @param chat - Chat to be updated 
 	*/
 	public saveChatReply(chat:PublicChat):void{
+		
+		console.log("Attempting to reply with chat " + chat.id);
+		
 		this.service.createChat(chat.id, this.replyChatForm.get('message')?.value).subscribe(res => {
 			this.replyChatForm = new UntypedFormGroup({
 				message: new UntypedFormControl(),
@@ -288,6 +291,10 @@ export class PublicPostsComponent {
 			
 		});
 		
+	}
+	
+	public close():void{
+		this.replyAddedEvent.emit('replyAddedEvent');
 	}
 	
 	/**
