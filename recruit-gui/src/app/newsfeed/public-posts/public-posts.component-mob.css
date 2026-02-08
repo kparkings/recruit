@@ -1,0 +1,8 @@
+@media (max-width:700px)  {
+	
+	.post-message{
+		margin-top:0px;
+		border:1px solid grey;
+		min-height:200px;
+	}
+}

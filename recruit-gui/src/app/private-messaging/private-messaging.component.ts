@@ -86,6 +86,7 @@ export class PrivateMessagingComponent {
 						this.fetchChats();
 						this.showChatMessages(this.currentChat!);
 						this.startReplyScheduler();
+
 					}
 				});
 
@@ -517,9 +518,12 @@ export class PrivateMessagingComponent {
 		
 		this.currentReplies = replies.sort(this.compareMessages);
 			
+		/**
+		* Scrolls to the last message in the open chat window 
+		*/
 		if (this.scrollOff == false) {
 			this.doScrollTop('boop');
-			this.doScrollTop('pageTop');
+			//this.doScrollTop('pageTop'); //This causes issue in mobile
 		}
 		
 	}
@@ -529,8 +533,8 @@ export class PrivateMessagingComponent {
 	}
 	
 	public setScrollOn():void{
-			this.scrollOff = false;
-		}
+		this.scrollOff = false;
+	}
 	
 	/**
 	* Deletes the Chat message 

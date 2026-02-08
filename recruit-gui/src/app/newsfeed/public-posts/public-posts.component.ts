@@ -10,7 +10,7 @@ import { AppComponent } 												from 'src/app/app.component';
   selector: 'app-public-posts',
   standalone: false,
   templateUrl: './public-posts.component.html',
-  styleUrl: './public-posts.component.css'
+  styleUrls: ['./public-posts.component.css', './public-posts.component-mob.css']
 })
 export class PublicPostsComponent {
 
@@ -121,6 +121,7 @@ export class PublicPostsComponent {
 	* Opens Chat session with the owner of the Chat 
 	*/
 	public openChat(chat:PublicChat):void{
+		this.appComponent.privateChat.showContactsItemView();
 		this.appComponent.privateChat.openChat(chat.owner.id);	
 	}
 	
@@ -338,6 +339,23 @@ export class PublicPostsComponent {
 	*/
 	public isOwnMessageChatParticipant(chatParticipant:ChatParticipant):boolean{
 		return chatParticipant.id == sessionStorage.getItem("userId") ? true : false;
+	}
+	
+	public cappedLengthStringStandard(text:string):string{
+		
+		if(text.length <= 50) {
+			return text;
+		}
+		
+		return text.substring(0,50)+"...";
+	}
+	
+	public cappedLengthStringMobile(text:string):string{
+		if(text.length <= 20) {
+			return text;
+		}
+		
+		return text.substring(0,20) + "...";
 	}
 	
 }
