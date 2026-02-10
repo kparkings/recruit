@@ -3,12 +3,16 @@ package com.arenella.recruit.messaging.services;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChat;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 import com.arenella.recruit.messaging.beans.PublicChatNotification;
@@ -250,6 +254,25 @@ public class PublicChatServiceImpl implements PublicChatService {
 		});
 	}
 
-	
+	public SequencedSet<UUID> fetchPathToTopLevelChat(UUID chatId){
+		
+		LinkedHashSet<UUID> pathFromChiltToTopLevelParent = new LinkedHashSet<>();
+		
+		PublicChat chat = this.chatDao.fetchChatById(chatId).orElseThrow();
+		
+		System.out.println("NOTIFICATION ID = " + chat.getId());
+		
+		
+		while (Optional.ofNullable(chat.getParentChat()).isPresent()) {
+			System.out.println("PARENT ID = " + chat.getId());
+			pathFromChiltToTopLevelParent.add(chat.getId());
+			if(chat.getParentChat().isEmpty()) {
+				break;
+			}
+			chat = this.chatDao.fetchChatById(chat.getParentChat().orElseThrow()).orElseThrow();
+		}
+		
+		return pathFromChiltToTopLevelParent.reversed();
+	}
 	
 }

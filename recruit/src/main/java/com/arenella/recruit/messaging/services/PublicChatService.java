@@ -2,6 +2,7 @@ package com.arenella.recruit.messaging.services;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -80,5 +81,7 @@ public interface PublicChatService {
 	* @return Update PublicChat
 	*/
 	PublicChat toggleLikeForChat(UUID chatId, String name);
+	
+	public SequencedSet<UUID> fetchPathToTopLevelChat(UUID chatId);
 	
 }

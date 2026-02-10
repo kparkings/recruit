@@ -45,7 +45,10 @@
 		</div>
 		<div class="single-post-panel" *ngIf="newsFeedPane == 'SINGLEPOST'">
 			<button class="btn btn-secondary arenella-btn" style="width:100%;text-align:center;" (click)="closeNotificationView()">Close</button>
-			<app-public-posts [topLevelPosts]="topLevelPosts" [topLevel]="'false'" (replyAddedEvent)="handleReplyForNotification()"></app-public-posts>
+			<app-public-posts [topLevelPosts]="topLevelPosts" [topLevel]="'true'" [notificationPath]="notificationPath" (replyAddedEvent)="resetScroll()"></app-public-posts>
+			<!--  
+			<app-public-posts [topLevelPosts]="topLevelPosts" [currentTopLevelChatId]="notificationPathTopLevelChatId" [topLevel]="'false'" (replyAddedEvent)="handleReplyForNotification()"></app-public-posts>
+			-->
 		</div>  	
 	</div>
 </div>

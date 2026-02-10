@@ -1,6 +1,7 @@
 package com.arenella.recruit.messaging.services;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -59,5 +60,5 @@ public class ParticipantServiceImpl implements ParticipantService{
 	public Optional<ChatParticipant> fetchById(String participantId) {	
 		return this.chatParticipantDao.fetchChatParticipantById(participantId);
 	}
-
+	
 }

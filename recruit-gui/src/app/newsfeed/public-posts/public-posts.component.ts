@@ -21,6 +21,7 @@ export class PublicPostsComponent {
 	@Input()  public topLevel:string = "false";
 	@Input()  public currentTopLevelChatId:string = "";
 	@Input()  public parentCss:string = "Even";
+	@Input()  public notificationPath:Array<string> = new Array<string>(); 
 	
 	@Output() replyAddedEvent 		= new EventEmitter<string>();
 
@@ -30,6 +31,7 @@ export class PublicPostsComponent {
 	public currentChatForDelete:PublicChat | undefined;
 	public currentChatForReply:PublicChat | undefined;
 	public replyCssClass:string = "Even";
+	private nofificationUpdated:boolean = false;
 		
 	public replyChatForm:UntypedFormGroup = new UntypedFormGroup({
 		message: 			new UntypedFormControl(),
@@ -76,16 +78,27 @@ export class PublicPostsComponent {
 				});
 			});	
 		} else {
-			this.service.fetchChatChildren(""+this.currentTopLevelChatId).subscribe(chats => {
-				this.topLevelPosts = chats;
-				this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-				this.topLevelPosts.forEach(tlp => {
-					this.service.fetchChatChildren(tlp.id).subscribe(replies => {
-						tlp.replies = replies;
-						tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-					});
-				})
-			});	
+			
+			//Pass in path. If child contains path value toggleReplies. This will result in the fill path.
+			//Then scrollTo last path value that needs to be and id
+			
+			if (this.currentTopLevelChatId){
+				this.service.fetchChatChildren(""+this.currentTopLevelChatId).subscribe(chats => {
+					this.topLevelPosts = chats;
+					
+					this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+					this.topLevelPosts.forEach(tlp => {
+						
+						if (this.nofificationUpdated || (this.notificationPath.length > 0 && this.notificationPath.indexOf(tlp.id) >= 0 && tlp.id != this.notificationPath[this.notificationPath.length-1])) {
+							tlp.showReplies = true;
+						}
+						this.service.fetchChatChildren(tlp.id).subscribe(replies => {
+							tlp.replies = replies;
+							tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+						});
+					})
+				});	
+			}
 		}
 	}
 	
@@ -129,8 +142,6 @@ export class PublicPostsComponent {
 	* Comparator to sort Chats in descending creation time order 
 	*/
 	private isGreater(one:PublicChat, two:PublicChat):number{
-		console.log(one.created < two.created);
-		
 		if(one.created > two.created){
 			return -1;
 		}
@@ -289,7 +300,7 @@ export class PublicPostsComponent {
 			this.refreshPosts();
 			this.showFeedView();	
 			this.replyAddedEvent.emit('replyAddedEvent');
-			
+			this.nofificationUpdated;
 		});
 		
 	}

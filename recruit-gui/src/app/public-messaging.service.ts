@@ -94,6 +94,16 @@ export class PublicMessagingService {
 
 	}
 	
+	public fetchPathToChat(chatId:string):Observable<Array<string>>{
+
+		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId+'/path';
+
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+		
+		
+	}
+	
 	/**
 	* Toggles like for given chat for the authenticated User
 	*/

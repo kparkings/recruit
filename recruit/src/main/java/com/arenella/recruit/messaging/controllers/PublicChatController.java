@@ -2,6 +2,7 @@ package com.arenella.recruit.messaging.controllers;
 
 import java.security.Principal;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -169,6 +170,23 @@ public class PublicChatController {
 		});
 		
 		return ResponseEntity.ok(likeParticipants);
+	}
+	
+	/**
+	* Takes a Chat and returns all direct parents up until and including the top level Chat.
+	* Effectively this is to find the top level chat of a notification.
+	* @param chatId - Id of Chat to return top level Chat for
+	* @return Chain of Chats from given Chat up to its top level Chat
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	@GetMapping(path="publicchat/{chatId}/path", produces="application/json")
+	public ResponseEntity<SequencedSet<UUID>> fetchPathToChat(@PathVariable("chatId") UUID chatId) {
+		
+		SequencedSet<UUID> path = this.publicChatService.fetchPathToTopLevelChat(chatId);
+		
+		
+		return ResponseEntity.ok(path);
+		
 	}
 	
 }

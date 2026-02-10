@@ -53,17 +53,53 @@ export class NewsfeedComponent {
 	}
 	
 	public handleReplyForNotification():void{
+		this.refreshPosts();
 		//this.pageYPos = window.pageYOffset;
 		//this.refreshPosts();
 	}
 	
-	
+	public notificationPath:Array<string> = new Array<string>(); 
 	public loadNotification(notification:PublicChatNotification):void{
 		this.newsFeedPane = "SINGLEPOST"
-		this.topLevelPosts = new Array<PublicChat>();
-		this.service.fetchChatById(notification.chatId).subscribe(chat =>{
-			this.topLevelPosts.push(chat);
+		this.service.fetchPathToChat(notification.chatId).subscribe(chatPath => {
+			this.notificationPath = chatPath;
+			this.service.fetchChatById(chatPath[0]).subscribe(chat =>{
+				this.topLevelPosts = new Array<PublicChat>();
+				this.topLevelPosts.push(chat);
+				this.topLevelPosts.forEach(tlp => {
+					this.service.fetchChatChildren(tlp.id).subscribe(replies => {
+						tlp.replies = replies;
+						tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+						
+						
+						if (this.notificationPath.length > 0) {
+							tlp.replies.forEach(reply => {
+							//	tlp.showReplies = true;
+													
+							
+							console.log("Path " + JSON.stringify(this.notificationPath));
+							console.log("TLP " + tlp.id);
+										
+								//if(this.notificationPath.indexOf(tlp.id) >= 0 && tlp.id != notification.chatId){
+								if(this.notificationPath.indexOf(tlp.id) >= 0 ){	
+									console.log("Opening " + tlp.id + "  where ncid = " + notification.chatId);
+									tlp.showReplies = true;	
+								}
+								//if(this.notificationPath.indexOf(reply.id) > 0){
+									//reply.showReplies = true;	
+								//}
+							});
+							
+						}
+						
+						
+					});
+				})
+			});
+			
 		});
+		
+	
 	}
 	
 	public closeNotificationView():void{

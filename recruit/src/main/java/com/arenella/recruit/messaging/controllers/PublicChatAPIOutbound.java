@@ -22,6 +22,7 @@ public class PublicChatAPIOutbound {
 	private LocalDateTime 					created;
 	private String 							message;
 	private Set<String>						likes					= new LinkedHashSet<>();
+	private Set<PublicChatAPIOutbound>		children				= new LinkedHashSet<>();
 	
 	/**
 	* Constructor based upon a Builder
@@ -94,6 +95,14 @@ public class PublicChatAPIOutbound {
 	*/
 	public Set<String> getLikes() {
 		return this.likes;
+	}
+	
+	public void addChildren(Set<PublicChatAPIOutbound> children) {
+		this.children.addAll(children);
+	}
+	
+	public Set<PublicChatAPIOutbound> getChildren() {
+		return this.children;
 	}
 	
 	/**
