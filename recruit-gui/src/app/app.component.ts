@@ -200,6 +200,10 @@ export class AppComponent {
 			this.emailService.fetchUnseenEmailsCount().subscribe(val => {
 				this.unseenEmails = val;
 			});
+			
+			this.publicMessagingService.fetchNotificationsForUser().subscribe(notifications => {
+				this.publicMessagingService.unreadNotifications = notifications.filter(n => n.viewed == false).length;
+			});
 		
 		}
 		

@@ -3,6 +3,7 @@ import { PublicMessagingService}										from '../public-messaging.service';
 import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
 import { PublicChat, ChatParticipant, PublicChatNotification}			from './public-chat';
 import { AppComponent } 												from 'src/app/app.component';
+import { ViewportScroller } 										from '@angular/common';
 
 @Component({
   selector: 'app-newsfeed',
@@ -25,13 +26,15 @@ export class NewsfeedComponent {
 	public currentChatForReply:PublicChat | undefined;
 	public topLevelPosts:Array<PublicChat> = new Array<PublicChat>();
 	public notifications:Array<PublicChatNotification> = new Array<PublicChatNotification>();
+	private currentNotification:string = "";
 	
 	/**
 	* Constructor
 	* @oaramparam service  - Services for PublicMessages 
 	*/
 	public constructor(	public service:PublicMessagingService, 
-						private appComponent:AppComponent){
+						private appComponent:AppComponent,
+						private scroller: ViewportScroller,){
 		//this.refreshPosts();
 	}
 	
@@ -54,8 +57,6 @@ export class NewsfeedComponent {
 	
 	public handleReplyForNotification():void{
 		this.refreshPosts();
-		//this.pageYPos = window.pageYOffset;
-		//this.refreshPosts();
 	}
 	
 	public notificationPath:Array<string> = new Array<string>(); 
@@ -74,20 +75,13 @@ export class NewsfeedComponent {
 						
 						if (this.notificationPath.length > 0) {
 							tlp.replies.forEach(reply => {
-							//	tlp.showReplies = true;
-													
-							
-							console.log("Path " + JSON.stringify(this.notificationPath));
-							console.log("TLP " + tlp.id);
-										
-								//if(this.notificationPath.indexOf(tlp.id) >= 0 && tlp.id != notification.chatId){
 								if(this.notificationPath.indexOf(tlp.id) >= 0 ){	
-									console.log("Opening " + tlp.id + "  where ncid = " + notification.chatId);
 									tlp.showReplies = true;	
+									this.currentNotification = 'chat-id-'+ notification.chatId;
+									setTimeout(() => {
+									  this.scroller.scrollToAnchor('chat-id-'+notification.chatId);
+									}, 125);
 								}
-								//if(this.notificationPath.indexOf(reply.id) > 0){
-									//reply.showReplies = true;	
-								//}
 							});
 							
 						}

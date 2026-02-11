@@ -120,7 +120,7 @@ export class LoginUserComponent implements OnInit {
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 
 			if (roles.includes('ROLE_CANDIDATE') && beforeAuthPage == 'suggestions') {
-				sessionStorage.setItem('beforeAuthPage', 'email');
+				sessionStorage.setItem('beforeAuthPage', 'newsfeed');
 	    		this.router.navigate([beforeAuthPage]);
 	    	} else {
 	 

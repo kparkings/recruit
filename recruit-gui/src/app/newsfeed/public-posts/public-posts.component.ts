@@ -5,6 +5,7 @@ import { PublicChat, ChatParticipant}									from '../public-chat';
 import { PublicMessagingService}										from '../../public-messaging.service';
 
 import { AppComponent } 												from 'src/app/app.component';
+import { ViewportScroller } 										from '@angular/common';
 
 @Component({
   selector: 'app-public-posts',
@@ -42,7 +43,7 @@ export class PublicPostsComponent {
 	* @oaram service  		- Services for PublicMessages 
 	* @param appComponent 	- Main system component
 	*/
-	public constructor(	public service:PublicMessagingService, private readonly appComponent:AppComponent){
+	public constructor(	public service:PublicMessagingService, private readonly appComponent:AppComponent, private scroller: ViewportScroller,){
 			
 	}
 	
@@ -79,9 +80,6 @@ export class PublicPostsComponent {
 			});	
 		} else {
 			
-			//Pass in path. If child contains path value toggleReplies. This will result in the fill path.
-			//Then scrollTo last path value that needs to be and id
-			
 			if (this.currentTopLevelChatId){
 				this.service.fetchChatChildren(""+this.currentTopLevelChatId).subscribe(chats => {
 					this.topLevelPosts = chats;
@@ -91,6 +89,7 @@ export class PublicPostsComponent {
 						
 						if (this.nofificationUpdated || (this.notificationPath.length > 0 && this.notificationPath.indexOf(tlp.id) >= 0 && tlp.id != this.notificationPath[this.notificationPath.length-1])) {
 							tlp.showReplies = true;
+							this.scroller.scrollToAnchor('chat-id-'+this.notificationPath[this.notificationPath.length-1]);
 						}
 						this.service.fetchChatChildren(tlp.id).subscribe(replies => {
 							tlp.replies = replies;
@@ -102,6 +101,23 @@ export class PublicPostsComponent {
 		}
 	}
 	
+	public isCurrentNotification(chat:PublicChat):string{
+		if (this.notificationPath.length == 0) {
+			return "false";
+		}
+		
+		if (chat.id != this.notificationPath[this.notificationPath.length-1]) {
+			return "false";
+		}
+		
+		if (chat.id == this.notificationPath[this.notificationPath.length-1]) {
+			return "true";
+		}
+		
+		return "false";
+		
+	}
+
 	/**
 	* Returns whether the Chat contains a profile
 	* image for the owner 
@@ -128,6 +144,20 @@ export class PublicPostsComponent {
 	*/
 	public isOwnMessage(chat:PublicChat):boolean{
 		return chat.owner.id == sessionStorage.getItem("userId") ? true : false;
+	}
+	
+	/**
+	* Returns whether or not the Chat is owned by a non recruiter entity
+	*/
+	public chatIsNotOwnerByRecruiter(chat:PublicChat):boolean {
+		return chat.owner.type != 'RECRUITER';
+	}
+	
+	/**
+	* Whether or not the Use is a Candidate
+	*/
+	public isCandidate():boolean{
+		return sessionStorage.getItem('isCandidate') === 'true';
 	}
 	
 	/**
@@ -290,8 +320,6 @@ export class PublicPostsComponent {
 	* @param chat - Chat to be updated 
 	*/
 	public saveChatReply(chat:PublicChat):void{
-		
-		console.log("Attempting to reply with chat " + chat.id);
 		
 		this.service.createChat(chat.id, this.replyChatForm.get('message')?.value).subscribe(res => {
 			this.replyChatForm = new UntypedFormGroup({
