@@ -227,6 +227,10 @@
 	margin-right:5px;
 }
 
+.notification-viewed-true{
+	color:grey;
+}
+
 @media (max-width: 768px) {
 	.newsfeed-boop-panel{
 		display:none;
@@ -250,6 +254,18 @@
 	
 	.arenella-btn {
         width: 70px;
+    }
+    
+    .header{
+    	border-top:1px solid white;
+    }
+    
+    .notification-mobile-close-btn{
+    	float:right;
+    	font-weight:bold;
+    	color:white;
+    	cursor:pointer;
+    	margin-right:20px;
     }
 	
 }

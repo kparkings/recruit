@@ -27,6 +27,7 @@ export class NewsfeedComponent {
 	public topLevelPosts:Array<PublicChat> = new Array<PublicChat>();
 	public notifications:Array<PublicChatNotification> = new Array<PublicChatNotification>();
 	private currentNotification:string = "";
+	private showNotificationsForMobile:string = "";
 	
 	/**
 	* Constructor
@@ -36,11 +37,60 @@ export class NewsfeedComponent {
 						private appComponent:AppComponent,
 						private scroller: ViewportScroller,){
 		//this.refreshPosts();
+		
+		
+				
 	}
 	
 	ngAfterViewInit(){
 		
 		this.refreshPosts();
+		this.refreshNotifications();
+		
+	}
+	
+	ngAfterViewChecked(){
+		if (localStorage.getItem("display-news-item-notifications") == "true") {
+			this.showNotificationsForMobile = "SHOW";
+			localStorage.removeItem("display-news-item-notifications");
+		}
+		
+		if (localStorage.getItem("display-news-item-notifications") == "false") {
+			this.showNotificationsForMobile = "";
+			localStorage.removeItem("display-news-item-notifications");
+		}		
+	}
+	
+	/**
+	* In web we always show notification. In mobile by default we use css
+	* to hide the div. To make it visible we add the values 
+	* of showNotificationsForMobile to the end of the css class name with a 
+	* non empty string value. This causes the css class name to be chnaged to 
+	* a non existent class name and therefore removing the display_none value.
+	* 
+	* By setting showNotificationsForMobile to "" the original css class 
+	* with the display:none attribue is again called.
+	* 
+	* The name of the css class is: newsfeed-notification-panel
+	* 
+	* The code to make it visible is initiated in the menu bar which sets
+	* a localStorage item which is set in this component when the component 
+	* is loaded.
+	*  
+	*/
+	public showNotificationForMobile():string{
+		return this.showNotificationsForMobile;
+	}
+	
+	/**
+	* Hides the notification panel when viewing the site on
+	* a mobile device
+	*/
+	public hideNotificationsForMobile():void{
+		this.showNotificationsForMobile = "";
+	}
+	
+	private refreshNotifications():void{
 		this.service.fetchNotificationsForUser().subscribe(notifications => {
 			this.notifications = notifications;
 			this.notifications.sort((one:PublicChatNotification, two:PublicChatNotification) => this.isGreaterNotification(one,two));
@@ -61,18 +111,20 @@ export class NewsfeedComponent {
 	
 	public notificationPath:Array<string> = new Array<string>(); 
 	public loadNotification(notification:PublicChatNotification):void{
+		this.hideNotificationsForMobile();
 		this.newsFeedPane = "SINGLEPOST"
 		this.service.fetchPathToChat(notification.chatId).subscribe(chatPath => {
 			this.notificationPath = chatPath;
 			this.service.fetchChatById(chatPath[0]).subscribe(chat =>{
+				this.service.setViewedStatusForChat(notification.notificationId, true).subscribe(res => {
+						this.refreshNotifications();
+				});
 				this.topLevelPosts = new Array<PublicChat>();
 				this.topLevelPosts.push(chat);
 				this.topLevelPosts.forEach(tlp => {
 					this.service.fetchChatChildren(tlp.id).subscribe(replies => {
 						tlp.replies = replies;
 						tlp.replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
-						
-						
 						if (this.notificationPath.length > 0) {
 							tlp.replies.forEach(reply => {
 								if(this.notificationPath.indexOf(tlp.id) >= 0 ){	
@@ -207,6 +259,28 @@ export class NewsfeedComponent {
 	public showFeedView():void{
 		this.currentChat = undefined;
 		this.currentChatForReply = undefined;
+	}
+	
+	/**
+	* Toggles whether the Notification has been viewed by the User. Initially this will be 
+	* false and set to true once they have viewed the Notification but the User can 
+	* also toggle the value manually 
+	* @param notification - Notification to toggle
+	*/
+	public toggleNotificationViewed(notification:PublicChatNotification):void{
+		this.service.setViewedStatusForChat(notification.notificationId, !notification.viewed).subscribe(res => {
+			this.refreshNotifications();
+		});
+	}
+	
+	/**
+	* Deletes the notification for the User
+	* @param notification - Notification to toggle
+	*/
+	public deleteNotification(notification:PublicChatNotification):void{
+		this.service.deleteNotification(notification.notificationId).subscribe(res => {
+			this.refreshNotifications();
+		});
 	}
 	
 	private pageYPos = 0;

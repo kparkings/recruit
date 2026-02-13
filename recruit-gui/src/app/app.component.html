@@ -10,6 +10,9 @@
 		<a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:right;" (click)="toggleMobileAuthMenuOpt()">
 			account_box
 		</a> 
+		<a class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}} unread-notifications-{{getUnreadNewsFeedNotifications() > 0 }}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeedNotifications()" *ngIf="isAuthenticated()">
+           notifications
+        </a> 
 		<a class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openChat()" *ngIf="isAuthenticated()">
            chat
         </a> 
@@ -57,12 +60,7 @@
         
 		<li  class="li-arenella-nav-pre-login li-arenella-nav-pre-login-std non-mobile-only-element" *ngIf="!isAuthenticated()">
            <a  class="dropdown-item dropdown-item-preauth" routerLink="/suggestions">{{'arenella-app-menu-login' | translate}}</a>
-        </li>
-        <!--  
-         <li class="spacer-for-mobile-menu" *ngIf="!isAuthenticated()">
-           	
- 	    </li>
- 	    --> 
+        </li> 
         <li class="non-mobile-only-element li-arenella-nav-pre-login li-arenella-nav-pre-signup signup-candidate arenella-fourth-background arenella-fourth-colour" *ngIf="!isAuthenticated()">
            	<a class="dropdown-item dropdown-item-preauth" routerLink="/create-candidate">{{'arenella-app-menu-candidate-signup' | translate}}</a>
  	    </li>
@@ -103,9 +101,9 @@
         <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && isRecruiter() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/recruiter-stats">{{'arenella-app-menu-stats' | translate}}</a>
         </li>
-        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-			<a *ngIf="unseenNewsfeedItems" 	class="dropdown-item" routerLink="/newsfeed"><span class="unseen-posts">{{getUnreadNewsFeedNotifications()}}</span>{{'arenella-app-menu-news-feed' | translate}}</a>
-			<a *ngIf="!unseenNewsfeedItems"	class="dropdown-item" routerLink="/newsfeed">{{'arenella-app-menu-news-feed' | translate}}</a>
+        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="openNewsFeed()">
+        	<a *ngIf="unseenNewsfeedItems" 	class="dropdown-item"><span  class=" unseen-posts ">{{getUnreadNewsFeedNotifications()}}</span>{{'arenella-app-menu-news-feed' | translate}}</a>
+			<a *ngIf="!unseenNewsfeedItems"	class="dropdown-item">{{'arenella-app-menu-news-feed' | translate}}</a>
         </li>
         <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" routerLink="/accounts">{{'arenella-app-menu-accounts' | translate}}</a>

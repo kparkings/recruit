@@ -186,4 +186,8 @@
 		margin-bottom:10px;
 		background:grey;
 	}
+	
+	.unread-notifications-true{
+		color:green;
+	}
 }

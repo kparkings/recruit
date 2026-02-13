@@ -94,13 +94,15 @@ export class PublicMessagingService {
 
 	}
 	
+	/**
+	* Returns an orders array of the path from the Top level chat to the notification Chat
+	* @param chatId - Id of the Chat to calculate the path for
+	*/
 	public fetchPathToChat(chatId:string):Observable<Array<string>>{
 
 		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId+'/path';
 
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
-		
-		
 		
 	}
 	
@@ -112,6 +114,30 @@ export class PublicMessagingService {
 		const backendUrl:string = environment.backendUrl + 'publicchat/'+chatId+'/like';
 
 		return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
+
+	}
+	
+	/**
+	* Toggles like for given chat for the authenticated User
+	*/
+	public setViewedStatusForChat(notificationId:string, viewedStatus:boolean): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl + 'publicchatnotification/'+notificationId+'/'+ viewedStatus;
+
+		return this.httpClient.put<any>(backendUrl, {}, this.httpOptions);
+
+	}
+	
+	
+	/**
+	* Deletes a notification
+	* @param notificationId - Unique Id of Notification to delete
+	*/
+	public deleteNotification(notificationId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl + 'publicchatnotification/'+notificationId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
 
 	}
 	

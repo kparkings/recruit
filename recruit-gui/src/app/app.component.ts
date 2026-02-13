@@ -420,6 +420,21 @@ export class AppComponent {
 	}
 	
 	/**
+	* Navigates to the newsfeed page and displays
+	* the notifications. 
+	*/
+	public openNewsFeedNotifications():void{
+		this.router.navigate(['newsfeed']);	
+		localStorage.setItem("display-news-item-notifications", 'true');
+	}
+	
+	public openNewsFeed():void{
+		this.refreschUnreadAlerts();
+		localStorage.setItem("display-news-item-notifications", 'false');
+		this.router.navigate(['newsfeed']);	
+	}
+	
+	/**
 	* Whether at least one of the users chats has not been
 	* read by the User  
 	*/

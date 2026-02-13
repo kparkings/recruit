@@ -4,22 +4,29 @@
 		<div class="header"></div>
 	</div>
 	
-	<div class="newsfeed-notification-panel" >
-		<div class="header">Notifications</div>
+	<div class="newsfeed-notification-panel{{showNotificationForMobile()}}" >
+		<div class="header">
+			Notifications
+			<span class="notification-mobile-close-btn mobile-only-element" (click)="hideNotificationsForMobile()">X</span>
+		</div>
 		<div class="public-chat-notification-panel-notifications">
 			<div *ngFor="let notification of notifications">
 			
 				<div *ngIf="notification.initiatingUser" >
 					
-					<div class="notification-public-chat" (click)="loadNotification(notification)">
-						<div style="float:left">
+					<div class="notification-public-chat">
+						<div style="float:left" (click)="loadNotification(notification)">
 							<img class="notification-public-chat-image" id='base64image' *ngIf="notification.initiatingUser.photo" src='data:image/jpeg;base64, {{notification.initiatingUser.photo.imageBytes}}' />
 							<img class="notification-public-chat-image" *ngIf="!notification.initiatingUser.photo" id='base64image' src="../assets/img/default-user-image.jpg" />
 						</div>
-						<div class="notification-public-chat-name">
+						<div class="notification-public-chat-name" (click)="loadNotification(notification)">
 							<span class="material-icons notification-type-icon" *ngIf="notification.type == 'REPLY'">chat_bubble</span>
 							<span class="material-icons notification-type-icon" *ngIf="notification.type == 'LIKE'">thumb_up</span>
 							{{notification.initiatingUser.firstName}} {{notification.initiatingUser.surname}}
+						</div>
+						<div style="float:right;margin-right:5px;padding-top:10px;">
+							<span class="material-icons notification-type-icon notification-viewed-{{notification.viewed}}" title="viewed status" (click)="toggleNotificationViewed(notification)">visibility</span>
+							<span class="material-icons notification-type-icon" (click)="deleteNotification(notification)" title="delete notification">delete</span>
 						</div>
 					</div>
 					<div style="clear:both"></div>					
@@ -28,7 +35,7 @@
 		</div>
 	</div>
 	
-	<div class="newsfeed-messages-panel" >
+	<div class="newsfeed-messages-panel" *ngIf="!showNotificationForMobile()">
 		<div class="new-message-panel">
 			<form [formGroup]="newMessageForm">
 				<div class="new-message-panel-textarea">
