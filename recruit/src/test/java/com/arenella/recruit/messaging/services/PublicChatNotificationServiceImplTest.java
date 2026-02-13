@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.security.Principal;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -19,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.messaging.beans.PublicChatNotification;
+import com.arenella.recruit.messaging.beans.PublicChatNotification.NotificationType;
 import com.arenella.recruit.messaging.dao.PublicChatNotificationDao;
 
 /**
@@ -28,10 +31,13 @@ import com.arenella.recruit.messaging.dao.PublicChatNotificationDao;
 class PublicChatNotificationServiceImplTest {
 
 	@Mock
-	private PublicChatNotificationDao mockDao;
+	private PublicChatNotificationDao 			mockDao;
+	
+	@Mock
+	private Principal 							mockPrincipal;
 	
 	@InjectMocks
-	private PublicChatNotificationServiceImpl service;
+	private PublicChatNotificationServiceImpl 	service;
 	
 	/**
 	* Tests persisting a new Notification 
@@ -80,6 +86,23 @@ class PublicChatNotificationServiceImplTest {
 			this.service.deleteNotification(notificationId, userId);
 		});
 			
+	}
+	
+	/**
+	* Test a user that added a Like can remove the notification
+	*/
+	@Test
+	void testDeleteNotificationLike() {
+		
+		final UUID 		notificationId 	= UUID.randomUUID();
+		final String 	userId 			= "rec001";
+	
+		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().type(NotificationType.LIKE).notificationId(notificationId).initiatingUserId(userId).build()));
+		
+		this.service.deleteNotification(notificationId, userId);
+		
+		verify(this.mockDao).deleteById(notificationId);
+		
 	}
 	
 	/**
@@ -220,5 +243,73 @@ class PublicChatNotificationServiceImplTest {
 		assertEquals(1, results.size());
 		
 	}
+	
+	/**
+	* Tests the viewed status is updated for a Notification where the user is 
+	* the recipient of the notification
+	*/
+	@Test
+	void testSetNotificationViewedStatusHappyPath() {
+		
+		final UUID 		notificationId 	= UUID.randomUUID();
+		final boolean 	viewed 			= true;
+		final String 	username 		= "authenticatedUser1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(username);
+		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().destinationUserId(username).build()));
+		
+		this.service.setNotificationViewedStatus(notificationId, viewed, username);
+		
+		verify(this.mockDao).saveNotification(any());
+		
+	}
+
+	/**
+	* Tests an Exception is thrown if the authenticated user attempts to set
+	* the viewed status for a Notification that they are not the recipient of
+	*/
+	@Test
+	void testSetNotificationViewedStatusFailurePathUnknownNotification() {
+		
+		final UUID 		notificationId 	= UUID.randomUUID();
+		final boolean 	viewed 			= true;
+		final String 	username 		= "authenticatedUser1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(username);
+		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.empty());
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () ->{
+			this.service.setNotificationViewedStatus(notificationId, viewed, username);
+		});
+		 
+		assertEquals(PublicChatNotificationServiceImpl.ERR_MSG_CANNOT_DELETE_UNKNOWM_NOTIFICATION, ex.getMessage());
+		
+		verify(this.mockDao, never()).saveNotification(any());
+		
+	}
+	
+	/**
+	* Tests an Exception is thrown if the authenticated user attempts to set
+	* the viewed status for a Notification that they are not the recipient of
+	*/
+	@Test
+	void testSetNotificationViewedStatusFailurePathNotDestinationUser() {
+		
+		final UUID 		notificationId 	= UUID.randomUUID();
+		final boolean 	viewed 			= true;
+		final String 	username 		= "authenticatedUser1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(username);
+		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().destinationUserId("notDestinationUser").build()));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () ->{
+			this.service.setNotificationViewedStatus(notificationId, viewed, username);
+		});
+		 
+		assertEquals(PublicChatNotificationServiceImpl.ERR_MSG_CANNOT_DELETE_OTHER_USERS_NOTIFICATION, ex.getMessage());
+		
+		verify(this.mockDao, never()).saveNotification(any());
+	}
+
 	
 }

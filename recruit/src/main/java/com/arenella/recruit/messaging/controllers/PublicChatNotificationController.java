@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PublicChatNotificationService;
-import com.arenella.recruit.messaging.services.PublicChatService;
 
 /**
 * REST API for PublicChatNotifications 

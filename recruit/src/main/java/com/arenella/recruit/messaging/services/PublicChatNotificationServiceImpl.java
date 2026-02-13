@@ -16,7 +16,10 @@ import com.arenella.recruit.messaging.dao.PublicChatNotificationDao;
 */
 @Service
 public class PublicChatNotificationServiceImpl implements PublicChatNotificationService{
-
+	
+	public static final String ERR_MSG_CANNOT_DELETE_UNKNOWM_NOTIFICATION 		= "Cannot toggle value for unknown Notification";
+	public static final String ERR_MSG_CANNOT_DELETE_OTHER_USERS_NOTIFICATION 	= "Cannot update another User's notification.";
+	
 	private PublicChatNotificationDao dao;
 	
 	/**
@@ -131,10 +134,10 @@ public class PublicChatNotificationServiceImpl implements PublicChatNotification
 	@Override
 	public void setNotificationViewedStatus(UUID notificationId, boolean viewedStatus, String authenticatedUser) {
 		
-		PublicChatNotification notification = this.dao.fetchNotificationsById(notificationId).orElseThrow(() -> new RuntimeException("Cannot toggle value for unknown Notification"));
+		PublicChatNotification notification = this.dao.fetchNotificationsById(notificationId).orElseThrow(() -> new RuntimeException(ERR_MSG_CANNOT_DELETE_UNKNOWM_NOTIFICATION));
 		
 		if (!notification.getDestinationUserId().equals(authenticatedUser)) {
-			throw new RuntimeException("Cannot update another User's notification.");
+			throw new RuntimeException(ERR_MSG_CANNOT_DELETE_OTHER_USERS_NOTIFICATION);
 		}
 		
 		this.dao.saveNotification(PublicChatNotification.builder().publicChatNotification(notification).viewed(viewedStatus).build());
