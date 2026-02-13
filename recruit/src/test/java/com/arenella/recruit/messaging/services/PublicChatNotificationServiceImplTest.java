@@ -255,7 +255,7 @@ class PublicChatNotificationServiceImplTest {
 		final boolean 	viewed 			= true;
 		final String 	username 		= "authenticatedUser1";
 		
-		when(this.mockPrincipal.getName()).thenReturn(username);
+		//when(this.mockPrincipal.getName()).thenReturn(username);
 		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().destinationUserId(username).build()));
 		
 		this.service.setNotificationViewedStatus(notificationId, viewed, username);
@@ -275,7 +275,7 @@ class PublicChatNotificationServiceImplTest {
 		final boolean 	viewed 			= true;
 		final String 	username 		= "authenticatedUser1";
 		
-		when(this.mockPrincipal.getName()).thenReturn(username);
+		//when(this.mockPrincipal.getName()).thenReturn(username);
 		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.empty());
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, () ->{
@@ -299,7 +299,7 @@ class PublicChatNotificationServiceImplTest {
 		final boolean 	viewed 			= true;
 		final String 	username 		= "authenticatedUser1";
 		
-		when(this.mockPrincipal.getName()).thenReturn(username);
+		//when(this.mockPrincipal.getName()).thenReturn(username);
 		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().destinationUserId("notDestinationUser").build()));
 		
 		RuntimeException ex = assertThrows(RuntimeException.class, () ->{
