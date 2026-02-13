@@ -260,15 +260,14 @@ public class PublicChatServiceImpl implements PublicChatService {
 		
 		PublicChat chat = this.chatDao.fetchChatById(chatId).orElseThrow();
 		
-		System.out.println("NOTIFICATION ID = " + chat.getId());
-		
-		
 		while (Optional.ofNullable(chat.getParentChat()).isPresent()) {
-			System.out.println("PARENT ID = " + chat.getId());
+		
 			pathFromChiltToTopLevelParent.add(chat.getId());
+			
 			if(chat.getParentChat().isEmpty()) {
 				break;
 			}
+			
 			chat = this.chatDao.fetchChatById(chat.getParentChat().orElseThrow()).orElseThrow();
 		}
 		

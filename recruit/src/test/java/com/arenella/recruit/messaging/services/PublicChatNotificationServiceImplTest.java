@@ -55,7 +55,7 @@ class PublicChatNotificationServiceImplTest {
 		final UUID 		notificationId 	= UUID.randomUUID();
 		final String 	userId 			= "rec001";
 	
-		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().notificationId(notificationId).initiatingUserId(userId).build()));
+		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().notificationId(notificationId).destinationUserId(userId).build()));
 		
 		this.service.deleteNotification(notificationId, userId);
 		
@@ -74,7 +74,7 @@ class PublicChatNotificationServiceImplTest {
 		final UUID 		notificationId 	= UUID.randomUUID();
 		final String 	userId 			= "rec001";
 	
-		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().notificationId(notificationId).initiatingUserId("anotherUser").build()));
+		when(this.mockDao.fetchNotificationsById(notificationId)).thenReturn(Optional.of(PublicChatNotification.builder().notificationId(notificationId).destinationUserId("anotherUser").build()));
 		
 		assertThrows(RuntimeException.class, () -> {
 			this.service.deleteNotification(notificationId, userId);
@@ -95,9 +95,9 @@ class PublicChatNotificationServiceImplTest {
 		
 		when(this.mockDao.fetchNotificationsForUser(userId))
 			.thenReturn(Set.of(
-					PublicChatNotification.builder().notificationId(notificationId1).initiatingUserId(userId).build(),
-					PublicChatNotification.builder().notificationId(notificationId2).initiatingUserId(userId).build(),
-					PublicChatNotification.builder().notificationId(notificationId3).initiatingUserId(userId).build()));
+					PublicChatNotification.builder().notificationId(notificationId1).destinationUserId(userId).build(),
+					PublicChatNotification.builder().notificationId(notificationId2).destinationUserId(userId).build(),
+					PublicChatNotification.builder().notificationId(notificationId3).destinationUserId(userId).build()));
 		
 		this.service.deleteNotificationsForUser(userId);
 		

@@ -42,7 +42,15 @@ public class PublicChatNotificationServiceImpl implements PublicChatNotification
 	public void deleteNotification(UUID notificationId,  String userId) {
 		this.dao.fetchNotificationsById(notificationId).ifPresent(notification -> {
 			
-			if (!notification.getInitiatingUserId().equals(userId)) {
+			/**
+			* User that added the like can remove it
+			*/
+			if (notification.getType() == NotificationType.LIKE && notification.getInitiatingUserId().equals(userId)) {
+				this.dao.deleteById(notificationId);
+				return;
+			}
+			
+			if (!notification.getDestinationUserId().equals(userId)) {
 				throw new RuntimeException("Cannot delete another user's notificaton");
 			}
 		
@@ -115,6 +123,22 @@ public class PublicChatNotificationServiceImpl implements PublicChatNotification
 	@Override
 	public Set<PublicChatNotification> fetchNotificationsForChat(UUID chatId) {
 		return this.dao.fetchNotificationsForChat(chatId);
+	}
+	
+	/**
+	* Refer to the PublicChatNotificationService interface for details 
+	*/
+	@Override
+	public void setNotificationViewedStatus(UUID notificationId, boolean viewedStatus, String authenticatedUser) {
+		
+		PublicChatNotification notification = this.dao.fetchNotificationsById(notificationId).orElseThrow(() -> new RuntimeException("Cannot toggle value for unknown Notification"));
+		
+		if (!notification.getDestinationUserId().equals(authenticatedUser)) {
+			throw new RuntimeException("Cannot update another User's notification.");
+		}
+		
+		this.dao.saveNotification(PublicChatNotification.builder().publicChatNotification(notification).viewed(viewedStatus).build());
+		
 	}
 
 }

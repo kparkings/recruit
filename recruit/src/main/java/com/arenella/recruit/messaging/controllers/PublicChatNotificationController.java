@@ -3,11 +3,15 @@ package com.arenella.recruit.messaging.controllers;
 import java.security.Principal;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.arenella.recruit.messaging.services.ParticipantService;
@@ -50,4 +54,30 @@ public class PublicChatNotificationController {
 				.collect(Collectors.toCollection(LinkedHashSet::new)));
 	}
 	
+	/**
+	* Sets whether a given Notification has been viewed by the destination User
+	* @param notificationId		- Unique id of Notification to set viewed status for
+	* @param viewedStatus		- new status
+	* @param authenticatedUser  - Authenticated User
+	* @return ResponseEntity
+	*/
+	@PutMapping(path="publicchatnotification/{notificationId}/{viewedStatus}", produces="application/json")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	public ResponseEntity<Void> setViewedStatus(@PathVariable("notificationId") UUID notificationId, @PathVariable("viewedStatus") boolean viewedStatus, Principal authenticatedUser){
+		this.notificationService.setNotificationViewedStatus(notificationId, viewedStatus, authenticatedUser.getName());
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	* Deletes the notification providing the User has permissions
+	* @param notificationId		- Id of Notification to delete
+	* @param authenticatedUser	- Authenticated User
+	* @return
+	*/
+	@DeleteMapping(path="publicchatnotification/{notificationId}", produces="application/json")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	public ResponseEntity<Void> deleteNotification(@PathVariable("notificationId") UUID notificationId, Principal authenticatedUser){
+		this.notificationService.deleteNotification(notificationId, authenticatedUser.getName());
+		return ResponseEntity.ok().build();
+	}
 }

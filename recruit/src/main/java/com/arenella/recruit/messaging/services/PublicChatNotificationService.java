@@ -64,5 +64,13 @@ public interface PublicChatNotificationService {
 	* @return Chat notifications
 	*/
 	public Set<PublicChatNotification> fetchNotificationsForChat(UUID chatId);
+	
+	/**
+	* Toggle the viewed status of a given Notification
+	* @param notificationId 		- Id of the Notification
+	* @param viewedStatus			- new viewed status of Notification
+	* @param authenticatedUser		- Id of authenticated User
+	*/
+	public void setNotificationViewedStatus(UUID notificationId, boolean viewedStatus, String authenticatedUser);
 		
 }
