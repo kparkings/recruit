@@ -40,6 +40,9 @@ public class PublicChatNotificationEntity {
 	@Column(name="initiating_user")
 	private String  initiatingUserId;
 	
+	@Column(name="delivered")
+	private boolean delivered;
+	
 	@Column(name="viewed")
 	private boolean  viewed;
 	
@@ -63,6 +66,7 @@ public class PublicChatNotificationEntity {
 		this.chatId 					= builder.chatId;
 		this.destinationUserId			= builder.destinationUserId;
 		this.initiatingUserId 			= builder.initiatingUserId;
+		this.delivered					= builder.delivered;
 		this.viewed 					= builder.viewed;
 		this.notificationEmailSent 		= builder.notificationEmailSent;
 	}
@@ -121,6 +125,16 @@ public class PublicChatNotificationEntity {
 	}
 	
 	/**
+	* Whether the destination user has received the Notification. This could for 
+	* example be the User has logged into the newsfeed since the Notification 
+	* was created.
+	* @return is the Notification has been viewed
+	*/
+	public boolean isDelivered() {
+		return this.delivered;
+	}
+	
+	/**
 	* Whether the chat owner has viewed the 
 	* Notification
 	* @return is the Notification has been viewed
@@ -157,6 +171,7 @@ public class PublicChatNotificationEntity {
 		private UUID 				chatId;
 		private String 				destinationUserId;
 		private String 				initiatingUserId;
+		private boolean 			delivered;
 		private boolean 			viewed;
 		private boolean 			notificationEmailSent;
 		
@@ -172,6 +187,7 @@ public class PublicChatNotificationEntity {
 			this.chatId 				= publicChatNotification.getChatId();
 			this.destinationUserId		= publicChatNotification.getDestinationUserId();
 			this.initiatingUserId 		= publicChatNotification.getInitiatingUserId();
+			this.delivered  			= publicChatNotification.isDelivered();
 			this.viewed 				= publicChatNotification.isViewed();
 			this.notificationEmailSent 	= publicChatNotification.isNotificationEmailSent();
 
@@ -243,6 +259,18 @@ public class PublicChatNotificationEntity {
 		}
 		
 		/**
+		* Sets whether the notification has been delivered. At the time of writing this means the 
+		* destination user has opened the newsfeed after the Notification was created but 
+		* it could equally apply to the notification being added to a queue etc
+		* @param viewed - If notification has been delivered
+		* @return Builder 
+		*/
+		public PublicChatNotificationEntityBuilder delivered(boolean delivered) {
+			this.delivered = delivered;
+			return this;
+		}
+		
+		/**
 		* Sets whether the notification has been viewed by the Chat owner
 		* @param viewed - Whether the notification has been viewed
 		* @return Builder 
@@ -251,6 +279,8 @@ public class PublicChatNotificationEntity {
 			this.viewed = viewed;
 			return this;
 		}
+		
+		
 		
 		/**
 		* Sets whether an email has been sent to inform the user that they 
@@ -287,6 +317,7 @@ public class PublicChatNotificationEntity {
 					.chatId(entity.getChatId())
 					.destinationUserId(entity.getDestinationUserId())
 					.initiatingUserId(entity.getInitiatingUserId())
+					.delivered(entity.isDelivered())
 					.viewed(entity.isViewed())
 					.notificationEmailSent(entity.isNotificationEmailSent())
 				.build();

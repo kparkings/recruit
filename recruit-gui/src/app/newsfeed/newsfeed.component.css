@@ -267,5 +267,10 @@
     	cursor:pointer;
     	margin-right:20px;
     }
+    
+    .public-chat-notification-panel-notifications{
+	overflow-y:scroll;
+	height:100%;
+}
 	
 }

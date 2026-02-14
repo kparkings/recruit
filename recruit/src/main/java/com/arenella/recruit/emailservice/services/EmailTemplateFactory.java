@@ -43,6 +43,7 @@ public class EmailTemplateFactory {
 			case LISTING_MATCHING_ROLE					-> loadTemplate("listing-alert-hit.ftlh",model);
 			case CANDIDATE_SUMMARY						-> loadTemplate("candidate-summary.ftlh", model);
 			case MISSED_CHAT_MESSAGE					-> loadTemplate("missed-message.ftlh",model);
+			case MISSED_NEWSFEED_NOTIFICATION			-> loadTemplate("missed-newsfeed-notification.ftlh",model);
 			default -> "Could not process template";
 		};
 		

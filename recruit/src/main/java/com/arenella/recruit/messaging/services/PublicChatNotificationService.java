@@ -52,13 +52,6 @@ public interface PublicChatNotificationService {
 	public Optional<PublicChatNotification> fetchNotificationById(UUID notificationId, String userId);
 	
 	/**
-	* Sends email's to user informing them of unread notifications for notifications 
-	* before the cuttoff where no email has been sent previously
-	* @param cuttoff - lte date/time
-	*/
-	public void mailNotificationReminders(LocalDateTime cuttoff);
-	
-	/**
 	* Retrieves all the Notification for a specific Chat
 	* @param chatId - Id of Chat to fetch Notification for
 	* @return Chat notifications
@@ -72,5 +65,13 @@ public interface PublicChatNotificationService {
 	* @param authenticatedUser		- Id of authenticated User
 	*/
 	public void setNotificationViewedStatus(UUID notificationId, boolean viewedStatus, String authenticatedUser);
+
+	/**
+	* Returns notifications that have not been delivered to the destination and were created before the 
+	* cutoff
+	* @param cuttoff - Notification need to be older than or equal to this time to be included in results
+	* @return Notification past the cutoff that have not been delivered
+	*/
+	public Set<PublicChatNotification> fetchUndeliveredBefore(LocalDateTime cutoff);
 		
 }

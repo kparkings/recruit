@@ -27,8 +27,8 @@ public interface PublicChatNotificationDao extends ListCrudRepository<PublicChat
 	@Query("from PublicChatNotificationEntity where chatId = :chatId")
 	List<PublicChatNotificationEntity> findByChatId(UUID chatId);
 	
-	@Query("from PublicChatNotificationEntity where created <= :cuttOff and viewed = false and notificationEmailSent = false")
-	List<PublicChatNotificationEntity> findByRequiresEmail(LocalDateTime cuttoff);
+	@Query("from PublicChatNotificationEntity where created <= :cuttOff and delivered = false and notificationEmailSent = false ")
+	List<PublicChatNotificationEntity> findByUndeliveredWithoutNotificationEmail(LocalDateTime cuttOff);
 	
 	/**
 	* Persists a Notification
@@ -66,14 +66,20 @@ public interface PublicChatNotificationDao extends ListCrudRepository<PublicChat
 	}
 	
 	/**
-	* Returns all notification before a given moment in time that have 
-	* not already been viewed by the user and where no email has been sent informing them 
-	* of the Notification's existence
-	* @param cuttoff - lte date time
-	* @return Notifications
+	* Fetches undelivered Notifications requiring an email. 
+	* NOTE: The underlying query only returns Notifications that have been both undelivered and 
+	*       not already had a email sent to the destination user.
+	* @param cutoff
+	* @return
 	*/
-	default Set<PublicChatNotification> fetchUnviewedNotificationsBefore(LocalDateTime cuttoff) {
-		return this.findByRequiresEmail(cuttoff).stream().map(PublicChatNotificationEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	default Set<PublicChatNotification> fetchUndeliveredBefore(LocalDateTime cutoff) {
+		
+		
+		//
+		List<PublicChatNotificationEntity> aa = this.findByUndeliveredWithoutNotificationEmail(cutoff);
+		//
+		
+		return this.findByUndeliveredWithoutNotificationEmail(cutoff).stream().map(PublicChatNotificationEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 }

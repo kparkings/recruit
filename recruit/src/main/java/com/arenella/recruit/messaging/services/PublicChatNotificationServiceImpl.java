@@ -108,17 +108,6 @@ public class PublicChatNotificationServiceImpl implements PublicChatNotification
 		return notificationOpt;
 		
 	}
- 
-	/**
-	* Refer to the PublicChatNotificationService interface for details 
-	*/
-	@Override
-	public void mailNotificationReminders(LocalDateTime cuttoff) {
-		this.dao.fetchUnviewedNotificationsBefore(cuttoff).stream().filter(n -> n.getType() == NotificationType.REPLY).forEach(notification -> {
-			//TODO: Call email service
-		});
-		
-	}
 
 	/**
 	* Refer to the PublicChatNotificationService interface for details 
@@ -142,6 +131,14 @@ public class PublicChatNotificationServiceImpl implements PublicChatNotification
 		
 		this.dao.saveNotification(PublicChatNotification.builder().publicChatNotification(notification).viewed(viewedStatus).build());
 		
+	}
+
+	/**
+	* Refer to the PublicChatNotificationService interface for details 
+	*/
+	@Override
+	public Set<PublicChatNotification> fetchUndeliveredBefore(LocalDateTime cutoff) {
+		return this.dao.fetchUndeliveredBefore(cutoff);
 	}
 
 }

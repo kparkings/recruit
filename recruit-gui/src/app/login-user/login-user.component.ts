@@ -24,6 +24,8 @@ export class LoginUserComponent implements OnInit {
 	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
 	@ViewChild('resetPasswordDialog', { static: false }) private resetDialog:any;
 	
+	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
+	
 	public showForgottenPassword:boolean 	= false;
 	public showSubscriptionMsg:boolean 		= false;
 	public failureMessage:string			= "";
@@ -116,6 +118,11 @@ export class LoginUserComponent implements OnInit {
 			sessionStorage.setItem('loggedIn',      					'true');
 	      
 			sessionStorage.setItem("userId", 							this.formBean.get('username')?.value);
+			
+			this.scheduleOpenChatRefresh = window.setInterval(()=> {
+				this.appComponent.refreshUnreadNewsFeedNotifications();		
+				console.log("Fetching boop");	
+			},1000);
 
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 

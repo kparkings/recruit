@@ -23,54 +23,54 @@ import com.arenella.recruit.newsfeed.services.NewsFeedItemService;
 * Rest API for NewsFeedItems
 * @author K Parkings
 */
-@RestController
+//@RestController
 public class NewsFeedController {
 
-	@Autowired
-	private NewsFeedItemService newsFeedItemService;
+	//@Autowired
+	//private NewsFeedItemService newsFeedItemService;
 	
 	/**
 	* Returns the NewsFeedItems
 	* @param types - Types to filter on if any
 	* @return NewsFeedItems
 	*/
-	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
-	@GetMapping(value="/newsfeeditem")
-	public ResponseEntity<Set<NewsFeedItemAPIOutbound>> fetchNewsItems(@RequestParam(required = false) Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> types){
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN')")
+	//@GetMapping(value="/newsfeeditem")
+	//public ResponseEntity<Set<NewsFeedItemAPIOutbound>> fetchNewsItems(@RequestParam(required = false) Set<NewsFeedItem.NEWSFEED_ITEM_TYPE> types){
 		
-		NewsFeedItemFilters filters = 
-				NewsFeedItemFilters
-				.builder()
-					.maxResults(50)
-					.createdBefore(LocalDateTime.now().minusWeeks(1))
-					.types(types)
-				.build();
+	//	NewsFeedItemFilters filters = 
+	//			NewsFeedItemFilters
+	//			.builder()
+	//				.maxResults(50)
+	//				.createdBefore(LocalDateTime.now().minusWeeks(1))
+	//				.types(types)
+	//			.build();
 		
 		
-		return ResponseEntity.status(HttpStatus.OK).body(newsFeedItemService.fetchNewsFeedItems(filters).stream().map(NewsFeedItemAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
+	//	return ResponseEntity.status(HttpStatus.OK).body(newsFeedItemService.fetchNewsFeedItems(filters).stream().map(NewsFeedItemAPIOutbound::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)));
 	
-	}
+	//}
 	
 	/**
 	* Fetches the NewsFeedUserView view information for a specific User
 	* @param principal - Currently logged in user
 	* @return view information
 	*/
-	@GetMapping(value="/newsfeeduserview")
-	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
-	public ResponseEntity<NewsFeedUserViewAPIOutbound> fetchNewsFeedUserView(Principal principal) {
-		return ResponseEntity.ok().body(NewsFeedUserViewAPIOutbound.convertFromDomain(this.newsFeedItemService.getNewsFeedUserView(principal.getName())));
-	}
+	//@GetMapping(value="/newsfeeduserview")
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	//public ResponseEntity<NewsFeedUserViewAPIOutbound> fetchNewsFeedUserView(Principal principal) {
+	//	return ResponseEntity.ok().body(NewsFeedUserViewAPIOutbound.convertFromDomain(this.newsFeedItemService.getNewsFeedUserView(principal.getName())));
+	//}
 	
 	/**
 	* Updates the last time the User viewed the Newsfeed
 	* @return ResponseEntity
 	*/
-	@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
-	@PutMapping("/newsfeeduserview")
-	public ResponseEntity<Void> updateNewsFeedUserViewLastViewed(Principal principal){
-		this.newsFeedItemService.saveNewsFeedUserView(principal);
-		return ResponseEntity.ok().build();
-	}
+	//@PreAuthorize("hasRole('ROLE_RECRUITER') OR hasRole('ROLE_ADMIN') OR hasRole('ROLE_CANDIDATE')")
+	//@PutMapping("/newsfeeduserview")
+	//public ResponseEntity<Void> updateNewsFeedUserViewLastViewed(Principal principal){
+	//	this.newsFeedItemService.saveNewsFeedUserView(principal);
+	//	return ResponseEntity.ok().build();
+	//}
 	
 }

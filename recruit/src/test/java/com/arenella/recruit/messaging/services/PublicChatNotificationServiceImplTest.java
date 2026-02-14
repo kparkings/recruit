@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -311,5 +312,19 @@ class PublicChatNotificationServiceImplTest {
 		verify(this.mockDao, never()).saveNotification(any());
 	}
 
+	/**
+	* Tests retrieval of Undelivered Notifications 
+	*/
+	@Test
+	void testFetchUndeliveredBefore() {
+		
+		final LocalDateTime cutoff = LocalDateTime.of(2026, 2, 13 , 20, 29, 01);
+		
+		when(this.mockDao.fetchUndeliveredBefore(cutoff)).thenReturn(Set.of(PublicChatNotification.builder().build(), PublicChatNotification.builder().build()));
+		
+		Set<PublicChatNotification> response = this.service.fetchUndeliveredBefore(cutoff);
+		
+		assertEquals(2, response.size());
+	}
 	
 }

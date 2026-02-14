@@ -170,27 +170,27 @@ export class AppComponent {
 			return;
 		}
 		
-		let now:Date = new Date();
+		//let now:Date = new Date();
 		
-		if(this.lastAlertRefresh && this.lastAlertRefresh > now){
-			//So we dont make lots of expensive backend calls
-		} else {
-			if(!this.lastAlertRefresh){
-				this.lastAlertRefresh = now;
-			} else {
-				this.lastAlertRefresh.setSeconds(this.lastAlertRefresh.getSeconds() + 10);
-			}	
+		//if(this.lastAlertRefresh && this.lastAlertRefresh > now){
+		//	//So we dont make lots of expensive backend calls
+		//} else {
+		//	if(!this.lastAlertRefresh){
+		//		this.lastAlertRefresh = now;
+		//	} else {
+		//		this.lastAlertRefresh.setSeconds(this.lastAlertRefresh.getSeconds() + 10);
+		//	}	
 			
-			if (sessionStorage.getItem("userId")) {
-				this.newsfeedService.getLastViewRecord().subscribe(record => {
-					this.lastNewsfeedView = record.lastViewed;	
-					this.newsfeedService.getNewsFeedItems().subscribe(items => {
-						if(items[0]) {
-							this.unseenNewsfeedItems = (items[0].created > this.lastNewsfeedView);
-						}
-					});
-				});
-			}
+		//	if (sessionStorage.getItem("userId")) {
+		//		this.newsfeedService.getLastViewRecord().subscribe(record => {
+		//			this.lastNewsfeedView = record.lastViewed;	
+		//			this.newsfeedService.getNewsFeedItems().subscribe(items => {
+		//				if(items[0]) {
+		//					this.unseenNewsfeedItems = (items[0].created > this.lastNewsfeedView);
+		//				}
+		//			});
+		//		});
+		//	}
 		
 			this.mpService.fetchUnseenOpenPositionCount().subscribe(val => {
 				this.unseenMpPosts = val;
@@ -201,14 +201,23 @@ export class AppComponent {
 				this.unseenEmails = val;
 			});
 			
-			this.publicMessagingService.fetchNotificationsForUser().subscribe(notifications => {
-				this.publicMessagingService.unreadNotifications = notifications.filter(n => n.viewed == false).length;
-			});
+			this.refreshUnreadNewsFeedNotifications();
 		
-		}
+		//}
 		
 	}
 	
+	
+	
+	/**
+	* Whether or not the user has authenticated as an Candidate user 
+	*/
+	public refreshUnreadNewsFeedNotifications():void{
+		this.publicMessagingService.fetchNotificationsForUser().subscribe(notifications => {
+			this.publicMessagingService.unreadNotifications = notifications.filter(n => n.viewed == false).length;
+		});
+	}
+		
 	/**
 	* Whether or not the user has authenticated as an Candidate user 
 	*/

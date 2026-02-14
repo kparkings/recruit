@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.arenella.recruit.messaging.beans.PublicChatNotification;
 import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PublicChatNotificationService;
 
@@ -44,7 +45,14 @@ public class PublicChatNotificationController {
 	@GetMapping(path="publicchatnotification", produces="application/json")
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
 	public ResponseEntity<Set<PublicChatNotificationAPIOutbound>> fetchNotificationsForUser(Principal authenticatedUser){
-		return ResponseEntity.ok(this.notificationService.fetchNotificationsForUser(authenticatedUser.getName())
+		
+		Set<PublicChatNotification> notifications = this.notificationService.fetchNotificationsForUser(authenticatedUser.getName());
+		
+		notifications.stream().filter(n -> !n.isDelivered()).forEach(n -> 
+			this.notificationService.persistNotification(PublicChatNotification.builder().publicChatNotification(n).delivered(true).build())
+		);
+				
+		return ResponseEntity.ok(notifications
 				.stream()
 				.map(notification -> PublicChatNotificationAPIOutbound
 						.builder()

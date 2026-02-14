@@ -19,6 +19,7 @@ public class PublicChatNotification {
 	private UUID 				chatId;
 	private String 				destinationUserId;	//This so we can get users notifications
 	private String 				initiatingUserId;	//This so we can show who replied
+	private boolean 			delivered;
 	private boolean 			viewed;
 	private boolean 			notificationEmailSent;
 
@@ -33,6 +34,7 @@ public class PublicChatNotification {
 		this.chatId 					= builder.chatId;
 		this.destinationUserId			= builder.destinationUserId;
 		this.initiatingUserId 			= builder.initiatingUserId;
+		this.delivered					= builder.delivered;
 		this.viewed 					= builder.viewed;
 		this.notificationEmailSent 		= builder.notificationEmailSent;
 	}
@@ -71,7 +73,6 @@ public class PublicChatNotification {
 		return this.chatId;
 	}
 	
-	
 	/**
 	* Returns the unique Id of the User who the Notification 
 	* is intended for
@@ -88,6 +89,17 @@ public class PublicChatNotification {
 	*/
 	public String getInitiatingUserId() {
 		return this.initiatingUserId;
+	}
+	
+	/**
+	* Returns whether the notification has been delivered. That could be 
+	* the destination user has opened the front end application after the 
+	* Notification was sent or the Notification has been sent to a queue 
+	* etc
+	* @return if Notification has been delivered to the destination User
+	*/
+	public boolean isDelivered() {
+		return this.delivered;
 	}
 	
 	/**
@@ -127,6 +139,7 @@ public class PublicChatNotification {
 		private UUID 				chatId;
 		private String 				destinationUserId;
 		private String 				initiatingUserId;
+		private boolean 			delivered;
 		private boolean 			viewed;
 		private boolean 			notificationEmailSent;
 		
@@ -142,6 +155,7 @@ public class PublicChatNotification {
 			this.chatId 				= publicChatNotification.chatId;
 			this.destinationUserId		= publicChatNotification.destinationUserId;
 			this.initiatingUserId 		= publicChatNotification.initiatingUserId;
+			this.delivered				= publicChatNotification.delivered;
 			this.viewed 				= publicChatNotification.viewed;
 			this.notificationEmailSent 	= publicChatNotification.notificationEmailSent;
 
@@ -208,6 +222,16 @@ public class PublicChatNotification {
 		*/
 		public PublicChatNotificationBuilder initiatingUserId(String initiatingUserId) {
 			this.initiatingUserId = initiatingUserId;
+			return this;
+		}
+		
+		/**
+		* Sets whether the notification has been delivered to the destination User
+		* @param notificationDelivered - Whether the notification has been delivered
+		* @return Builder 
+		*/
+		public PublicChatNotificationBuilder delivered(boolean delivered) {
+			this.delivered = delivered;
 			return this;
 		}
 		

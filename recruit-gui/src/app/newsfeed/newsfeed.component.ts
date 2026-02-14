@@ -29,6 +29,8 @@ export class NewsfeedComponent {
 	private currentNotification:string = "";
 	private showNotificationsForMobile:string = "";
 	
+	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
+	
 	/**
 	* Constructor
 	* @oaramparam service  - Services for PublicMessages 
@@ -45,8 +47,8 @@ export class NewsfeedComponent {
 	ngAfterViewInit(){
 		
 		this.refreshPosts();
-		this.refreshNotifications();
-		
+		//this.refreshNotifications();
+		this.startNotificationPolling();
 	}
 	
 	ngAfterViewChecked(){
@@ -59,6 +61,16 @@ export class NewsfeedComponent {
 			this.showNotificationsForMobile = "";
 			localStorage.removeItem("display-news-item-notifications");
 		}		
+	}
+	
+	ngOnDestroy(){
+		clearInterval(this.scheduleOpenChatRefresh);
+	}
+	
+	private startNotificationPolling():void{
+		this.scheduleOpenChatRefresh = window.setInterval(()=> {
+			this.refreshNotifications();			
+		},1000);
 	}
 	
 	/**

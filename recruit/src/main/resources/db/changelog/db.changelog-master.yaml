@@ -2886,6 +2886,11 @@ databaseChangeLog:
                  constraints:
                    nullable: false
              - column:
+                 name: delivered
+                 type: boolean
+                 constraints:
+                   nullable: false
+             - column:
                  name: viewed
                  type: boolean
                  constraints:
