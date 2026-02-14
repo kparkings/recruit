@@ -231,6 +231,18 @@
 	color:grey;
 }
 
+.email-notifications{
+	float:right;
+	margin-right:10px;
+	margin-top:10px;
+	color:grey;
+	cursor:pointer;
+}
+
+.email-notifications-disabled{
+	color:red;
+}
+
 @media (max-width: 768px) {
 	.newsfeed-boop-panel{
 		display:none;
@@ -269,8 +281,12 @@
     }
     
     .public-chat-notification-panel-notifications{
-	overflow-y:scroll;
-	height:100%;
-}
+		overflow-y:scroll;
+		height:100%;
+	}
+	
+	.email-notifications{
+		margin-top:15px;
+	}
 	
 }

@@ -20,8 +20,10 @@ import com.arenella.recruit.emailservice.beans.Email.Sender;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.emailservice.beans.Email.Sender.SenderType;
 import com.arenella.recruit.messaging.adapters.MessagingMonolithExternalEventPublisher;
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChatNotification;
 import com.arenella.recruit.messaging.beans.PublicChatNotification.NotificationType;
+import com.arenella.recruit.messaging.services.ParticipantService;
 import com.arenella.recruit.messaging.services.PublicChatNotificationService;
 
 /**
@@ -35,15 +37,17 @@ public class MissedNotificationEmailScheduler {
 
 	private final PublicChatNotificationService service;
 	private final MessagingMonolithExternalEventPublisher eventPublisher;
+	private final ParticipantService participantService;
 	
 	/**
 	* Constructor
 	* @param service 			- Services for interaction with Notification
 	* @oaram eventPublisher 	- For sending emails
 	*/
-	public MissedNotificationEmailScheduler(PublicChatNotificationService service, MessagingMonolithExternalEventPublisher eventPublisher) {
-		this.service 		= service;
-		this.eventPublisher = eventPublisher;
+	public MissedNotificationEmailScheduler(PublicChatNotificationService service, MessagingMonolithExternalEventPublisher eventPublisher, ParticipantService participantService) {
+		this.service 				= service;
+		this.eventPublisher 		= eventPublisher;
+		this.participantService 	= participantService;
 	}
 	
 	/**
@@ -52,53 +56,60 @@ public class MissedNotificationEmailScheduler {
 	*/
 	@Scheduled(fixedRate=60000)
 	public void missedNotificationEmalMessageSender() {
-		System.out.println("Running scheduler");
+		
 		try {
 			
-			final LocalDateTime  oneHourAgo = LocalDateTime.now().minusHours(5);
+			final LocalDateTime  oneHourAgo = LocalDateTime.now().minusHours(1);
+			final LocalDateTime  oneDayAgo 	= LocalDateTime.now().minusDays(1);
 			
 			Set<String> users = this.service.fetchUndeliveredBefore(oneHourAgo).stream().filter(n -> !n.isDelivered() && !n.isNotificationEmailSent()).map(n -> n.getDestinationUserId()).collect(Collectors.toCollection(LinkedHashSet::new));
 			
-			System.out.println("Use count = " + users.size());
-			
 			users.stream().forEach(userId -> {
 				
-				System.out.println("Processing " + userId);
-				
-				AtomicInteger likeCount = new AtomicInteger();
-				AtomicInteger replyCount = new AtomicInteger();
-				
-				//Also need to add into filter new attribute for user not viewed at least once
-				this.service.fetchNotificationsForUser(userId).stream().filter(n -> !n.isDelivered() && !n.isNotificationEmailSent()).forEach(notification -> {
-					System.out.println("Fetching notifications");
-					if (notification.getType() == NotificationType.LIKE) {
-						likeCount.incrementAndGet();
-					}
+				this.participantService.fetchById(userId).ifPresent(participant -> {
 					
-					if (notification.getType() == NotificationType.REPLY) {
-						replyCount.incrementAndGet();
+					if (!participant.isDisableNotificationEmails()) {
+						
+						boolean sufficientTimeSinceLastEmail = participant.getLastNotificationEmailSent().isEmpty() || !participant.getLastNotificationEmailSent().get().isAfter(oneDayAgo);
+						
+						if (sufficientTimeSinceLastEmail) {
+							
+							AtomicInteger likeCount = new AtomicInteger();
+							AtomicInteger replyCount = new AtomicInteger();
+							
+							this.service.fetchNotificationsForUser(userId).stream().filter(n -> !n.isDelivered() && !n.isNotificationEmailSent()).forEach(notification -> {
+								
+								if (notification.getType() == NotificationType.LIKE) {
+									likeCount.incrementAndGet();
+								}
+								
+								if (notification.getType() == NotificationType.REPLY) {
+									replyCount.incrementAndGet();
+								}
+								
+								this.service.persistNotification(PublicChatNotification.builder().publicChatNotification(notification).notificationEmailSent(true).build());
+								
+							});
+							
+							if (likeCount.intValue() != 0 || replyCount.intValue() != 0 ) {
+								this.eventPublisher.publishSendEmailCommand(RequestSendEmailCommand
+										.builder()
+											.emailType(EmailType.SYSTEM_EXTERN)
+											.persistable(false)
+											.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
+											.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), userId, ContactType.RECRUITER)))
+											.title("Unread Newsfeed Notification")
+											.model(Map.of("likeCount",likeCount.get(), "replyCount", replyCount.get()))
+											.topic(EmailTopic.MISSED_NEWSFEED_NOTIFICATION)
+										.build());
+								this.participantService.persistParticpant(ChatParticipant.builder().chatParticipant(participant).lastNotificationEmailSent(LocalDateTime.now()).build());
+							}
+							
+						}
+						
 					}
-					
-					System.out.println("Updatting DB");
-					this.service.persistNotification(PublicChatNotification.builder().publicChatNotification(notification).notificationEmailSent(true).build());
 					
 				});
-				
-				if (likeCount.intValue() != 0 || replyCount.intValue() != 0 ) {
-					System.out.println("Sending Email");
-					this.eventPublisher.publishSendEmailCommand(RequestSendEmailCommand
-							.builder()
-								.emailType(EmailType.SYSTEM_EXTERN)
-								.persistable(false)
-								.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
-								.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), userId, ContactType.RECRUITER)))
-								.title("Unread Newsfeed Notification")
-								.model(Map.of("likeCount",likeCount.get(), "replyCount", replyCount.get()))
-								.topic(EmailTopic.MISSED_NEWSFEED_NOTIFICATION)
-							.build());
-				} else {
-					System.out.println("No notificaiton so no email");
-				}
 				
 			});
 			

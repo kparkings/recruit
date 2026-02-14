@@ -15,17 +15,19 @@ public class ChatParticipantAPIOutbound {
 	private String 					firstName;
 	private String 					surname;
 	private Photo 					photo;
+	private boolean					disableNotificationEmails;
 	
 	/**
 	* Constructor
 	* @param builder - Contains initialization information
 	*/
 	public ChatParticipantAPIOutbound(ChatParticipantAPIOutboundBuilder builder) {
-		this.id 		= builder.id;
-		this.type		= builder.type;
-		this.firstName 	= builder.firstName;
-		this.surname 	= builder.surname;
-		this.photo		= builder.photo;
+		this.id 						= builder.id;
+		this.type						= builder.type;
+		this.firstName 					= builder.firstName;
+		this.surname 					= builder.surname;
+		this.photo						= builder.photo;
+		this.disableNotificationEmails 	= builder.disableNotificationEmails;
 	}
 	
 	/**
@@ -69,6 +71,14 @@ public class ChatParticipantAPIOutbound {
 	}
 	
 	/**
+	* Whether or not the user has disabled notification email's
+	* @return receive email preference
+	*/
+	public boolean isDisableNotificationEmails() {
+		return this.disableNotificationEmails;
+	}
+	
+	/**
 	* Returns a Builder for the class
 	* @return BUilder
 	*/
@@ -81,11 +91,12 @@ public class ChatParticipantAPIOutbound {
 	*/
 	public static class ChatParticipantAPIOutboundBuilder{
 	
-		private String id;
-		private CHAT_PARTICIPANT_TYPE type;
-		private String firstName;
-		private String surname;
-		private Photo photo;
+		private String 					id;
+		private CHAT_PARTICIPANT_TYPE 	type;
+		private String 					firstName;
+		private String 					surname;
+		private Photo 					photo;
+		private boolean					disableNotificationEmails;
 		
 		/**
 		* Populates builder with values from a ChatParticipant
@@ -93,10 +104,11 @@ public class ChatParticipantAPIOutbound {
 		* @return BuildeR
 		*/
 		public ChatParticipantAPIOutboundBuilder chatParticipant(ChatParticipant chatParticipant) {
-			this.id 		= chatParticipant.getParticipantId();
-			this.type		= chatParticipant.getType();
-			this.firstName 	= chatParticipant.getFirstName();
-			this.surname 	= chatParticipant.getSurame();
+			this.id 						= chatParticipant.getParticipantId();
+			this.type						= chatParticipant.getType();
+			this.firstName 					= chatParticipant.getFirstName();
+			this.surname 					= chatParticipant.getSurame();
+			this.disableNotificationEmails	= chatParticipant.isDisableNotificationEmails();
 			
 			chatParticipant.getPhoto().ifPresent(p -> photo = p);
 			

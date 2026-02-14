@@ -18,10 +18,11 @@ class ChatParticipantAPIOutboundTest {
 	@Test
 	void testConstruction() {
 		
-		final String id 					= "pId1";
-		final String firstName 				= "Bob";
-		final String surname 				= "Parkings";
-		final CHAT_PARTICIPANT_TYPE type 	= CHAT_PARTICIPANT_TYPE.CANDIDATE;
+		final String 					id 					= "pId1";
+		final String 					firstName 			= "Bob";
+		final String 					surname 			= "Parkings";
+		final CHAT_PARTICIPANT_TYPE 	type 				= CHAT_PARTICIPANT_TYPE.CANDIDATE;
+		final boolean 					disableEmails 		= true;
 		
 		ChatParticipant chatParticipant = ChatParticipant
 				.builder()
@@ -29,6 +30,7 @@ class ChatParticipantAPIOutboundTest {
 					.type(type)
 					.firstName(firstName)
 					.surname(surname)
+					.disableNotificationEmails(disableEmails)
 				.build();
 		
 		ChatParticipantAPIOutbound outbound = ChatParticipantAPIOutbound
@@ -40,6 +42,7 @@ class ChatParticipantAPIOutboundTest {
 		assertEquals(type, 			outbound.getType());
 		assertEquals(firstName, 	outbound.getFirstName());
 		assertEquals(surname, 		outbound.getSurname());
+		assertEquals(disableEmails, outbound.isDisableNotificationEmails());
 		
 	}
 	

@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.entities;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.arenella.recruit.messaging.beans.Photo;
@@ -44,6 +45,12 @@ public class ChatParticipantEntity {
 	@Enumerated(EnumType.STRING)
 	private PHOTO_FORMAT 			photoFormat;
 	
+	@Column(name="disable_noficication_emails")
+	private boolean					disableNotificationEmails;
+	
+	@Column(name="last_nofication_email_sent")
+	private LocalDateTime			lastNotificationEmailSent;
+	
 	/**
 	* Default constructor 
 	*/
@@ -56,10 +63,12 @@ public class ChatParticipantEntity {
 	*/
 	public ChatParticipantEntity(ChatParticipantEntityBuilder builder) {
 		
-		this.participantId 	= builder.participantId;
-		this.type 			= builder.type;
-		this.firstName 		= builder.firstName;
-		this.surname		= builder.surname;
+		this.participantId 				= builder.participantId;
+		this.type 						= builder.type;
+		this.firstName 					= builder.firstName;
+		this.surname					= builder.surname;
+		this.disableNotificationEmails 	= builder.disableNotificationEmails;
+		this.lastNotificationEmailSent 	= builder.lastNotificationEmailSent;
 		
 		Optional.ofNullable(builder.photo).ifPresent(photo -> {
 			this.photoBytes 	= photo.imageBytes();
@@ -116,6 +125,24 @@ public class ChatParticipantEntity {
 	}
 	
 	/**
+	* Returns whether or not the User has opted out of receiving 
+	* email's relating to notifications
+	* @return Whether user wants to receive email's or not for notifications
+	*/
+	public boolean isDisableNotificationEmails() {
+		return this.disableNotificationEmails;
+	}
+	
+	/**
+	* If a notification email has already been sent, then returns when 
+	* the last email was sent
+	* @return last time email sent
+	*/
+	public Optional<LocalDateTime> getLastNotificationEmailSent() {
+		return Optional.ofNullable(this.lastNotificationEmailSent);
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return Builder
 	*/
@@ -133,6 +160,8 @@ public class ChatParticipantEntity {
 		private String					firstName;
 		private String					surname;
 		private Photo 					photo;
+		private boolean					disableNotificationEmails;
+		private LocalDateTime			lastNotificationEmailSent;
 		
 		/**
 		* 
@@ -185,6 +214,26 @@ public class ChatParticipantEntity {
 		}
 		
 		/**
+		* Sets whether to disable sending of Notification email's to the user 
+		* @param disableNotificationEmails - Whether to disable email notifications
+		* @return Builder
+		*/
+		public ChatParticipantEntityBuilder disableNotificationEmails(boolean disableNotificationEmails) {
+			this.disableNotificationEmails = disableNotificationEmails;
+			return this;
+		}
+		
+		/**
+		* Sets the last time a notification email was sent to the user
+		* @param lastNotificationEmailSent - last time email was sent
+		* @return Builder
+		*/
+		public ChatParticipantEntityBuilder lastNotificationEmailSent(LocalDateTime lastNotificationEmailSent) {
+			this.lastNotificationEmailSent = lastNotificationEmailSent;
+			return this;
+		}
+		
+		/**
 		* Returns initialized instance 
 		* @return Initialized instance
 		*/
@@ -207,7 +256,9 @@ public class ChatParticipantEntity {
 			.participantId(entity.getParticipantId())
 			.firstName(entity.getFirstName())
 			.surname(entity.getSurame())
-			.type(entity.getType());
+			.type(entity.getType())
+			.disableNotificationEmails(entity.isDisableNotificationEmails())
+			.lastNotificationEmailSent(entity.getLastNotificationEmailSent().orElse(null));;
 		
 		entity.getPhoto().ifPresent(p -> {
 			builder.photo(new Photo(p.imageBytes(), p.format()));
@@ -229,7 +280,9 @@ public class ChatParticipantEntity {
 			.participantId(participant.getParticipantId())
 			.firstName(participant.getFirstName())
 			.surname(participant.getSurame())
-			.type(participant.getType());
+			.type(participant.getType())
+			.disableNotificationEmails(participant.isDisableNotificationEmails())
+			.lastNotificationEmailSent(participant.getLastNotificationEmailSent().orElse(null));
 		
 		participant.getPhoto().ifPresent(p -> {
 			builder.photo(new Photo(p.imageBytes(), p.format()));

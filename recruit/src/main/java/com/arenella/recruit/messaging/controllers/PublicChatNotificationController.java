@@ -87,4 +87,33 @@ public class PublicChatNotificationController {
 		this.notificationService.deleteNotification(notificationId, authenticatedUser.getName());
 		return ResponseEntity.ok().build();
 	}
+	
+	/**
+	* Returns the authenticated users Own ChatParticipant
+	* @param authenticatedUser
+	* @return
+	*/
+	@GetMapping(path="publicchatnotification/participant/self", produces="application/json")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	public ResponseEntity<ChatParticipantAPIOutbound> fetchUsersOwnChatParticipant(Principal authenticatedUser){
+		
+		ChatParticipantAPIOutbound participant = this.participantService.fetchById(authenticatedUser.getName()).map(cp -> ChatParticipantAPIOutbound.builder().chatParticipant(cp).build()).orElse(null);
+		
+		return ResponseEntity.ok(participant);
+	}
+	
+	/**
+	* Returns the authenticated users Own ChatParticipant
+	* @param authenticatedUser
+	* @return
+	*/
+	@PutMapping(path="publicchatnotification/toggleEmailNotifications", produces="application/json")
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	public ResponseEntity<ChatParticipantAPIOutbound> toggleReceiveNotificationEmails(Principal authenticatedUser){
+		
+		ChatParticipantAPIOutbound participant = this.participantService.toggleReceiveNotificationEmails(authenticatedUser.getName()).map(cp -> ChatParticipantAPIOutbound.builder().chatParticipant(cp).build()).orElse(null);
+		
+		return ResponseEntity.ok(participant);
+	}
+	
 }

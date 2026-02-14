@@ -27,5 +27,11 @@ public interface ParticipantService {
 	* @return ChatParticipant if available
 	*/
 	Optional<ChatParticipant> fetchById(String participantId);
+
+	/**
+	* Toggles the email notification preference for the user
+	* @param authenticatedUserId - Id of currently authenticated user
+	*/
+	Optional<ChatParticipant> toggleReceiveNotificationEmails(String authenticatedUserId);
 	
 }

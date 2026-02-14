@@ -2924,3 +2924,21 @@ databaseChangeLog:
               referencedTableName: chat_participants
               referencedTableSchemaName: chats
               referencedColumnNames: id
+  - changeSet:
+     id: addColumns-notification-emails
+     author: kevin
+     changes:
+       - addColumn:
+           tableName: chat_participants
+           schemaName: chats
+           columns:
+             - column:
+                 name: disable_noficication_emails
+                 type: boolean
+                 constraints:
+                   default: false
+             - column:
+                 name: last_nofication_email_sent
+                 type: timestamp
+                 constraints:
+                   nullable: true

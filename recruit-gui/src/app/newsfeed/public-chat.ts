@@ -66,13 +66,14 @@ export class ChatParticipant {
 	
 	/**
 	* Constructor
-	* @paran id 		- Unique Id of the Participant
-	* @param type		- Type of Participant ( RECRUIER, CANDIDATE, SYSTEM)
-	* @param firstName 	- Participants first name
-	* @param surname 	- Participants surname
-	* @param photo 		- Participants profile image
+	* @paran id 						- Unique Id of the Participant
+	* @param type						- Type of Participant ( RECRUIER, CANDIDATE, SYSTEM)
+	* @param firstName 					- Participants first name
+	* @param surname 					- Participants surname
+	* @param photo 						- Participants profile image
+	* @param disableNotificationEmails	- Whether User has opted not to receive notification emails
 	*/
-	constructor(public id:string, public type:string, public firstName:string, public surname:string, public photo:Photo){}
+	constructor(public id:string, public type:string, public firstName:string, public surname:string, public photo:Photo, public disableNotificationEmails:boolean){}
 	
 }
 

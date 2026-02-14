@@ -6,8 +6,10 @@
 	
 	<div class="newsfeed-notification-panel{{showNotificationForMobile()}}" >
 		<div class="header">
-			{{'NOTIFICATIONS' | translate }
+			{{'NOTIFICATIONS' | translate }}
 			<span class="notification-mobile-close-btn mobile-only-element" (click)="hideNotificationsForMobile()">X</span>
+			<span *ngIf="usersOwnChatParticipant.disableNotificationEmails == true" class="material-icons notification-type-icon email-notifications email-notifications-disabled" title="Email notifications are currently disabled" (click)="toggleReceiveNotificationEmails()">mail_outline</span>
+			<span *ngIf="usersOwnChatParticipant.disableNotificationEmails == false" class="material-icons notification-type-icon email-notifications" title="Email notifications are currently enabled" (click)="toggleReceiveNotificationEmails()">mail_outline</span>
 		</div>
 		<div class="public-chat-notification-panel-notifications">
 			<div *ngFor="let notification of notifications">

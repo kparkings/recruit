@@ -3,6 +3,8 @@ package com.arenella.recruit.messaging.beans;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.messaging.beans.ChatParticipant.CHAT_PARTICIPANT_TYPE;
@@ -18,6 +20,8 @@ class ChatParticipantTest {
 	private static final String					FIRSTNAME 		= "kevin";
 	private static final String					SURNAME 		= "Parkings";
 	private static final Photo 					PHOTO 			= new Photo(new byte[] {}, PHOTO_FORMAT.PNG);
+	private static final boolean				DISABLE_EMAIL	= true;
+	private static final LocalDateTime			LAST_EMAIL		= LocalDateTime.of(2026, 2, 14, 10, 11 , 12);
 	
 	/**
 	* Tests construction via builder 
@@ -32,12 +36,16 @@ class ChatParticipantTest {
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
 					.photo(PHOTO)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	participant.getParticipantId());
 		assertEquals(TYPE, 				participant.getType());
 		assertEquals(FIRSTNAME, 		participant.getFirstName());
 		assertEquals(SURNAME, 			participant.getSurame());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
 		assertTrue(participant.getPhoto().isPresent());
 		
 	}
@@ -54,12 +62,16 @@ class ChatParticipantTest {
 					.type(TYPE)
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	participant.getParticipantId());
 		assertEquals(TYPE, 				participant.getType());
 		assertEquals(FIRSTNAME, 		participant.getFirstName());
 		assertEquals(SURNAME, 			participant.getSurame());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
 		assertTrue(participant.getPhoto().isEmpty());
 		
 	}

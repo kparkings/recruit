@@ -157,6 +157,25 @@ export class PublicMessagingService {
 		return this.httpClient.get<Array<PublicChatNotification>>(backendUrl, this.httpOptions);
 	}
 	
+	/**
+	* Retrieves Users own Participant object
+	*/
+	public fetchOwnParticipant():Observable<ChatParticipant> {
+		const backendUrl:string = environment.backendUrl + 'publicchatnotification/participant/self';
+		return this.httpClient.get<ChatParticipant>(backendUrl, this.httpOptions);
+	}
+	
+	/**
+	* Toggles whether or not the User wants to receive emails about missed notifications
+	*/
+	public toggleOwnParticipantReceiveNotificationEmails(): Observable<ChatParticipant>{
+		
+		const backendUrl:string = environment.backendUrl + 'publicchatnotification/toggleEmailNotifications';
+
+		return this.httpClient.put<ChatParticipant>(backendUrl, {}, this.httpOptions);
+
+	}
+	
 }
 
 /**

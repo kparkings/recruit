@@ -4,6 +4,7 @@ import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
 import { PublicChat, ChatParticipant, PublicChatNotification}			from './public-chat';
 import { AppComponent } 												from 'src/app/app.component';
 import { ViewportScroller } 										from '@angular/common';
+import { Photo } from '../private-messaging.service';
 
 @Component({
   selector: 'app-newsfeed',
@@ -31,6 +32,8 @@ export class NewsfeedComponent {
 	
 	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
 	
+	public usersOwnChatParticipant:ChatParticipant = new ChatParticipant("", "", "", "", new Photo("",""), false);
+	
 	/**
 	* Constructor
 	* @oaramparam service  - Services for PublicMessages 
@@ -40,8 +43,16 @@ export class NewsfeedComponent {
 						private scroller: ViewportScroller,){
 		//this.refreshPosts();
 		
-		
+		this.service.fetchOwnParticipant().subscribe(participant => {
+			this.usersOwnChatParticipant = participant;
+		});
 				
+	}
+	
+	public toggleReceiveNotificationEmails():void{
+		this.service.toggleOwnParticipantReceiveNotificationEmails().subscribe(participant => {
+				this.usersOwnChatParticipant = participant;
+		});
 	}
 	
 	ngAfterViewInit(){

@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.beans;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -7,11 +8,6 @@ import java.util.Optional;
 */
 public class ChatParticipant {
 
-	//TODO: [KP] Make endpoint to get participant image independent of chat. This will allow for FE caching and reduce calls for images when
-	//			 participant appears in multiple chats
-	
-	//TODO: [KP] Once participant and photo working first add to private chat to improve solution and release before starting public chats
-	
 	public enum CHAT_PARTICIPANT_TYPE {RECRUITER, CANDIDATE, SYSTEM}
 	
 	private String 					participantId;
@@ -19,6 +15,8 @@ public class ChatParticipant {
 	private String					firstName;
 	private String					surname;
 	private Photo 					photo;
+	private boolean					disableNotificationEmails;
+	private LocalDateTime			lastNotificationEmailSent;
 	
 	/**
 	* Constructor based upon a Builder
@@ -30,6 +28,8 @@ public class ChatParticipant {
 		this.firstName 		= builder.firstName;
 		this.surname		= builder.surname;
 		this.photo 			= builder.photo;
+		this.disableNotificationEmails = builder.disableNotificationEmails;
+		this.lastNotificationEmailSent = builder.lastNotificationEmailSent;
 	}
 	
 	/**
@@ -75,6 +75,24 @@ public class ChatParticipant {
 	}
 	
 	/**
+	* Returns whether or not the User has opted out of receiving 
+	* email's relating to notifications
+	* @return Whether user wants to receive email's or not for notifications
+	*/
+	public boolean isDisableNotificationEmails() {
+		return this.disableNotificationEmails;
+	}
+	
+	/**
+	* If a notification email has already been sent, then returns when 
+	* the last email was sent
+	* @return last time email sent
+	*/
+	public Optional<LocalDateTime> getLastNotificationEmailSent() {
+		return Optional.ofNullable(this.lastNotificationEmailSent);
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return Builder
 	*/
@@ -92,13 +110,18 @@ public class ChatParticipant {
 		private String					firstName;
 		private String					surname;
 		private Photo 					photo;
+		private boolean					disableNotificationEmails;
+		private LocalDateTime			lastNotificationEmailSent;
 		
 		public ChatParticipantBuilder chatParticipant(ChatParticipant participant) {
-			this.participantId 	= participant.participantId;
-			this.type 			= participant.type;
-			this.firstName		= participant.firstName;
-			this.surname		= participant.surname;
-			this.photo			= participant.photo;
+			this.participantId 				= participant.participantId;
+			this.type 						= participant.type;
+			this.firstName					= participant.firstName;
+			this.surname					= participant.surname;
+			this.photo						= participant.photo;
+			this.disableNotificationEmails 	= participant.disableNotificationEmails;
+			this.lastNotificationEmailSent 	= participant.lastNotificationEmailSent;
+			
 			return this;
 		}
 		
@@ -149,6 +172,26 @@ public class ChatParticipant {
 		*/
 		public ChatParticipantBuilder photo(Photo photo) {
 			this.photo = photo;
+			return this;
+		}
+		
+		/**
+		* Sets whether to disable sending of Notification email's to the user 
+		* @param disableNotificationEmails - Whether to disable email notifications
+		* @return Builder
+		*/
+		public ChatParticipantBuilder disableNotificationEmails(boolean disableNotificationEmails) {
+			this.disableNotificationEmails = disableNotificationEmails;
+			return this;
+		}
+		
+		/**
+		* Sets the last time a notification email was sent to the user
+		* @param lastNotificationEmailSent - last time email was sent
+		* @return Builder
+		*/
+		public ChatParticipantBuilder lastNotificationEmailSent(LocalDateTime lastNotificationEmailSent) {
+			this.lastNotificationEmailSent = lastNotificationEmailSent;
 			return this;
 		}
 		

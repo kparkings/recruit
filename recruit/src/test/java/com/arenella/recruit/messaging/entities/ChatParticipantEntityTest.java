@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.messaging.beans.Photo;
@@ -21,6 +23,8 @@ class ChatParticipantEntityTest {
 	private static final String					FIRSTNAME 		= "kevin";
 	private static final String					SURNAME 		= "Parkings";
 	private static final Photo 					PHOTO 			= new Photo(new byte[] {}, PHOTO_FORMAT.PNG);
+	private static final boolean				DISABLE_EMAIL	= true;
+	private static final LocalDateTime			LAST_EMAIL		= LocalDateTime.of(2026, 2, 14, 10, 11 , 12);
 	
 	/**
 	* Tests construction via builder 
@@ -35,12 +39,16 @@ class ChatParticipantEntityTest {
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
 					.photo(PHOTO)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	participant.getParticipantId());
 		assertEquals(TYPE, 				participant.getType());
 		assertEquals(FIRSTNAME, 		participant.getFirstName());
 		assertEquals(SURNAME, 			participant.getSurame());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
 		assertTrue(participant.getPhoto().isPresent());
 		
 	}
@@ -57,6 +65,8 @@ class ChatParticipantEntityTest {
 					.type(TYPE)
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	participant.getParticipantId());
@@ -80,12 +90,16 @@ class ChatParticipantEntityTest {
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
 					.photo(PHOTO)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	entity.getParticipantId());
 		assertEquals(TYPE, 				entity.getType());
 		assertEquals(FIRSTNAME, 		entity.getFirstName());
 		assertEquals(SURNAME, 			entity.getSurame());
+		assertEquals(DISABLE_EMAIL, 	entity.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		entity.getLastNotificationEmailSent().get());
 		assertTrue(entity.getPhoto().isPresent());
 		
 		ChatParticipant participant = ChatParticipantEntity.fromEntity(entity);
@@ -96,6 +110,8 @@ class ChatParticipantEntityTest {
 		assertEquals(SURNAME, 			participant.getSurame());
 		assertNotNull(participant.getPhoto().get().imageBytes());
 		assertNotNull(participant.getPhoto().get().format());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
 		
 	}
 	
@@ -112,12 +128,16 @@ class ChatParticipantEntityTest {
 					.type(TYPE)
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	entity.getParticipantId());
 		assertEquals(TYPE, 				entity.getType());
 		assertEquals(FIRSTNAME, 		entity.getFirstName());
 		assertEquals(SURNAME, 			entity.getSurame());
+		assertEquals(DISABLE_EMAIL, 	entity.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		entity.getLastNotificationEmailSent().get());
 		
 		ChatParticipant participant = ChatParticipantEntity.fromEntity(entity);
 		
@@ -125,6 +145,9 @@ class ChatParticipantEntityTest {
 		assertEquals(TYPE, 				participant.getType());
 		assertEquals(FIRSTNAME, 		participant.getFirstName());
 		assertEquals(SURNAME, 			participant.getSurame());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
+		
 		assertTrue(participant.getPhoto().isEmpty());
 		
 	}
@@ -142,12 +165,17 @@ class ChatParticipantEntityTest {
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
 					.photo(PHOTO)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	participant.getParticipantId());
 		assertEquals(TYPE, 				participant.getType());
 		assertEquals(FIRSTNAME, 		participant.getFirstName());
 		assertEquals(SURNAME, 			participant.getSurame());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
+		
 		assertTrue(participant.getPhoto().isPresent());
 		
 		ChatParticipantEntity entity = ChatParticipantEntity.toEntity(participant);
@@ -158,6 +186,8 @@ class ChatParticipantEntityTest {
 		assertEquals(SURNAME, 			entity.getSurame());
 		assertNotNull(entity.getPhoto().get().imageBytes());
 		assertNotNull(entity.getPhoto().get().format());
+		assertEquals(DISABLE_EMAIL, 	entity.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		entity.getLastNotificationEmailSent().get());
 		
 	}
 
@@ -174,12 +204,16 @@ class ChatParticipantEntityTest {
 					.type(TYPE)
 					.firstName(FIRSTNAME)
 					.surname(SURNAME)
+					.disableNotificationEmails(DISABLE_EMAIL)
+					.lastNotificationEmailSent(LAST_EMAIL)
 				.build();
 		
 		assertEquals(PARTICIPANT_ID, 	participant.getParticipantId());
 		assertEquals(TYPE, 				participant.getType());
 		assertEquals(FIRSTNAME, 		participant.getFirstName());
 		assertEquals(SURNAME, 			participant.getSurame());
+		assertEquals(DISABLE_EMAIL, 	participant.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		participant.getLastNotificationEmailSent().get());
 		
 		ChatParticipantEntity entity = ChatParticipantEntity.toEntity(participant);
 		
@@ -187,6 +221,8 @@ class ChatParticipantEntityTest {
 		assertEquals(TYPE, 				entity.getType());
 		assertEquals(FIRSTNAME, 		entity.getFirstName());
 		assertEquals(SURNAME, 			entity.getSurame());
+		assertEquals(DISABLE_EMAIL, 	entity.isDisableNotificationEmails());
+		assertEquals(LAST_EMAIL, 		entity.getLastNotificationEmailSent().get());
 		assertTrue(entity.getPhoto().isEmpty());
 		
 	}

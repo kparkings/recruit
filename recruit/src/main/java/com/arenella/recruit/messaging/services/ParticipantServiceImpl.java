@@ -59,5 +59,19 @@ public class ParticipantServiceImpl implements ParticipantService{
 	public Optional<ChatParticipant> fetchById(String participantId) {	
 		return this.chatParticipantDao.fetchChatParticipantById(participantId);
 	}
+
+	/**
+	* Refer to the ParticipantService for details 
+	*/
+	@Override
+	public Optional<ChatParticipant> toggleReceiveNotificationEmails(String authenticatedUserId) {
+	
+		this.fetchById(authenticatedUserId).ifPresent(participant -> {
+			this.chatParticipantDao.persistChatParticipant(ChatParticipant.builder().chatParticipant(participant).disableNotificationEmails(!participant.isDisableNotificationEmails()).build());
+		});
+		
+		return this.fetchById(authenticatedUserId);
+		
+	}
 	
 }
