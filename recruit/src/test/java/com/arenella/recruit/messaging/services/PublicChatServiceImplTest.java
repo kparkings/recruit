@@ -480,7 +480,5 @@ class PublicChatServiceImplTest {
 		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
 		
 	}
-	
-	
-	
+		
 }

@@ -782,4 +782,20 @@ class PrivateChatServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests deletion of Chats for User
+	*/
+	@Test
+	void testSystemDeleteChatsForUser() {
+		
+		final String userId = "aUserId";
+		
+		when(this.mockChatDao.fetchUserChats(userId)).thenReturn(Set.of(PrivateChat.builder().build(), PrivateChat.builder().build()));
+		
+		this.service.systemDeleteChatsForUser(userId);
+		
+		verify(this.mockChatDao, times(2)).deleteById(any());
+		
+	}
+	
 }

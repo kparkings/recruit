@@ -12,6 +12,9 @@ import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.services.ParticipantService;
+import com.arenella.recruit.messaging.services.PrivateChatService;
+import com.arenella.recruit.messaging.services.PublicChatNotificationService;
+import com.arenella.recruit.messaging.services.PublicChatService;
 import com.arenella.recruit.messaging.beans.Photo;
 import com.arenella.recruit.messaging.beans.Photo.PHOTO_FORMAT;
 
@@ -25,14 +28,24 @@ import java.util.Optional;
 @Component
 public class MessagingMessagingServiceExternalEventListenerImpl implements MessagingMessagingServiceExternalEventListener{
 
-	private ParticipantService participantService;
+	private ParticipantService 				participantService;
+	private PublicChatNotificationService 	notificationService;
+	private PrivateChatService				privateChatService;
+	private PublicChatService				publicChatService;
 	
 	/**
 	* Constructor
 	* @param participantService
 	*/
-	public MessagingMessagingServiceExternalEventListenerImpl(ParticipantService participantService) {
-		this.participantService = participantService;
+	public MessagingMessagingServiceExternalEventListenerImpl(
+			ParticipantService 				participantService, 
+			PublicChatNotificationService 	notificationService,
+			PrivateChatService				privateChatService,
+			PublicChatService				publicChatService) {
+		this.participantService 	= participantService;
+		this.notificationService 	= notificationService;
+		this.privateChatService 	= privateChatService;
+		this.publicChatService		= publicChatService;
 	}
 	
 	/**
@@ -59,7 +72,7 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 	@Override
 	public void listenForCandidateUpdateEvent(CandidateUpdateEvent event) {
 			
-		this.participantService.fetchById(String.valueOf(event.getCandidateId())).ifPresent(existingParticipant -> {
+		this.participantService.fetchById(String.valueOf(event.getCandidateId())).ifPresent(_ -> {
 			ChatParticipant participant = 
 					ChatParticipant
 					.builder()
@@ -118,15 +131,22 @@ public class MessagingMessagingServiceExternalEventListenerImpl implements Messa
 	*/
 	@Override
 	public void listenForCandidateDeletedEvent(CandidateDeletedEvent event) {
+		this.notificationService.deleteNotificationsForUser(event.getCandidateId());
+		this.privateChatService.systemDeleteChatsForUser(event.getCandidateId());
+		this.publicChatService.systemDeleteChatsForUser(event.getCandidateId());
 		this.participantService.deletePartipant(event.getCandidateId());
-		
 	}
+	
 
 	/**
 	* Refer to the MessagingMessagingServiceExternalEventListener interface for details 
 	*/
 	@Override
 	public void listenForRecruiterDeletedEvent(RecruiterDeletedEvent event) {
+		this.notificationService.deleteNotificationsForUser(event.getRecruiterId());
+		this.privateChatService.systemDeleteChatsForUser(event.getRecruiterId());
+		this.publicChatService.removeLikesForUser(event.getRecruiterId());
+		this.publicChatService.systemDeleteChatsForUser(event.getRecruiterId());
 		this.participantService.deletePartipant(event.getRecruiterId());
 	}
 

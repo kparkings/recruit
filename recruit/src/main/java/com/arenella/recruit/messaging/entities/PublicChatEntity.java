@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import com.arenella.recruit.messaging.beans.PublicChat;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 
@@ -50,6 +53,7 @@ public class PublicChatEntity {
 	@Column(name="user_id")
 	@ElementCollection(targetClass=String.class, fetch = FetchType.EAGER)
 	@CollectionTable(schema="chats", name="public_chat_likes", joinColumns=@JoinColumn(name="chat_id"))
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<String>			likes					= new LinkedHashSet<>();
 	
 	/**

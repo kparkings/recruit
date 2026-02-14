@@ -44,6 +44,14 @@ public interface PublicChatService {
 	void deleteChat(UUID chatId, Principal user);
 	
 	/**
+	* Like the deleteUserChats except there is no validation. THis is 
+	* for use by the system to delete chats and should never be 
+	* exposed to the end users via the API
+	* @param userId - Id of User
+	 */
+	void systemDeleteChatsForUser(String userId);
+	
+	/**
 	* Returns a specified Chat
 	* @param chatId - Unique id of the Chat to return
 	* @return Chat
@@ -81,6 +89,10 @@ public interface PublicChatService {
 	* @return Update PublicChat
 	*/
 	PublicChat toggleLikeForChat(UUID chatId, String name);
+	
+	public PublicChat removeLikeForChat(UUID chatId, String name);
+	
+	public void removeLikesForUser(String userId);
 	
 	public SequencedSet<UUID> fetchPathToTopLevelChat(UUID chatId);
 	

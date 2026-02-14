@@ -73,6 +73,14 @@ public interface PrivateChatService {
 	void deleteUserChats(Principal user);
 	
 	/**
+	* Like the deleteUserChats except there is no validation. THis is 
+	* for use by the system to delete chats and should never be 
+	* exposed to the end users via the API
+	* @param userId - Id of User
+	 */
+	void systemDeleteChatsForUser(String userId);
+	
+	/**
 	* Adds a Message to an existing Chat. Only a User who is a 
 	* Sender/Receiver of the Chat can add a Message
 	* @param charId		- Id of Chat to add message to

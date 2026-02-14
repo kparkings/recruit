@@ -166,6 +166,14 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	* Refer to the PrivateChatService for details 
 	*/
 	@Override
+	public void systemDeleteChatsForUser(String userId) {
+		this.privateChatDao.fetchUserChats(userId).forEach(c -> privateChatDao.deleteById(c.getId()));
+	}
+	
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
 	public void addMessage(UUID chatId, String message, Principal user) {
 		
 		this.canChat(user, true);
@@ -293,13 +301,13 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 			.stream()
 			.filter(c -> c.getSenderId().equals(chat.getSenderId()) && c.getRecipientId().equals(chat.getRecipientId()))
 			.findAny()
-			.ifPresent(m -> {throw new RuntimeException("Invalid attempt to create chat for User combination. Combination already exists.");});
+			.ifPresent(_ -> {throw new RuntimeException("Invalid attempt to create chat for User combination. Combination already exists.");});
 			
 		this.privateChatDao.fetchUserChats(userId)
 			.stream()
 			.filter(c -> c.getSenderId().equals(chat.getRecipientId()) && c.getRecipientId().equals(chat.getSenderId()))
 			.findAny()
-			.ifPresent(m -> {throw new RuntimeException("Invalid attempt to create chat for User combination. Combination already exists.");});
+			.ifPresent(_ -> {throw new RuntimeException("Invalid attempt to create chat for User combination. Combination already exists.");});
 		
 		LocalDateTime currentTime = LocalDateTime.now();
 		

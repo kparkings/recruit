@@ -32,6 +32,12 @@ public interface PublicChatDao extends ListCrudRepository<PublicChatEntity, UUID
 	@Query("from PublicChatEntity where parentChat is null and created <= :olderThanOrEqualTo")
 	List<PublicChatEntity> findChatsOlderThanOrEqualTo(LocalDate olderThanOrEqualTo);
 	
+	@Query("from PublicChatEntity where ownerId = :ownerId")
+	List<PublicChatEntity> findChatsForUser(String ownerId);
+	
+	@Query("from PublicChatEntity p join p.likes l where l in (:ownerId)")
+	List<PublicChatEntity> findChatsLikedByUser(String ownerId);
+	
 	/**
 	* If available returns a specific Chat
 	* @param chatId - UniqueId of the chat
@@ -82,6 +88,19 @@ public interface PublicChatDao extends ListCrudRepository<PublicChatEntity, UUID
 	*/
 	default Set<PublicChat> fetchTopLevelChatsOlderThanOrEqualTo(LocalDate olderThanOrEqualTo) {
 		return this.findChatsOlderThanOrEqualTo(olderThanOrEqualTo).stream().map(PublicChatEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Fetches all Chats created by the User
+	* @param userId - Id of the User
+	* @return Users Chats
+	*/
+	default Set<PublicChat> fetchChatsForUser(String userId) {
+		return this.findChatsForUser(userId).stream().map(PublicChatEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	default Set<PublicChat> fetchChatsLikedByUser(String userId) {
+		return this.findChatsLikedByUser(userId).stream().map(PublicChatEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 }

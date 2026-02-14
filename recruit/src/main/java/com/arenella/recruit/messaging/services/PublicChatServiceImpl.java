@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChat;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 import com.arenella.recruit.messaging.beans.PublicChatNotification;
@@ -152,6 +151,44 @@ public class PublicChatServiceImpl implements PublicChatService {
 	* Refer to the PublicChatService interface for details 
 	*/
 	@Override
+	public PublicChat removeLikeForChat(UUID chatId, String name) {
+		
+		AtomicReference<PublicChat> atomicChat = new AtomicReference<>();
+		
+		this.chatDao.fetchChatById(chatId).ifPresent(chat -> {
+			
+			Set<String> likes = chat.getLikes();
+			
+			boolean deleteNotification = false;
+			
+			if (chat.getLikes().contains(name)) {
+				likes.remove(name);
+				deleteNotification = true;
+				
+			}
+			
+			PublicChat updatedChat = PublicChat.builder().publicChat(chat).likes(likes).build();
+			
+			//If like removed also remove the notification if it existed
+			if (deleteNotification) {
+				this.notificationService.fetchNotificationsForChat(chatId)
+					.stream()
+					.filter(notification -> notification.getType() == NotificationType.LIKE && notification.getInitiatingUserId().equals(name))
+					.forEach(notificationToDelete -> this.notificationService.deleteNotification(notificationToDelete.getNotificationId(), name));
+			}
+			
+			this.chatDao.saveChat(updatedChat);
+			
+		});
+		
+		return atomicChat.get();
+		
+	}
+	
+	/**
+	* Refer to the PublicChatService interface for details 
+	*/
+	@Override
 	public PublicChat toggleLikeForChat(UUID chatId, String name) {
 		
 		AtomicReference<PublicChat> atomicChat = new AtomicReference<>();
@@ -231,15 +268,26 @@ public class PublicChatServiceImpl implements PublicChatService {
 	}
 	
 	/**
-	* Recursive delete of Chat's children's notifications 
-	* @param chat - Chat to delete notification for
+	* Refer to the PublicChatService interface for details 
 	*/
-	private void deleteChatChildrenNotifications(PublicChat chat) {
-		this.notificationService.deleteNotificationsForChat(chat.getId());
-		this.fetchChatChildren(chat.getId()).stream().forEach(child -> {
-			deleteChatChildrenNotifications(child);
+	@Override
+	public void systemDeleteChatsForUser(String userId) {
+		this.chatDao.fetchChatsForUser(userId).stream().forEach(chat -> {
 			this.notificationService.deleteNotificationsForChat(chat.getId());
+			this.deleteChatChildrenNotifications(chat);
+			this.deleteChatChildren(chat);
+			this.chatDao.saveChat(PublicChat.builder().publicChat(chat).likes(Set.of()).build());
+			this.chatDao.deleteById(chat.getId());
 		});
+		
+	}
+	
+	public void removeLikesForUser(String userId) {
+		
+		this.chatDao.fetchChatsLikedByUser(userId).forEach(chat -> {
+			this.removeLikeForChat(chat.getId(), userId);
+		});
+		
 	}
 	
 	/**
@@ -250,7 +298,20 @@ public class PublicChatServiceImpl implements PublicChatService {
 	private void deleteChatChildren(PublicChat chat) {
 		this.fetchChatChildren(chat.getId()).stream().forEach(child -> {
 			this.deleteChatChildren(child);
+			this.chatDao.saveChat(PublicChat.builder().publicChat(chat).likes(Set.of()).build());
 			this.chatDao.deleteById(child.getId());
+		});
+	}
+	
+	/**
+	* Recursive delete of Chat's children's notifications 
+	* @param chat - Chat to delete notification for
+	*/
+	private void deleteChatChildrenNotifications(PublicChat chat) {
+		this.notificationService.deleteNotificationsForChat(chat.getId());
+		this.fetchChatChildren(chat.getId()).stream().forEach(child -> {
+			deleteChatChildrenNotifications(child);
+			this.notificationService.deleteNotificationsForChat(chat.getId());
 		});
 	}
 

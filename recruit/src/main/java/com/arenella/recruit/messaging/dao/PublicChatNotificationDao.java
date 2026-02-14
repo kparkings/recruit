@@ -73,12 +73,6 @@ public interface PublicChatNotificationDao extends ListCrudRepository<PublicChat
 	* @return
 	*/
 	default Set<PublicChatNotification> fetchUndeliveredBefore(LocalDateTime cutoff) {
-		
-		
-		//
-		List<PublicChatNotificationEntity> aa = this.findByUndeliveredWithoutNotificationEmail(cutoff);
-		//
-		
 		return this.findByUndeliveredWithoutNotificationEmail(cutoff).stream().map(PublicChatNotificationEntity::fromEntity).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
