@@ -1,7 +1,6 @@
 package com.arenella.recruit.messaging.services;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 

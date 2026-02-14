@@ -212,7 +212,7 @@ class PublicChatControllerTest {
 	void testToggleLikeForChat() {
 		
 		when(this.mockPrincipal.getName()).thenReturn("rec1");
-		doNothing().when(this.mockService).toggleLikeForChat(ID, "rec1");
+		when(this.mockService.toggleLikeForChat(ID, "rec1")).thenReturn(PublicChat.builder().build());
 		
 		ResponseEntity<PublicChatAPIOutbound> response = this.controller.toggleLikeForChat(ID, mockPrincipal);
 	

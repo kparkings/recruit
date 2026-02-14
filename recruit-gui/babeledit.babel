@@ -24200,6 +24200,37 @@
 						</translations>
 					</concept_node>
 					<concept_node>
+						<name>BACK</name>
+						<description/>
+						<comment/>
+						<translations>
+							<translation>
+								<language>de-DE</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>en-US</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>es-ES</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>fr-FR</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>it-IT</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>nl-NL</language>
+								<approved>false</approved>
+							</translation>
+						</translations>
+					</concept_node>
+					<concept_node>
 						<name>BELGIUM</name>
 						<description/>
 						<comment/>
@@ -24511,6 +24542,37 @@
 					</concept_node>
 					<concept_node>
 						<name>CENTRAL_EUROPE</name>
+						<description/>
+						<comment/>
+						<translations>
+							<translation>
+								<language>de-DE</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>en-US</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>es-ES</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>fr-FR</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>it-IT</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>nl-NL</language>
+								<approved>false</approved>
+							</translation>
+						</translations>
+					</concept_node>
+					<concept_node>
+						<name>CLOSE</name>
 						<description/>
 						<comment/>
 						<translations>
@@ -30090,6 +30152,37 @@
 						</translations>
 					</concept_node>
 					<concept_node>
+						<name>NOTIFICATIONS</name>
+						<description/>
+						<comment/>
+						<translations>
+							<translation>
+								<language>de-DE</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>en-US</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>es-ES</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>fr-FR</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>it-IT</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>nl-NL</language>
+								<approved>false</approved>
+							</translation>
+						</translations>
+					</concept_node>
+					<concept_node>
 						<name>ONE_MONTH_SUBSCRIPTION</name>
 						<description/>
 						<comment/>
@@ -32136,6 +32229,68 @@
 						</translations>
 					</concept_node>
 					<concept_node>
+						<name>REPLIES</name>
+						<description/>
+						<comment/>
+						<translations>
+							<translation>
+								<language>de-DE</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>en-US</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>es-ES</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>fr-FR</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>it-IT</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>nl-NL</language>
+								<approved>false</approved>
+							</translation>
+						</translations>
+					</concept_node>
+					<concept_node>
+						<name>REPLY</name>
+						<description/>
+						<comment/>
+						<translations>
+							<translation>
+								<language>de-DE</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>en-US</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>es-ES</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>fr-FR</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>it-IT</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>nl-NL</language>
+								<approved>false</approved>
+							</translation>
+						</translations>
+					</concept_node>
+					<concept_node>
 						<name>REPUBLIC_OF_IRELAND</name>
 						<description/>
 						<comment/>
@@ -32509,6 +32664,37 @@
 					</concept_node>
 					<concept_node>
 						<name>SAP</name>
+						<description/>
+						<comment/>
+						<translations>
+							<translation>
+								<language>de-DE</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>en-US</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>es-ES</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>fr-FR</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>it-IT</language>
+								<approved>false</approved>
+							</translation>
+							<translation>
+								<language>nl-NL</language>
+								<approved>false</approved>
+							</translation>
+						</translations>
+					</concept_node>
+					<concept_node>
+						<name>SAVE</name>
 						<description/>
 						<comment/>
 						<translations>

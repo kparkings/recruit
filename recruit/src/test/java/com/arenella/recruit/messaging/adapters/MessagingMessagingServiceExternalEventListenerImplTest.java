@@ -31,7 +31,9 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.ChatParticipant.CHAT_PARTICIPANT_TYPE;
 import com.arenella.recruit.messaging.services.ParticipantService;
+import com.arenella.recruit.messaging.services.PrivateChatService;
 import com.arenella.recruit.messaging.services.PublicChatNotificationService;
+import com.arenella.recruit.messaging.services.PublicChatService;
 
 /**
 * Unit tests for the MessagingMessagingServiceExternalEventListenerImpl class 
@@ -43,10 +45,16 @@ class MessagingMessagingServiceExternalEventListenerImplTest {
 	private static final String RECRUITER_ID = "rec1";
 	
 	@Mock
-	private PublicChatNotificationService notificationService;
+	private PublicChatNotificationService 	notificationService;
 	
 	@Mock
-	private ParticipantService mockParticipantService;
+	private ParticipantService 				mockParticipantService;
+	
+	@Mock
+	private PrivateChatService				mockPrivateChatService;
+	
+	@Mock
+	private PublicChatService				mockPublicChatService;
 	
 	@InjectMocks
 	private MessagingMessagingServiceExternalEventListenerImpl listener;;
