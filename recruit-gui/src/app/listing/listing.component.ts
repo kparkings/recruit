@@ -75,17 +75,17 @@ export class ListingComponent implements OnInit {
 	showSendAlertBoxSuccess:boolean 		= false;
 	showSendAlertBoxFailure:boolean 		= false;
 	
-  	constructor(private listingService:ListingService, 
-				private emailService:EmailService, 
-				private _Activatedroute:ActivatedRoute, 
-				private scroller: ViewportScroller,
-				private modalService:NgbModal, 
-				private recruiterProfileService:RecruiterProfileService,
-				public 	candidateService:			CandidateServiceService,
-				private staticDataService:			StaticDataService,
-				private translate:TranslateService,
-				private clipboard: Clipboard,
-				private router:					Router,) { 
+  	constructor(private readonly listingService:ListingService, 
+				private readonly emailService:EmailService, 
+				private readonly _Activatedroute:ActivatedRoute, 
+				private readonly scroller: ViewportScroller,
+				private readonly modalService:NgbModal, 
+				private readonly recruiterProfileService:RecruiterProfileService,
+				public 	readonly candidateService:CandidateServiceService,
+				private readonly staticDataService:StaticDataService,
+				private readonly translate:TranslateService,
+				private readonly clipboard:Clipboard,
+				private readonly router:Router,) { 
 		
 		if (sessionStorage.getItem("userId")) {		
 			this.recruiterProfileService.fetchRecruiterProfiles("RECRUITERS").subscribe(rps => {
@@ -435,6 +435,8 @@ export class ListingComponent implements OnInit {
 					})
 				});
 				
+				allSkills.sort((one:string, two:string) => this.isGreater(one,two));
+				
 				skillsBlock.addRow(new InfoItemRowMultiValues(allSkills, "skill"));
 				this.infoItemConfig.addItem(skillsBlock);
 			}
@@ -447,8 +449,6 @@ export class ListingComponent implements OnInit {
 			//it will allow users to use the back button
 			this.registerListingViewedEvent();
 			
-			//this.router.navigate(["listing/"+selectedListing.listingId]);
-			
 			window.scroll({ 
       			top: 0, 
       			left: 0, 
@@ -458,6 +458,22 @@ export class ListingComponent implements OnInit {
 
 		}
 		
+	}
+	
+	/**
+	* Comparator to sort Skills in descending creation time order 
+	*/
+	private isGreater(one:string, two:string):number{
+		
+		if(one > two){
+			return 1;
+		}
+		
+		if(one < two){
+			return -1;
+		}
+		
+		return 0;
 	}
 	
 	/**
@@ -511,6 +527,11 @@ export class ListingComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
+		
+		if (title == null) {
+			return "";
+		}
+		
 		title = ""+title;
 		title = title.replace("_"," ");
 		title = title.replace("-"," ");
@@ -526,8 +547,6 @@ export class ListingComponent implements OnInit {
 	public fetchListings(id:string):void{
 		//this.searchBar.fetchListingsFull(id, false);
 	}
-	
-	
 	
 	/**
 	* Registers that a Listing has been viewed

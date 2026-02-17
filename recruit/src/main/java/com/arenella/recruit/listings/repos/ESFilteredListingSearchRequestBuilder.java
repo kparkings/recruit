@@ -94,21 +94,12 @@ public class ESFilteredListingSearchRequestBuilder {
 			
 			try {
 			cutOff.ifPresent(cutOffDate -> 
-				//mustQueries.add(RangeQuery.of(m -> m
-				//		.queryName("created")
-				//		.field("created")
-				//		.gte(JsonData.of(Date.from(cutOffDate.atStartOfDay(ZoneId.systemDefault()).toInstant())))
-				//		)._toQuery())
-				
 				mustQueries.add(RangeQuery.of(m -> m
 					.date(n -> n
 					.queryName("created")
 					.field("created")
 					.gte(cutOffDate.atStartOfDay(ZoneId.systemDefault()).format(FMT_DATE_TIME)))
-					)._toQuery())
-				
-				
-				
+					)._toQuery())		
 			);
 			
 			}catch(Exception e) {

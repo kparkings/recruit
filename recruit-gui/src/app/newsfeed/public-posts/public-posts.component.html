@@ -10,6 +10,10 @@
 	</div>
 	
 	<!-- View Mode -->
+	<div class="post-message-created" *ngIf="!isInEditMode(chat)" >
+		<span style="float:right;margin:10px;color:lightgrey">{{chat.created | date: 'dd / MM / yyyy'}}</span>
+	</div>
+	
 	<div class="post-message" *ngIf="!isInEditMode(chat)">{{chat.message}}</div>
 	
 	<!-- Edit Mode -->

@@ -118,8 +118,7 @@ export class RecruiterListingsComponent implements OnInit {
 			this.recruiterSurname				= data.surname;
 			this.recruiterEmail					= data.email;
 			this.recruiterCompany				= data.companyName;
-			this.fetchListings();		
-			//this.getLanguageOptions();	
+			this.fetchListings();			
 		}, err => {
 			if (err.status === 401 || err.status === 0) {
 				sessionStorage.removeItem('isAdmin');
@@ -546,7 +545,7 @@ export class RecruiterListingsComponent implements OnInit {
 			}
 		});
 		
-		type = type == "" ? "BOTH" : type;
+		type = (type == null || type == "") ? "BOTH" : type;
 		
 		this.validationErrors	= new Array<string>();
 		
