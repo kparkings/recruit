@@ -427,7 +427,15 @@ export class ListingComponent implements OnInit {
 			if ( selectedListing!.skills.length > 0) {
 				let skillsBlock:InfoItemBlock = new InfoItemBlock();
 				skillsBlock.setTitle(this.translate.instant('arenella-listing-skills'));
-				skillsBlock.addRow(new InfoItemRowMultiValues(selectedListing!.skills, "skill"));
+				
+				let allSkills:Array<string> = new Array<string>();
+				selectedListing!.skills.forEach(aSkill => {
+					this.parseSkill(aSkill).forEach(s => {
+						allSkills.push(s);
+					})
+				});
+				
+				skillsBlock.addRow(new InfoItemRowMultiValues(allSkills, "skill"));
 				this.infoItemConfig.addItem(skillsBlock);
 			}
 			
@@ -451,6 +459,29 @@ export class ListingComponent implements OnInit {
 		}
 		
 	}
+	
+	/**
+	* Takes an individual skill and if it contains , creates a new skill
+	* for each value separated by the comma. Unfortunately Users are just 
+	* pasting with commas so if they do we handle it here. 
+	*/
+	public parseSkill(rawSkill:string):Array<string> {
+			
+			let allSkills:Array<string> = new Array<string>();
+			let skills:Array<string> 	= rawSkill.split(",");
+			
+			skills.forEach(skill => {
+				skill = skill.trim();
+				skill = skill.toLocaleLowerCase();
+				
+				if (!allSkills.includes(skill) && skill != '') {
+					allSkills.push(skill.trim());	
+				}	
+			});
+			
+			return allSkills;
+						
+		}
 	
 	/**
 	* Returns the code identifying the country

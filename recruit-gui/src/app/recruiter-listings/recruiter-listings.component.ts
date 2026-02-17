@@ -313,15 +313,19 @@ export class RecruiterListingsComponent implements OnInit {
 	*/
 	public addSkill():void {
 		
-		let skill:string = this.newListingFormBean.get('skill')?.value;
+		let rawSkill:string = this.newListingFormBean.get('skill')?.value;
 		
-		skill = skill.trim();
-		skill = skill.toLocaleLowerCase();
+		let skills:Array<string> = rawSkill.split(",");
 		
-		if (!this.skills.includes(skill) && skill != '') {
-			this.skills.push(skill.trim());	
-			this.newListingFormBean.get('skill')?.setValue('');
-		}
+		skills.forEach(skill => {
+			skill = skill.trim();
+			skill = skill.toLocaleLowerCase();
+			
+			if (!this.skills.includes(skill) && skill != '') {
+				this.skills.push(skill.trim());	
+				this.newListingFormBean.get('skill')?.setValue('');
+			}	
+		});
 					
 	}
 	
