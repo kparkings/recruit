@@ -511,6 +511,7 @@ export class ListingComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
+		title = ""+title;
 		title = title.replace("_"," ");
 		title = title.replace("-"," ");
 		return title.length< 35 ? title : title.substring(0,35) + "...";

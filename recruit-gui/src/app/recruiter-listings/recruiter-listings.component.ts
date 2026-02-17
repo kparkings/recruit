@@ -954,6 +954,7 @@ export class RecruiterListingsComponent implements OnInit {
 	* Returns size limited version
 	*/
 	public getFormattedJobTitle(title:string):string{
+		title = ""+title;
 		return title.length < 25 ? title : title.substring(0,25) + "...";
 	}
 	
