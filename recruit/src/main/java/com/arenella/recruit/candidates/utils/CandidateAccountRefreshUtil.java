@@ -46,8 +46,6 @@ import java.util.Optional;
 @EnableScheduling
 public class CandidateAccountRefreshUtil {
 
-	//TODO: [KP] Setting this out for the time being because I want the new candidates to already start getting their lastAccountRefresh values assigned
-	
 	@Value("${arenella.ict.candidate.email.availability}")
 	public String candidateAvailabilityEmailEnabled = "true";
 	
@@ -142,7 +140,7 @@ public class CandidateAccountRefreshUtil {
 	private void runEmailCandidateSummary() {
 
 		final CandidateFilterOptions filterOptionsMarkedAsAvailable = CandidateFilterOptions.builder()
-				.daysSincelastAvailabilityCheckEmailSent(14)
+				.daysSincelastAvailabilityCheckEmailSent(30)
 				.available(true)
 				.order(RESULT_ORDER.desc)
 				.orderAttribute("candidateId")
@@ -150,7 +148,7 @@ public class CandidateAccountRefreshUtil {
 				.build();
 		
 		final CandidateFilterOptions filterOptionsMarkedAsUnAvailable = CandidateFilterOptions.builder()
-				.daysSincelastAvailabilityCheckEmailSent(30)
+				.daysSincelastAvailabilityCheckEmailSent(60)
 				.available(false)
 				.order(RESULT_ORDER.desc)
 				.orderAttribute("candidateId")
