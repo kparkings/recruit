@@ -1,5 +1,3 @@
-import { RecruiterDetails }								from './recruiter-details';
-
 /**
 * Class represents an Open Position being offered by a Recruiter to 
 * other recruiters

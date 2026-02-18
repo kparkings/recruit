@@ -3,7 +3,7 @@ import { PublicMessagingService}										from '../public-messaging.service';
 import { UntypedFormGroup, UntypedFormControl }							from '@angular/forms';
 import { PublicChat, ChatParticipant, PublicChatNotification}			from './public-chat';
 import { AppComponent } 												from 'src/app/app.component';
-import { ViewportScroller } 										from '@angular/common';
+import { ViewportScroller } 											from '@angular/common';
 import { Photo } from '../private-messaging.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class NewsfeedComponent {
 	private currentNotification:string = "";
 	private showNotificationsForMobile:string = "";
 	
-	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
+	private scheduleOpenChatRefresh = window.setInterval(()=> {},60000);
 	
 	public usersOwnChatParticipant:ChatParticipant = new ChatParticipant("", "", "", "", new Photo("",""), false);
 	
@@ -39,9 +39,8 @@ export class NewsfeedComponent {
 	* @oaramparam service  - Services for PublicMessages 
 	*/
 	public constructor(	public service:PublicMessagingService, 
-						private appComponent:AppComponent,
-						private scroller: ViewportScroller,){
-		//this.refreshPosts();
+						private readonly appComponent:AppComponent,
+						private readonly scroller: ViewportScroller,){
 		
 		this.service.fetchOwnParticipant().subscribe(participant => {
 			this.usersOwnChatParticipant = participant;
@@ -58,7 +57,6 @@ export class NewsfeedComponent {
 	ngAfterViewInit(){
 		
 		this.refreshPosts();
-		//this.refreshNotifications();
 		this.startNotificationPolling();
 	}
 	
@@ -81,7 +79,7 @@ export class NewsfeedComponent {
 	private startNotificationPolling():void{
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.refreshNotifications();			
-		},1000);
+		},60000);
 	}
 	
 	/**

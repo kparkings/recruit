@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild }					from '@angular/core';
-import { UntypedFormGroup }								from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { ListingService }								from '../listing.service';
 import { RecruiterService }								from '../recruiter.service';
 import { Listing}										from './listing';
@@ -20,8 +20,6 @@ import { StaticDataService } 							from '../static-data.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import { TranslateService } 							from '@ngx-translate/core';
 import { Country } 										from '../shared-domain-object/country';
-import { UntypedFormControl } 							from "@angular/forms";
-
 
 @Component({
     selector: 'app-recruiter-listings',
@@ -31,10 +29,10 @@ import { UntypedFormControl } 							from "@angular/forms";
 })
 export class RecruiterListingsComponent implements OnInit {
 
-	@ViewChild('feedbackBox', { static: false }) 			private feedbackBox:any;
-	@ViewChild('specUploadBox', { static: false }) 			private specUploadBox:any;
-	@ViewChild('publicityBox', { static: false }) 			private publicityBox:any;
-	@ViewChild('marketplaceBox', { static: false }) 		private marketplaceBox:any;
+	@ViewChild('feedbackBox', { static: false }) 			private readonly feedbackBox:any;
+	@ViewChild('specUploadBox', { static: false }) 			private readonly specUploadBox:any;
+	@ViewChild('publicityBox', { static: false }) 			private readonly publicityBox:any;
+	@ViewChild('marketplaceBox', { static: false }) 		private readonly marketplaceBox:any;
 	
 	public isMobile:boolean 							= false;
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
@@ -44,7 +42,6 @@ export class RecruiterListingsComponent implements OnInit {
 	public skills:Array<string> 						= new Array<string>();
 	public listings:Array<Listing>						= new Array<Listing>();
 	public activeView:string							= 'list';
-	//public activeSubView:string							= 'none';
 	public selectedListing:Listing						= new Listing();
 	public feedbackBoxClass:string          			= '';
   	public feedbackBoxTitle                 			= '';
@@ -67,11 +64,11 @@ export class RecruiterListingsComponent implements OnInit {
   	
 	private	pageSize:number								= 1000;
   	private jobSpecFile!:File;
-	private  recruiterId:string							= '';
-	private  recruiterFirstName:string 					= '';
-	private  recruiterSurname:string					= '';
-	private  recruiterEmail:string 						= '';
-	private  recruiterCompany:string					= '';
+	private recruiterId:string							= '';
+	private recruiterFirstName:string 					= '';
+	private recruiterSurname:string					= '';
+	private recruiterEmail:string 						= '';
+	private recruiterCompany:string					= '';
 	
 	public currencies:Array<string> 		  = new Array<string>();
 	
@@ -85,16 +82,16 @@ export class RecruiterListingsComponent implements OnInit {
 	/**
 	* Constructor 
 	*/
-  	constructor(private listingService:				ListingService, 
-				private recruiterService:			RecruiterService, 
-				public 	candidateService:			CandidateServiceService,
-				public 	suggestionsService:			SuggestionsService,
-				private recruiterProfileService: 	RecruiterProfileService,
-				public 	router:						Router,
-				private marketplaceService: 		RecruiterMarketplaceService,
-				private creditsService:				CreditsService,
-				private staticDataService:			StaticDataService,
-				private translate:					TranslateService) {
+  	constructor(private readonly listingService:			ListingService, 
+				private readonly recruiterService:			RecruiterService, 
+				public 	candidateService:					CandidateServiceService,
+				public 	suggestionsService:					SuggestionsService,
+				private readonly recruiterProfileService: 	RecruiterProfileService,
+				public 	router:								Router,
+				private readonly marketplaceService: 		RecruiterMarketplaceService,
+				private readonly creditsService:				CreditsService,
+				private readonly staticDataService:			StaticDataService,
+				private readonly translate:					TranslateService) {
 				
 				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
 					this.recruiterProfile = rec;
@@ -348,7 +345,6 @@ export class RecruiterListingsComponent implements OnInit {
 		this.reset();
 		
 		this.activeView 			= 'add';
-		//this.activeSubView 			= 'step1';
 		this.selectedListing		= new Listing();
 		this.enabldeDeleteOption 	= false;
 		

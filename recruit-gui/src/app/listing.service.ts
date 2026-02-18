@@ -15,13 +15,13 @@ import { ListingStatContactRequests }				from './listing-stat-contact-requests';
 })
 export class ListingService {
 
-	private supportedLanguages:Array<string> = new Array<string>();
+	private readonly supportedLanguages:Array<string> = new Array<string>();
 	
 	/**
 	* Constructor
 	* @param httpClient - for sending httpRequests to backend
 	*/
-	constructor(private httpClient: HttpClient) { }
+	constructor(private readonly httpClient: HttpClient) { }
 
 	httpOptions = {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
@@ -65,8 +65,6 @@ export class ListingService {
 		listing.rate 				= rate;		
 		listing.currency 			= currency;	
 		listing.postToSocialMedia	= false;
-		
-		
 		
 		return this.httpClient.post<any>(backendUrl, JSON.stringify(listing), this.httpOptions);
 	

@@ -12,7 +12,7 @@ export class CandidateNavService {
 	/**
 	* Construction 
 	*/
-  	constructor(private router: Router) { }
+  	constructor(private readonly router: Router) { }
   	
   	/**
 	* Reset 

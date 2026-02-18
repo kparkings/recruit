@@ -1,8 +1,7 @@
-import { Injectable }                                                   from '@angular/core';
-import { Observable }                 	                                from 'rxjs';
-import { HttpClient, HttpHeaders }  	                                from '@angular/common/http';
-import { environment } 								                    from './../environments/environment';
-import { delay } from 'rxjs/operators';
+import { Injectable }                                       from '@angular/core';
+import { Observable }                 	                    from 'rxjs';
+import { HttpClient, HttpHeaders }  	                    from '@angular/common/http';
+import { environment } 								        from './../environments/environment';
 
 /**
 * Service for interacting with Curriculums 
@@ -16,7 +15,7 @@ export class CurriculumService {
     * Constructor
     * @param httpClient - For communicating with backend
     */
-  	constructor(private httpClient: HttpClient) { }
+  	constructor(private readonly httpClient: HttpClient) { }
   
    	/**
    	* Sets options for request going to the backend. 
@@ -94,9 +93,6 @@ export class CurriculumService {
 		
 		return environment.backendUrl + 'curriculum-test/' + candidateId + '.pdf';
 	}
-	
-	
-	
 	
 	/**
 	* Performs a check to see if the User has access to the Curriculum either

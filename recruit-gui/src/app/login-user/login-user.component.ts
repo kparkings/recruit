@@ -1,14 +1,13 @@
-import { Component, OnInit }									from '@angular/core';
-import { ReactiveFormsModule, UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
+import { Component, OnInit, ViewChild }							from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl }					from '@angular/forms';
 import { AuthService }                                          from '../auth.service';
 import { RecruiterService }                                     from '../recruiter.service';
 import { Router}                                                from '@angular/router';
-import { TemplateRef, ViewChild,ElementRef, AfterViewInit  }		from '@angular/core';
-import { NgbModal, NgbModalOptions, ModalDismissReasons}			from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
-import { CreditsService } from '../credits.service';
-import { CandidateServiceService } from '../candidate-service.service';
-import { AppComponent} from '../app.component';
+import { NgbModal, NgbModalOptions}								from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } 									from '@ngx-translate/core';
+import { CreditsService } 										from '../credits.service';
+import { CandidateServiceService } 								from '../candidate-service.service';
+import { AppComponent} 											from '../app.component';
 
 @Component({
     selector: 'app-login-user',
@@ -21,8 +20,8 @@ import { AppComponent} from '../app.component';
 */
 export class LoginUserComponent implements OnInit {
 	
-	@ViewChild('feedbackBox', { static: false }) private feedbackBox:any;
-	@ViewChild('resetPasswordDialog', { static: false }) private resetDialog:any;
+	@ViewChild('feedbackBox', { static: false }) private readonly feedbackBox:any;
+	@ViewChild('resetPasswordDialog', { static: false }) private readonly resetDialog:any;
 	
 	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
 	
@@ -43,14 +42,14 @@ export class LoginUserComponent implements OnInit {
    * @param authService - Services for authenticating users
    * @param router      - Angular router
    */
-  constructor(	private recruiterService:RecruiterService, 
-  				private candidateService:CandidateServiceService,
-  				private authService: AuthService, 
-  				private modalService: NgbModal, 
-  				private router: Router,
-  				private translate: TranslateService,
-  				private creditService:CreditsService,
-				private appComponent:AppComponent) { }
+  constructor(	private readonly recruiterService:RecruiterService, 
+  				private readonly candidateService:CandidateServiceService,
+  				private readonly authService: AuthService, 
+  				private readonly modalService: NgbModal, 
+  				private readonly router: Router,
+  				private readonly translate: TranslateService,
+  				private readonly creditService:CreditsService,
+				private readonly appComponent:AppComponent) { }
 
   /**
   * Performs initialization

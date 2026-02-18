@@ -1,5 +1,3 @@
-import { CandidateFunction } from "../candidate-function";
-
 /**
 * Request to create a new Candidate 
 */

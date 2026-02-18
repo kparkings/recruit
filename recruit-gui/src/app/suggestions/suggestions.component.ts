@@ -10,7 +10,6 @@ import { SuggestionsService }														from '../suggestions.service';
 import { CurriculumService }														from '../curriculum.service';
 import { Candidate}																	from './candidate';
 import { SavedCandidate}															from './saved-candidate';
-import { SuggestionParams}															from './suggestion-param-generator';
 import { CandidateProfile } 														from '../candidate-profile';
 import { CandidateNavService } 														from '../candidate-nav.service';
 import { CreditsService } 															from '../credits.service';
@@ -132,17 +131,17 @@ export class SuggestionsComponent implements OnInit {
 	* Constructor
 	* @param candidateService - Services relating to Candidates
 	*/
-	constructor(public candidateService:		CandidateServiceService, 
-				public suggestionsService:		SuggestionsService, 
-				private modalService: 			NgbModal, 
-				private sanitizer: 				DomSanitizer,
-				private curriculumService: 		CurriculumService,
-				private router:					Router,
-				private candidateNavService: 	CandidateNavService,
-				private creditsService:			CreditsService,
-				private appComponent:			AppComponent,
-				private translate:				TranslateService,
-				private scroller: 				ViewportScroller,) { 
+	constructor(public candidateService:				CandidateServiceService, 
+				public suggestionsService:				SuggestionsService, 
+				private readonly modalService: 			NgbModal, 
+				private readonly sanitizer: 			DomSanitizer,
+				private readonly curriculumService: 	CurriculumService,
+				private readonly router:				Router,
+				private readonly candidateNavService: 	CandidateNavService,
+				private readonly creditsService:		CreditsService,
+				private readonly appComponent:			AppComponent,
+				private readonly translate:				TranslateService,
+				private readonly scroller: 				ViewportScroller,) { 
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		

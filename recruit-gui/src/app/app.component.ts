@@ -1,27 +1,18 @@
-import { Component, ViewChild, Input }				from '@angular/core';
+import { Component, ViewChild, Input }		from '@angular/core';
 import { Router}							from '@angular/router';
 import { CookieService } 					from 'ngx-cookie-service';
-import { NgbModal, NgbModalOptions}			from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal}							from '@ng-bootstrap/ng-bootstrap'
 import { RecruiterMarketplaceService }		from './recruiter-marketplace.service';
 import { EmailService }						from './email.service';
 import { PopupsService }					from './popups.service';
 import { CandidateNavService } 				from './candidate-nav.service';
 import { CreditsService } 					from './credits.service';
-import { NewsfeedService } 					from './newsfeed.service';
 import { ListingService }					from './listing.service';
 import { TranslateService} 					from "@ngx-translate/core";
 import { CurrentUserAuth }					from './current-user-auth';
 import { PrivateMessagingComponent }		from './private-messaging/private-messaging.component';
-
 import { CurriculumService } 				from 'src/app/curriculum.service';
 import { DomSanitizer, SafeResourceUrl } 	from '@angular/platform-browser';	
-
-import { InfoItemConfig } 					from 'src/app/candidate-info-box/info-item';
-import { CandidateProfile } 				from 'src/app/candidate-profile';
-import { Candidate } 						from 'src/app/candidate';
-import { CandidateServiceService}			from './candidate-service.service';
-import { InfoPaneUtil } 					from './suggestions/info-pane-util';
-import { SupportedCountry } 				from './supported-candidate';
 import { CandidateMiniOverviewComponent} 	from './candidate-mini-overview/candidate-mini-overview.component';
 import { PublicMessagingService }			from './public-messaging.service';
 
@@ -35,13 +26,13 @@ export class AppComponent {
 
 	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
 	
-	@ViewChild('validationExBox', { static: false }) 	private validationExBox:any;
-	@ViewChild('noCreditsBox', { static: false }) 	 	private noCreditsBox:any;
-	@ViewChild('quickActionsBox', { static: false }) 	private quickActionsBox:any;
-	@ViewChild('tandcBox', { static: false }) 	 		private tandcBox:any;
+	@ViewChild('validationExBox', { static: false }) 	private readonly validationExBox:any;
+	@ViewChild('noCreditsBox', { static: false }) 	 	private readonly noCreditsBox:any;
+	@ViewChild('quickActionsBox', { static: false }) 	private readonly quickActionsBox:any;
+	@ViewChild('tandcBox', { static: false }) 	 		private readonly tandcBox:any;
 	@ViewChild(PrivateMessagingComponent) 				public privateChat!:PrivateMessagingComponent;
 	@ViewChild(CandidateMiniOverviewComponent) 			public miniOverview!:CandidateMiniOverviewComponent;
-	@ViewChild('noChatAccessBox')						private noChatAccessBox:any;
+	@ViewChild('noChatAccessBox')						private readonly noChatAccessBox:any;
 	
 	public currentChatWindowState:string = "closed";
 	
@@ -75,20 +66,19 @@ export class AppComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private router: 				Router, 
-				private cookieService: 			CookieService, 
-				private modalService: 			NgbModal, 
-				private mpService:				RecruiterMarketplaceService,
-				private emailService:			EmailService,
-				public  popupsService:			PopupsService,
-				private candidateNavService: 	CandidateNavService,
-				public  creditsService:			CreditsService,
-				public newsfeedService:		NewsfeedService,
-				private translate: 				TranslateService,
-				private listingService:			ListingService,
-				private readonly sanitizer:DomSanitizer, 
-				readonly curriculumService:CurriculumService,
-				private readonly publicMessagingService:PublicMessagingService,
+	constructor(private readonly router: 					Router, 
+				private readonly cookieService: 			CookieService, 
+				private readonly modalService: 				NgbModal, 
+				private readonly mpService:					RecruiterMarketplaceService,
+				private readonly emailService:				EmailService,
+				public  popupsService:						PopupsService,
+				private readonly candidateNavService: 		CandidateNavService,
+				public  creditsService:						CreditsService,
+				private readonly translate: 				TranslateService,
+				private readonly listingService:			ListingService,
+				private readonly sanitizer:					DomSanitizer, 
+				private readonly curriculumService:			CurriculumService,
+				private readonly publicMessagingService:	PublicMessagingService,
 			){
 		
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -170,44 +160,18 @@ export class AppComponent {
 			return;
 		}
 		
-		//let now:Date = new Date();
+		this.mpService.fetchUnseenOpenPositionCount().subscribe(val => {
+			this.unseenMpPosts = val;
+		});
 		
-		//if(this.lastAlertRefresh && this.lastAlertRefresh > now){
-		//	//So we dont make lots of expensive backend calls
-		//} else {
-		//	if(!this.lastAlertRefresh){
-		//		this.lastAlertRefresh = now;
-		//	} else {
-		//		this.lastAlertRefresh.setSeconds(this.lastAlertRefresh.getSeconds() + 10);
-		//	}	
-			
-		//	if (sessionStorage.getItem("userId")) {
-		//		this.newsfeedService.getLastViewRecord().subscribe(record => {
-		//			this.lastNewsfeedView = record.lastViewed;	
-		//			this.newsfeedService.getNewsFeedItems().subscribe(items => {
-		//				if(items[0]) {
-		//					this.unseenNewsfeedItems = (items[0].created > this.lastNewsfeedView);
-		//				}
-		//			});
-		//		});
-		//	}
+		this.emailService.updateUnseenEmails();
+		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
+			this.unseenEmails = val;
+		});
 		
-			this.mpService.fetchUnseenOpenPositionCount().subscribe(val => {
-				this.unseenMpPosts = val;
-			});
-			
-			this.emailService.updateUnseenEmails();
-			this.emailService.fetchUnseenEmailsCount().subscribe(val => {
-				this.unseenEmails = val;
-			});
-			
-			this.refreshUnreadNewsFeedNotifications();
-		
-		//}
+		this.refreshUnreadNewsFeedNotifications();
 		
 	}
-	
-	
 	
 	/**
 	* Whether or not the user has authenticated as an Candidate user 
@@ -455,9 +419,7 @@ export class AppComponent {
 		
 		return false;
 		
-		
 	}
-	
 	
 	public showInlineCVView:boolean = false;
 	

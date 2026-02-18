@@ -1,8 +1,7 @@
-import { Component, OnInit } 									from '@angular/core';
-import { RecruiterListingStatistics, ListingStat } 		from '../recruiter-listing-statistics';
+import { Component, OnInit } 							from '@angular/core';
+import { RecruiterListingStatistics } 					from '../recruiter-listing-statistics';
 import { StatisticsService } 							from '../statistics.service';
 import { ChartData}										from './chart-data';
-import { NgChartsModule } 								from 'ng2-charts';
 import { Router}										from '@angular/router';
 import { Chart, ChartType } from 'chart.js';
 import { TranslateService } from '@ngx-translate/core';
@@ -39,7 +38,7 @@ export class RecruiterStatsComponent implements OnInit{
 	* Constructor
 	* @param statisticsService - Services relating to statistics
 	*/
-	public constructor(public statisticsService:StatisticsService, private router:Router, private translate: TranslateService){
+	public constructor(public statisticsService:StatisticsService, private readonly router:Router, private readonly translate: TranslateService){
 		//this.refreshData();
 	}
 

@@ -1,7 +1,7 @@
-import { Injectable }                                                       from '@angular/core';
+import { Injectable }                                            from '@angular/core';
 import { HttpClient, HttpHeaders }                               from '@angular/common/http';
-import { Observable }                                                    from 'rxjs';
-import { environment }                                                  from './../environments/environment';
+import { Observable }                                            from 'rxjs';
+import { environment }                                           from './../environments/environment';
 
 /**
 * Service providing Authentication
@@ -16,7 +16,7 @@ export class AuthService {
 * Constructor
 * @param httpClient - Http Client Util 
 */
-constructor(private httpClient: HttpClient) { }
+constructor(private readonly httpClient: HttpClient) { }
 
     httpOptions = {
             headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true

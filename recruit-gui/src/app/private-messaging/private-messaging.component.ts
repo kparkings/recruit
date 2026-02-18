@@ -1,11 +1,8 @@
-import { Component, ViewChild, HostListener } 													from '@angular/core';
+import { Component } 																			from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } 												from '@angular/forms';
 import { AppComponent } 																		from 'src/app/app.component';
 import { PrivateChatAPIOutbound, ChatMessageAPIOutbound, PrivateMessagingService } 				from '../private-messaging.service';
-import { CandidateServiceService, CandidateSuggestionAPIOutbound} 								from '../candidate-service.service';
-import { RecruiterService, RecruiterBasicInfoAPIOutbound} 										from '../recruiter.service';
 import { CurrentUserAuth }																		from '../current-user-auth';
-import { SuggestionsSearchRequest }																from '../suggestions/suggestion-search-request';
 
 /**
 * Backing Component for the Chat window 
@@ -42,9 +39,7 @@ export class PrivateMessagingComponent {
 	*/
 	constructor(
 		private readonly appComponent:AppComponent, 
-		private readonly chatService:PrivateMessagingService, 
-		private readonly candidateService:CandidateServiceService, 
-		private readonly recruiterService:RecruiterService){
+		private readonly chatService:PrivateMessagingService){
 	}
 	
 	public messageForm:UntypedFormGroup 	= new UntypedFormGroup({

@@ -3,7 +3,6 @@ import { Router}								from '@angular/router';
 import { RecruiterService }						from '../recruiter.service';
 import { Recruiter }							from './recruiter';
 import { Subscription }							from './subscription';
-import { NgbModal}								from '@ng-bootstrap/ng-bootstrap'
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
 import {RecruiterUpdateRequest }				from './recruiter-update-request';
 import { CreditsService } 						from '../credits.service';
@@ -38,14 +37,13 @@ export class RecruiterAccountComponent implements OnInit {
 	/**
 	* Constructor
 	*/
-	constructor(private recruiterService:		RecruiterService, 
-				private router: 				Router, 
-				private creditsService: 		CreditsService,
-				private translate:				TranslateService) { 
+	constructor(private readonly recruiterService:		RecruiterService, 
+				private readonly router: 				Router, 
+				private readonly creditsService: 		CreditsService,
+				private readonly translate:				TranslateService) { 
 			
 		//Wants to set to false but use value prior to setting false					
 		this.creditsService.isPurchaseSubscription().subscribe(value => {
-			//this.creditsService.setPurchaseSubscription(false);
 			this.isBuyingSubscription = value;
 		});					
 					
@@ -105,8 +103,6 @@ export class RecruiterAccountComponent implements OnInit {
 		this.showBillingDetailsPrivatePerson 	= false;
 	}
 	
-	
-  	
   	public setSubscriptionOption():void{
 		  
 		let subscription:string = this.accoundDetailsForm.get('subscriptionOption')?.value;

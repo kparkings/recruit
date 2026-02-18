@@ -1,7 +1,7 @@
 import { UntypedFormGroup }				from '@angular/forms';
-import { GeoZone } from '../geo-zone';
-import { SupportedCountry } from '../supported-candidate';
-import { SupportedLanguage } from '../supported-language';
+import { GeoZone } 						from '../geo-zone';
+import { SupportedCountry } 			from '../supported-candidate';
+import { SupportedLanguage } 			from '../supported-language';
 
 /**
 * Class containing the logic to prepare the filter params for the 
@@ -9,26 +9,26 @@ import { SupportedLanguage } from '../supported-language';
 */
 export class SuggestionParams{
 	
-	private geoZones:Array<string> 						= new Array<string>();
-	private countries:Array<string> 					= new Array<string>();
-	private skills:Array<string> 						= new Array<string>();
-	private functionTypes:Array<string>					= new Array<string>();
-	private languages:Array<string> 					= new Array<string>();
-	private filterType:string | null | undefined;
-	private title:string | null;
-	private firstName:string | null | undefined;
-	private surname:string | null | undefined;
-	private email:string | null | undefined;
-	private candidateId:string | null | undefined;
-	private contract:string | null | undefined;
-	private perm:string | null | undefined;
-	private minExperience:string | null | undefined;
-	private maxExperience:string | null | undefined;
-	private unavailableCadidates:string | null | undefined;
-	private includeRequiresSponsorship:string | null | undefined;	
-	private locCountry:string | null | undefined;
-	private locCity:string | null | undefined;
-	private locDistance:number 							= 0;
+	private readonly geoZones:Array<string> 						= new Array<string>();
+	private readonly countries:Array<string> 					= new Array<string>();
+	private readonly skills:Array<string> 						= new Array<string>();
+	private readonly functionTypes:Array<string>				= new Array<string>();
+	private readonly languages:Array<string> 					= new Array<string>();
+	private readonly filterType:string | null | undefined;
+	private readonly title:string | null;
+	private readonly firstName:string | null | undefined;
+	private readonly surname:string | null | undefined;
+	private readonly email:string | null | undefined;
+	private readonly candidateId:string | null | undefined;
+	private readonly contract:string | null | undefined;
+	private readonly perm:string | null | undefined;
+	private readonly minExperience:string | null | undefined;
+	private readonly maxExperience:string | null | undefined;
+	private readonly unavailableCadidates:string | null | undefined;
+	private readonly includeRequiresSponsorship:string | null | undefined;	
+	private readonly locCountry:string | null | undefined;
+	private readonly locCity:string | null | undefined;
+	private readonly locDistance:number 							= 0;
 		
 	/**
 	* Constructor
@@ -48,14 +48,12 @@ export class SuggestionParams{
 		this.unavailableCadidates = suggestionFilterForm.get('includeUnavailableCandidates')?.value;
 		this.includeRequiresSponsorship = suggestionFilterForm.get('includeRequiresSponsorshipCandidates')?.value;
 		
-		
 		//START DISTANCE
 		this.locCountry 	= suggestionFilterForm.get('locationCountry')?.value;
 		this.locCity 		= suggestionFilterForm.get('locationCity')?.value;
 		this.locDistance 	= suggestionFilterForm.get('locationDistance')?.value;
 		
 		//END DISTANCE
-		
 		
 		if (this.filterType != 'FUNCTION') {
 			this.title = '';
@@ -115,8 +113,7 @@ export class SuggestionParams{
 		* Ccontract type filters
 		*/
 		if (suggestionFilterForm.get('contractType')?.value === 'BOTH'){
-			//perm 		= false;
-			//contract 	= false;
+	
 		}
 		
 		if (suggestionFilterForm.get('contractType')?.value === 'CONTRACT'){

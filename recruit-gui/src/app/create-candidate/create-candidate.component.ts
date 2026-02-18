@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } 				from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateServiceService }						from '../candidate-service.service';
-import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal}										from '@ng-bootstrap/ng-bootstrap';
 import { PopupsService }								from '../popups.service';
 import { NewPendingCandidate, Rate } 					from './new-pending-candidate';
 import { TranslateService } from '@ngx-translate/core';

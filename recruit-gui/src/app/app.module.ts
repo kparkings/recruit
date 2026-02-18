@@ -1,15 +1,14 @@
-import { APP_INITIALIZER, NgModule }							from '@angular/core';
+import { APP_INITIALIZER, NgModule }		from '@angular/core';
 import { BrowserModule }					from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule }				from '@angular/forms';
+import { FormsModule, ReactiveFormsModule }	from '@angular/forms';
 import { AppRoutingModule }					from './app-routing.module';
 import { AppComponent }						from './app.component';
 import { NewCandidateComponent }			from './new-candidate/new-candidate.component';
-import { HttpClientModule }					from '@angular/common/http';
+import { HttpClientModule, HttpClient }		from '@angular/common/http';
 import { LoginUserComponent }				from './login-user/login-user.component';
 import { AuthService }						from './auth.service';
 import { AuthGuardService }					from './auth-guard.service';
 import { HomeComponent }					from './home/home.component';
-import { NgbModule }						from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule }			from '@angular/platform-browser/animations';
 import { StatisticsComponent }				from './statistics/statistics.component';
 import { NgChartsModule }					from 'ng2-charts';
@@ -36,7 +35,6 @@ import { InlineCvComponent}					from './suggestions/inline-cv/inline-cv.componen
 import { SearchbarComponent}				from './suggestions/searchbar/searchbar.component';
 import { SearchbarComponentListing}			from './listing/searchbar/searchbar.component';
 
-
 import { SavedCandidatesComponent}			from './suggestions/saved-candidates/saved-candidates.component';
 import { CandidateProfileComponent}			from './suggestions/candidate-profile/candidate-profile.component';
 import { RecruitersComponent}				from './accounts/recruiters/recruiters.component';
@@ -45,17 +43,15 @@ import { CitiesComponent }					from './accounts/cities/cities.component';
 
 import {TranslateLoader, TranslateModule} 	from '@ngx-translate/core';
 import {TranslateHttpLoader} 				from '@ngx-translate/http-loader';
-import {HttpClient} 						from '@angular/common/http';
 import { MatIconModule } 					from "@angular/material/icon";
 import { CandidateServiceService } 			from './candidate-service.service';
 import { RecruiterMarketplaceService } 		from './recruiter-marketplace.service';
 import { ListingService } 					from './listing.service';
 
-import { ClipboardModule } 					from '@angular/cdk/clipboard'
 import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
-import { CandidateMiniOverviewComponent } from './candidate-mini-overview/candidate-mini-overview.component'
-import { PublicPostsComponent } from './newsfeed/public-posts/public-posts.component';
+import { CandidateMiniOverviewComponent } 	from './candidate-mini-overview/candidate-mini-overview.component'
+import { PublicPostsComponent } 			from './newsfeed/public-posts/public-posts.component';
 
 @NgModule({
   declarations: [

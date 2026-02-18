@@ -20,7 +20,7 @@ import { SuggestionsSearchRequest } 			from '../suggestions/suggestion-search-re
 })
 export class AccountsComponent implements OnInit {
 	
-	@ViewChild('recruiterLoginDetails', { static: false }) private content:any;
+	@ViewChild('recruiterLoginDetails', { static: false }) private readonly content:any;
 	
 	recruiters:Array<Recruiter>										= new Array<Recruiter>();
 	currentTab:string 												= "recruiters";

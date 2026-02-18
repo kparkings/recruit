@@ -1,5 +1,3 @@
-import { CandidateFunction } from "../candidate-function";
-
 /**
 * Request to create a new Candidate 
 */
@@ -8,7 +6,7 @@ export class UpdateCandidateRequest{
 	public surname:string							='';
 	public email:string								='';
 	public roleSought:string						='';
-	public functions:Array<string>		= new Array<string>();
+	public functions:Array<string>					= new Array<string>();
 	public country:string							='';
 	public city:string								='';
 	public perm:string								='';

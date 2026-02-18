@@ -1,7 +1,6 @@
-import { Component, OnInit } 							from '@angular/core';
+import { Component, OnInit, ViewChild } 				from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
-import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
-import { ViewChild }									from '@angular/core';
+import { NgbModal}										from '@ng-bootstrap/ng-bootstrap';
 import { RecruiterMarketplaceService }					from '../recruiter-marketplace.service';
 import { RecruiterService }								from '../recruiter.service';
 import { EmailService, EmailRequest }					from '../email.service';

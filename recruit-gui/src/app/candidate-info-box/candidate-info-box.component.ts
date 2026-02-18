@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } 	from '@angular/core';
-import { CommonModule } 							from '@angular/common';
-import { InfoItem, InfoItemConfig } 				from './info-item';
+import { InfoItemConfig } 							from './info-item';
 import { AppComponent } 							from 'src/app/app.component';
 import { PrivateMessagingService } 					from '../private-messaging.service';
 
@@ -28,7 +27,6 @@ export class CandidateInfoBoxComponent {
   	}
 	
 	public openChat():void{
-		//this.appComponent.currentChatWindowState = "maximized";
 		this.appComponent.privateChat.openChat(this.candidateId);	
 	}
 	

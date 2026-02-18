@@ -59,14 +59,14 @@ export class CandidateProfileComponent {
 	/**
 	* Constructor 
 	*/
-	constructor(private emailService:				EmailService, 
-				private curriculumService:			CurriculumService,
-				private creditsService:				CreditsService,
-				private sanitizer: 					DomSanitizer,
-				private candidateNavService:		CandidateNavService,
+	constructor(private readonly emailService:				EmailService, 
+				private readonly curriculumService:			CurriculumService,
+				private readonly creditsService:				CreditsService,
+				private readonly sanitizer: 					DomSanitizer,
+				private readonly candidateNavService:		CandidateNavService,
 				public candidateService:			CandidateServiceService,
-				private router:						Router,
-				private appComponent:				AppComponent){
+				private readonly router:						Router,
+				private readonly appComponent:				AppComponent){
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 		
@@ -82,8 +82,6 @@ export class CandidateProfileComponent {
 				this.savedCandidates = response;
 			})	
 		}
-		
-		
 		
 		if (this.parentComponent == 'savedCandidates') {
 			this.currentView = 'saved-candidates';

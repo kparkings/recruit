@@ -1,9 +1,8 @@
-import { Component, OnInit } 							from '@angular/core';
+import { Component, OnInit, ViewChild } 				from '@angular/core';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { RecruiterService }								from '../recruiter.service';
-import { ViewChild }									from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService } 							from '@ngx-translate/core';
 
 /**
 * Component for a new Recruiter to sign up for a free trial
@@ -25,7 +24,7 @@ export class RecruiterSignupComponent implements OnInit {
 	/**
 	* Constructor
 	*/
-  	constructor(private modalService: NgbModal, private recruiterService: RecruiterService,private translate: TranslateService) { }
+  	constructor(private readonly modalService: NgbModal, private readonly recruiterService: RecruiterService,private readonly translate: TranslateService) { }
 
 	/**
 	* Initializes component

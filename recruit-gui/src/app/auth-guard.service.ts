@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { RouterModule} from '@angular/router';
+import { Injectable } 											from '@angular/core';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, Router } 	from '@angular/router';
 
 /**
 * Provides services relating to Angular routeing Guards
@@ -16,7 +14,7 @@ export class AuthGuardService {
   * Constructor for the class
   * @param router - Angualr routeing 
   */
-  constructor(private router: Router) {
+  constructor(private readonly router: Router) {
 
   }
 

@@ -71,7 +71,5 @@ export class NewCandidate {
 	* Languages the candidate speaks
 	*/
 	languages: 			Array<Language> 	= new Array<Language>();
-				
-	
 
 }

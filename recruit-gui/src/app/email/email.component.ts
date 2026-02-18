@@ -4,7 +4,7 @@ import { Email} 								from './email';
 import { EmailAttachment} 						from './email-attachment';
 import { environment }							from '../../environments/environment';
 import { UntypedFormGroup, UntypedFormControl }	from '@angular/forms';
-import { NgbModal, NgbModalOptions }			from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal }								from '@ng-bootstrap/ng-bootstrap';
 import { Observable, Observer }                 from 'rxjs';
 
 /**
@@ -19,8 +19,6 @@ import { Observable, Observer }                 from 'rxjs';
 export class EmailComponent {
 
 	@ViewChild('replyBox', {static:true})replyDialogBox!: ElementRef<HTMLDialogElement>;
- 	
-//replyBox
 
 	public emails:Array<Email> 		= new Array<Email>();
 	public currentView:string 		= "view-inbox";
@@ -117,22 +115,9 @@ export class EmailComponent {
 	*/
 	public composeReply():void{
 		this.replyState = 'compose';
-		//let options: NgbModalOptions = {
-	    //	 centered: true
-	   //};
-
 		this.replyDialogBox.nativeElement.showModal();
-		//this.modalService.open(replyBox, options);
 	}
 	
-	/**
-	*  Closes the popups
-	*/
-	//public closeModal(): void {
-	//	this.modalService.dismissAll();
-	//}
-	
-
 	/**
 	* Sends a reply to the Email
 	*/

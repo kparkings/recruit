@@ -1,14 +1,14 @@
-import { Component, ViewChild } 								from '@angular/core';
-import { PhotoAPIOutbound, RecruiterProfile } 		from './recruiter-profile';
-import { RecruiterProfileService} 					from '../recruiter-profile.service';
-import { AddRecruiterProfileRequest }				from './add-recruiter-profile'
-import { UntypedFormGroup, UntypedFormControl }		from '@angular/forms';
-import { TupleStrValueByPos }						from './tuple-string-pos-pipe';
-import { EmailService, EmailRequest }				from '../email.service';
-import { NgbModal, NgbModalOptions}					from '@ng-bootstrap/ng-bootstrap';
-import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue } from '../candidate-info-box/info-item';
-import { EnumToHumanReadableValue } from './enum-to-hr-pipe';
-import { TranslateService } from '@ngx-translate/core';
+import { Component, ViewChild } 									from '@angular/core';
+import { PhotoAPIOutbound, RecruiterProfile } 						from './recruiter-profile';
+import { RecruiterProfileService} 									from '../recruiter-profile.service';
+import { AddRecruiterProfileRequest }								from './add-recruiter-profile'
+import { UntypedFormGroup, UntypedFormControl }						from '@angular/forms';
+import { TupleStrValueByPos }										from './tuple-string-pos-pipe';
+import { EmailService, EmailRequest }								from '../email.service';
+import { NgbModal}													from '@ng-bootstrap/ng-bootstrap';
+import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue } 		from '../candidate-info-box/info-item';
+import { EnumToHumanReadableValue } 								from './enum-to-hr-pipe';
+import { TranslateService } 										from '@ngx-translate/core';
 /**
 * Component for working with Recruiter Profiles
 */
@@ -39,7 +39,7 @@ export class RecruiterProfileComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private recruierProfileService:RecruiterProfileService, private emailService:EmailService, private modalService:NgbModal, private translate:TranslateService){
+	constructor(private readonly recruierProfileService:RecruiterProfileService, private readonly emailService:EmailService, private readonly modalService:NgbModal, private readonly translate:TranslateService){
 		this.recruierProfileService.fetchOwnRecruiterProfile().subscribe( response => {
 			this.recruiterProfile = response;
 			

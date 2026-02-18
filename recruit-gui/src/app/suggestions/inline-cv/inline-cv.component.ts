@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl } 											from '@angular/platform-browser';
-import { Candidate } from '../candidate';
+import { Component, EventEmitter, Input, Output } 		from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } 				from '@angular/platform-browser';
+import { Candidate } 									from '../candidate';
 
 /**
 * Component to display an inline CV 
@@ -21,7 +21,7 @@ export class InlineCvComponent {
 	/**
 	* Constructor
 	*/
-	constructor(private sanitizer: 				DomSanitizer){
+	constructor(private readonly sanitizer: 				DomSanitizer){
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 	}
 	

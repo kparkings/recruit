@@ -142,7 +142,7 @@ export class StatisticsComponent implements OnInit {
 	*/
 	constructor(	public statisticsService:StatisticsService, 
 					public candidateService:CandidateServiceService,
-					private router:Router) {
+					private readonly router:Router) {
 
 		this.fetchStatus();
 		this.fetchMarketplaceStats();

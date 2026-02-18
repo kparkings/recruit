@@ -1,5 +1,3 @@
-import { Subscription } from "./subscription";
-
 /**
 * Represnets a candidate
 * @author: K Parkings 
@@ -50,9 +48,6 @@ export class RecruiterUpdateRequest {
 	* Recruiters current Company Registation Number
 	*/
 	companyRegistrationNumber:string 	= "";
-	
-	
-	
 	
 	/**
 	* Primary language spoken by the Recruiter

@@ -4,7 +4,6 @@ import { EmailService, EmailRequest }								from '../email.service';
 import { Listing}													from './listing';
 import { ActivatedRoute, Router } 									from '@angular/router';
 import { UntypedFormGroup, UntypedFormControl,  }					from '@angular/forms';
-import { NgbModal }													from '@ng-bootstrap/ng-bootstrap';
 import { RecruiterProfileService} 									from '../recruiter-profile.service';
 import { RecruiterProfile }											from '../recruiter-profile/recruiter-profile';
 import { ListingAlertAddRequest } 									from './listing-alert-add-request';
@@ -16,7 +15,6 @@ import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValue
 import { TranslateService } 										from '@ngx-translate/core';
 import { SupportedCountry } 										from '../supported-candidate';
 import { CandidateServiceService } 									from '../candidate-service.service';
-import { Clipboard } 												from '@angular/cdk/clipboard';
 import { SearchStats } 												from '../search-stats';
 import { SearchbarComponentListing }	 							from './searchbar/searchbar.component';
 import { ListingSearchRequest }										from './../listing-search-request';
@@ -79,12 +77,10 @@ export class ListingComponent implements OnInit {
 				private readonly emailService:EmailService, 
 				private readonly _Activatedroute:ActivatedRoute, 
 				private readonly scroller: ViewportScroller,
-				private readonly modalService:NgbModal, 
 				private readonly recruiterProfileService:RecruiterProfileService,
 				public 	readonly candidateService:CandidateServiceService,
 				private readonly staticDataService:StaticDataService,
 				private readonly translate:TranslateService,
-				private readonly clipboard:Clipboard,
 				private readonly router:Router,) { 
 		
 		if (sessionStorage.getItem("userId")) {		
@@ -416,9 +412,7 @@ export class ListingComponent implements OnInit {
 				let languagesBlock:InfoItemBlock = new InfoItemBlock();
 				languagesBlock.setTitle(this.translate.instant('arenella-listing-language'));
 				selectedListing!.languages.forEach(lang => {
-					//languagesBlock.addRow(new InfoItemRowSingleValue(this.getLanguage(lang)));
 					languagesBlock.addRow(new InfoItemRowSingleValue(this.translate.instant(lang)));
-					
 				});
 				this.infoItemConfig.addItem(languagesBlock);
 			}

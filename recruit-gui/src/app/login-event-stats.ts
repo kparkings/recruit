@@ -6,7 +6,6 @@ export class LoginStats{
 	public threeMonthStats:Array<Stat> 		= new Array<Stat>();
 	public yearStats:Array<Stat> 			= new Array<Stat>();
 	
-	
 	public getEventsTodayKeys():string[]{
 		return Array.from(new Set(this.eventsToday.map(e => e.userId)));
 	}
@@ -23,9 +22,6 @@ export class LoginStats{
 		
 	}
 	
-	
-	
-	
 	public getEventsWeekKeys():string[]{
 		return Array.from(new Set(this.eventsWeek.map(e => e.userId)));
 	}
@@ -41,9 +37,6 @@ export class LoginStats{
 		return values;
 		
 	}
-	
-	
-	
 	
 	public getThreeMonthStatsKeysAsStrings():Array<string>{
 		return Array.from(new Set(this.threeMonthStats.map(e => e.date.toString())));
@@ -68,8 +61,6 @@ export class LoginStats{
 		
 	}
 	
-	
-	
 	public getWeekStatsKeysAsStrings():Array<string>{
 		return Array.from(new Set(this.weekStats.map(e => e.date.toString())));
 	}
@@ -92,7 +83,6 @@ export class LoginStats{
 		return values;
 		
 	}
-	
 	
 	public getYearStatsKeysAsStrings():Array<string>{
 		return Array.from(new Set(this.yearStats.map(e => e.date.toString())));

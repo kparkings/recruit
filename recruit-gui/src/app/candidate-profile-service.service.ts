@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable } 								from '@angular/core';
 import { HttpClient, HttpHeaders }  				from '@angular/common/http';
 import { Observable }                 				from 'rxjs';
 import { environment } 								from './../environments/environment';
-import { CandidateProfile } from './candidate-profile';
-//import { CandidateProfile }							from './candidate-profile/candidate-profile';
+import { CandidateProfile } 						from './candidate-profile';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CandidateProfileService {
 
-	constructor(private httpClient: HttpClient) { }
+	constructor(private readonly httpClient: HttpClient) { }
 
 	httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true

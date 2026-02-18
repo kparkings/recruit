@@ -7,7 +7,7 @@ import { CandidateServiceService } 												from 'src/app/candidate-service.s
 import { Candidate } 															from '../candidate';
 import { SavedCandidate } 														from '../saved-candidate';
 import { TranslateService } 													from '@ngx-translate/core';
-import { SuggestionsComponent } from '../suggestions.component';
+import { SuggestionsComponent } 												from '../suggestions.component';
 
 /**
 * Component for Candidates saved by a User to allow them 
@@ -30,10 +30,10 @@ export class SavedCandidatesComponent {
 	/**
 	* Constructor 
 	*/
-	constructor(private candidateService:CandidateServiceService,
-				private router:Router,
-				private translate:TranslateService,
-				private parentX:SuggestionsComponent){
+	constructor(private readonly candidateService:CandidateServiceService,
+				private readonly router:Router,
+				private readonly translate:TranslateService,
+				private readonly parentX:SuggestionsComponent){
 					
 	}
 	

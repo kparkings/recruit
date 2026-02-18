@@ -1,5 +1,5 @@
 import { Injectable } 							from '@angular/core';
-import { NgbModal, NgbModalOptions }			from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal }								from '@ng-bootstrap/ng-bootstrap';
 import { Observable, BehaviorSubject }			from 'rxjs';             
 
 /**
@@ -15,7 +15,7 @@ export class PopupsService {
 	/**
 	* Constructor
 	*/
-  	constructor(private modalService:NgbModal) { }
+  	constructor(private readonly modalService:NgbModal) { }
 
 	/**
 	* Closes the popups

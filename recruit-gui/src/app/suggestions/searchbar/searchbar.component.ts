@@ -83,11 +83,11 @@ export class SearchbarComponent {
 	* Constructor
 	*/
 	public constructor(
-		private translate:				TranslateService,
-		public candidateService:		CandidateServiceService,
-		private creditsService:			CreditsService,
-		private suggestionsService:		SuggestionsService,
-		private router:					Router){
+		private readonly translate:				TranslateService,
+		public candidateService:				CandidateServiceService,
+		private readonly creditsService:		CreditsService,
+		private readonly suggestionsService:	SuggestionsService,
+		private readonly router:				Router){
 	
 		this.init();	
 			

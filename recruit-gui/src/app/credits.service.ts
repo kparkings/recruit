@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } 					from '@angular/common/http';
 import { Injectable } 								from '@angular/core';
 import { Observable, BehaviorSubject  }             from 'rxjs';
 import { environment }								from './../environments/environment';
-import { of } from 'rxjs';
+import { of } 										from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class CreditsService {
 	/**
 	* constructor 
 	*/
-	constructor(private httpClient: HttpClient) { }
+	constructor(private readonly httpClient: HttpClient) { }
 	httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
     };
@@ -81,7 +81,6 @@ export class CreditsService {
 	*/
 	public isPurchaseSubscription():Observable<boolean>{
 		let x:boolean = this.purchaseSubscription.value; 
-		//this.setPurchaseSubscription(false)
 		this.purchaseSubscription.next(false);
 		return of(x);
 	}
@@ -92,6 +91,5 @@ export class CreditsService {
 	public buySubscription():void{
 		this.purchaseSubscription.next(true);
 	}
-	
 
 }

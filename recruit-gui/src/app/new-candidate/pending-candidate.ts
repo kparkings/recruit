@@ -39,7 +39,6 @@ export class PendingCandidate{
 	
 	public introduction:string 	= "";
 	
-	
 }
 
 export class Rate{

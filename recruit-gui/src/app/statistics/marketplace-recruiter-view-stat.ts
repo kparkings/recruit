@@ -11,7 +11,6 @@ export class MarketplaceRecruiterViewStat{
 			
 		}
 		
-		
 }
 
 export class MarketplaceRecruiterViewStatResponse{
@@ -19,6 +18,5 @@ export class MarketplaceRecruiterViewStatResponse{
 	constructor(public stats:Array<MarketplaceRecruiterViewStat>){
 			
 	}
-		
 		
 }

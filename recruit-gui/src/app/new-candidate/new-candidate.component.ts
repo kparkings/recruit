@@ -1,10 +1,9 @@
-import { Component, OnInit }							from '@angular/core';
+import { Component, OnInit, ViewChild }					from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { CandidateServiceService }						from '../candidate-service.service';
 import { CurriculumService }							from '../curriculum.service';
 import { CandidateFunction }							from '../candidate-function';
 import { NgbModal, NgbModalOptions}						from '@ng-bootstrap/ng-bootstrap'
-import { ViewChild }									from '@angular/core';
 import { Router}										from '@angular/router';
 import { PendingCandidate }								from './pending-candidate';
 import { environment }									from '../../environments/environment';
@@ -14,7 +13,6 @@ import { CandidateNavService } 							from '../candidate-nav.service';
 import { LanguageOption } 								from './language-option';
 import { AppComponent} 									from '../app.component';
 import { TranslateService } 							from '@ngx-translate/core';
-import { Country } 										from '../country';
 import { SupportedLanguage } 							from '../supported-language';
 import { SupportedCountry } 							from '../supported-candidate';
 import { CurrentUserAuth } 								from '../current-user-auth';
@@ -28,9 +26,9 @@ import { Industry } 									from '../industry';
 })
 export class NewCandidateComponent implements OnInit {
 
-	@ViewChild('feedbackBox', 			{ static: false }) private feedbackBox:any;
-	@ViewChild('validationBox', 		{ static: false }) private validationBox:any;
-	@ViewChild('pendingCandidateBox', 	{ static: false }) private pendingCandidateBoxChild:any;
+	@ViewChild('feedbackBox', 			{ static: false }) private readonly feedbackBox:any;
+	@ViewChild('validationBox', 		{ static: false }) private readonly validationBox:any;
+	@ViewChild('pendingCandidateBox', 	{ static: false }) private readonly pendingCandidateBoxChild:any;
 
     public functionTypes:Array<CandidateFunction> 		= new Array<CandidateFunction>();
 	public pendingCandidates:Array<PendingCandidate> 	= new Array<PendingCandidate>();
@@ -63,13 +61,13 @@ export class NewCandidateComponent implements OnInit {
 	/**
   	* Constructor
   	*/
-  	constructor(private curriculumService: 			CurriculumService, 
-  				private candidateService: 			CandidateServiceService,
-  				private modalService: 				NgbModal,
-  				private router: 					Router,
-  				private candidateNavService: 		CandidateNavService,
-  				private appComponent:				AppComponent,
-  				private translate:					TranslateService) {
+  	constructor(private readonly curriculumService: 		CurriculumService, 
+  				private readonly candidateService: 			CandidateServiceService,
+  				private readonly modalService: 				NgbModal,
+  				private readonly router: 					Router,
+  				private readonly candidateNavService: 		CandidateNavService,
+  				private readonly appComponent:				AppComponent,
+  				private readonly translate:					TranslateService) {
     
     	this.countries 			= this.candidateService.getSupportedCountries();
     	this.supportedLanguages = this.candidateService.getLanguages();
