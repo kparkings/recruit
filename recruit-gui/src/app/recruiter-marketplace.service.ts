@@ -7,6 +7,7 @@ import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidat
 import { NewOpenPosition } 							from './recruiter-marketplace/new-open-position';
 import { OpenPosition } 							from './recruiter-marketplace/open-position';
 import { SupportedCountry } 						from './supported-candidate';
+import { CandidateServiceService } 					from './candidate-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,20 +20,10 @@ export class RecruiterMarketplaceService {
 	public supportedCountries:Array<SupportedCountry> 	= new Array<SupportedCountry>();
 	
 	/**
-  	* Initializes the countries available in the Marketplace
-  	*/
-	public async initializeSupportedCountries():Promise<any>{
-	
-		const backendUrl:string = environment.backendUrl +'candidate/countries';	//TODO: [KP] Create and point to endpoint in marketplace
-		const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
- 
- 		config.body.forEach( (country: SupportedCountry) => {
-			this.supportedCountries.push(new SupportedCountry(''+country.name, country.iso2Code, country.humanReadable));	
-		});
- 
- 	   	Object.assign(this, config);
-    	
-    	return config;
+	* Constructor
+	* @param httpClient - for sending httpRequests to backend
+	*/
+	constructor(private httpClient: HttpClient, private readonly candidateService:CandidateServiceService) {
 		
 	}
 	
@@ -40,7 +31,7 @@ export class RecruiterMarketplaceService {
 	* Returns Countries supported by the system 
 	*/
 	public getSupportedCountries():Array<SupportedCountry>{
-		return this.supportedCountries;	
+		return this.candidateService.getSupportedCountries();
 	}
 	
 	/**
@@ -98,14 +89,6 @@ export class RecruiterMarketplaceService {
 				
 			});
 		}
-		
-	}
-
-	/**
-	* Constructor
-	* @param httpClient - for sending httpRequests to backend
-	*/
-	constructor(private httpClient: HttpClient) { 
 		
 	}
 

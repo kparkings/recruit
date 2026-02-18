@@ -118,10 +118,10 @@ export class LoginUserComponent implements OnInit {
 	      
 			sessionStorage.setItem("userId", 							this.formBean.get('username')?.value);
 			
+			this.appComponent.refreshUnreadNewsFeedNotifications();	
 			this.scheduleOpenChatRefresh = window.setInterval(()=> {
 				this.appComponent.refreshUnreadNewsFeedNotifications();		
-				console.log("Fetching boop");	
-			},1000);
+			},30000);
 
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 

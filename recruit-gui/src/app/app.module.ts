@@ -134,8 +134,7 @@ export function initCandidateInfoBackendDataCalls(
   listingService: ListingService
 ) {
   return async () => {
-	await recruiterMarketplaceService.initializeSupportedCountries();
-    await candidateService.initializeSupportedCountries();
+	await candidateService.initializeSupportedCountries();
     await candidateService.initializeSupportedLanguages();
     await candidateService.initializeGeoZones();
 	await listingService.initializeSupportedLanguages();

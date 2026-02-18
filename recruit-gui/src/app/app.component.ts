@@ -83,8 +83,8 @@ export class AppComponent {
 		
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
 				
-		translate.setDefaultLang('en');
-    	translate.use(""+translate.getBrowserLang());
+		this.translate.setDefaultLang('en');
+    	this.translate.use(""+translate.getBrowserLang());
     
 		if (this.isRecruiterNoSubscription() || this.hasUnpaidSubscription()) {
 			this.router.navigate(['recruiter-account']);
@@ -156,7 +156,12 @@ export class AppComponent {
 	
 	public refreschUnreadAlerts():void{
 		
-		if (this.isAuthenticatedAsCandidate()){
+		if (this.isAuthenticatedAsCandidate()) {
+			return;
+		}
+		
+		if (!sessionStorage.getItem('loggedIn') || sessionStorage.getItem('loggedIn') !='true') {
+			console.log("Exiting for "+sessionStorage.getItem('loggedIn'));
 			return;
 		}
 		
@@ -168,8 +173,6 @@ export class AppComponent {
 		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
 			this.unseenEmails = val;
 		});
-		
-		this.refreshUnreadNewsFeedNotifications();
 		
 	}
 	
