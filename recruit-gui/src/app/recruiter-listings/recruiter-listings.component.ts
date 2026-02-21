@@ -517,6 +517,8 @@ export class RecruiterListingsComponent implements OnInit {
 		
 	}
 		
+	private inProcessOfPublishing:boolean = false;
+	
 	/**
 	* Creates a new Listing. 
 	*/
@@ -547,6 +549,11 @@ export class RecruiterListingsComponent implements OnInit {
 		
 		if (this.selectedListing.listingId === '') {
 			
+			if (this.inProcessOfPublishing == true) {
+				return;
+			}
+			
+			this.inProcessOfPublishing = true;
 			this.listingService
 				.registerListing(ownerName, 
 								ownerCompany,
@@ -563,8 +570,9 @@ export class RecruiterListingsComponent implements OnInit {
 								currency, 		
 								false).subscribe( data => {
 									this.showMPBox();
+									this.inProcessOfPublishing = false;
 								}, err => {
-									
+									this.inProcessOfPublishing = false;
 									if(err.status === 400) {
 										
 										let failedFields:Array<any> = err.error;

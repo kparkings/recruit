@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } 							from '@angular/core';
 import { Subscription } 											from 'rxjs';
-import { debounceTime, map } 										from "rxjs/operators";
+import { debounceTime } 											from "rxjs/operators";
 import { UntypedFormGroup,UntypedFormControl } 						from '@angular/forms';
 import { TranslateService } 										from '@ngx-translate/core';
 import { CandidateServiceService }									from './../../candidate-service.service';
@@ -59,7 +59,6 @@ export class SearchbarComponentListing {
 		this.listingsFilterForm.addControl('searchPhrase', new UntypedFormControl());
 		
 		var id = this._Activatedroute.snapshot.paramMap.get("id");
-		
 		
 		this.subscription = this.listingsFilterForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
 			this.fetchListingsFull("", true, 0, this.pageSize);

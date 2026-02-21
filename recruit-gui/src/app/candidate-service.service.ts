@@ -80,7 +80,7 @@ export class CandidateServiceService {
 		const backendUrl:string = environment.backendUrl +'candidate/geo-zone';
     	const config 			= await this.httpClient.get<any>(backendUrl,  { observe: 'response', withCredentials: true}).toPromise();
     	
-		this.geoZones = new Array<GeoZone>();
+		//this.geoZones = new Array<GeoZone>();
 		
 		config.body.forEach( (geoZone: string) => {
 			this.geoZones.push(new GeoZone(''+geoZone));	

@@ -1,15 +1,15 @@
-import { APP_INITIALIZER, NgModule }		from '@angular/core';
+import { APP_INITIALIZER, NgModule, inject, provideAppInitializer }		from '@angular/core';
 import { BrowserModule }					from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }	from '@angular/forms';
 import { AppRoutingModule }					from './app-routing.module';
-import { AppComponent }						from './app.component';
+import { AppComponent }							from './app.component';
 import { NewCandidateComponent }			from './new-candidate/new-candidate.component';
-import { HttpClientModule, HttpClient }		from '@angular/common/http';
+import { provideHttpClient, HttpClient }	from '@angular/common/http';
 import { LoginUserComponent }				from './login-user/login-user.component';
 import { AuthService }						from './auth.service';
 import { AuthGuardService }					from './auth-guard.service';
 import { HomeComponent }					from './home/home.component';
-import { BrowserAnimationsModule }			from '@angular/platform-browser/animations';
+//import { BrowserAnimationsModule }			from '@angular/platform-browser/animations';
 import { StatisticsComponent }				from './statistics/statistics.component';
 import { NgChartsModule }					from 'ng2-charts';
 import { AccountsComponent } 				from './accounts/accounts.component';
@@ -52,6 +52,7 @@ import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
 import { CandidateMiniOverviewComponent } 	from './candidate-mini-overview/candidate-mini-overview.component'
 import { PublicPostsComponent } 			from './newsfeed/public-posts/public-posts.component';
+import { Observable } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -96,7 +97,8 @@ import { PublicPostsComponent } 			from './newsfeed/public-posts/public-posts.co
   imports: [
     BrowserModule,
      MatIconModule,
-    HttpClientModule,
+    //HttpClientModule,
+	
      TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -106,16 +108,32 @@ import { PublicPostsComponent } 			from './newsfeed/public-posts/public-posts.co
         }),
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule,
+   // HttpClientModule,
+   
 	FormsModule,
-    BrowserAnimationsModule,
+    //BrowserAnimationsModule,
 	NgChartsModule.forRoot()
   ],
-  providers: [AuthGuardService, AuthService, CookieService, CandidateServiceService,RecruiterMarketplaceService,ListingService,{
+  providers: [provideHttpClient(), AuthGuardService, AuthService, CookieService, CandidateServiceService,RecruiterMarketplaceService,ListingService, 
+	//TODO: [KP] THis replaces APP_INITIALIZED but then the geozone and countries don't initialize properly. Needs investigation
+	//provideAppInitializer(()=>{	
+	
+	//	const canServ 	= inject(CandidateServiceService);
+	//	const listServ 	= inject(ListingService);
+		
+	//	canServ.initializeSupportedCountries();
+	//	canServ.initializeSupportedLanguages();
+	//	canServ.initializeGeoZones();
+	//	listServ.initializeSupportedLanguages();
+		
+	//})
+	//,
+	{
       provide: APP_INITIALIZER,
       useFactory: initCandidateInfoBackendDataCalls,
-      deps: [CandidateServiceService, RecruiterMarketplaceService, ListingService], multi: true
-    }],
+      deps: [CandidateServiceService, ListingService], multi: true
+    }
+	],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
@@ -130,7 +148,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 */
 export function initCandidateInfoBackendDataCalls(
   candidateService: CandidateServiceService,
-  recruiterMarketplaceService: RecruiterMarketplaceService,
   listingService: ListingService
 ) {
   return async () => {

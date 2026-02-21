@@ -257,6 +257,8 @@
 					<p>
 						#available #looking #lookingforwork #itcandidates #ictkandidaten #candidate #kandidaat
 						#itjobboard #ictojobboard #beschikbaar #it #ict #opentowork #seeking 
+						<span *ngFor="let country of newCandidateCountries"> {{'#'+country}}</span>
+						<span *ngFor="let function of newCandidateFunctions"> {{'#'+function}}</span>
 					</p>
 					</div>
 					<div *ngIf="showNewCandidates && showNewCandidateStatsDiv" class="stats-table">

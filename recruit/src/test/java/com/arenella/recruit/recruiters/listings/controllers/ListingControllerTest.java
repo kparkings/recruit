@@ -30,6 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.language;
@@ -46,8 +47,18 @@ import com.arenella.recruit.listings.controllers.ListingContactRequest;
 import com.arenella.recruit.listings.controllers.ListingController;
 import com.arenella.recruit.listings.controllers.ListingSearchRequestAPIInbound;
 import com.arenella.recruit.listings.controllers.ListingStatContactRequestsAPIOutbound;
+import com.arenella.recruit.listings.dao.ListingAlertSentEventDao;
+import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
+import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
+import com.arenella.recruit.listings.repos.ListingRepository;
+import com.arenella.recruit.listings.services.FileSecurityParser;
 import com.arenella.recruit.listings.services.ListingService;
 import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
+import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
+
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+
 import static org.mockito.Mockito.*;
 
 /**
@@ -70,13 +81,40 @@ class ListingControllerTest {
 	private Principal									mockPrincipal;
 	
 	@Mock
+	private ListingRepository							listingRepository;
+	
+	@Mock
+	private ElasticsearchClient							esClient;
+	
+	@Mock
+	private FileSecurityParser 							fileSecurityParser;
+	
+	@Mock
+	private ExternalEventPublisher						externalEventPublisher;
+	
+	@Mock
+	private ListingRecruiterCreditDao 					creditDao;
+	
+	@Mock
+	private ListingContactRequestEventDao				listingContactRequestEventDao;
+	
+	@Mock
+	private ListingGeoZoneSearchUtil					listingGeoZoneSearchUtil;
+	
+	@Mock
+	private ListingFunctionSynonymUtil					functionSynonymUil;
+	
+	@Mock
+	private ListingAlertSentEventDao					listingAlertSentEventDao;
+	
+	@Mock
 	private ClaimsUsernamePasswordAuthenticationToken 	mockUsernamePasswordAuthenticationToken;
 	
 	@Mock
 	private ListingAlertHitTesterUtil 					mockListingAlertHitUtil;
 	
 	@InjectMocks
-	private ListingController 	controller 				= new ListingController();
+	private ListingController 							controller;
 	
 	/**
 	* Sets up test environment

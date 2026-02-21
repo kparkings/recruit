@@ -27,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import com.arenella.recruit.adapters.actions.GrantCreditCommand;
+import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
 import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.beans.Listing;
@@ -44,7 +45,9 @@ import com.arenella.recruit.listings.dao.ListingAlertSentEventDao;
 import com.arenella.recruit.listings.dao.ListingContactRequestEventDao;
 import com.arenella.recruit.listings.dao.ListingRecruiterCreditDao;
 import com.arenella.recruit.listings.services.ListingServiceImpl;
+import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
 import com.arenella.recruit.listings.utils.ListingFunctionSynonymUtil;
+import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 
@@ -57,36 +60,48 @@ import org.springframework.web.multipart.MultipartFile;
 */
 @ExtendWith(MockitoExtension.class)
 class ListingServiceImplTest {
+	
+	@Mock
+	private ElasticsearchClient							mockEsClient;
+	
+	@Mock
+	private ListingRepository 							mockListingRepository;
+	
+	@Mock
+	private	Authentication								mockAuthentication;
+	
+	@Mock
+	private FileSecurityParser 							mockFileSecurityParser;
+	
+	@Mock
+	private ExternalEventPublisher 						mockExternalEventPublisher;
+	
+	@Mock
+	private ListingRecruiterCreditDao 					mockCreditDao;
+	
+	@Mock
+	private ListingFunctionSynonymUtil					mockListingFunctionSynonymUtil;
+	
+	@Mock
+	private ListingContactRequestEventDao				mockListingContactRequestEventDao;
+	
+	@Mock
+	private ListingFunctionSynonymUtil					mockFunctionSynonymUil;
+	
+	@Mock
+	private ListingAlertSentEventDao 					mockListingAlertSentEventDao;
 
+	@Mock
+	private ListingGeoZoneSearchUtil					mockListingGeoZoneSearchUtil;
+	
+	@Mock
+	private ClaimsUsernamePasswordAuthenticationToken 	mockUsernamePasswordAuthenticationToken;
+	
+	@Mock
+	private ListingAlertHitTesterUtil 					mockListingAlertHitUtil;
+	
 	@InjectMocks
-	private ListingServiceImpl 	service = new ListingServiceImpl();
-	
-	@Mock
-	private ElasticsearchClient				mockEsClient;
-	
-	@Mock
-	private ListingRepository 				mockListingRepository;
-	
-	@Mock
-	private	Authentication					mockAuthentication;
-	
-	@Mock
-	private FileSecurityParser 				mockFileSecurityParser;
-	
-	@Mock
-	private ExternalEventPublisher 			mockExternalEventPublisher;
-	
-	@Mock
-	private ListingRecruiterCreditDao 		mockCreditDao;
-	
-	@Mock
-	private ListingFunctionSynonymUtil		mockListingFunctionSynonymUtil;
-	
-	@Mock
-	private ListingContactRequestEventDao	mockListingContactRequestEventDao;
-	
-	@Mock
-	private ListingAlertSentEventDao 		listingAlertSentEventDao;
+	private ListingServiceImpl 							service;
 	
 	/**
 	* Sets up test environment
@@ -113,6 +128,9 @@ class ListingServiceImplTest {
 										.ownerCompany("aCompany")
 									.build();
 		
+		when(this.mockListingRepository.findAllListings(any(), any())).thenReturn(Set.of(Listing.builder().description("aDescX").title("aTitleX").created(LocalDateTime.now()).build()));
+		
+		
 		UUID listingId = service.addListing(listing, true);
 		
 		if (!(listingId instanceof UUID)) {
@@ -120,6 +138,33 @@ class ListingServiceImplTest {
 		}
 		
 		verify(mockListingRepository).saveListings(anySet());
+		
+	}
+	
+	/**
+	* Tests Exception thrown if attempt is made to 
+	* add a duplicate Listing 
+	* @throws Exception
+	*/
+	@Test
+	void testAddListing_duplicate() throws Exception {
+		
+		final Listing listing = Listing
+									.builder()
+										.title("aTitle")
+										.description("aDesc")
+										.ownerName("anOwnerName")
+										.ownerEmail("anEmail")
+										.ownerCompany("aCompany")
+									.build();
+		
+		when(this.mockListingRepository.findAllListings(any(), any())).thenReturn(Set.of(Listing.builder().description("aDesc").title("aTitle").created(LocalDateTime.now()).build()));
+		
+		assertThrows(RuntimeException.class, ()-> {
+			service.addListing(listing, true);
+		});
+		
+		verify(mockListingRepository, never()).saveListings(anySet());
 		
 	}
 	

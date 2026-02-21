@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -46,11 +45,18 @@ import com.arenella.recruit.listings.utils.ListingAlertHitTesterUtil;
 @RestController
 public class ListingController {
 
-	@Autowired
 	private ListingService 				service;
-	
-	@Autowired
 	private ListingAlertHitTesterUtil 	listingAlertHitUtil;
+	
+	/**
+	* Constructor
+	* @param service			 - Services for interacting with Listings
+	* @param listingAlertHitUtil - Util used to test Listings to see if an alert needs to be sent to Candidate
+	*/
+	public ListingController(ListingService service, ListingAlertHitTesterUtil listingAlertHitUtil) {
+		this.service 				= service;
+		this.listingAlertHitUtil 	= listingAlertHitUtil;
+	}
 	
 	/**
 	* Adds a new listing

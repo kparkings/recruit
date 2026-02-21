@@ -678,6 +678,8 @@ export class StatisticsComponent implements OnInit {
   	
 	public newCandidates:Array<NewCandidateSummaryItem>  	= new Array<NewCandidateSummaryItem>();
 	public newCandidateStats:Array<NewCandidateStatItem>  	= new Array<NewCandidateStatItem>();
+	public newCandidateCountries:Array<string>  			= new Array<string>();
+	public newCandidateFunctions:Array<string>  			= new Array<string>();
 	
 	/**
 	* Loads list of new Candidates
@@ -687,6 +689,30 @@ export class StatisticsComponent implements OnInit {
 			this.newCandidates 				= c.candidateSummary;
 			this.showNewCandidatesDiv 		= true;
 			this.showNewCandidateStatsDiv	= false;
+			
+			this.newCandidateCountries = new Array<string>();
+			this.newCandidateFunctions = new Array<string>();
+			
+			c.candidateSummary.forEach((cs:NewCandidateSummaryItem) => {
+		
+				let newFunction:string = ""+cs.functionDesc;
+				newFunction = newFunction.replace(/\_/g, " ");
+				newFunction = newFunction.toLowerCase();
+				
+				if (this.newCandidateFunctions.indexOf(newFunction) < 0 ) {
+					this.newCandidateFunctions.push(newFunction);
+				}
+				
+				let newCountry:string = ""+cs.country;
+				newCountry = newCountry.replace(/\_/g, " ");
+				newCountry = newCountry.toLowerCase();
+				
+				if (this.newCandidateCountries.indexOf(newCountry) < 0 ) {
+					this.newCandidateCountries.push(newCountry);
+				}
+				
+			});
+			
 		});
 	}
 

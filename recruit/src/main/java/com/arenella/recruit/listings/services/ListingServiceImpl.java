@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,6 +26,7 @@ import com.arenella.recruit.listings.adapters.ExternalEventPublisher;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand;
 import com.arenella.recruit.listings.adapters.RequestListingContactEmailCommand.RequestListingContactEmailCommandBuilder;
 import com.arenella.recruit.listings.beans.Listing;
+import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.ListingContactRequestEvent;
 import com.arenella.recruit.listings.beans.ListingContactRequestEvent.CONTACT_USER_TYPE;
 import com.arenella.recruit.listings.beans.ListingFilter;
@@ -52,32 +52,49 @@ import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil;
 @Service
 public class ListingServiceImpl implements ListingService{
 
-	@Autowired
 	private ListingRepository				listingRepository;
-	
-	@Autowired
 	private ElasticsearchClient				esClient;
-	
-	@Autowired
 	private FileSecurityParser 				fileSecurityParser;
-	
-	@Autowired
 	private ExternalEventPublisher			externalEventPublisher;
-	
-	@Autowired
 	private ListingRecruiterCreditDao 		creditDao;
-	
-	@Autowired
 	private ListingContactRequestEventDao	listingContactRequestEventDao;
-	
-	@Autowired
 	private ListingGeoZoneSearchUtil		listingGeoZoneSearchUtil;
-	
-	@Autowired
 	private ListingFunctionSynonymUtil		functionSynonymUil;
-	
-	@Autowired
 	private ListingAlertSentEventDao		listingAlertSentEventDao;
+	
+	/**
+	* 
+	* @param listingRepository				- Repository containing Listing data
+	* @param esClient						- Elasticsearch client
+	* @param fileSecurityParser				- For testing File is of type specified
+	* @param externalEventPublishe			- Event publisher
+	* @param creditDao						- Users credit data
+	* @param listingContactRequestEventDao	- Data for contact requests
+	* @param listingGeoZoneSearchUtil		- GeoZone utilities
+	* @param functionSynonymUil				- Function type Synonym utilities
+	* @param listingAlertSentEventDao		- Data for Alerts to Candidates for new Listings
+	*/
+	public ListingServiceImpl(
+			ListingRepository 				listingRepository,
+			ElasticsearchClient 			esClient, 
+			FileSecurityParser 				fileSecurityParser, 
+			ExternalEventPublisher 			externalEventPublisher,
+			ListingRecruiterCreditDao 		creditDao,
+			ListingContactRequestEventDao	listingContactRequestEventDao,
+			ListingGeoZoneSearchUtil		listingGeoZoneSearchUtil,
+			ListingFunctionSynonymUtil		functionSynonymUil,
+			ListingAlertSentEventDao		listingAlertSentEventDao) {
+		
+		this.listingRepository 				= listingRepository;
+		this.esClient 						= esClient;
+		this.fileSecurityParser 			= fileSecurityParser;
+		this.externalEventPublisher 		= externalEventPublisher;
+		this.creditDao 						= creditDao;
+		this.listingContactRequestEventDao 	= listingContactRequestEventDao;
+		this.listingGeoZoneSearchUtil 		= listingGeoZoneSearchUtil;
+		this.functionSynonymUil 			= functionSynonymUil;
+		this.listingAlertSentEventDao 		= listingAlertSentEventDao;
+	}
 	
 	/**
 	* Refer to the Listing interface for details
@@ -87,6 +104,18 @@ public class ListingServiceImpl implements ListingService{
 		
 		listing.initializeAsNewListing();
 		listing.setOwnerId(SecurityContextHolder.getContext().getAuthentication().getName());
+		
+		/**
+		* To stop same Listing being added multiple times 
+		*/
+		this.listingRepository.findAllListings(ListingFilter
+				.builder()
+				.ownerId(listing.getOwnerId())
+				.listingAge(LISTING_AGE.TODAY)
+				.build(), esClient).stream()
+				.filter(l -> l.getDescription().equals(listing.getDescription()) && l.getTitle().equals(listing.getTitle())).findAny().ifPresent(_ -> {
+					throw new RuntimeException("Attempt to create duplicate Listing refused.");
+				});
 		
 		this.performValidation(listing);
 		
