@@ -1,0 +1,53 @@
+.intro{
+	width:80%;
+	margin-top:20px;
+	margin-left:10%;
+	margin-right:10%;
+	margin-bottom:0px;
+	text-align:center;
+}
+
+.pricing-table{
+	margin:auto;
+	width:60%;
+	color: #002549;
+    padding: 10px;
+    text-align: center;
+}
+
+.pricing-table table{
+	text-align:center;
+	width:100%;
+}
+
+.pricing-table table th{
+	padding:5px;
+}
+
+.pricing-table table td{
+	padding:5px;
+}
+
+.pricing-feature{
+	text-align:left;
+	background:none;
+}
+
+.pricing-feature-group{
+	border-top:1px solid black;
+	border-bottom:1px solid black;
+	font-weight:bold;
+}
+
+.pricing-vat{
+	margin:0px;
+	margin-top:20px;
+	padding:0px;
+	color:grey;
+}
+
+.pricing-table-main-header{
+	color:white;
+}
+
+

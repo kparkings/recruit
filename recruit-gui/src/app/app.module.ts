@@ -47,6 +47,7 @@ import { MatIconModule } 					from "@angular/material/icon";
 import { CandidateServiceService } 			from './candidate-service.service';
 import { RecruiterMarketplaceService } 		from './recruiter-marketplace.service';
 import { ListingService } 					from './listing.service';
+import { PricingComponent } 				from './pricing/pricing.component';
 
 import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
@@ -90,7 +91,8 @@ import { Observable } from 'rxjs';
 	CandidateStatisticsComponent,
 	PrivateMessagingComponent,
 	CandidateMiniOverviewComponent,
-	PublicPostsComponent
+	PublicPostsComponent,
+	PricingComponent
 	
 	
   ],

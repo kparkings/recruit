@@ -1,0 +1,34 @@
+@media ( max-width :700px) {
+	.intro{
+		width:80%;
+		text-align:center;
+		margin-bottom:0px;
+	}
+	
+	.pricing-table{
+		margin:auto;
+		width:100%;
+		color: #002549;
+	    background: none;
+	    text-align: center;
+	    padding:0px;
+	}
+
+	.pricing-table table td{
+		width:500px;
+		padding:0px;
+		padding-left:2px;
+		padding-left:10px;
+	    padding-right:10px;
+	}
+	
+	.pricing-table table th{
+		padding:2px;
+		padding-left:10px;
+	    padding-right:10px;
+	}
+	
+	.pricing-feature{
+		width:500p;
+	}
+}
