@@ -77,6 +77,7 @@ export class NewsfeedComponent {
 	}
 	
 	private startNotificationPolling():void{
+		this.refreshNotifications();	
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.refreshNotifications();			
 		},60000);

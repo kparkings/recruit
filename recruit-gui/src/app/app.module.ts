@@ -48,6 +48,7 @@ import { CandidateServiceService } 			from './candidate-service.service';
 import { RecruiterMarketplaceService } 		from './recruiter-marketplace.service';
 import { ListingService } 					from './listing.service';
 import { PricingComponent } 				from './pricing/pricing.component';
+import { FeaturesComponent } 				from './features/features.component';
 
 import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-statistics.component';
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
@@ -92,9 +93,8 @@ import { Observable } from 'rxjs';
 	PrivateMessagingComponent,
 	CandidateMiniOverviewComponent,
 	PublicPostsComponent,
-	PricingComponent
-	
-	
+	PricingComponent,
+	FeaturesComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,2 @@
+width:711
+Tool: https://new.express.adobe.com/home/tools/resize-image

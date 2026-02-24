@@ -22,7 +22,8 @@ import { NewsfeedComponent } 							from './newsfeed/newsfeed.component';
 import { ContactComponent } 							from './contact/contact.component';
 import { CandidateStatisticsComponent } 				from './candidate-statistics/candidate-statistics.component';
 import { CandidateMiniOverviewComponent }				from './candidate-mini-overview/candidate-mini-overview.component';
-import { PricingComponent }									from './pricing/pricing.component';
+import { PricingComponent }								from './pricing/pricing.component';
+import { FeaturesComponent }							from './features/features.component'
 
 const routes: Routes = [
 	{path: '', 								component: ListingComponent},
@@ -49,6 +50,7 @@ const routes: Routes = [
 	{path: 'create-candidate', 				component: CreateCandidateComponent},
 	{path: 'recruiter-signup', 				component: RecruiterSignupComponent},
 	{path: 'pricing', 						component: PricingComponent},
+	{path: 'features', 						component: FeaturesComponent},
 	
 ];
 

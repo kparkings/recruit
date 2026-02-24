@@ -1,0 +1,42 @@
+@media ( max-width :700px) {
+	
+	.features-body{
+		margin:0px;
+		margin-bottom:20px;
+	}
+		
+	.feature{
+		width:100%;
+		margin-top:10px;
+		padding-left:5px;
+		padding-right:5px;
+	}
+	
+	.feature-main-title{
+		background:lightgrey;
+		height:60px;
+		margin:0px;
+		padding:10px;
+		padding-top:20px;
+		font-size:20px;
+	}
+	
+	.feature-image{
+		float:left;
+		margin:0px;
+		width:100%;
+		margin-top:10px;
+		margin-bottom:10px;
+	}
+	
+	.feature-block-text{
+		width:100%;
+		min-height:0px;
+		float:left;
+		padding-left:0px;
+		padding-right:0px	;
+		padding-top:10px;
+		margin-left:0px;
+		margin-right:0px;
+	}
+}
