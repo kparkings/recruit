@@ -376,7 +376,12 @@ export class PublicPostsComponent {
 	* user or another user
 	* @param msg: Message to be checked
 	*/
-	public isOwnMessageChatParticipant(chatParticipant:ChatParticipant):boolean{
+	public isChatPossible(chatParticipant:ChatParticipant):boolean{
+		
+		if (this.isCandidate()) {
+			return true;
+		}
+		
 		return chatParticipant.id == sessionStorage.getItem("userId") ? true : false;
 	}
 	

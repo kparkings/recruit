@@ -103,13 +103,13 @@
 			<div style="clear:both">
 				<div style="float:left;">
 					<img class="public-chat-image" *ngIf="participant.photo"  id='base64image' src='data:image/jpeg;base64, {{participant.photo.imageBytes}}' />
-					<img class="public-chat-image" *ngIf="!participant.photo" id='base64image'/>
+					<img class="public-chat-image" *ngIf="!participant.photo" id='base64image' src="../assets/img/default-user-image.jpg"  />
 				</div>
 				<div class="like-participant-name">
 					{{participant.firstName}} {{participant.surname}}
 				</div>
 				<div class="like-participant-chat">
-					<div class="chat-icon material-icons public-chat-option" *ngIf="!isOwnMessageChatParticipant(participant)" (click)="openChatChatParticipant(participant)">chat</div>
+					<div class="chat-icon material-icons public-chat-option" *ngIf="!isChatPossible(participant)" (click)="openChatChatParticipant(participant)">chat</div>
 				</div>
 			</div>
 		</div>
