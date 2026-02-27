@@ -113,10 +113,10 @@
         
         <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="openNewsFeed()">
         	<span class="material-icons" style="float:left;margin:0px;padding:0px;">
-        		<a title="news feed notifications" class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}} unread-notifications-{{getUnreadNewsFeedNotifications() > 0 }}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeedNotifications()" *ngIf="isAuthenticated()">
+        		<a title="news feed notifications" class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}} unread-notifications-{{getUnreadNewsFeedNotifications() > 0 }} non-mobile-only-element" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeedNotifications()" *ngIf="isAuthenticated()">
         		   notifications
         		</a> 
-				<a title="news feed" class="mobile-menu-bar-icon unread-chats-{{unreadNewFeedItems}} unread-notifications-{{unreadNewFeedItems}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeed()" *ngIf="isAuthenticated()">
+				<a title="news feed" class="mobile-menu-bar-icon unread-chats-{{unreadNewFeedItems}} unread-notifications-{{unreadNewFeedItems}} non-mobile-only-element" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeed()" *ngIf="isAuthenticated()">
         		   bubble_chart
        			 </a>
        		</span>
