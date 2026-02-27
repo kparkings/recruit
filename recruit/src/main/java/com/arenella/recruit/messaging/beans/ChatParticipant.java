@@ -17,19 +17,21 @@ public class ChatParticipant {
 	private Photo 					photo;
 	private boolean					disableNotificationEmails;
 	private LocalDateTime			lastNotificationEmailSent;
+	private LocalDateTime			lastTimeNewsFeedViewed;
 	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization details
 	*/
 	public ChatParticipant(ChatParticipantBuilder builder) {
-		this.participantId 	= builder.participantId;
-		this.type 			= builder.type;
-		this.firstName 		= builder.firstName;
-		this.surname		= builder.surname;
-		this.photo 			= builder.photo;
-		this.disableNotificationEmails = builder.disableNotificationEmails;
-		this.lastNotificationEmailSent = builder.lastNotificationEmailSent;
+		this.participantId 				= builder.participantId;
+		this.type 						= builder.type;
+		this.firstName 					= builder.firstName;
+		this.surname					= builder.surname;
+		this.photo 						= builder.photo;
+		this.lastTimeNewsFeedViewed 	= builder.lastTimeNewsFeedViewed;
+		this.disableNotificationEmails 	= builder.disableNotificationEmails;
+		this.lastNotificationEmailSent 	= builder.lastNotificationEmailSent;
 	}
 	
 	/**
@@ -93,6 +95,14 @@ public class ChatParticipant {
 	}
 	
 	/**
+	* Returns the last time the ChatParticipant viewed the Newsfeed
+	* @return Last time the Newsfeed was viewed
+	*/
+	public Optional<LocalDateTime> getLastTimeNewsFeedViewed() {
+		return Optional.ofNullable(this.lastTimeNewsFeedViewed);
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return Builder
 	*/
@@ -112,7 +122,13 @@ public class ChatParticipant {
 		private Photo 					photo;
 		private boolean					disableNotificationEmails;
 		private LocalDateTime			lastNotificationEmailSent;
+		private LocalDateTime			lastTimeNewsFeedViewed;
 		
+		/**
+		* Populates Builder with values from existing ChatParticipant
+		* @param participant - Values to use to populate Builder
+		* @return Builder
+		*/
 		public ChatParticipantBuilder chatParticipant(ChatParticipant participant) {
 			this.participantId 				= participant.participantId;
 			this.type 						= participant.type;
@@ -121,6 +137,7 @@ public class ChatParticipant {
 			this.photo						= participant.photo;
 			this.disableNotificationEmails 	= participant.disableNotificationEmails;
 			this.lastNotificationEmailSent 	= participant.lastNotificationEmailSent;
+			this.lastTimeNewsFeedViewed		= participant.lastTimeNewsFeedViewed;
 			
 			return this;
 		}
@@ -192,6 +209,16 @@ public class ChatParticipant {
 		*/
 		public ChatParticipantBuilder lastNotificationEmailSent(LocalDateTime lastNotificationEmailSent) {
 			this.lastNotificationEmailSent = lastNotificationEmailSent;
+			return this;
+		}
+		
+		/**
+		* Sets the last time the Chat Participant viewed the Newsfeed
+		* @param lastTimeNewsFeedViewed - Last time newsfeed viewed
+		* @return Builder
+		*/
+		public ChatParticipantBuilder lastTimeNewsFeedViewed(LocalDateTime lastTimeNewsFeedViewed) {
+			this.lastTimeNewsFeedViewed = lastTimeNewsFeedViewed;
 			return this;
 		}
 		

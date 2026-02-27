@@ -51,6 +51,9 @@ public class ChatParticipantEntity {
 	@Column(name="last_nofication_email_sent")
 	private LocalDateTime			lastNotificationEmailSent;
 	
+	@Column(name="last_nofication_newsfeed_view")
+	private LocalDateTime			lastTimeNewsFeedViewed;
+	
 	/**
 	* Default constructor 
 	*/
@@ -69,6 +72,7 @@ public class ChatParticipantEntity {
 		this.surname					= builder.surname;
 		this.disableNotificationEmails 	= builder.disableNotificationEmails;
 		this.lastNotificationEmailSent 	= builder.lastNotificationEmailSent;
+		this.lastTimeNewsFeedViewed		= builder.lastTimeNewsFeedViewed;
 		
 		Optional.ofNullable(builder.photo).ifPresent(photo -> {
 			this.photoBytes 	= photo.imageBytes();
@@ -143,6 +147,14 @@ public class ChatParticipantEntity {
 	}
 	
 	/**
+	* Returns the last time the ChatParticipant has viewed the newsfeed 
+	* @return last time viewed
+	*/
+	public Optional<LocalDateTime> getLastTimeNewsFeedViewed() {
+		return Optional.ofNullable(this.lastTimeNewsFeedViewed);
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return Builder
 	*/
@@ -162,6 +174,7 @@ public class ChatParticipantEntity {
 		private Photo 					photo;
 		private boolean					disableNotificationEmails;
 		private LocalDateTime			lastNotificationEmailSent;
+		private LocalDateTime			lastTimeNewsFeedViewed;
 		
 		/**
 		* 
@@ -234,6 +247,16 @@ public class ChatParticipantEntity {
 		}
 		
 		/**
+		* Sets the last time the ChatParticipant viewed the Newsfeed
+		* @param lastTimeNewsFeedViewed - Last time viewed
+		* @return Builder
+		*/
+		public ChatParticipantEntityBuilder lastTimeNewsFeedViewed(LocalDateTime lastTimeNewsFeedViewed) {
+			this.lastTimeNewsFeedViewed = lastTimeNewsFeedViewed;
+			return this;
+		}
+		
+		/**
 		* Returns initialized instance 
 		* @return Initialized instance
 		*/
@@ -258,7 +281,9 @@ public class ChatParticipantEntity {
 			.surname(entity.getSurame())
 			.type(entity.getType())
 			.disableNotificationEmails(entity.isDisableNotificationEmails())
-			.lastNotificationEmailSent(entity.getLastNotificationEmailSent().orElse(null));;
+			.lastTimeNewsFeedViewed(entity.getLastTimeNewsFeedViewed().orElse(null))
+			.lastNotificationEmailSent(entity.getLastNotificationEmailSent().orElse(null));
+		
 		
 		entity.getPhoto().ifPresent(p -> {
 			builder.photo(new Photo(p.imageBytes(), p.format()));
@@ -282,6 +307,7 @@ public class ChatParticipantEntity {
 			.surname(participant.getSurame())
 			.type(participant.getType())
 			.disableNotificationEmails(participant.isDisableNotificationEmails())
+			.lastTimeNewsFeedViewed(participant.getLastTimeNewsFeedViewed().orElse(null))
 			.lastNotificationEmailSent(participant.getLastNotificationEmailSent().orElse(null));
 		
 		participant.getPhoto().ifPresent(p -> {

@@ -33,5 +33,11 @@ public interface ParticipantService {
 	* @param authenticatedUserId - Id of currently authenticated user
 	*/
 	Optional<ChatParticipant> toggleReceiveNotificationEmails(String authenticatedUserId);
+
+	/**
+	* Updates the last time the user viewed the newsfeed
+	* @param name - Id of the Chat participant
+	*/
+	void markNewsFeedViewd(String name);
 	
 }

@@ -80,4 +80,36 @@ class ParticipantServiceImplTest {
 		
 	}
 	
+	/**
+	* Test happy path
+	*/
+	@Test
+	void testMarkNewsFeedViewd() {
+		
+		final String userId = "rec1";
+		
+		when(this.service.fetchById(userId)).thenReturn(Optional.of(ChatParticipant.builder().build()));
+		
+		this.service.markNewsFeedViewd(userId);
+		
+		verify(this.mockDao).persistChatParticipant(any());
+		
+	}
+	
+	/**
+	* Test case in which User does not exist
+	*/
+	@Test
+	void testMarkNewsFeedViewd_unknownUser() {
+		
+		final String userId = "rec1";
+		
+		when(this.service.fetchById(userId)).thenReturn(Optional.empty());
+		
+		this.service.markNewsFeedViewd(userId);
+		
+		verify(this.mockDao, never()).persistChatParticipant(any());
+		
+	}
+	
 }

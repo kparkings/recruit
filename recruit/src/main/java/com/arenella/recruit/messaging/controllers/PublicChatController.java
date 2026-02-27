@@ -188,5 +188,32 @@ public class PublicChatController {
 		return ResponseEntity.ok(path);
 		
 	}
+
+	/**
+	* Returns if there are posts on the newsfeed that the Authenticated user has 
+	* not yet seen. These will be messages added since they last viewed the newsfeed
+	* @param principal - Authenticated user
+	* @return if there are unread posts
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	@GetMapping(path="publicchat/hasUnreadNewsfeedItems", produces="application/json")
+	public ResponseEntity<Boolean> isUnreadNewsFeedItems(Principal principal) {
+		return ResponseEntity.ok(this.publicChatService.isUnreadNewsFeedItems(principal.getName()));
+	}
+	
+	/**
+	* Event that the authenticated user viewed the newsfeed
+	* @param principal - Authenticated User
+	* @return Void
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER') OR hasRole('CANDIDATE')")
+	@PutMapping(path="publicchat/newsfeedViewed", produces="application/json")
+	public ResponseEntity<Void> newsFeedViewed(Principal principal) {
+		
+		this.participantService.markNewsFeedViewd(principal.getName());
+		
+		return ResponseEntity.ok().build();
+		
+	}
 	
 }

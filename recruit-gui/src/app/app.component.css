@@ -4,10 +4,15 @@
 		color:green;
 	}
 	
+	
 	.unread-chats-false{
 		color:#002549;
 	}
 	
+	.unread-notifications-true{
+		color:green;
+	}
+
 	.no-chat-box{
 		text-align:center;
 		line-height:100px; 

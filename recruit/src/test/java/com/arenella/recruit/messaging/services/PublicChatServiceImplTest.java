@@ -1,6 +1,7 @@
 package com.arenella.recruit.messaging.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,6 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.messaging.beans.ChatParticipant;
 import com.arenella.recruit.messaging.beans.PublicChat;
 import com.arenella.recruit.messaging.beans.PublicChat.AUDIENCE_TYPE;
 import com.arenella.recruit.messaging.beans.PublicChatNotification;
@@ -53,6 +55,9 @@ class PublicChatServiceImplTest {
 	
 	@Mock
 	private PublicChatNotificationService 	mockNotificationService;
+	
+	@Mock
+	private ParticipantService 				mockParticipantService;
 	
 	@InjectMocks
 	private PublicChatServiceImpl service;
@@ -478,6 +483,90 @@ class PublicChatServiceImplTest {
 		this.service.toggleLikeForChat(ID, this.mockPrincipal.getName());
 		
 		verify(this.mockChatDao, never()).saveChat(any(PublicChat.class));
+		
+	}
+	
+	/**
+	* Test case in which no Newsfeed items ( PublicChat's ) exist
+	*/
+	@Test
+	void testIsUnreadNewsFeedItemsNoChats() {
+		
+		final String userId = "candidate1";
+		
+		when(this.service.fetchTopLevelChats(0, 1)).thenReturn(Set.of());
+		
+		assertFalse(this.service.isUnreadNewsFeedItems(userId));
+	}
+	
+	/**
+	* Test case in which the specified ChatParticipant 
+	* doesn't exist
+	*/
+	@Test
+	void testIsUnreadNewsFeedItemsNoMatchingParticipant() {
+		
+		final String userId = "candidate1";
+		
+		when(this.service.fetchTopLevelChats(0, 1)).thenReturn(Set.of(PublicChat.builder().build()));
+		when(this.mockParticipantService.fetchById(userId)).thenReturn(Optional.empty());
+		
+		assertFalse(this.service.isUnreadNewsFeedItems(userId));
+		
+	}
+	
+	/**
+	* Test case in which the specified ChatParticipant 
+	* exists but has never viewed the newsfeed
+	*/
+	@Test
+	void testIsUnreadNewsFeedItemsNoLastView() {
+		
+		final String 		userId 	= "candidate1";
+		final LocalDateTime created = LocalDateTime.of(2026,2, 27, 15, 28, 11);
+		
+		when(this.service.fetchTopLevelChats(0, 1)).thenReturn(Set.of(PublicChat.builder().created(created).build()));
+		when(this.mockParticipantService.fetchById(userId)).thenReturn(Optional.of(ChatParticipant.builder().build()));
+		
+		assertTrue(this.service.isUnreadNewsFeedItems(userId));
+		
+	}
+	
+	/**
+	* Test case in which the specified ChatParticipant 
+	* exists and has viewed the newsfeed but no new
+	* posts have been added since the last view
+	*/
+	@Test
+	void testIsUnreadNewsFeedItemsNoNewPosts() {
+		
+		final String 			userId 				= "candidate1";
+		final LocalDateTime 	created 			= LocalDateTime.of(2026,2, 27, 15, 28, 11);
+		final LocalDateTime 	lastViewcreated 	= LocalDateTime.of(2026,2, 27, 16, 28, 11);
+		
+		when(this.service.fetchTopLevelChats(0, 1)).thenReturn(Set.of(PublicChat.builder().created(created).build()));
+		when(this.mockParticipantService.fetchById(userId)).thenReturn(Optional.of(ChatParticipant.builder().lastTimeNewsFeedViewed(lastViewcreated).build()));
+		
+		assertFalse(this.service.isUnreadNewsFeedItems(userId));
+		
+	}
+	
+	/**
+	* Test case in which the specified ChatParticipant 
+	* exists and has viewed the newsfeed but no new
+	* posts have been added since the last view
+	*/
+	@Test
+	void testIsUnreadNewsFeedItemsNewPosts() {
+		
+		final String 		userId 				= "candidate1";
+		final LocalDateTime created 			= LocalDateTime.of(2026,2, 27, 15, 28, 11);
+		final LocalDateTime lastViewcreated 	= LocalDateTime.of(2026,2, 27, 14, 28, 11);
+		
+		when(this.service.fetchTopLevelChats(0, 1)).thenReturn(Set.of(PublicChat.builder().created(created).build()));
+		when(this.mockParticipantService.fetchById(userId)).thenReturn(Optional.of(ChatParticipant.builder().lastTimeNewsFeedViewed(lastViewcreated).build()));
+		
+		assertTrue(this.service.isUnreadNewsFeedItems(userId));
 		
 	}
 		

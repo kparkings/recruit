@@ -176,6 +176,29 @@ export class PublicMessagingService {
 
 	}
 	
+	/**
+	* Returns whether or not Items have been added to the newsfeed since the User
+	* last viewed the newsfeed 
+	*/
+	public hasUnreadNewsFeedItems(): Observable<boolean>{
+			
+		const backendUrl:string = environment.backendUrl + 'publicchat/hasUnreadNewsfeedItems';
+
+		return this.httpClient.get<boolean>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Informs the backend that the user has viewed the newsfeed 
+	*/
+	public newsFeedViewed(): Observable<void>{
+				
+		const backendUrl:string = environment.backendUrl + 'publicchat/newsfeedViewed';
+
+		return this.httpClient.put<void>(backendUrl, {}, this.httpOptions);
+
+	}
+	
 }
 
 /**

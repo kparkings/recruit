@@ -34,6 +34,8 @@ export class AppComponent {
 	@ViewChild(CandidateMiniOverviewComponent) 			public miniOverview!:CandidateMiniOverviewComponent;
 	@ViewChild('noChatAccessBox')						private readonly noChatAccessBox:any;
 	
+	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
+	
 	public currentChatWindowState:string = "closed";
 	
 	public currentUserAuth:CurrentUserAuth 						= new CurrentUserAuth();
@@ -120,7 +122,27 @@ export class AppComponent {
 			this.tandcBox.nativeElement.showModal();
 		}
 		this.privateChat.startChatContactListPolling();
+		
+		if(sessionStorage.getItem("loggedIn") == "true") {
+			console.log("STARTING NOTIFICATION SCHEDULRE")
+			this.runNotificationScheduler();
+		} else {
+			console.log("NOT  !!  STARTING NOTIFICATION SCHEDULRE")
+		}
 	
+	}
+	
+	private runNotificationScheduler():void{
+
+		this.refreshUnreadNewsFeedNotifications();	
+		this.hasUnreadNewsFeedItems();
+	
+		this.scheduleOpenChatRefresh = window.setInterval(()=> {
+			this.refreshUnreadNewsFeedNotifications();		
+			this.hasUnreadNewsFeedItems();
+			console.log("Notificaion schedulre running");
+		},30000);
+					
 	}
 	
 	/**
@@ -457,6 +479,15 @@ export class AppComponent {
 	
 	public getUnreadNewsFeedNotifications():number{
 		return this.publicMessagingService.unreadNotifications;
+	}
+	
+	public unreadNewFeedItems:boolean = false;
+	
+	public hasUnreadNewsFeedItems():void{
+		this.publicMessagingService.hasUnreadNewsFeedItems().subscribe(response =>{
+			console.log("eeeeeeeeeeeeeeee + " + response);
+			 this.unreadNewFeedItems = response;
+		});
 	}
 	
 }

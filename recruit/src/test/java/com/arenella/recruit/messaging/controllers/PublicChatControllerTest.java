@@ -220,4 +220,34 @@ class PublicChatControllerTest {
 		
 	}
 	
+	/**
+	* Test endpoint to see if there have been new newsfeed posts since the 
+	* authenticated User last viewed the newsfeed 
+	*/
+	@Test 
+	void testIsUnreadNewsFeedItems() {
+	
+		when(this.mockPrincipal.getName()).thenReturn("rec1");
+		
+		ResponseEntity<Boolean> response = this.controller.isUnreadNewsFeedItems(mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Test endpoint to see if there have been new newsfeed posts since the 
+	* authenticated User last viewed the newsfeed 
+	*/
+	@Test 
+	void testNewsFeedViewed() {
+	
+		when(this.mockPrincipal.getName()).thenReturn("rec1");
+		
+		ResponseEntity<Void> response = this.controller.newsFeedViewed(mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
 }

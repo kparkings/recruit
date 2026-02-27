@@ -95,5 +95,13 @@ public interface PublicChatService {
 	public void removeLikesForUser(String userId);
 	
 	public SequencedSet<UUID> fetchPathToTopLevelChat(UUID chatId);
+
+	/**
+	* Returns whether at least one unread Public chat has been added since
+	* the User last viewed the public chats
+	* @param authenticatedUserId - Id of authenticated User
+	* @return If unread public chats exist for USer
+	*/
+	public boolean isUnreadNewsFeedItems(String authenticatedUserId);
 	
 }

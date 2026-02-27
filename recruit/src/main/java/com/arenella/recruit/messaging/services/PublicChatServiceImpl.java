@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.SequencedSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
@@ -24,17 +25,20 @@ import com.arenella.recruit.messaging.dao.PublicChatDao;
 @Service
 public class PublicChatServiceImpl implements PublicChatService {
 
-	private PublicChatDao chatDao;
-	private PublicChatNotificationService notificationService;
+	private PublicChatDao 					chatDao;
+	private PublicChatNotificationService 	notificationService;
+	private ParticipantService 				participantService;
 	
 	/**
 	* Constructor
 	* @param chatDao 				- Repository for PublicChat's
 	* @param notificationService 	- Services for Notification relating to Chats
+	* @param participantService		- Services relating to Chat Participants
 	*/
-	public PublicChatServiceImpl(PublicChatDao chatDao, PublicChatNotificationService notificationService) {
+	public PublicChatServiceImpl(PublicChatDao chatDao, PublicChatNotificationService notificationService, ParticipantService participantService) {
 		this.chatDao 				= chatDao;
 		this.notificationService 	= notificationService;
+		this.participantService		= participantService;
 	}
 	
 	/**
@@ -333,6 +337,28 @@ public class PublicChatServiceImpl implements PublicChatService {
 		}
 		
 		return pathFromChiltToTopLevelParent.reversed();
+	}
+
+	/**
+	* Refer to the PublicChatService interface for details 
+	*/
+	@Override
+	public boolean isUnreadNewsFeedItems(String authenticatedUserId) {
+		AtomicBoolean unreadItems = new AtomicBoolean(false);
+		this.fetchTopLevelChats(0, 1).stream().findFirst().ifPresent(chat -> {
+			this.participantService.fetchById(authenticatedUserId).ifPresent(chatParticipant -> {
+				if (chatParticipant.getLastTimeNewsFeedViewed().isEmpty()) {
+					unreadItems.set(true);
+				}
+				
+				chatParticipant.getLastTimeNewsFeedViewed().ifPresent(lastView ->{
+					if (chat.getCreated().isAfter(lastView)) {
+						unreadItems.set(true);
+					}
+				});
+			});
+		});
+		return unreadItems.get();
 	}
 	
 }

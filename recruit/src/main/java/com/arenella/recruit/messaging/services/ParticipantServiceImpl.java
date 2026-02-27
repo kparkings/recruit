@@ -1,5 +1,6 @@
 package com.arenella.recruit.messaging.services;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -72,6 +73,16 @@ public class ParticipantServiceImpl implements ParticipantService{
 		
 		return this.fetchById(authenticatedUserId);
 		
+	}
+
+	/**
+	* Refer to the ParticipantService for details 
+	*/
+	@Override
+	public void markNewsFeedViewd(String name) {
+		this.fetchById(name).ifPresent(chatParticipant -> {
+			this.persistParticpant(ChatParticipant.builder().chatParticipant(chatParticipant).lastTimeNewsFeedViewed(LocalDateTime.now()).build());
+		});
 	}
 	
 }

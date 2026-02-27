@@ -58,6 +58,9 @@ export class NewsfeedComponent {
 		
 		this.refreshPosts();
 		this.startNotificationPolling();
+		this.service.newsFeedViewed().subscribe(()=>{
+			this.appComponent.hasUnreadNewsFeedItems();
+		})
 	}
 	
 	ngAfterViewChecked(){
@@ -78,8 +81,10 @@ export class NewsfeedComponent {
 	
 	private startNotificationPolling():void{
 		this.refreshNotifications();	
+		
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
-			this.refreshNotifications();			
+			this.refreshNotifications();	
+			this.appComponent.hasUnreadNewsFeedItems();		
 		},60000);
 	}
 	

@@ -23,8 +23,6 @@ export class LoginUserComponent implements OnInit {
 	@ViewChild('feedbackBox', { static: false }) private readonly feedbackBox:any;
 	@ViewChild('resetPasswordDialog', { static: false }) private readonly resetDialog:any;
 	
-	private scheduleOpenChatRefresh = window.setInterval(()=> {},1000);
-	
 	public showForgottenPassword:boolean 	= false;
 	public showSubscriptionMsg:boolean 		= false;
 	public failureMessage:string			= "";
@@ -118,11 +116,15 @@ export class LoginUserComponent implements OnInit {
 	      
 			sessionStorage.setItem("userId", 							this.formBean.get('username')?.value);
 			
-			this.appComponent.refreshUnreadNewsFeedNotifications();	
-			this.scheduleOpenChatRefresh = window.setInterval(()=> {
-				this.appComponent.refreshUnreadNewsFeedNotifications();		
-			},30000);
-
+			//this.appComponent.refreshUnreadNewsFeedNotifications();	
+			//this.appComponent.hasUnreadNewsFeedItems();
+			
+			//this.scheduleOpenChatRefresh = window.setInterval(()=> {
+			//	this.appComponent.refreshUnreadNewsFeedNotifications();		
+			//	this.appComponent.hasUnreadNewsFeedItems();
+			//},30000);
+			
+			
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 
 			if (roles.includes('ROLE_CANDIDATE') && beforeAuthPage == 'suggestions') {
