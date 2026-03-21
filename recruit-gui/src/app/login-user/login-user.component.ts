@@ -124,6 +124,8 @@ export class LoginUserComponent implements OnInit {
 			//	this.appComponent.hasUnreadNewsFeedItems();
 			//},30000);
 			
+			this.appComponent.runNotificationScheduler();
+			
 			
 			const beforeAuthPage: any = sessionStorage.getItem('beforeAuthPage');
 

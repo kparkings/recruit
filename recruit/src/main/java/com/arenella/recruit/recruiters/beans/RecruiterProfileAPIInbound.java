@@ -9,11 +9,14 @@ import com.arenella.recruit.recruiters.beans.RecruiterProfile.COUNTRY;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.LANGUAGE;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.Photo.PHOTO_FORMAT;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.REC_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.SECTOR;
 import com.arenella.recruit.recruiters.beans.RecruiterProfile.TECH;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * API Outbound representation of RecruiterProfile

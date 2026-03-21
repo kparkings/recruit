@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		 <version>3.5.8</version>
+		 <version>4.0.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.arenella.recruit</groupId>
@@ -70,11 +70,12 @@
 		    <artifactId>poi-ooxml</artifactId>
 		    <version>5.2.0</version>
 		</dependency>
+		
 		<dependency>
-    <groupId>fr.opensagres.xdocreport</groupId>
-    <artifactId>fr.opensagres.poi.xwpf.converter.pdf-gae</artifactId>
-    <version>2.0.3</version>
-</dependency>
+    		<groupId>fr.opensagres.xdocreport</groupId>
+    		<artifactId>fr.opensagres.poi.xwpf.converter.pdf-gae</artifactId>
+    		<version>2.0.3</version>
+		</dependency>
 		
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
@@ -132,12 +133,10 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-    		<artifactId>spring-data-elasticsearch</artifactId>
-    	</dependency>
-    	-->
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-jackson2</artifactId>
+	</dependency>
     </dependencies>
 
 	<build>

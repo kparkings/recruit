@@ -3,7 +3,8 @@ package com.arenella.recruit.authentication.spring.filters;
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.ajp.AjpNioProtocol;
 import org.springframework.stereotype.Component;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory;
+//import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -26,8 +27,8 @@ public class TomcatServletContainerFactoryX {
 		ajpConnector.setPort(9090);
 		ajpConnector.setSecure(false);
 		ajpConnector.setScheme("http");
-		//tomcat.addAdditionalConnectors(ajpConnector);
-		tomcat.addAdditionalTomcatConnectors(ajpConnector);
+		tomcat.addAdditionalConnectors(ajpConnector);
+		//tomcat.addAdditionalTomcatConnectors(ajpConnector);
 	      
 		return tomcat;
 	  

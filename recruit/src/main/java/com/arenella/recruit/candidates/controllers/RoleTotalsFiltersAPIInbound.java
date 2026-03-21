@@ -6,8 +6,10 @@ import com.arenella.recruit.candidates.beans.RoleTotalsFilters;
 import com.arenella.recruit.candidates.beans.RoleTotalsFilters.RoleTotalsFiltersBuilder;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.utils.GeoZoneSearchUtil.GEO_ZONE;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Filter options to apply to retrieval of 

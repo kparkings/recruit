@@ -6,11 +6,15 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.listings.utils.ListingGeoZoneSearchUtil.GEO_ZONE;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
+
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Details the filers to apply to search results of Listing's 
@@ -24,6 +28,10 @@ public class ListingSearchRequestAPIInbound {
 	private Set<Country> 		countries		= new HashSet<>();
 	private UUID				listingId;
 	private LISTING_AGE			maxAgeOfPost;
+	
+	public ListingSearchRequestAPIInbound() {
+		//Jackson
+	}
 	
 	/**
 	* Constructor based upon a builder 

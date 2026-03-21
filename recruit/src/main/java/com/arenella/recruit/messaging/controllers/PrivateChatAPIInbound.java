@@ -3,8 +3,10 @@ package com.arenella.recruit.messaging.controllers;
 import java.util.UUID;
 
 import com.arenella.recruit.messaging.beans.PrivateChat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Request to create a new PrivateChat

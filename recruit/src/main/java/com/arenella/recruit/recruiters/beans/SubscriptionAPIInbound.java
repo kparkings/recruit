@@ -2,8 +2,10 @@ package com.arenella.recruit.recruiters.beans;
 
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.INVOICE_TYPE;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Class represents a request for a Subscription of 

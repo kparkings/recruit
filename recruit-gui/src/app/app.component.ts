@@ -123,16 +123,16 @@ export class AppComponent {
 		}
 		this.privateChat.startChatContactListPolling();
 		
-		if(sessionStorage.getItem("loggedIn") == "true") {
-			console.log("STARTING NOTIFICATION SCHEDULRE")
-			this.runNotificationScheduler();
-		} else {
-			console.log("NOT  !!  STARTING NOTIFICATION SCHEDULRE")
-		}
+		//if(sessionStorage.getItem("loggedIn") == "true") {
+		//	console.log("STARTING NOTIFICATION SCHEDULRE")
+		//	this.runNotificationScheduler();
+		//} else {
+		//	console.log("NOT  !!  STARTING NOTIFICATION SCHEDULRE")
+		//}
 	
 	}
 	
-	private runNotificationScheduler():void{
+	public runNotificationScheduler():void{
 
 		this.refreshUnreadNewsFeedNotifications();	
 		this.hasUnreadNewsFeedItems();

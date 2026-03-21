@@ -2,8 +2,10 @@ package com.arenella.recruit.candidates.controllers;
 
 import com.arenella.recruit.candidates.beans.City;
 import com.arenella.recruit.candidates.enums.COUNTRY;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * API Inbound representation of a City 
