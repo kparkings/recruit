@@ -161,7 +161,7 @@ class CandidateStatisticsControllerTest {
 		assertEquals(2, response.getBody().size());
 
 		assertEquals(2, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 19")).findFirst().orElseThrow().count());
-		assertEquals(1, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 2")).findFirst().orElseThrow().count());
+		assertEquals(1, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 02")).findFirst().orElseThrow().count());
 		
 	}
 
@@ -189,7 +189,7 @@ class CandidateStatisticsControllerTest {
 		assertEquals(2, response.getBody().size());
 
 		assertEquals(2, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 19")).findFirst().orElseThrow().count());
-		assertEquals(1, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 2")).findFirst().orElseThrow().count());
+		assertEquals(1, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 02")).findFirst().orElseThrow().count());
 		
 	}
 	
@@ -216,7 +216,7 @@ class CandidateStatisticsControllerTest {
 		assertEquals(2, response.getBody().size());
 
 		assertEquals(2, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 19")).findFirst().orElseThrow().count());
-		assertEquals(1, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 2")).findFirst().orElseThrow().count());
+		assertEquals(1, response.getBody().stream().filter(b -> b.bucketId().equals("2025 - 02")).findFirst().orElseThrow().count());
 		
 	}
 	
