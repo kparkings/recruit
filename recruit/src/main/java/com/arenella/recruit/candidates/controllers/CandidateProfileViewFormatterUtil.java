@@ -38,7 +38,7 @@ public class CandidateProfileViewFormatterUtil {
 		events.stream().forEach(event -> {
 			TemporalField 	weekOfYear 	= WeekFields.of(Locale.getDefault()).weekOfYear();
 			int 			weekNumber 	= event.getViewed().get(weekOfYear);
-			String 			key 		= event.getViewed().getYear() + " - " + weekNumber;
+			String 			key 		= event.getViewed().getYear() + " - " + formatWeek(weekNumber);
 			
 			if (!buckets.containsKey(key)) {
 				buckets.put(key, new Bucket(key));
@@ -49,6 +49,18 @@ public class CandidateProfileViewFormatterUtil {
 		});
 		
 		return buckets.values().stream().toList().stream().sorted(Comparator.comparing(Bucket::getBucketId)).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Adds a 0 to months of only one number to maintain correct order
+	* @param weekNumber - To be formatted
+	* @return formatted
+	*/
+	private static String formatWeek(int weekNumber) {
+		String wkNum = String.valueOf(weekNumber);
+		
+		return wkNum.length() == 1 ? "0"+wkNum : wkNum;
+		
 	}
 	
 	/**
