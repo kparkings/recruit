@@ -1,5 +1,5 @@
 package com.arenella.recruit.campaigns.beans;
 
-public class Participant {
+public class CampaignLogo {
 
 }
