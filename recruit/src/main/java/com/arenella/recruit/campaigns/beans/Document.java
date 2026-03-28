@@ -3,7 +3,7 @@ package com.arenella.recruit.campaigns.beans;
 import java.time.LocalDateTime;
 
 /**
-* Represents a Document accosiated with either a Campaign or Role
+* Represents a Document associated with either a Campaign or Role
 * @param title 			- Human readable name for the document
 * @param documentType 	- Type of the Document
 * @param bytes 			- File bytes

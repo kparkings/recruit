@@ -2,6 +2,7 @@ package com.arenella.recruit.campaigns.beans;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -76,8 +77,8 @@ public class Campaign {
 	* logo of the company the Campaign relates to
 	* @return Campaign logo
 	*/
-	public CampaignLogo getLogo() {
-		return this.logo;
+	public Optional<CampaignLogo> getLogo() {
+		return Optional.ofNullable(this.logo);
 	}
 	
 	/**
