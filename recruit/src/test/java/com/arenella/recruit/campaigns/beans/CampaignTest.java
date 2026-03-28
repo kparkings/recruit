@@ -25,7 +25,7 @@ class CampaignTest {
 	private static final Set<Participation> PARTICIPANTS	= Set.of(Participation.builder().build());
 	private static final Set<Note> 			NOTES			= Set.of(Note.builder().build());
 	private static final Set<Appointment> 	APPOINTMENTS	= Set.of(Appointment.builder().build());
-	private static final Set<Document> 		DOCUMENTS		= Set.of(new Document("spec", DocumentType.pdf, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)));
+	private static final Set<Document> 		DOCUMENTS		= Set.of(new Document("spec", DocumentType.PDF, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)));
 	
 	/**
 	* Tests construction via Builder 
@@ -63,7 +63,7 @@ class CampaignTest {
 					.participation(Participation.builder().build())
 					.note(Note.builder().build())
 					.appointment(Appointment.builder().build())
-					.document(new Document("spec", DocumentType.pdf, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)))
+					.document(new Document("spec", DocumentType.PDF, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)))
 				.build();
 	
 		assertEquals(ID, 			updatedCampaign.getId());

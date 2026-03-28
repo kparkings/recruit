@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 */
 public record Document(String title, DocumentType type, byte[] bytes, LocalDateTime created) {
 	
-	public enum DocumentType {doc,pdf}
+	public enum DocumentType {DOC,PDF}
 	
 }
