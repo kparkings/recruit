@@ -9,6 +9,9 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
+import com.arenella.recruit.campaigns.beans.Document.DocumentType;
+
 /**
 * Unit tests for the Campaign class 
 */
@@ -17,12 +20,12 @@ class CampaignTest {
 	private static final UUID 				ID				= UUID.randomUUID();
 	private static final String 			NAME			= "ABN AMRO";
 	private static final String 			DESCRIPTION		= "Campaign for IT roles for the Client ABN Amro";
-	private static final CampaignLogo 		LOGO			= new CampaignLogo();
+	private static final CampaignLogo 		LOGO			= new CampaignLogo(new byte[] {}, PHOTO_FORMAT.jpeg);
 	private static final LocalDateTime		CREATED			= LocalDateTime.of(2026, 3,27,17,49,11);
 	private static final Set<Participation> PARTICIPANTS	= Set.of(Participation.builder().build());
 	private static final Set<Note> 			NOTES			= Set.of(Note.builder().build());
-	private static final Set<Appointment> 	APPOINTMENTS	= Set.of(new Appointment());
-	private static final Set<Document> 		DOCUMENTS		= Set.of(new Document());
+	private static final Set<Appointment> 	APPOINTMENTS	= Set.of(Appointment.builder().build());
+	private static final Set<Document> 		DOCUMENTS		= Set.of(new Document("spec", DocumentType.pdf, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)));
 	
 	/**
 	* Tests construction via Builder 
@@ -59,8 +62,8 @@ class CampaignTest {
 					.from(campaign)
 					.participation(Participation.builder().build())
 					.note(Note.builder().build())
-					.appointment(new Appointment())
-					.document(new Document())
+					.appointment(Appointment.builder().build())
+					.document(new Document("spec", DocumentType.pdf, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)))
 				.build();
 	
 		assertEquals(ID, 			updatedCampaign.getId());
