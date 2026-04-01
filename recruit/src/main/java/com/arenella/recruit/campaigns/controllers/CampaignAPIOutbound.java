@@ -115,7 +115,7 @@ public class CampaignAPIOutbound {
 	* Returns a Builder for the Class
 	* @return Builder
 	*/
-	public CampaignAPIOutboundBuilder builder() {
+	public static CampaignAPIOutboundBuilder builder() {
 		return new CampaignAPIOutboundBuilder();
 	}
 	
