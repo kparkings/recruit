@@ -32,7 +32,7 @@ public class Participation {
 	* Returns the Unique Id of the Participation
 	* @return
 	*/
-	public UUID getParticipanttionId() {
+	public UUID getParticipationId() {
 		return this.participationId;
 	}
 	

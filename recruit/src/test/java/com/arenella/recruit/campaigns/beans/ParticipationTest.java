@@ -35,7 +35,7 @@ class ParticipationTest {
 					.type(TYPE)
 				.build();
 		
-		assertEquals(PARTICIPATION_ID, 	participation.getParticipanttionId());
+		assertEquals(PARTICIPATION_ID, 	participation.getParticipationId());
 		assertEquals(CONTACT_ID, 		participation.getContactId());
 		assertEquals(CAMPAIGN_ID, 		participation.getCampaignId());
 		assertEquals(ROLE_ID, 			participation.getRoleId().get());

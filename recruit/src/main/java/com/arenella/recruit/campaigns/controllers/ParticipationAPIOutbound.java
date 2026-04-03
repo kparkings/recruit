@@ -75,7 +75,7 @@ public class ParticipationAPIOutbound {
 		* @return
 		*/
 		public ParticipationAPIOutboundBuilder from(Participation participation, Contact contact) {
-			this.participationId = participation.getParticipanttionId();
+			this.participationId = participation.getParticipationId();
 			this.contact = new ContactAPIOutbound(contact.firstName(), contact.surname());
 			this.type = participation.getType();
 			return this;

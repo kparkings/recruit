@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Document;
@@ -15,91 +16,123 @@ import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 */
 public class CampaignServiceImpl implements CampaignService{
 
+	private final CampaignDao campaignDao;
+	
+	/**
+	* Constructor
+	* @param campaignDao
+	*/
+	public CampaignServiceImpl(CampaignDao campaignDao) {
+		this.campaignDao = campaignDao;
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public Set<Campaign> fetchCampaignsForUser(String currentUserId) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.campaignDao.fetchCampaignsForUser(currentUserId);
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public Campaign fetchCampaignById(UUID campaignId, String currentUserId) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public Void addCampaign(String name, String description, CampaignLogo logo, String currentUserId) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
-	public void addParticipationToCampaign(String contactId, UUID campaignId, UUID roleId, ParticipantType type,
-			String currentUserId) {
-		// TODO Auto-generated method stub
+	public void addParticipationToCampaign(String contactId, UUID campaignId, UUID roleId, ParticipantType type, String currentUserId) {
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public void deleteParticipation(UUID participationId, String currentUserId) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public void addNotToCampaign(UUID campaignId, UUID roleId, String title, String text, String currentUserId) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public void updateNote(UUID noteId, String title, String text, String currentUser) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public void deleteNote(UUID noteId, String name) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
-	public void addAppointment(UUID campaignId, UUID roleId, String name, String description, String phoneNumber,
-			String videoLink, ZonedDateTime when, String currentUser) {
-		// TODO Auto-generated method stub
+	public void addAppointment(UUID campaignId, UUID roleId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUser) {
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
-	public void updateAppointment(UUID appointmentId, String name, String description, String phoneNumber,
-			String videoLink, ZonedDateTime when, String currentUser) {
-		// TODO Auto-generated method stub
+	public void updateAppointment(UUID appointmentId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUser) {
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public void deleteAppointment(UUID appointmentId, String currentUser) {
-		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
-	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes,
-			String currentUser) {
-		// TODO Auto-generated method stub
-		
+	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes, String currentUser) {	
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public void deleteDocument(UUID documentId, String currentUser) {
-		// TODO Auto-generated method stub
-		
 	}
 
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
 	@Override
 	public Document fetchCampaignDocument(UUID documentId, String currentUser) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
