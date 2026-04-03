@@ -30,6 +30,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Participation;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.services.CampaignService;
@@ -365,6 +366,53 @@ class CampaignControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		verify(this.mockCampaignService).addDocument(campaignId, roleId, title, type, mpf.getBytes(), userId);
+		
+	}
+	
+	/**
+	* Tests Deleting an existing Document from a Campaign
+	*/
+	@Test
+	void testDeleteDocument() {
+		
+		final UUID 		documentId = UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		
+		ResponseEntity<Void> response = this.controller.deleteDocument(documentId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteDocument(documentId, userId);
+		
+	}
+	
+	/**
+	* Tests retrieval of the Document requested by the documentId
+	*/
+	@Test
+	void testFetchCampaignDocument() {
+		
+		final UUID 				documentId 	= UUID.randomUUID();
+		final String 			userId 		= "rec1";
+		final String 			title		= ""; 
+		final DocumentType 		type		= DocumentType.DOC;
+		final byte[] 			bytes 		= new byte[] {};
+		final LocalDateTime 	created 	= LocalDateTime.of(2026, 3, 4, 16, 9, 0);
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockCampaignService.fetchCampaignDocument(documentId, userId)).thenReturn(new Document(title, type, bytes, created));
+		
+		ResponseEntity<CampaignDocumentAPIOutbound> response = this.controller.fetchCampaignDocument(documentId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).fetchCampaignDocument(documentId, userId);
+		
+		assertNotNull(response.getBody());
+		assertEquals(title, response.getBody().title());
 		
 	}
 	

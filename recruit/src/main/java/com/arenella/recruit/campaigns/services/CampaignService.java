@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 
@@ -109,20 +110,34 @@ public interface CampaignService {
 
 	/**
 	* Deletes an existing appointment
-	* @param appointmentId - Id of the Appointment to delete
+	* @param appointmentId 	- Id of the Appointment to delete
 	* @param currentUser 	- Id of the authenticated User
 	*/
 	void deleteAppointment(UUID appointmentId, String currentUser);
 
 	/**
 	* Adds a Document to a Campaign
-	* @param campaignId	- Id to associate the Document with
-	* @param roleId		- If Role level document the Id of the Role to associate the Document with
-	* @param title		- Title of the Document
-	* @param type		- Type of the Document
-	* @param bytes		- Bytes of the actual Document
-	*@param currentUser - Id of the authenticated User		
+	* @param campaignId		- Id to associate the Document with
+	* @param roleId			- If Role level document the Id of the Role to associate the Document with
+	* @param title			- Title of the Document
+	* @param type			- Type of the Document
+	* @param bytes			- Bytes of the actual Document
+	* @param currentUser	- Id of the authenticated User		
 	*/
 	void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes, String currentUser);
+
+	/**
+	* Deletes the Document with the given Id
+	* @param documentId 	- Id of the Document to delete
+	* @param currentUser 	- Id of the authenticated User
+	*/
+	void deleteDocument(UUID documentId, String currentUser);
+
+	/**
+	* Retrieves a Document based upon its Id
+	* @param documentId 	- Id of Document to retrieve
+	* @param currentUser 	- Id of the authenticated User		
+	*/
+	Document fetchCampaignDocument(UUID documentId, String currentUser);
 
 } 

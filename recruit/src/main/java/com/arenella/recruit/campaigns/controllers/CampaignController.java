@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.Contact;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.services.CampaignService;
 import com.arenella.recruit.campaigns.services.ContactService;
@@ -224,7 +225,8 @@ public class CampaignController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@DeleteMapping(path="campaign/document/{documentId}")
 	public ResponseEntity<Void> deleteDocument(@PathVariable("documentId") UUID documentId, Principal currentUser){
-		return null;
+		this.campaignService.deleteDocument(documentId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
 	/**
@@ -236,7 +238,8 @@ public class CampaignController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@GetMapping(path="campaign/document/{documentId}")
 	public ResponseEntity<CampaignDocumentAPIOutbound> fetchCampaignDocument(@PathVariable("documentId") UUID documentId, Principal principal) {
-		return null;
+		Document document = this.campaignService.fetchCampaignDocument(documentId, principal.getName());
+		return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.title(), document.type(), document.bytes(), document.created()), HttpStatus.OK);
 	}
 	
 }

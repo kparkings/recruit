@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.Document;
+import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 
 /**
@@ -80,6 +82,25 @@ public class CampaignServiceImpl implements CampaignService{
 	public void deleteAppointment(UUID appointmentId, String currentUser) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes,
+			String currentUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteDocument(UUID documentId, String currentUser) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Document fetchCampaignDocument(UUID documentId, String currentUser) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
