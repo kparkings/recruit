@@ -2,6 +2,7 @@ package com.arenella.recruit.campaigns.beans;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
 * Class represents an Appointment relating to a Campaign or Role such 
@@ -9,6 +10,7 @@ import java.util.Optional;
 */
 public class Appointment {
 	
+	private UUID			appointmentId;
 	private String 			name;
 	private String 			description;
 	private String 			videoLink;
@@ -20,6 +22,7 @@ public class Appointment {
 	* @param builder - Contains initialization values
 	*/
 	public Appointment(AppointmentBuilder builder) {
+		this.appointmentId  = builder.appointmentId;
 		this.name 			= builder.name;
 		this.description 	= builder.description;
 		this.videoLink 		= builder.videoLink;
@@ -27,6 +30,14 @@ public class Appointment {
 		this.when 			= builder.when;
 	}
 		
+	/**
+	* Returns the unique Id of the Appointment
+	* @return Id of the Appointment
+	*/
+	public UUID getAppointmentId() {
+		return this.appointmentId;
+	}
+	
 	/**
 	* Returns the name of the Appointment
 	* @return Appointment name
@@ -81,11 +92,22 @@ public class Appointment {
 	*/
 	public static class AppointmentBuilder {
 		
+		private UUID			appointmentId;
 		private String 			name;
 		private String 			description;
 		private String 			videoLink;
 		private String 			phoneNumber;
 		private ZonedDateTime 	when;
+		
+		/**
+		* Sets the Id of the appointment
+		* @param appointmentId - Unique id of the Appointment
+		* @return Builder
+		*/
+		public AppointmentBuilder appointmentId(UUID appointmentId) {
+			this.appointmentId = appointmentId;
+			return this;
+		}
 		
 		/**
 		* Sets the name of the Appointment

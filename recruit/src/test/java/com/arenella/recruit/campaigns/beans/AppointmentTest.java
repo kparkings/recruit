@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 */
 class AppointmentTest {
 
+	private static final UUID				ID				= UUID.randomUUID();
 	private static final String 			NAME 			= "Call with Candidate K Parkings";
 	private static final String 			DESCRIPTION 	= "Initial introduction meeting with Kevin Parkings";
 	private static final String 			VIDEO_LINK 		= "https://wwww.fakevidomeeting.com?asaasa22131";
@@ -28,6 +30,7 @@ class AppointmentTest {
 		
 		Appointment appointment = Appointment
 				.builder()
+					.appointmentId(ID)
 					.name(NAME)
 					.description(DESCRIPTION)
 					.videoLink(VIDEO_LINK)
@@ -35,6 +38,7 @@ class AppointmentTest {
 					.when(WHEN)
 				.build();
 		
+		assertEquals(ID, 			appointment.getAppointmentId());
 		assertEquals(NAME, 			appointment.getName());
 		assertEquals(DESCRIPTION, 	appointment.getDescription());
 		assertEquals(VIDEO_LINK, 	appointment.getVideoLink().get());

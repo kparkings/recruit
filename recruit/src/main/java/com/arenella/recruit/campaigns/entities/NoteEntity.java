@@ -38,6 +38,13 @@ public class NoteEntity {
 	private String 			text;
 	
 	/**
+	* Default constructor 
+	*/
+	public NoteEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/

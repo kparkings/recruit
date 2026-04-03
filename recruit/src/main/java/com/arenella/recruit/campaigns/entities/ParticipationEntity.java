@@ -35,6 +35,13 @@ public class ParticipationEntity {
 	private ParticipantType type;
 	
 	/**
+	* Default constructor 
+	*/
+	public ParticipationEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/

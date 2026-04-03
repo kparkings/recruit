@@ -41,6 +41,13 @@ public class CandidateEntity {
 	private boolean deletedFromSystem;
 	
 	/**
+	* Default constructor 
+	*/
+	public CandidateEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
