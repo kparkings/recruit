@@ -1,13 +1,13 @@
-package com.arenella.recruit.campaigns.beans;
+package com.arenella.recruit.campaigns.controllers;
+
+import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
 /**
-* A Candidate that can be added to Campaign or Role 
-* level.  
+* APIOutbound representation of a Candidate 
 */
-public class Candidate {
+public class CandidateAPIOutbound {
 
-	public enum Type {INTERNAL, EXTERNAL}
-	
 	private String 	id;
 	private Type 	type;
 	private String 	firstName;
@@ -21,7 +21,7 @@ public class Candidate {
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	public Candidate(CandidateBuilder builder) {
+	public CandidateAPIOutbound(CandidateAPIOutboundBuilder builder) {
 		this.id 				= builder.id;
 		this.type 				= builder.type;
 		this.firstName 			= builder.firstName;
@@ -29,7 +29,7 @@ public class Candidate {
 		this.countryCode 		= builder.countryCode;
 		this.jobTitle 			= builder.jobTitle;
 		this.email 				= builder.email;
-		this.deletedFromSystem 	=  builder.deletedFromSystem;
+		this.deletedFromSystem 	= builder.deletedFromSystem;
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class Candidate {
 	}
 	
 	/**
-	* Returns the firstname of the Candidate
+	* Returns the firstName of the Candidate
 	* @return first name
 	*/
 	public String getFirstName() {
@@ -108,14 +108,14 @@ public class Candidate {
 	* Returns a builder for the class
 	* @return Builder for the class
 	*/
-	public static CandidateBuilder builder() {
-		return new CandidateBuilder();
+	public static CandidateAPIOutboundBuilder builder() {
+		return new CandidateAPIOutboundBuilder();
 	}
 	
 	/**
 	* Builder for the Class 
 	*/
-	public static class CandidateBuilder {
+	public static class CandidateAPIOutboundBuilder {
 		
 		private String 	id;
 		private Type 	type;
@@ -127,83 +127,21 @@ public class Candidate {
 		private boolean deletedFromSystem;
 		
 		/**
-		* Sets the Id of the Candidate
-		* @param id - Candidate Id 
+		* Populates the Builder with values from a Candidate 
+		* @param candiate - Initialization values
 		* @return Builder
 		*/
-		public CandidateBuilder id(String id) {
-			this.id = id;
-			return this;
-		}
-		
-		/**
-		* Sets the Type of the Candidate
-		* @param type - Candidate Type
-		* @return Builder
-		*/
-		public CandidateBuilder type(Type type) {
-			this.type = type;
-			return this;
-		}
-		
-		/**
-		* Sets the Candidate's firstName
-		* @param firstName - firstName of the Candidate
-		* @return Builder
-		*/
-		public CandidateBuilder firstName(String firstName) {
-			this.firstName = firstName;
-			return this;
-		}
-		
-		/**
-		* Sets the surname of the Candidate
-		* @param surname - Candidates surname
-		* @return Builder
-		*/
-		public CandidateBuilder surname(String surname) {
-			this.surname = surname;
-			return this;
-		}
-		
-		/**
-		* Sets the Country code of the Country where the Candidate
-		* resides
-		* @param countryCode - Code of Country
-		* @return Builder
-		*/
-		public CandidateBuilder countryCode(String countryCode) {
-			this.countryCode = countryCode;
-			return this;
-		}
-		
-		/**
-		* Sets the Candidate's Job title
-		* @param jobTitle - Role Candidate performs
-		* @return Builder
-		*/
-		public CandidateBuilder jobTitle(String jobTitle) {
-			this.jobTitle = jobTitle;
-			return this;
-		}
-		
-		/**
-		* Sets the email address to contact the Candidate
-		* @param email - Candidates email address
-		* @return Builder
-		*/
-		public CandidateBuilder email(String email) {
-			this.email = email;
-			return this;
-		}
-		
-		/**
-		* Sets whether the Candidate has been deleted from the System
-		* @param deletedFromSystem - If Candidate has been deleted from the System
-		* @return Builder
-		*/
-		public CandidateBuilder deletedFromSystem(boolean deletedFromSystem) {
-			this.deletedFromSystem = deletedFromSystem;
+		public CandidateAPIOutboundBuilder from (Candidate candidate) {
+			
+			this.id 				= candidate.getId();
+			this.type 				= candidate.getType();
+			this.firstName 			= candidate.getFirstName();
+			this.surname 			= candidate.getSurname();
+			this.countryCode 		= candidate.getCountryCode();
+			this.jobTitle 			= candidate.getJobTitle();
+			this.email 				= candidate.getEmail();
+			this.deletedFromSystem 	= candidate.isDeleteFromSystem();
+			
 			return this;
 		}
 		
@@ -211,8 +149,8 @@ public class Candidate {
 		* Returns an initialized instance 
 		* @return initialized instance
 		*/
-		public Candidate build() {
-			return new Candidate(this);
+		public CandidateAPIOutbound build() {
+			return new CandidateAPIOutbound(this);
 		}
 		
 	}

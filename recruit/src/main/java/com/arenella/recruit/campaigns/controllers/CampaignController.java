@@ -3,7 +3,6 @@ package com.arenella.recruit.campaigns.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
-import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.services.CampaignService;
 import com.arenella.recruit.campaigns.services.ContactService;
 

@@ -19,6 +19,7 @@ public class CampaignAPIOutbound {
 	private String 							name;
 	private String 							description;
 	private CampaignLogo 					logo;
+	private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
 	private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
 	private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
 	private Set<AppointmentAPIOutbound> 	appointments	= new LinkedHashSet<>();
@@ -35,11 +36,13 @@ public class CampaignAPIOutbound {
 		this.description 	= builder.description;
 		this.logo 			= builder.logo;
 		
+		this.candidates.clear();
 		this.participations.clear(); 
 		this.notes.clear();
 		this.appointments.clear();
 		this.documents.clear();
 		
+		this.candidates.addAll(builder.candidates);
 		this.participations.addAll(builder.participations); 
 		this.notes.addAll(builder.notes);
 		this.appointments.addAll(builder.appointments);
@@ -78,6 +81,14 @@ public class CampaignAPIOutbound {
 	public Optional<CampaignLogo> getLogo(){
 		return Optional.ofNullable(this.logo);
 	}
+	
+	/**
+	* Returns Campaign level Candidates. 
+	* @return
+	*/
+	public Set<CandidateAPIOutbound> getCandidates(){
+		return this.candidates;
+	} 
 	
 	/**
 	* Returns a collection of Participation in the Campaign
@@ -128,6 +139,7 @@ public class CampaignAPIOutbound {
 		private String 							name;
 		private String 							description;
 		private CampaignLogo 					logo;
+		private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
 		private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
 		private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
 		private Set<AppointmentAPIOutbound> 	appointments	= new LinkedHashSet<>();
@@ -151,6 +163,7 @@ public class CampaignAPIOutbound {
 				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id() == participation.getContactId()).findFirst().orElseThrow()).build());
 			});
 			
+			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(campaign.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(campaign.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.title(), d.type(), d.created())).collect(Collectors.toCollection(LinkedHashSet::new)));

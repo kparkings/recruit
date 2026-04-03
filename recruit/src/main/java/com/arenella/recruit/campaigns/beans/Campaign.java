@@ -18,6 +18,7 @@ public class Campaign {
 	private String 				description;
 	private CampaignLogo 		logo;
 	private LocalDateTime		created;
+	private Set<Candidate>		candidates		= new LinkedHashSet<>();
 	private Set<Participation> 	participations	= new LinkedHashSet<>();
 	private Set<Note> 			notes			= new LinkedHashSet<>();
 	private Set<Appointment> 	appointments	= new LinkedHashSet<>();
@@ -36,11 +37,13 @@ public class Campaign {
 		this.logo 			= builder.logo;
 		this.created 		= builder.created;
 		
+		this.candidates.clear();
 		this.participations.clear();
 		this.notes.clear();
 		this.appointments.clear();
 		this.documents.clear();
 
+		this.candidates.addAll(builder.candidates);
 		this.participations.addAll(builder.participations);
 		this.notes.addAll(builder.notes);
 		this.appointments.addAll(builder.appointments);
@@ -107,6 +110,14 @@ public class Campaign {
 	}
 	
 	/**
+	* Returns the Candidates at the Campaign level
+	* @return Candidates associated with the Campaign
+	*/
+	public Set<Candidate> getCandidates() {
+		return this.candidates;
+	}
+	
+	/**
 	* Returns appointments that are specific to the Campaign such as 
 	* meetings with the clients or calls with a Candidate
 	* @return appointments
@@ -141,6 +152,7 @@ public class Campaign {
 		private String 				description;
 		private CampaignLogo 		logo;
 		private LocalDateTime		created;
+		private Set<Candidate>		candidates		= new LinkedHashSet<>();
 		private Set<Participation>  participations	= new LinkedHashSet<>();
 		private Set<Note> 			notes			= new LinkedHashSet<>();
 		private Set<Appointment> 	appointments	= new LinkedHashSet<>();
@@ -158,11 +170,13 @@ public class Campaign {
 			this.logo 			= campaign.logo;
 			this.created	 	= campaign.created;
 			
+			this.candidates.clear();
 			this.participations.clear();
 			this.notes.clear();
 			this.appointments.clear();
 			this.documents.clear();
 			
+			this.candidates.addAll(campaign.candidates);
 			this.participations.addAll(campaign.participations);
 			this.notes.addAll(campaign.notes);
 			this.appointments.addAll(campaign.appointments);
@@ -218,6 +232,28 @@ public class Campaign {
 		*/
 		public CampaignBuilder created(LocalDateTime created) {
 			this.created = created;
+			return this;
+		}
+		
+		/**
+		* Adds Campaign level Candidates. These are candidates that are 
+		* potentially interesting to multiple roles in the Campaign
+		* @param candidates - Campaign level Candidates
+		* @return Builder
+		*/
+		public CampaignBuilder candidates(Set<Candidate> candidates) {
+			this.candidates.clear();
+			this.candidates.addAll(candidates);
+			return this;
+		}
+		
+		/**
+		* Adds an additional Candidate to the Campaign level 
+		* @param candidate - Candidate 
+		* @return Builder
+		*/
+		public CampaignBuilder candidate(Candidate candidate) {
+			this.candidates.add(candidate);
 			return this;
 		}
 		
@@ -299,7 +335,7 @@ public class Campaign {
 		/**
 		* Adds an additional Document to the existing Documents
 		* @param document - Additional document
-		* @return Buuilder
+		* @return Builder
 		*/
 		public CampaignBuilder document(Document document) {
 			this.documents.add(document);

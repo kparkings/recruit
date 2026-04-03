@@ -22,6 +22,7 @@ class CampaignTest {
 	private static final String 			DESCRIPTION		= "Campaign for IT roles for the Client ABN Amro";
 	private static final CampaignLogo 		LOGO			= new CampaignLogo(new byte[] {}, PHOTO_FORMAT.jpeg);
 	private static final LocalDateTime		CREATED			= LocalDateTime.of(2026, 3,27,17,49,11);
+	private static final Set<Candidate>		CANDIDATES		= Set.of(Candidate.builder().build());
 	private static final Set<Participation> PARTICIPANTS	= Set.of(Participation.builder().build());
 	private static final Set<Note> 			NOTES			= Set.of(Note.builder().build());
 	private static final Set<Appointment> 	APPOINTMENTS	= Set.of(Appointment.builder().build());
@@ -35,6 +36,7 @@ class CampaignTest {
 		
 		Campaign campaign = Campaign
 				.builder()
+					.candidates(CANDIDATES)
 					.appointments(APPOINTMENTS)
 					.created(CREATED)
 					.description(DESCRIPTION)
@@ -49,9 +51,10 @@ class CampaignTest {
 		assertEquals(ID, 			campaign.getId());
 		assertEquals(NAME, 			campaign.getName());
 		assertEquals(DESCRIPTION, 	campaign.getDescription());
-		assertEquals(LOGO, 			campaign.getLogo());
+		assertEquals(LOGO, 			campaign.getLogo().get());
 		assertEquals(CREATED, 		campaign.getCreated());
 		
+		assertEquals(1, campaign.getCandidates().size());
 		assertEquals(1, campaign.getParticipations().size());
 		assertEquals(1, campaign.getNotes().size());
 		assertEquals(1, campaign.getAppointments().size());
@@ -60,6 +63,7 @@ class CampaignTest {
 		Campaign updatedCampaign = Campaign
 				.builder()
 					.from(campaign)
+					.candidate(Candidate.builder().build())
 					.participation(Participation.builder().build())
 					.note(Note.builder().build())
 					.appointment(Appointment.builder().build())
@@ -69,9 +73,10 @@ class CampaignTest {
 		assertEquals(ID, 			updatedCampaign.getId());
 		assertEquals(NAME, 			updatedCampaign.getName());
 		assertEquals(DESCRIPTION, 	updatedCampaign.getDescription());
-		assertEquals(LOGO, 			updatedCampaign.getLogo());
+		assertEquals(LOGO, 			updatedCampaign.getLogo().get());
 		assertEquals(CREATED, 		updatedCampaign.getCreated());
 		
+		assertEquals(2, updatedCampaign.getCandidates().size());
 		assertEquals(2, updatedCampaign.getParticipations().size());
 		assertEquals(2, updatedCampaign.getNotes().size());
 		assertEquals(2, updatedCampaign.getAppointments().size());
@@ -88,6 +93,7 @@ class CampaignTest {
 	
 		Campaign campaign = Campaign.builder().build();
 	
+		assertTrue(campaign.getCandidates().isEmpty());
 		assertTrue(campaign.getParticipations().isEmpty());
 		assertTrue(campaign.getNotes().isEmpty());
 		assertTrue(campaign.getAppointments().isEmpty());
