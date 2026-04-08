@@ -237,7 +237,7 @@ public class CampaignController {
 	@GetMapping(path="campaign/document/{documentId}")
 	public ResponseEntity<CampaignDocumentAPIOutbound> fetchCampaignDocument(@PathVariable("documentId") UUID documentId, Principal principal) {
 		Document document = this.campaignService.fetchCampaignDocument(documentId, principal.getName());
-		return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.title(), document.type(), document.bytes(), document.created()), HttpStatus.OK);
+		return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.getTitle(), document.getType(), document.getBytes(), document.getCreated()), HttpStatus.OK);
 	}
 	
 }
