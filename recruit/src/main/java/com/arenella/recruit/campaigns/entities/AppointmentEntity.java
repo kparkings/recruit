@@ -4,7 +4,11 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.arenella.recruit.campaigns.beans.Appointment;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /**
@@ -14,17 +18,33 @@ import jakarta.persistence.Table;
 @Table(schema="campaigns", name="appointments")
 public class AppointmentEntity {
 
+	@Id
+	@Column(name="id")
 	private UUID			appointmentId;
+	
+	@Column(name="campaign_id")
 	private UUID			campaiginId;
+	
+	@Column(name="role_id")
 	private UUID			roleId;
+	
+	@Column(name="name")
 	private String 			name;
+	
+	@Column(name="description")
 	private String 			description;
+	
+	@Column(name="video_link")
 	private String 			videoLink;
+	
+	@Column(name="phone_numver")
 	private String 			phoneNumber;
+	
+	@Column(name="when")
 	private ZonedDateTime 	when;
 	
 	/**
-	* Default constructir
+	* Default constructor
 	*/
 	public AppointmentEntity() {
 		//Hibernate
@@ -221,4 +241,43 @@ public class AppointmentEntity {
 		}
 		
 	}
+	
+	/**
+	* Converts from the Domain to Entity representation of an Appointment
+	* @param appointment - To convert
+	* @return converted
+	*/
+	public static AppointmentEntity toEntity(Appointment appointment) {
+		return AppointmentEntity
+				.builder()
+					.appointmentId(appointment.getAppointmentId())
+					.campaignId(appointment.getCampaignId())
+					.description(appointment.getDescription())
+					.name(appointment.getName())
+					.phoneNumber(appointment.getPhoneNumber().orElse(null))
+					.roleId(appointment.getRoleId().orElse(null))
+					.videoLink(appointment.getVideoLink().orElse(null))
+					.when(appointment.getWhen())
+				.build();
+	}
+	
+	/**
+	* Converts from the Entity to the Domain representation of an Appointment
+	* @param entity - To be converted
+	* @return converted
+	*/
+	public static Appointment fromEntity(AppointmentEntity entity) {
+		return Appointment
+				.builder()
+					.appointmentId(entity.getAppointmentId())
+					.campaignId(entity.getCampaignId())
+					.description(entity.getDescription())
+					.name(entity.getName())
+					.phoneNumber(entity.getPhoneNumber().orElse(null))
+					.roleId(entity.getRoleId().orElse(null))
+					.videoLink(entity.getVideoLink().orElse(null))
+					.when(entity.getWhen())
+				.build();
+	}
+	
 }

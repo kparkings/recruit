@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 class AppointmentTest {
 
 	private static final UUID				ID				= UUID.randomUUID();
+	private static final UUID				CAMPAIGN_ID		= UUID.randomUUID();
+	private static final UUID				ROLE_ID			= UUID.randomUUID();
 	private static final String 			NAME 			= "Call with Candidate K Parkings";
 	private static final String 			DESCRIPTION 	= "Initial introduction meeting with Kevin Parkings";
 	private static final String 			VIDEO_LINK 		= "https://wwww.fakevidomeeting.com?asaasa22131";
@@ -31,6 +33,8 @@ class AppointmentTest {
 		Appointment appointment = Appointment
 				.builder()
 					.appointmentId(ID)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 					.name(NAME)
 					.description(DESCRIPTION)
 					.videoLink(VIDEO_LINK)
@@ -39,6 +43,8 @@ class AppointmentTest {
 				.build();
 		
 		assertEquals(ID, 			appointment.getAppointmentId());
+		assertEquals(CAMPAIGN_ID, 	appointment.getCampaignId());
+		assertEquals(ROLE_ID, 		appointment.getRoleId().get());
 		assertEquals(NAME, 			appointment.getName());
 		assertEquals(DESCRIPTION, 	appointment.getDescription());
 		assertEquals(VIDEO_LINK, 	appointment.getVideoLink().get());
@@ -60,6 +66,7 @@ class AppointmentTest {
 					.when(WHEN)
 				.build();
 		
+		assertTrue(appointment.getRoleId().isEmpty());
 		assertTrue(appointment.getVideoLink().isEmpty());
 		assertTrue(appointment.getPhoneNumber().isEmpty());
 		

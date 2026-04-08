@@ -11,6 +11,8 @@ import java.util.UUID;
 public class Appointment {
 	
 	private UUID			appointmentId;
+	private UUID			campaignId;
+	private UUID			roleId;
 	private String 			name;
 	private String 			description;
 	private String 			videoLink;
@@ -23,6 +25,8 @@ public class Appointment {
 	*/
 	public Appointment(AppointmentBuilder builder) {
 		this.appointmentId  = builder.appointmentId;
+		this.campaignId		= builder.campaignId;
+		this.roleId			= builder.roleId;
 		this.name 			= builder.name;
 		this.description 	= builder.description;
 		this.videoLink 		= builder.videoLink;
@@ -36,6 +40,24 @@ public class Appointment {
 	*/
 	public UUID getAppointmentId() {
 		return this.appointmentId;
+	}
+	
+	/**
+	* Returns the Id of the Campaign the Appointment is associated 
+	* with 
+	* @return Campaign Id
+	*/
+	public UUID getCampaignId() {
+		return this.campaignId;
+	}
+	
+	/**
+	* If Role level Appointment, returns the Id of the 
+	* associated Role
+	* @return Id of the Role
+	*/
+	public Optional<UUID> getRoleId() {
+		return Optional.ofNullable(this.roleId);
 	}
 	
 	/**
@@ -93,6 +115,8 @@ public class Appointment {
 	public static class AppointmentBuilder {
 		
 		private UUID			appointmentId;
+		private UUID			campaignId;
+		private UUID			roleId;
 		private String 			name;
 		private String 			description;
 		private String 			videoLink;
@@ -106,6 +130,26 @@ public class Appointment {
 		*/
 		public AppointmentBuilder appointmentId(UUID appointmentId) {
 			this.appointmentId = appointmentId;
+			return this;
+		}
+		
+		/**
+		* Sets the id of the Campaign the Appointment relates to
+		* @param campaignId - Id of the Campaign
+		* @return Builder
+		*/
+		public AppointmentBuilder campaignId(UUID campaignId) {
+			this.campaignId = campaignId;
+			return this;
+		}
+		
+		/**
+		* If Role level sets the Role the Appointment is associate with
+		* @param roleId - Id of the Role
+		* @return Builder
+		*/
+		public AppointmentBuilder roleId(UUID roleId) {
+			this.roleId = roleId;
 			return this;
 		}
 		
