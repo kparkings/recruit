@@ -24,8 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
+import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
-import com.arenella.recruit.campaigns.services.ContactService;
 
 /**
 * Rest API for working with Campaign's 
@@ -33,15 +33,15 @@ import com.arenella.recruit.campaigns.services.ContactService;
 @RestController
 public class CampaignController {
 
-	private final CampaignService 	campaignService;
-	private final ContactService 	contactService;
+	private final CampaignService 			campaignService;
+	private final CampaignContactService 	contactService;
 	
 	/**
 	* Constructor
 	* @param campaignService - Services for interacting with Campaigin's
 	* @param contactService  - Services for interacting with Contact's
 	*/
-	public CampaignController(CampaignService campaignService, ContactService contactService) {
+	public CampaignController(CampaignService campaignService, CampaignContactService contactService) {
 		this.campaignService 	= campaignService;
 		this.contactService 	= contactService;
 	}
@@ -208,7 +208,7 @@ public class CampaignController {
 	* @return ResponseENtity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PostMapping(path="campaign/document}",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	@PostMapping(path="campaign/document",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> addDocument(@RequestPart("document") AddDocumentAPIInbound document, @RequestPart("documentBytes")MultipartFile documentBytes, Principal principal) throws IOException{
 		this.campaignService.addDocument(document.getCampaignId(), document.getRoleId().orElse(null), document.getTitle(), document.getType(), documentBytes.getBytes(), principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);	

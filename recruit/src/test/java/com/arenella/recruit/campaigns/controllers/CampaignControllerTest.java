@@ -33,8 +33,8 @@ import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
+import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
-import com.arenella.recruit.campaigns.services.ContactService;
 
 /**
 * Unit tests for the CampaignController class 
@@ -43,16 +43,16 @@ import com.arenella.recruit.campaigns.services.ContactService;
 class CampaignControllerTest {
 
 	@Mock
-	private CampaignService 	mockCampaignService;
+	private CampaignService 			mockCampaignService;
 	
 	@Mock
-	private ContactService 		mockContactService;
+	private CampaignContactService 		mockContactService;
 	
 	@Mock
-	private	Principal			mockPrincipal;
+	private	Principal					mockPrincipal;
 	
 	@InjectMocks
-	private CampaignController 	controller;
+	private CampaignController 			controller;
 	
 	/**
 	* Test endpoint for retrieving current User's own Campaigns 
@@ -397,13 +397,10 @@ class CampaignControllerTest {
 		
 		final UUID 				documentId 	= UUID.randomUUID();
 		final String 			userId 		= "rec1";
-		final String 			title		= ""; 
-		final DocumentType 		type		= DocumentType.DOC;
-		final byte[] 			bytes 		= new byte[] {};
-		final LocalDateTime 	created 	= LocalDateTime.of(2026, 3, 4, 16, 9, 0);
+		final String 			title		= "A title"; 
 		
 		when(this.mockPrincipal.getName()).thenReturn(userId);
-		when(this.mockCampaignService.fetchCampaignDocument(documentId, userId)).thenReturn(new Document(title, type, bytes, created));
+		when(this.mockCampaignService.fetchCampaignDocument(documentId, userId)).thenReturn(Document.builder().title(title).build());
 		
 		ResponseEntity<CampaignDocumentAPIOutbound> response = this.controller.fetchCampaignDocument(documentId, mockPrincipal);
 		

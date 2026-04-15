@@ -160,13 +160,13 @@ public class CampaignAPIOutbound {
 			campaign.getLogo().ifPresent(campaignLogo -> this.logo = campaignLogo);
 			
 			campaign.getParticipations().stream().forEach(participation -> {
-				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id() == participation.getContactId()).findFirst().orElseThrow()).build());
+				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build());
 			});
 			
 			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(campaign.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(campaign.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.title(), d.type(), d.created())).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
 			
 			return this;
 		}

@@ -2,23 +2,20 @@ package com.arenella.recruit.campaigns.beans;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 /**
-* Class represents a recruitment Campaign. It is a high level container
-* that could, for example represent a recruiters clients and contain 
-* amongst other things each of the Roles for that candidate 
+* Class represents an individual Role within a Campaign. For example an open 
+* Role for a Java developer that forms part of a Campaigin for the Recruiters 
+* banking client 
 */
-public class Campaign {
+public class Role {
 
 	private UUID 				id;
 	private String 				name;
 	private String 				description;
-	private CampaignLogo 		logo;
 	private LocalDateTime		created;
-	private Set<Role>			roles			= new LinkedHashSet<>();
 	private Set<Candidate>		candidates		= new LinkedHashSet<>();
 	private Set<Participation> 	participations	= new LinkedHashSet<>();
 	private Set<Note> 			notes			= new LinkedHashSet<>();
@@ -30,22 +27,19 @@ public class Campaign {
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	public Campaign(CampaignBuilder builder) {
+	public Role(RoleBuilder builder) {
 		
 		this.id				= builder.id;
 		this.name 			= builder.name;
 		this.description 	= builder.description;
-		this.logo 			= builder.logo;
 		this.created 		= builder.created;
 		
-		this.roles.clear();
 		this.candidates.clear();
 		this.participations.clear();
 		this.notes.clear();
 		this.appointments.clear();
 		this.documents.clear();
 
-		this.roles.addAll(builder.roles);
 		this.candidates.addAll(builder.candidates);
 		this.participations.addAll(builder.participations);
 		this.notes.addAll(builder.notes);
@@ -79,15 +73,6 @@ public class Campaign {
 	}
 	
 	/**
-	* Returns the Campaigns log. This could be for example the business 
-	* logo of the company the Campaign relates to
-	* @return Campaign logo
-	*/
-	public Optional<CampaignLogo> getLogo() {
-		return Optional.ofNullable(this.logo);
-	}
-	
-	/**
 	* Returns when the Campaign was created
 	* @return creation date/time
 	*/
@@ -110,14 +95,6 @@ public class Campaign {
 	*/
 	public Set<Note> getNotes() {
 		return this.notes;
-	}
-	
-	/**
-	* Returns the Roles associated with the Campaign
-	* @return roles
-	*/
-	public Set<Role> getRoles(){
-		return this.roles;
 	}
 	
 	/**
@@ -149,21 +126,19 @@ public class Campaign {
 	* Return a Builder for the class
 	* @return Builder
 	*/
-	public static CampaignBuilder builder() {
-		return new CampaignBuilder();
+	public static RoleBuilder builder() {
+		return new RoleBuilder();
 	}
 	
 	/**
 	* Builder for the class 
 	*/
-	public static class CampaignBuilder{
+	public static class RoleBuilder{
 		
 		private UUID 				id;
 		private String 				name;
 		private String 				description;
-		private CampaignLogo 		logo;
 		private LocalDateTime		created;
-		private Set<Role>			roles			= new LinkedHashSet<>();
 		private Set<Candidate>		candidates		= new LinkedHashSet<>();
 		private Set<Participation>  participations	= new LinkedHashSet<>();
 		private Set<Note> 			notes			= new LinkedHashSet<>();
@@ -171,134 +146,100 @@ public class Campaign {
 		private Set<Document> 		documents		= new LinkedHashSet<>();
 
 		/**
-		* Populates the Builder with the values from an existing Campaign
-		* @param campaign - Contains initialization values
+		* Populates the Builder with the values from an existing Role
+		* @param role - Contains initialization values
 		* @return Builder
 		*/
-		public CampaignBuilder from(Campaign campaign) {
-			this.id 			= campaign.id;
-			this.name 			= campaign.name;
-			this.description 	= campaign.description;
-			this.logo 			= campaign.logo;
-			this.created	 	= campaign.created;
+		public RoleBuilder from(Role role) {
+			this.id 			= role.id;
+			this.name 			= role.name;
+			this.description 	= role.description;
+			this.created	 	= role.created;
 			
-			this.roles.clear();
 			this.candidates.clear();
 			this.participations.clear();
 			this.notes.clear();
 			this.appointments.clear();
 			this.documents.clear();
 			
-			this.roles.addAll(campaign.roles);
-			this.candidates.addAll(campaign.candidates);
-			this.participations.addAll(campaign.participations);
-			this.notes.addAll(campaign.notes);
-			this.appointments.addAll(campaign.appointments);
-			this.documents.addAll(campaign.documents);
+			this.candidates.addAll(role.candidates);
+			this.participations.addAll(role.participations);
+			this.notes.addAll(role.notes);
+			this.appointments.addAll(role.appointments);
+			this.documents.addAll(role.documents);
 			
 			return this;
 		}
 		
 		/**
-		* Sets the unique Id of the Campaign
-		* @param id - Unique Id of the Campaign
+		* Sets the unique Id of the Role
+		* @param id - Unique Id of the Role
 		* @return Builder
 		*/
-		public CampaignBuilder id (UUID id) {
+		public RoleBuilder id (UUID id) {
 			this.id = id;
 			return this;
 		}
 		
 		/**
-		* Sets the name of the Campaign
-		* @param name - Name of the Campaign
+		* Sets the name of the Role
+		* @param name - Name of the Role
 		* @return Builder
 		*/
-		public CampaignBuilder name(String name) {
+		public RoleBuilder name(String name) {
 			this.name = name;
 			return this;
 		}
 		
 		/**
-		* Sets a description of the Campaign
-		* @param description - Campaign description
+		* Sets a description of the Role
+		* @param description - Role description
 		* @return Builder
 		*/
-		public CampaignBuilder description(String description) {
+		public RoleBuilder description(String description) {
 			this.description = description;
 			return this;
 		}
 		
 		/**
-		* Sets the Logo or the Campaign
-		* @param logo - Campaign Logo
-		* @return Builder
-		*/
-		public CampaignBuilder logo(CampaignLogo logo) {
-			this.logo = logo;
-			return this;
-		}
-		
-		/**
-		* Sets when the Campaign was created
+		* Sets when the Role was created
 		* @param created - Creation date/time
 		* @return Builder
 		*/
-		public CampaignBuilder created(LocalDateTime created) {
+		public RoleBuilder created(LocalDateTime created) {
 			this.created = created;
 			return this;
 		}
-
-		/**
-		* Adds Roles. These are Roles that are relevant to the Campaign
-		* @param roles - Roles relevant to the Campaign
-		* @return Builder
-		*/
-		public CampaignBuilder roles(Set<Role> roles) {
-			this.roles.clear();
-			this.roles.addAll(roles);
-			return this;
-		}
 		
 		/**
-		* Adds an additional Role to the Campaign 
-		* @param role - Role 
-		* @return Builder
-		*/
-		public CampaignBuilder role(Role role) {
-			this.roles.add(role);
-			return this;
-		}
-		
-		/**
-		* Adds Campaign level Candidates. These are candidates that are 
-		* potentially interesting to multiple roles in the Campaign
+		* Adds Role level Candidates. These are candidates that are 
+		* potentially interesting for this specific Role
 		* @param candidates - Campaign level Candidates
 		* @return Builder
 		*/
-		public CampaignBuilder candidates(Set<Candidate> candidates) {
+		public RoleBuilder candidates(Set<Candidate> candidates) {
 			this.candidates.clear();
 			this.candidates.addAll(candidates);
 			return this;
 		}
 		
 		/**
-		* Adds an additional Candidate to the Campaign level 
+		* Adds an additional Candidate to the Role level 
 		* @param candidate - Candidate 
 		* @return Builder
 		*/
-		public CampaignBuilder candidate(Candidate candidate) {
+		public RoleBuilder candidate(Candidate candidate) {
 			this.candidates.add(candidate);
 			return this;
 		}
 		
 		/**
 		* Sets the Participations which are able to view and interact with the 
-		* Campaign
-		* @param participations - Campaign Participations
+		* Role
+		* @param participations - Role Participations
 		* @return Builder:
 		*/
-		public CampaignBuilder participants(Set<Participation> participations) {
+		public RoleBuilder participants(Set<Participation> participations) {
 			this.participations.clear();
 			this.participations.addAll(participations);
 			return this;
@@ -309,17 +250,17 @@ public class Campaign {
 		* @param participation - Additional Participation
 		* @return Builder
 		*/
-		public CampaignBuilder participation(Participation participation) {
+		public RoleBuilder participation(Participation participation) {
 			this.participations.add(participation);
 			return this;
 		}
 		
 		/**
-		* Sets ant notes relating to the Campaign
-		* @param notes - Campaign level Notes
+		* Sets ant notes relating to the Role
+		* @param notes - Role level Notes
 		* @return Builder
 		*/
-		public CampaignBuilder notes(Set<Note> notes) {
+		public RoleBuilder notes(Set<Note> notes) {
 			this.notes.clear();
 			this.notes.addAll(notes);
 			return this;
@@ -330,17 +271,17 @@ public class Campaign {
 		* @param note - Additional Note
 		* @return Builder
 		*/
-		public CampaignBuilder note(Note note) {
+		public RoleBuilder note(Note note) {
 			this.notes.add(note);
 			return this;
 		}
 		
 		/**
-		* Sets any appointments relating to the Campaign
+		* Sets any appointments relating to the Role
 		* @param appointments - Appointments such as client meetings or Candidate calls
 		* @return Builder
 		*/
-		public CampaignBuilder appointments(Set<Appointment> appointments) {
+		public RoleBuilder appointments(Set<Appointment> appointments) {
 			this.appointments.clear();
 			this.appointments.addAll(appointments);
 			return this;
@@ -351,17 +292,17 @@ public class Campaign {
 		* @param appointment - Additional Appointment
 		* @return Builder
 		*/
-		public CampaignBuilder appointment(Appointment appointment) {
+		public RoleBuilder appointment(Appointment appointment) {
 			this.appointments.add(appointment);
 			return this;
 		}
 		
 		/**
-		* Sets any documents associated with the Campaign
+		* Sets any documents associated with the Role
 		* @param documents - Campaign Documents
 		* @return Builder
 		*/
-		public CampaignBuilder documents(Set<Document> documents) {
+		public RoleBuilder documents(Set<Document> documents) {
 			this.documents.clear();
 			this.documents.addAll(documents);
 			return this;
@@ -372,13 +313,13 @@ public class Campaign {
 		* @param document - Additional document
 		* @return Builder
 		*/
-		public CampaignBuilder document(Document document) {
+		public RoleBuilder document(Document document) {
 			this.documents.add(document);
 			return this;
 		}
 		
-		public Campaign build() {
-			return new Campaign(this);
+		public Role build() {
+			return new Role(this);
 		}
 		
 	}

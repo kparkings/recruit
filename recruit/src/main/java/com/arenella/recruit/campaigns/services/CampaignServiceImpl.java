@@ -4,6 +4,8 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
@@ -14,6 +16,7 @@ import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 /**
 * Services for working with Campaigns 
 */
+@Service
 public class CampaignServiceImpl implements CampaignService{
 
 	private final CampaignDao campaignDao;

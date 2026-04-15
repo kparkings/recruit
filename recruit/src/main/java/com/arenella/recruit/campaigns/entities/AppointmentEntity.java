@@ -23,7 +23,7 @@ public class AppointmentEntity {
 	private UUID			appointmentId;
 	
 	@Column(name="campaign_id")
-	private UUID			campaiginId;
+	private UUID			campaignId;
 	
 	@Column(name="role_id")
 	private UUID			roleId;
@@ -37,7 +37,7 @@ public class AppointmentEntity {
 	@Column(name="video_link")
 	private String 			videoLink;
 	
-	@Column(name="phone_numver")
+	@Column(name="phone_number")
 	private String 			phoneNumber;
 	
 	@Column(name="when")
@@ -56,7 +56,7 @@ public class AppointmentEntity {
 	*/
 	public AppointmentEntity(AppointmentEntityBuilder builder) {
 		this.appointmentId	= builder.appointmentId;
-		this.campaiginId	= builder.campaignId;
+		this.campaignId		= builder.campaignId;
 		this.roleId			= builder.roleId;
 		this.name 			= builder.name;
 		this.description 	= builder.description;
@@ -78,7 +78,7 @@ public class AppointmentEntity {
 	* @return Id of the Campaign
 	*/
 	public UUID getCampaignId() {
-		return this.campaiginId;
+		return this.campaignId;
 	}
 		
 	/**

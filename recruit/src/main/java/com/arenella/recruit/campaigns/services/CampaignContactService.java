@@ -7,7 +7,7 @@ import com.arenella.recruit.campaigns.beans.Contact;
 /**
 * Defines services for interacting with Contact's 
 */
-public interface ContactService {
+public interface CampaignContactService {
 
 	/**
 	* 

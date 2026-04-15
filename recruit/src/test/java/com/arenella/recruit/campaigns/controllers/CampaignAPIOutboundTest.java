@@ -18,7 +18,6 @@ import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
-import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 
 /**
 * Unit tests for the CampaignAPIOutbound class 
@@ -34,7 +33,7 @@ class CampaignAPIOutboundTest {
 	private static final Set<Participation> PARTICIPANTS	= Set.of(Participation.builder().contactId("rec1").build());
 	private static final Set<Note> 			NOTES			= Set.of(Note.builder().build());
 	private static final Set<Appointment> 	APPOINTMENTS	= Set.of(Appointment.builder().build());
-	private static final Set<Document> 		DOCUMENTS		= Set.of(new Document("spec", DocumentType.PDF, new byte[] {}, LocalDateTime.of(2026, 3, 28, 15, 7, 55)));
+	private static final Set<Document> 		DOCUMENTS		= Set.of(Document.builder().build());
 	
 	/**
 	* Test construction via Builder
