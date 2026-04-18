@@ -3281,3 +3281,37 @@ databaseChangeLog:
                    nullable: false
                    foreignKeyName: fk_campaigns_rol_cam
                    references: campaigns.roles(id)
+  - changeSet:
+     id: campaign_contacts
+     author: kparkings
+     changes:
+       - createTable:
+           tableName: contacts
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: varchar
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: first_name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: surname
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: email
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: subscription_type
+                 type: varchar
+                 constraints:
+                   nullable: false

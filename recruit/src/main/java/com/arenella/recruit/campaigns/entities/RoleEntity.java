@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import com.arenella.recruit.campaigns.beans.Role;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
@@ -381,6 +384,48 @@ public class RoleEntity {
 			return new RoleEntity(this);
 		}
 		
+	}
+	
+	/**
+	* Converts from Entity to Domain representation
+	* @param entity - To be converted
+	* @return converted
+	*/
+	public static Role fromEntity(RoleEntity entity) {
+		return Role
+				.builder()
+				.id(entity.getId())
+				.name(entity.getName())
+				.description(entity.getDescription())
+				.created(entity.getCreated())
+				.candidates(entity.getCandidates().stream().map(CandidateEntity::fromEntity).collect(Collectors.toSet()))
+				.participants(entity.getParticipations().stream().map(ParticipationEntity::fromEntity).collect(Collectors.toSet()))
+				.notes(entity.getNotes().stream().map(NoteEntity::fromEntity).collect(Collectors.toSet()))
+				.appointments(entity.getAppointments().stream().map(AppointmentEntity::fromEntity).collect(Collectors.toSet()))
+				.documents(entity.getDocuments().stream().map(DocumentEntity::fromEntity).collect(Collectors.toSet()))
+				.build();
+	}
+	
+	/**
+	* Converts from Domain to Entity representation
+	* @param role 		- To be converted
+	* @param campaignId - Id of the Campaign the Role belongs to
+	* @return converted
+	*/
+	public static RoleEntity toEntity(Role role, UUID campaignId) {
+		return RoleEntity
+				.builder()
+				.id(role.getId())
+				.campaignId(campaignId)
+				.name(role.getName())
+				.description(role.getDescription())
+				.created(role.getCreated())
+				.candidates(role.getCandidates().stream().map(CandidateEntity::toEntity).collect(Collectors.toSet()))
+				.participants(role.getParticipations().stream().map(ParticipationEntity::toEntity).collect(Collectors.toSet()))
+				.notes(role.getNotes().stream().map(NoteEntity::toEntity).collect(Collectors.toSet()))
+				.appointments(role.getAppointments().stream().map(AppointmentEntity::toEntity).collect(Collectors.toSet()))
+				.documents(role.getDocuments().stream().map(DocumentEntity::toEntity).collect(Collectors.toSet()))
+				.build();
 	}
 	
 }

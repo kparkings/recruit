@@ -38,7 +38,7 @@ public interface CampaignService {
 	* @param currentUserId 	- Id of the authenticated User
 	* @return
 	*/
-	Void addCampaign(String name, String description, CampaignLogo logo, String currentUserId);
+	void addCampaign(String name, String description, CampaignLogo logo, String currentUserId);
 
 	/**
 	* Adds a new Participation to an existing Campaign

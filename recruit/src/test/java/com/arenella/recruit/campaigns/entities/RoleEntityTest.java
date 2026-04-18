@@ -9,6 +9,13 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import com.arenella.recruit.campaigns.beans.Appointment;
+import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.Document;
+import com.arenella.recruit.campaigns.beans.Note;
+import com.arenella.recruit.campaigns.beans.Participation;
+import com.arenella.recruit.campaigns.beans.Role;
+
 /**
 * Unit tests for the RoleEntity class 
 */
@@ -95,6 +102,100 @@ class RoleEntityTest {
 		assertTrue(role.getNotes().isEmpty());
 		assertTrue(role.getAppointments().isEmpty());
 		assertTrue(role.getDocuments().isEmpty());
+		
+	}
+
+	/**
+	* Tests conversion from Entity to Domain representaiton 
+	*/
+	@Test
+	void fromEntity() {
+		
+		RoleEntity entity = RoleEntity
+				.builder()
+					.campaignId(CAMPAIGN_ID)
+					.candidates(CANDIDATES)
+					.appointments(APPOINTMENTS)
+					.created(CREATED)
+					.description(DESCRIPTION)
+					.documents(DOCUMENTS)
+					.id(ID)
+					.name(NAME)
+					.notes(NOTES)
+					.participants(PARTICIPANTS)
+				.build();
+		
+		assertEquals(ID, 			entity.getId());
+		assertEquals(CAMPAIGN_ID, 	entity.getCampaignId());
+		assertEquals(NAME, 			entity.getName());
+		assertEquals(DESCRIPTION, 	entity.getDescription());
+		assertEquals(CREATED, 		entity.getCreated());
+		
+		assertEquals(1, entity.getCandidates().size());
+		assertEquals(1, entity.getParticipations().size());
+		assertEquals(1, entity.getNotes().size());
+		assertEquals(1, entity.getAppointments().size());
+		assertEquals(1, entity.getDocuments().size());
+		
+		Role role = RoleEntity.fromEntity(entity);
+		
+		assertEquals(ID, 			role.getId());
+		assertEquals(NAME, 			role.getName());
+		assertEquals(DESCRIPTION, 	role.getDescription());
+		assertEquals(CREATED, 		role.getCreated());
+		
+		assertEquals(1, role.getCandidates().size());
+		assertEquals(1, role.getParticipations().size());
+		assertEquals(1, role.getNotes().size());
+		assertEquals(1, role.getAppointments().size());
+		assertEquals(1, role.getDocuments().size());
+		
+		
+	}
+	
+	/**
+	* Tests conversion from Domain to Entity representaiton 
+	*/
+	@Test
+	void toEntity() {
+		
+		Role role = Role
+				.builder()
+					.candidates(Set.of(Candidate.builder().build()))
+					.appointments(Set.of(Appointment.builder().build()))
+					.created(CREATED)
+					.description(DESCRIPTION)
+					.documents(Set.of(Document.builder().build()))
+					.id(ID)
+					.name(NAME)
+					.notes(Set.of(Note.builder().build()))
+					.participants(Set.of(Participation.builder().build()))
+				.build();
+		
+		assertEquals(ID, 			role.getId());
+		assertEquals(NAME, 			role.getName());
+		assertEquals(DESCRIPTION, 	role.getDescription());
+		assertEquals(CREATED, 		role.getCreated());
+		
+		assertEquals(1, role.getCandidates().size());
+		assertEquals(1, role.getParticipations().size());
+		assertEquals(1, role.getNotes().size());
+		assertEquals(1, role.getAppointments().size());
+		assertEquals(1, role.getDocuments().size());
+		
+		RoleEntity entity = RoleEntity.toEntity(role, CAMPAIGN_ID);
+		
+		assertEquals(ID, 			entity.getId());
+		assertEquals(CAMPAIGN_ID, 	entity.getCampaignId());
+		assertEquals(NAME, 			entity.getName());
+		assertEquals(DESCRIPTION, 	entity.getDescription());
+		assertEquals(CREATED, 		entity.getCreated());
+		
+		assertEquals(1, entity.getCandidates().size());
+		assertEquals(1, entity.getParticipations().size());
+		assertEquals(1, entity.getNotes().size());
+		assertEquals(1, entity.getAppointments().size());
+		assertEquals(1, entity.getDocuments().size());
 		
 	}
 	

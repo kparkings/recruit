@@ -1,6 +1,7 @@
 package com.arenella.recruit.campaign.dao;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,6 +28,23 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	*/
 	default Set<Campaign> fetchCampaignsForUser(String userId) {
 		return this.fetchCampaignsWhereUserIsParticipant(userId).stream().map(c -> CampaignEntity.fromEntityLazy(c)).collect(Collectors.toCollection(LinkedHashSet::new));
+	}
+	
+	/**
+	* Returns a Campaign based upon its Id
+	* @param campaignId - Id of the Campaign to retrieve
+	* @return Campaign if present
+	*/
+	default Optional<Campaign> fetchCampaign(UUID campaignId) {
+		return this.findById(campaignId).map(CampaignEntity::fromEntityLazy);
+	}
+
+	/**
+	* Saves a Campaign
+	* @param campaign - Campaign to be persisted
+	*/
+	default void saveCampaign(Campaign campaign) {
+		this.save(CampaignEntity.toEntity(campaign));
 	}
 
 }

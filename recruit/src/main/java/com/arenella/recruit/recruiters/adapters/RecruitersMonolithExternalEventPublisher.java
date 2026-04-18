@@ -24,6 +24,7 @@ import com.arenella.recruit.adapters.events.RecruiterProfileUpdatedEvent.Recruit
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
+import com.arenella.recruit.campaigns.adapters.CampaignsExternalEventListener;
 import com.arenella.recruit.candidates.adapters.CandidateExternalEventListener;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
@@ -71,6 +72,10 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 	private CurriculumExternalEventListener					curriculumExternalEventListener;
 	
 	@Autowired
+	private CampaignsExternalEventListener					campaiginExternalEventListener;
+	
+	
+	@Autowired
 	private MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
 	
 	/**
@@ -85,6 +90,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.recruitersInternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.curriculumExternalEventListener.listenForRecruiterCreatedEvent(event);
 		this.messagingMessagingServiceExternalEventListener.listenForRecruiterCreatedEvent(event);
+		this.campaiginExternalEventListener.listenForRecruiterCreatedEvent(event);
 		
 	}
 
@@ -98,6 +104,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.recruitersInternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.candidateExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		this.curriculumExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
+		this.campaiginExternalEventListener.listenForRecruiterNoOpenSubscriptionsEvent(new RecruiterNoOpenSubscriptionEvent(recruiterId));
 		//TODO: [Set credits 0 or defaults -> Test year subscription allows can]
 		
 	}
@@ -112,6 +119,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.recruitersInternalEventListener.listenForSubscriptionAddedEvent(event);
 		this.candidateExternalEventListener.listenForSubscriptionAddedEvent(event);
 		this.curriculumExternalEventListener.listenForSubscriptionAddedEvent(event);
+		this.campaiginExternalEventListener.listenForSubscriptionAddedEvent(event);
 	}
 
 	/**
@@ -138,6 +146,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.emailServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
 		this.candidateExternalEventListener.listenForRecruiterUpdatedEvent(event);
 		this.messagingMessagingServiceExternalEventListener.listenForRecruiterUpdatedEvent(event);
+		this.campaiginExternalEventListener.listenForRecruiterUpdatedEvent(event);
 	}
 
 	/**
@@ -283,6 +292,7 @@ public class RecruitersMonolithExternalEventPublisher implements RecruitersExter
 		this.candidateExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent); 
 		this.curriculumExternalEventListener.listenForRecruiterAccountDeletedEvent(recruiterDeletedEvent);
 		this.messagingMessagingServiceExternalEventListener.listenForRecruiterDeletedEvent(recruiterDeletedEvent);
+		this.campaiginExternalEventListener.listenForRecruiterDeletedEvent(recruiterDeletedEvent);
 	}
 
 	/**
