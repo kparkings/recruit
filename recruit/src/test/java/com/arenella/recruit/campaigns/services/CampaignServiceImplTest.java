@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -25,6 +26,7 @@ import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Participation;
 
@@ -197,6 +199,222 @@ class CampaignServiceImplTest {
 		assertEquals(1, campaign.getParticipations().size());
 		
 		assertEquals(currentUserId, campaign.getParticipations().stream().findFirst().map(p -> p.getContactId()).get());
+		
+	}
+	
+	/**
+	* Tests case attempt is made to update a non existent campaign 
+	*/
+	@Test
+	void testAddParticipationToCampaignUnknownCampaign() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_CAMPAIGN_NOT_FOUND, ex.getMessage());
+		
+		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Tests case where the logged in User is not a know contact 
+	*/
+	@Test
+	void testAddParticipationToCampaignUnknownUser() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		Campaign campaign = Campaign.builder().build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
+		
+		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Tests case where the logged in User is a know contact
+	* but does not have a paid subscription and can't administer
+	* campaigns 
+	*/
+	@Test
+	void testAddParticipationToCampaignNonPaidUser() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		Campaign campaign = Campaign.builder().build();
+		Contact loggedInUserContact = new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Test case when the new Participant is not a known contact in the 
+	* system
+	*/
+	@Test
+	void testAddParticipationToCampaignNonExistentNewParticipant() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		Campaign campaign = Campaign.builder().build();
+		Contact loggedInUserContact = new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockContactDao.fetchContact(contactId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
+		
+		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Test case when the Current user attempts to add a new Participant but is not an 
+	* admin user for the Campaign
+	*/
+	@Test
+	void testAddParticipationToCampaignLoggedInUserNotAdmin() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		Contact loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		Contact newParticipantContact 	= new Contact("rec3", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		Campaign campaign = Campaign.builder().participation(Participation
+				.builder()
+				.contactId(loggedInUserId)
+				.type(ParticipantType.VIEW)
+		.build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockContactDao.fetchContact(contactId)).thenReturn(Optional.of(newParticipantContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_ROLE_FOR_USER, ex.getMessage());
+		
+		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
+		
+	}
+	
+
+	/**
+	* Test case when the new Participant is already a participant in the 
+	* Campaign
+	*/
+	@Test
+	void testAddParticipationToCampaignExistentNewParticipant() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		Contact loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		Contact newParticipantContact 	= new Contact("rec3", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		Campaign campaign = Campaign.builder().participation(Participation
+				.builder()
+					.contactId(loggedInUserId)
+					.type(ParticipantType.ADMIN)
+				.build())
+				.participation(Participation
+						.builder()
+							.contactId(contactId)
+							.type(ParticipantType.VIEW)
+						.build()
+				).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockContactDao.fetchContact(contactId)).thenReturn(Optional.of(newParticipantContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.ADMIN, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_CONTACT_ALREADY_PARTICIPANT, ex.getMessage());
+		
+		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Test happy path
+	*/
+	@Test
+	void testAddParticipationToCampaign() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	contactId 		= "rec22";
+		final String 	loggedInUserId 	= "rec88";
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		Contact loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		Contact newParticipantContact 	= new Contact("rec3", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		Campaign campaign = Campaign.builder().participation(Participation
+				.builder()
+					.contactId(loggedInUserId)
+					.type(ParticipantType.ADMIN)
+				.build())
+				.build();
+		
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockContactDao.fetchContact(contactId)).thenReturn(Optional.of(newParticipantContact));
+		
+		this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.EDIT, loggedInUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign saved = campaignArgCapt.getValue();
+		
+		saved.getParticipations().stream().filter(p -> p.getType() == ParticipantType.EDIT && p.getContactId().equals(contactId)).findAny().orElseThrow();
 		
 	}
 	

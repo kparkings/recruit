@@ -24,10 +24,13 @@ import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 @Service
 public class CampaignServiceImpl implements CampaignService{
 
-	public static final String ERR_MSG_UNKNOWN_CAMPAIGN = "Cannot retrieve unknown Campaign.";
-	public static final String ERR_MSG_USER_NOT_PARTICIPANT = "You are not a participant in the Campaign.";
-	public static final String ERR_MSG_CONTACT_NOT_FOUND = "Unknown Contact.";
+	public static final String ERR_MSG_UNKNOWN_CAMPAIGN 				= "Cannot retrieve unknown Campaign.";
+	public static final String ERR_MSG_USER_NOT_PARTICIPANT 			= "You are not a participant in the Campaign.";
+	public static final String ERR_MSG_CONTACT_NOT_FOUND 				= "Unknown Contact.";
 	public static final String ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE = "Only paid subscription users can create Campaigns";
+	public static final String ERR_MSG_CAMPAIGN_NOT_FOUND 				= "Unknown Campaign.";
+	public static final String ERR_MSG_CONTACT_ALREADY_PARTICIPANT 		= "Cannot add existing participant.";
+	public static final String ERR_MSG_NO_ADMIN_ROLE_FOR_USER			= "Only Admin Users can perform this action.";
 	
 	
 	private final CampaignDao 		campaignDao;
@@ -62,7 +65,7 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		return campaign;
 	}
-
+	
 	/**
 	* Refer to the CampaignService interface for details 
 	*/
@@ -70,11 +73,8 @@ public class CampaignServiceImpl implements CampaignService{
 	public void addCampaign(String name, String description, CampaignLogo logo, String currentUserId) {
 		
 		UUID 	campaignId 	= UUID.randomUUID();
-		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
 		
-		if (currentUser.subscriptionType() == SubscriptionType.CREDIT) {
-			throw new RuntimeException(ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE);
-		}
+		fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Campaign campaign = Campaign
 				.builder()
@@ -100,6 +100,30 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void addParticipationToCampaign(String contactId, UUID campaignId, UUID roleId, ParticipantType type, String currentUserId) {
+		
+		Campaign 	campaign 			= this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_CAMPAIGN_NOT_FOUND));
+		
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.fetchContactFor(contactId);
+		
+		campaign.getParticipations()
+			.stream()
+			.filter(p -> p.getContactId().equals(currentUserId) && p.getType() == ParticipantType.ADMIN)
+			.findAny().orElseThrow(() -> new RuntimeException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
+		
+		campaign.getParticipations().stream().filter(p -> p.getContactId().equals(contactId)).findAny().ifPresent(_ -> {
+			throw new IllegalArgumentException(ERR_MSG_CONTACT_ALREADY_PARTICIPANT);
+		});
+		
+		this.campaignDao.saveCampaign(Campaign.builder().from(campaign)
+				.participation(Participation
+						.builder()
+							.participationId(UUID.randomUUID())
+							.campaignId(campaignId)
+							.contactId(contactId)
+							.roleId(roleId)
+							.type(type)
+						.build()).build());
 		
 	}
 
@@ -179,6 +203,37 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public Document fetchCampaignDocument(UUID documentId, String currentUser) {
 		return null;
+	}
+	
+	/**
+	* Attempts to retrieve the Contact of the current user and validate that
+	* they have access to Campaigns
+	* @param currentUserId - Id of currently logged in User
+	* @return Contact for User
+	*/
+	private Contact fetchAndValidateContactForCurrentUser(String currentUserId) {
+		
+		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
+		
+		if (currentUser.subscriptionType() == SubscriptionType.CREDIT) {
+			throw new RuntimeException(ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE);
+		}
+		
+		return currentUser;
+		
+	}
+	
+	/**
+	* Attempts to retrieve the Contact 
+	* @param contactId - Id of contact to retrieve
+	* @return Contact for User
+	*/
+	private Contact fetchContactFor(String currentUserId) {
+		
+		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
+		
+		return currentUser;
+		
 	}
 
 }
