@@ -17,7 +17,7 @@ import com.arenella.recruit.campaigns.entities.CampaignEntity;
 */
 public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 
-	@Query("FROM CampaignEntity where :participantId member of participations")
+	@Query("FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
 	Set<CampaignEntity> fetchCampaignsWhereUserIsParticipant(String userId);
 	
 	/**
@@ -27,7 +27,7 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	* @return Campaigns in which the user is a Participant
 	*/
 	default Set<Campaign> fetchCampaignsForUser(String userId) {
-		return this.fetchCampaignsWhereUserIsParticipant(userId).stream().map(c -> CampaignEntity.fromEntityLazy(c)).collect(Collectors.toCollection(LinkedHashSet::new));
+		return this.fetchCampaignsWhereUserIsParticipant(userId).stream().map(CampaignEntity::fromEntityLazy).collect(Collectors.toCollection(LinkedHashSet::new));
 	}
 	
 	/**
@@ -36,9 +36,9 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	* @return Campaign if present
 	*/
 	default Optional<Campaign> fetchCampaign(UUID campaignId) {
-		return this.findById(campaignId).map(CampaignEntity::fromEntityLazy);
+		return this.findById(campaignId).map(CampaignEntity::fromEntity);
 	}
-
+	
 	/**
 	* Saves a Campaign
 	* @param campaign - Campaign to be persisted

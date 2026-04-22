@@ -54,9 +54,13 @@ public class CampaignController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@GetMapping(path="campaign")
 	public ResponseEntity<Set<CampaignOverviewAPIOutbound>> fetchCampaignsForUser(Principal currentUser) {
-		return new ResponseEntity<>(this.campaignService.fetchCampaignsForUser(currentUser.getName())
+		
+		LinkedHashSet<CampaignOverviewAPIOutbound> campaigns = this.campaignService.fetchCampaignsForUser(currentUser.getName())
 				.stream()
-				.map(c -> CampaignOverviewAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)), HttpStatus.CREATED);
+				.map(c -> CampaignOverviewAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new));
+		
+		return new ResponseEntity<>(campaigns,  HttpStatus.OK);
+
 	}
 	
 	/**
@@ -124,7 +128,7 @@ public class CampaignController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="campaign/note")
 	public ResponseEntity<Void> addNote(@RequestBody AddNoteAPIInbound note, Principal currentUser){
-		this.campaignService.addNotToCampaign(note.getCampaignId(), note.getRoleId().orElse(null), note.getTitle().orElse(null), note.getText(), currentUser.getName());
+		this.campaignService.addNoteToCampaign(note.getCampaignId(), note.getRoleId().orElse(null), note.getTitle().orElse(null), note.getText(), currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

@@ -67,8 +67,8 @@ class CampaignControllerTest {
 		
 		ResponseEntity<Set<CampaignOverviewAPIOutbound>> response = this.controller.fetchCampaignsForUser(mockPrincipal);
 		
-		assertEquals(HttpStatus.CREATED, 	response.getStatusCode());
-		assertEquals(2, 					response.getBody().size());
+		assertEquals(HttpStatus.OK, 	response.getStatusCode());
+		assertEquals(2, 				response.getBody().size());
 		
 	}
 	
@@ -198,7 +198,7 @@ class CampaignControllerTest {
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
-		verify(this.mockCampaignService).addNotToCampaign(campaignId, roleId, title, text, userId);
+		verify(this.mockCampaignService).addNoteToCampaign(campaignId, roleId, title, text, userId);
 		
 	}
 	

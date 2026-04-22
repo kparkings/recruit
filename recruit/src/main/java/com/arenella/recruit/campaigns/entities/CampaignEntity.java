@@ -498,11 +498,11 @@ public class CampaignEntity {
 		
 		AtomicReference<CampaignLogo> logo = new AtomicReference<>(null);
 		
-		campaign.getLogoBytes().ifPresent(b -> {
-			campaign.getLogoFormat().ifPresent(f -> {
-				logo.set(new CampaignLogo(b,f));
-			});
-		});
+		campaign.getLogoBytes().ifPresent(b -> 
+			campaign.getLogoFormat().ifPresent(f -> 
+				logo.set(new CampaignLogo(b,f))
+			)
+		);
 		
 		return Campaign
 				.builder()

@@ -65,7 +65,7 @@ public interface CampaignService {
 	* @param text			- Note text body
 	* @param currentUserId 	- Id of the authenticated User
 	*/
-	void addNotToCampaign(UUID campaignId, UUID roleId, String title, String text, String currentUserId);
+	void addNoteToCampaign(UUID campaignId, UUID roleId, String title, String text, String currentUserId);
 
 	/**
 	* Updates an existing Note
