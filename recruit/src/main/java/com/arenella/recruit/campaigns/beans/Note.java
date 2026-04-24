@@ -104,6 +104,24 @@ public class Note {
 		private String 			text;
 		
 		/**
+		* Populates the builder with the values of an 
+		* Existing Note
+ 		* @param note - Contains initialization values
+		* @return Builder
+		*/
+		public NoteBuilder from(Note note) {
+			
+			this.id 			= note.id;
+			this.campaignId 	= note.campaignId;
+			this.roleId 		= note.roleId;
+			this.created		= note.created;
+			this.title 			= note.title;
+			this.text 			= note.text;
+			
+			return this;
+		}
+		
+		/**
 		* Sets the Unique Id of the Note
 		* @param id - Id of the Note
 		* @return Builder

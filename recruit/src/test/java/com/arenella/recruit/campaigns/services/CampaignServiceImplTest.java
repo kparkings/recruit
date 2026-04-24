@@ -10,6 +10,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -23,11 +24,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
@@ -48,6 +51,9 @@ class CampaignServiceImplTest {
 	
 	@Mock
 	private ContactEntityDao			mockContactDao;
+	
+	@Mock
+	private NoteEntityDao				mockNoteDao;
 	
 	@InjectMocks
 	private CampaignServiceImpl 		service;
@@ -920,6 +926,663 @@ class CampaignServiceImplTest {
 		assertEquals(campaignId, 	savedNote.getCampaignId());
 		
 	}
+	
+	/**
+	* Tests it is not possible to Update a Note if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testUpdateNoteUserNotPaidUser() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.updateNote(noteId, title, body, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to Delete a Note if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testDeleteNoteUserNotPaidUser() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.deleteNote(noteId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to Delete a Note if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testAddAppointmentNotPaidUser() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to Delete a Note if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testUpdateAppointmentNotPaidUser() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to Delete a Note if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testDeleteAppointmentNotPaidUser() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.deleteAppointment(appointmentId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to add a Document if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testAddDocumentNotPaidUser() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to delete a Document if the User 
+	* does not have an active paid subscription
+	*/
+	@Test
+	void testDeleteDocumentNotPaidUser() {
+		
+		final UUID 				documentId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, ()-> {
+			this.service.deleteDocument(documentId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if Note if not found 
+	*/
+	@Test
+	void testUpdateNoteUnknownNote() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateNote(noteId, title, body, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_NOTE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if Note if not found 
+	*/
+	@Test
+	void testDeleteNoteUnknownNote() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteNote(noteId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_NOTE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to update a Note and 
+	* its associated Campaign is not found 
+	*/
+	@Test
+	void testUpdateNoteUnknownCampaign() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(UUID.randomUUID()).build();
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateNote(noteId, title, body, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to delete a Note and 
+	* its associated Campaign is not found 
+	*/
+	@Test
+	void testDeleteNoteUnknownCampaign() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(UUID.randomUUID()).build();
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteNote(noteId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
 
+	/**
+	* Tests exception is thrown an attempt is made to update 
+	* a Note by a User that has no participation for the Note 
+	* at any level
+	*/
+	@Test
+	void testUpdateNoteUserNotParticipantAtAnyLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).build();
+		final Campaign	campaign		= Campaign.builder().build();
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateNote(noteId, title, body, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown an attempt is made to delete 
+	* a Note by a User that has no participation for the Note 
+	* at any level
+	*/
+	@Test
+	void testDeleteNoteUserNotParticipantAtAnyLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).build();
+		final Campaign	campaign		= Campaign.builder().build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteNote(noteId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests exception is thrown if attempt made to update a 
+	* Note by a User who does not have an Admin or Edit 
+	* Participation level for that Note
+	*/
+	@Test
+	void testUpdateNoteUserNotParticipantAtAdminOrEditLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).build();
+		final Campaign	campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateNote(noteId, title, body, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if attempt made to delete a 
+	* Note by a User who does not have an Admin or Edit 
+	* Participation level for that Note
+	*/
+	@Test
+	void testDeleteNoteUserNotParticipantAtAdminOrEditLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).build();
+		final Campaign	campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteNote(noteId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests happy path for Update where User has Admin level participation at Campaign level
+	*/
+	@Test
+	void testUpdateNoteUserParticipantAtCampaignAdminLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).id(noteId).title("oldTitle").text("oldBody").build();
+		final Campaign	campaign		= Campaign.builder().note(note).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		
+		ArgumentCaptor<Campaign> capaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(mockCampaignDao).saveCampaign(capaignArgCapt.capture());
+		
+		this.service.updateNote(noteId, title, body, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		assertEquals(1, capaignArgCapt.getValue().getNotes().size());
+		
+		Note updatedNote = capaignArgCapt.getValue().getNotes().stream().findFirst().orElseThrow();
+		
+		assertEquals(noteId, updatedNote.getId());
+		assertEquals(title, updatedNote.getTitle().orElseThrow());
+		assertEquals(body, updatedNote.getText());
+		
+	}
+	
+	/**
+	* Tests happy path for Delete where User has Admin level participation at Campaign level
+	*/
+	@Test
+	void testDeleteNoteUserNotParticipantAtCampaignAdminLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).build();
+		final Campaign	campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		this.service.deleteNote(noteId, currentUserId);
+		
+		verify(this.mockNoteDao).deleteById(noteId);
+		
+	}
+	
+	/**
+	* Tests happy path for Update where User has Admin level participation at Campaign level
+	*/
+	@Test
+	void testUpdateNoteUserParticipantAtCampaignEditLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).id(noteId).title("oldTitle").text("oldBody").build();
+		final Campaign	campaign		= Campaign.builder().note(note).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		
+		ArgumentCaptor<Campaign> capaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(mockCampaignDao).saveCampaign(capaignArgCapt.capture());
+		
+		this.service.updateNote(noteId, title, body, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		assertEquals(1, capaignArgCapt.getValue().getNotes().size());
+		
+		Note updatedNote = capaignArgCapt.getValue().getNotes().stream().findFirst().orElseThrow();
+		
+		assertEquals(noteId, updatedNote.getId());
+		assertEquals(title, updatedNote.getTitle().orElseThrow());
+		assertEquals(body, updatedNote.getText());
+		
+	}
+	
+	/**
+	* Tests happy path for Delete where User has Admin level participation at Campaign level
+	*/
+	@Test
+	void testDeleteNoteUserNotParticipantAtCampaignEditLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).build();
+		final Campaign	campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		this.service.deleteNote(noteId, currentUserId);
+		
+		verify(this.mockNoteDao).deleteById(noteId);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests happy path for Update where User has Admin level participation at Role level
+	*/
+	@Test
+	void testUpdateNoteUserParticipantAtRoleAdminLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final UUID		roleId			= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).id(noteId).title("oldTitle").text("oldBody").build();
+		final Role		role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign	campaign		= Campaign.builder().role(role).note(note).build();
+		
+		ArgumentCaptor<Campaign> capaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(mockCampaignDao).saveCampaign(capaignArgCapt.capture());
+		
+		this.service.updateNote(noteId, title, body, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		assertEquals(1, capaignArgCapt.getValue().getNotes().size());
+		
+		Note updatedNote = capaignArgCapt.getValue().getNotes().stream().findFirst().orElseThrow();
+		
+		assertEquals(noteId, updatedNote.getId());
+		assertEquals(title, updatedNote.getTitle().orElseThrow());
+		assertEquals(body, updatedNote.getText());
+		
+	}
+	
+	/**
+	* Tests happy path for Delete where User has Admin level participation at Role level
+	*/
+	@Test
+	void testDeleteNoteUserNotParticipantAtRoleAdminLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final UUID		roleId			= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).build();
+		final Role		role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign	campaign		= Campaign.builder().role(role).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		this.service.deleteNote(noteId, currentUserId);
+		
+		verify(this.mockNoteDao).deleteById(noteId);
+		
+	}
+	
+	/**
+	* Tests happy path for Update where User has Admin level participation at Campaign level
+	*/
+	@Test
+	void testUpdateNoteUserParticipantAtRoleEditLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final UUID		roleId			= UUID.randomUUID();
+		final String 	title 			= "a title";
+		final String 	body 			= "note text";
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).id(noteId).title("oldTitle").text("oldBody").build();
+		final Role		role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign	campaign		= Campaign.builder().role(role).build();
+		
+		ArgumentCaptor<Campaign> capaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(mockCampaignDao).saveCampaign(capaignArgCapt.capture());
+		
+		this.service.updateNote(noteId, title, body, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		assertEquals(1, capaignArgCapt.getValue().getNotes().size());
+		
+		Note updatedNote = capaignArgCapt.getValue().getNotes().stream().findFirst().orElseThrow();
+		
+		assertEquals(noteId, updatedNote.getId());
+		assertEquals(title, updatedNote.getTitle().orElseThrow());
+		assertEquals(body, updatedNote.getText());
+		
+	}
+	
+	/**
+	* Tests happy path for Delete where User has Admin level participation at Campaign level
+	*/
+	@Test
+	void testDeleteNoteUserNotParticipantAtRoleEditLevel() {
+		
+		final UUID 		noteId 			= UUID.randomUUID();
+		final UUID		campaignId		= UUID.randomUUID();
+		final UUID		roleId			= UUID.randomUUID();
+		final String 	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).build();
+		final Role		role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign	campaign		= Campaign.builder().role(role).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		
+		this.service.deleteNote(noteId, currentUserId);
+		
+		verify(this.mockNoteDao).deleteById(noteId);
+		
+	}
+	
 	
 }

@@ -79,9 +79,9 @@ public interface CampaignService {
 	/**
 	* Delete an existing Note
 	* @param noteId 		- Id of the Note to delete
-	* @param currentUser 	- Id of the authenticated User
+	* @param currentUserId 	- Id of the authenticated User
 	*/
-	void deleteNote(UUID noteId, String name);
+	void deleteNote(UUID noteId, String currentUserId);
 
 	/**
 	* Adds an Appointment to an existing Campaign

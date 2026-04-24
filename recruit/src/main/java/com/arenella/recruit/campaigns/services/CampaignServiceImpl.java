@@ -6,11 +6,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
@@ -40,10 +42,12 @@ public class CampaignServiceImpl implements CampaignService{
 	public static final String ERR_MSG_UNKNOWN_ROLE						= "Unknown Role";
 	public static final String ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT		= "An Admin Participant must be present after action taken.";
 	public static final String ERR_MSG_NO_ADMIN_RIGHTS					= "No rights to perform this action.";
+	public static final String ERR_MSG_UNKNOWN_NOTE 					= "Cannot retrieve unknown Note.";
 	
 	private final CampaignDao 				campaignDao;
 	private final ContactEntityDao 			contactDao;
 	private final ParticipationEntityDao 	participationDao;
+	private final NoteEntityDao				noteDao;
 	
 	/**
 	* Constructor
@@ -51,10 +55,11 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param contactDao			- For working with Contacts
 	* @param participationDao	- For working with Paricipation's
 	*/
-	public CampaignServiceImpl(CampaignDao campaignDao, ContactEntityDao contactDao, ParticipationEntityDao participationDao) {
+	public CampaignServiceImpl(CampaignDao campaignDao, ContactEntityDao contactDao, ParticipationEntityDao participationDao, NoteEntityDao noteDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
+		this.noteDao 			= noteDao;
 	}
 	
 	/**
@@ -191,61 +196,91 @@ public class CampaignServiceImpl implements CampaignService{
 	* Refer to the CampaignService interface for details 
 	*/
 	@Override
-	public void updateNote(UUID noteId, String title, String text, String currentUser) {
+	public void updateNote(UUID noteId, String title, String text, String currentUserId) {
+		
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		
+		Note 		note 		= this.noteDao.fetchNoteById(noteId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_NOTE));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
+		
+		this.campaignDao.saveCampaign(Campaign
+				.builder()
+					.from(campaign)
+					.notes(campaign.getNotes().stream().filter(n -> n.getId() != noteId).collect(Collectors.toSet()))
+					.note(Note
+							.builder()
+								.from(note)
+								.title(title)
+								.text(text)
+							.build())
+				.build());
 		
 	}
-
+	
 	/**
 	* Refer to the CampaignService interface for details 
 	*/
 	@Override
-	public void deleteNote(UUID noteId, String name) {
+	public void deleteNote(UUID noteId, String currentUserId) {
 		
-	}
-
-	/**
-	* Refer to the CampaignService interface for details 
-	*/
-	@Override
-	public void addAppointment(UUID campaignId, UUID roleId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUser) {
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
 		
-	}
-
-	/**
-	* Refer to the CampaignService interface for details 
-	*/
-	@Override
-	public void updateAppointment(UUID appointmentId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUser) {
+		Note 		note 		= this.noteDao.fetchNoteById(noteId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_NOTE));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-	}
-
-	/**
-	* Refer to the CampaignService interface for details 
-	*/
-	@Override
-	public void deleteAppointment(UUID appointmentId, String currentUser) {
 		
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
+		
+		this.noteDao.deleteById(noteId);
 	}
 
 	/**
 	* Refer to the CampaignService interface for details 
 	*/
 	@Override
-	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes, String currentUser) {	
+	public void addAppointment(UUID campaignId, UUID roleId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUserId) {
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
 	}
 
 	/**
 	* Refer to the CampaignService interface for details 
 	*/
 	@Override
-	public void deleteDocument(UUID documentId, String currentUser) {
+	public void updateAppointment(UUID appointmentId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUserId) {
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
 	}
 
 	/**
 	* Refer to the CampaignService interface for details 
 	*/
 	@Override
-	public Document fetchCampaignDocument(UUID documentId, String currentUser) {
+	public void deleteAppointment(UUID appointmentId, String currentUserId) {
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
+	}
+
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
+	@Override
+	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes, String currentUserId) {	
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
+	@Override
+	public void deleteDocument(UUID documentId, String currentUserId) {
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
+	}
+
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
+	@Override
+	public Document fetchCampaignDocument(UUID documentId, String currentUserId) {
 		return null;
 	}
 	

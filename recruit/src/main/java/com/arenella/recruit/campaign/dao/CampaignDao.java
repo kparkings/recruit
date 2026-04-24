@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.entities.CampaignEntity;
@@ -15,6 +16,7 @@ import com.arenella.recruit.campaigns.entities.CampaignEntity;
 /**
 * Repository for Campaign's 
 */
+@Repository
 public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 
 	@Query("FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
