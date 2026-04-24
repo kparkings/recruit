@@ -120,15 +120,34 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
 		
-		Campaign 	campaign 			= this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_CAMPAIGN_NOT_FOUND));
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_CAMPAIGN_NOT_FOUND));
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
 		this.fetchContactFor(contactId);
 		
-		campaign.getParticipations()
-			.stream()
-			.filter(p -> p.getContactId().equals(currentUserId) && p.getType() == ParticipantType.ADMIN)
-			.findAny().orElseThrow(() -> new RuntimeException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
+		AtomicBoolean isAdminAtRoleLevel = new AtomicBoolean(false);
+		
+		Optional.ofNullable(roleId).ifPresent(rId -> 
+			campaign.getRoles().stream().filter(r -> r.getId() == rId).findAny().ifPresent(role -> 
+				role.getParticipations().stream().filter(p -> p.getType() == ParticipantType.ADMIN && p.getContactId().equals(currentUserId)).findAny().ifPresent(_ -> 
+					isAdminAtRoleLevel.set(true)
+				)
+			)
+		);
+		
+		if (!isAdminAtRoleLevel.get()) {
+			campaign.getParticipations()
+				.stream()
+				.filter(p -> p.getContactId().equals(currentUserId) && p.getType() == ParticipantType.ADMIN)
+				.findAny().orElseThrow(() -> new RuntimeException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
+		}
+		
+		Optional.ofNullable(roleId).ifPresent(rId -> 
+			campaign.getRoles().stream().filter(r -> r.getId() == rId).findAny().ifPresent(role -> 
+				role.getParticipations().stream().filter(p -> p.getContactId().equals(contactId)).findAny().ifPresent(_ -> {
+					throw new IllegalArgumentException(ERR_MSG_CONTACT_ALREADY_PARTICIPANT);
+				})
+			)
+		);
 		
 		campaign.getParticipations().stream().filter(p -> p.getContactId().equals(contactId)).findAny().ifPresent(_ -> {
 			throw new IllegalArgumentException(ERR_MSG_CONTACT_ALREADY_PARTICIPANT);
@@ -143,8 +162,6 @@ public class CampaignServiceImpl implements CampaignService{
 							.roleId(roleId)
 							.type(type)
 						.build()).build());
-		
-		//TODO: [KP] Think we need to add the case for Admin at Role level but not Campaign level who can add other Admin users to the Role
 		
 	}
 
