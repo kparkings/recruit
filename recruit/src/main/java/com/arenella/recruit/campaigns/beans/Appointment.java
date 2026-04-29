@@ -124,6 +124,23 @@ public class Appointment {
 		private ZonedDateTime 	when;
 		
 		/**
+		* Populates the builder with values from an existing Appointment
+		* @param appointment - Contains initialization values
+		* @return Builder
+		*/
+		public AppointmentBuilder from(Appointment appointment) {
+			this.appointmentId 	= appointment.appointmentId;
+			this.campaignId 	= appointment.campaignId;
+			this.roleId 		= appointment.roleId;
+			this.name 			= appointment.name;
+			this.description 	= appointment.description;
+			this.videoLink 		= appointment.videoLink;
+			this.phoneNumber 	= appointment.phoneNumber;
+			this.when 			= appointment.when;
+			return this;
+		}
+		
+		/**
 		* Sets the Id of the appointment
 		* @param appointmentId - Unique id of the Appointment
 		* @return Builder

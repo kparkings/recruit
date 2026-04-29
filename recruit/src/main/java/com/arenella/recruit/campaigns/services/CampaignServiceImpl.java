@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
+import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Contact;
@@ -43,23 +45,28 @@ public class CampaignServiceImpl implements CampaignService{
 	public static final String ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT		= "An Admin Participant must be present after action taken.";
 	public static final String ERR_MSG_NO_ADMIN_RIGHTS					= "No rights to perform this action.";
 	public static final String ERR_MSG_UNKNOWN_NOTE 					= "Cannot retrieve unknown Note.";
+	public static final String ERR_MSG_UNKNOWN_APPOINTMENT 				= "Cannot retrieve unknown Appointment.";
+	
 	
 	private final CampaignDao 				campaignDao;
 	private final ContactEntityDao 			contactDao;
 	private final ParticipationEntityDao 	participationDao;
 	private final NoteEntityDao				noteDao;
+	private final AppointmentEntityDao		appointmentDao;
 	
 	/**
 	* Constructor
 	* @param campaignDao		- For working with Campaigns
 	* @param contactDao			- For working with Contacts
 	* @param participationDao	- For working with Paricipation's
+	* @param appointmentDao		- For working with Appointments
 	*/
-	public CampaignServiceImpl(CampaignDao campaignDao, ContactEntityDao contactDao, ParticipationEntityDao participationDao, NoteEntityDao noteDao) {
+	public CampaignServiceImpl(CampaignDao campaignDao, ContactEntityDao contactDao, ParticipationEntityDao participationDao, NoteEntityDao noteDao, AppointmentEntityDao appointmentDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
 		this.noteDao 			= noteDao;
+		this.appointmentDao		= appointmentDao;
 	}
 	
 	/**
@@ -258,7 +265,31 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void addAppointment(UUID campaignId, UUID roleId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUserId) {
+	
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+	
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
+		
+		Appointment appointment = Appointment
+				.builder()
+					.campaignId(campaignId)
+					.appointmentId(UUID.randomUUID())
+					.description(description)
+					.name(name)
+					.phoneNumber(phoneNumber)
+					.roleId(roleId)
+					.videoLink(videoLink)
+					.when(when)
+				.build();
+		
+		this.campaignDao.saveCampaign(Campaign
+				.builder()
+					.from(campaign)
+					.appointment(appointment)
+				.build());
+		
 	}
 
 	/**
@@ -266,7 +297,31 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void updateAppointment(UUID appointmentId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUserId) {
+		
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		
+		Appointment appointment = this.appointmentDao.fetchAppointmentById(appointmentId).orElseThrow(() 	 -> new IllegalArgumentException(ERR_MSG_UNKNOWN_APPOINTMENT));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(appointment.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, appointment.getRoleId().orElse(null), currentUserId);
+		
+		Appointment updatedAppointment = Appointment
+				.builder()
+					.from(appointment)
+					.description(description)
+					.name(name)
+					.phoneNumber(phoneNumber)
+					.roleId(appointment.getRoleId().orElse(null))
+					.videoLink(videoLink)
+					.when(when)
+				.build();
+		
+		this.campaignDao.saveCampaign(Campaign
+				.builder()
+					.from(campaign)
+					.appointments(campaign.getAppointments().stream().filter(a -> a.getAppointmentId() != appointmentId).collect(Collectors.toSet()))
+					.appointment(updatedAppointment)
+				.build());
 	}
 
 	/**

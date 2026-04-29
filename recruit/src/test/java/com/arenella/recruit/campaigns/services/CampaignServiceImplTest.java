@@ -22,10 +22,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
+import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
@@ -54,6 +56,9 @@ class CampaignServiceImplTest {
 	
 	@Mock
 	private NoteEntityDao				mockNoteDao;
+
+	@Mock
+	private AppointmentEntityDao		mockAppointmentDao;
 	
 	@InjectMocks
 	private CampaignServiceImpl 		service;
@@ -1238,25 +1243,7 @@ class CampaignServiceImplTest {
 		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	* Tests exception is thrown if attempt made to update a 
 	* Note by a User who does not have an Admin or Edit 
@@ -1431,33 +1418,6 @@ class CampaignServiceImplTest {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	* Tests happy path for Update where User has Admin level participation at Role level
 	*/
@@ -1581,6 +1541,637 @@ class CampaignServiceImplTest {
 		this.service.deleteNote(noteId, currentUserId);
 		
 		verify(this.mockNoteDao).deleteById(noteId);
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to update 
+	* an Appointment that doesn't exist
+	*/
+	@Test
+	void testUpdateUnknownAppointment() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_APPOINTMENT, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to Update 
+	* an Appointment by a user that does not have Admin or Edit 
+	* level access at the Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentNotAdminOrEditCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests adding Updating an existing Appointment at Campaign level where the User has admin rights at Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentAdminCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding Updating an existing Appointment at Role level where the User has Admin rights at Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentToRoleAdminCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an Role where the User has Edit rights at the Campaign level but not the Role level
+	*/
+	@Test
+	void testUpdateAppointmentToRoleEditCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests Updating an Appointment to an existing Campaign where the User has Edit rights at Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentEditCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to add 
+	* an Appointment by a user that does not have Admin or Edit 
+	* level access at the Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentNotAdminOrEditRoleLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Updating an Appointment to an existing Role where the User has admin rights at Role level
+	* but not at the Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentAdminRoleLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an existing Role where the User has Edit rights at Role level
+	* but not at the Campaign level
+	*/
+	@Test
+	void testUpdateAppointmentEditRoleLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests exception is thrown if an attempt is made to add 
+	* an Appointment to an unknown Campaign
+	*/
+	@Test
+	void testAddAppointmentUnkownCampaign() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to add 
+	* an Appointment by a user that does not have Admin or Edit 
+	* level access at the Campaign level
+	*/
+	@Test
+	void testAddAppointmentNotAdminOrEditCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.addAppointment(campaignId, null, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an existing Campaign where the User has admin rights at Campaign level
+	*/
+	@Test
+	void testAddAppointmentAdminCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.addAppointment(campaignId, null, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an Role where the User has Admin rights at the Campaign level but not the Role level
+	*/
+	@Test
+	void testAddAppointmentToRoleAdminCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an Role where the User has Edit rights at the Campaign level but not the Role level
+	*/
+	@Test
+	void testAddAppointmentToRoleEditCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an existing Campaign where the User has admin rights at Campaign level
+	*/
+	@Test
+	void testAddAppointmentEditCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.addAppointment(campaignId, null, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to add 
+	* an Appointment by a user that does not have Admin or Edit 
+	* level access at the Campaign level
+	*/
+	@Test
+	void testAddAppointmentNotAdminOrEditRoleLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an existing Role where the User has admin rights at Role level
+	* but not at the Campaign level
+	*/
+	@Test
+	void testAddAppointmentAdminRoleLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
+		
+	}
+	
+	/**
+	* Tests adding an Appointment to an existing Role where the User has Edit rights at Role level
+	* but not at the Campaign level
+	*/
+	@Test
+	void testAddAppointmentEditRoleLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		
+		this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Campaign savedCampaign = campaignArgCapt.getValue();
+		
+		assertEquals(1, savedCampaign.getAppointments().size());
 		
 	}
 	

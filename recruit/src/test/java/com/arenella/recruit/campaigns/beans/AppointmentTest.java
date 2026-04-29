@@ -72,4 +72,45 @@ class AppointmentTest {
 		
 	}
 	
+	/**
+	* Tests populating Builder with values from an existing
+	* Appointment 
+	*/
+	@Test
+	void testBuilderFromExistingAppointment() {
+		
+		Appointment existing = Appointment
+				.builder()
+					.appointmentId(ID)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
+					.name(NAME)
+					.description(DESCRIPTION)
+					.videoLink(VIDEO_LINK)
+					.phoneNumber(PHONE_NUMBER)
+					.when(WHEN)
+				.build();
+		
+		assertEquals(ID, 			existing.getAppointmentId());
+		assertEquals(CAMPAIGN_ID, 	existing.getCampaignId());
+		assertEquals(ROLE_ID, 		existing.getRoleId().get());
+		assertEquals(NAME, 			existing.getName());
+		assertEquals(DESCRIPTION, 	existing.getDescription());
+		assertEquals(VIDEO_LINK, 	existing.getVideoLink().get());
+		assertEquals(PHONE_NUMBER, 	existing.getPhoneNumber().get());
+		assertEquals(WHEN,		 	existing.getWhen());
+		
+		Appointment appointment = Appointment.builder().from(existing).build();
+		
+		assertEquals(ID, 			appointment.getAppointmentId());
+		assertEquals(CAMPAIGN_ID, 	appointment.getCampaignId());
+		assertEquals(ROLE_ID, 		appointment.getRoleId().get());
+		assertEquals(NAME, 			appointment.getName());
+		assertEquals(DESCRIPTION, 	appointment.getDescription());
+		assertEquals(VIDEO_LINK, 	appointment.getVideoLink().get());
+		assertEquals(PHONE_NUMBER, 	appointment.getPhoneNumber().get());
+		assertEquals(WHEN,		 	appointment.getWhen());
+		
+	}
+	
 }
