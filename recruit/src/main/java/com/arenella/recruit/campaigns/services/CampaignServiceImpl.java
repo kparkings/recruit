@@ -330,6 +330,14 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteAppointment(UUID appointmentId, String currentUserId) {
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		
+		Appointment appointment = this.appointmentDao.fetchAppointmentById(appointmentId).orElseThrow(() 	 -> new IllegalArgumentException(ERR_MSG_UNKNOWN_APPOINTMENT));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(appointment.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, appointment.getRoleId().orElse(null), currentUserId);
+		
+		this.appointmentDao.deleteById(appointmentId);
+		
 	}
 
 	/**

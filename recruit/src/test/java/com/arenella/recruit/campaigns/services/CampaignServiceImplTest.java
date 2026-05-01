@@ -1857,8 +1857,305 @@ class CampaignServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests exception is thrown if attempt is made to delete an 
+	* unknown appointment 
+	*/
+	@Test
+	void testDeleteAppointmentUnknownAppointment() {
+		
+		final UUID		appointmentId	= UUID.randomUUID();
+		final String	currentUserId 	= "rec35";
+		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->
+			this.service.deleteAppointment(appointmentId, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_APPOINTMENT, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to delete
+	* an Appointment but the associated campaign isn't known 
+	*/
+	@Test
+	void testDeleteAppointmentUnknownCampaign() {
+		
+		final UUID				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()->
+			this.service.deleteAppointment(appointmentId, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
 	
 	
+	/**
+	* Tests exception is thrown if an attempt is made to Delete 
+	* an Appointment by a user that does not have Admin or Edit 
+	* level access at the Campaign level
+	*/
+	@Test
+	void testDeleteAppointmentNotAdminOrEditCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> 
+			this.service.deleteAppointment(appointmentId, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Deleting an existing Appointment at Campaign level where the User has admin rights at Campaign level
+	*/
+	@Test
+	void testDeleteAppointmentAdminCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteAppointment(appointmentId, currentUserId);
+		
+		verify(this.mockAppointmentDao).deleteById(appointmentId);
+		
+	}
+	
+	/**
+	* Tests Deleting an existing Appointment at Role level where the User has Admin rights at Campaign level
+	*/
+	@Test
+	void testDeleteAppointmentToRoleAdminCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteAppointment(appointmentId, currentUserId);
+		
+		verify(this.mockAppointmentDao).deleteById(appointmentId);
+		
+	}
+	
+	/**
+	* Tests Deleting an Appointment from an Role where the User has Edit rights at the Campaign level but not the Role level
+	*/
+	@Test
+	void testDeleteAppointmentToRoleEditCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteAppointment(appointmentId, currentUserId);
+		
+		verify(this.mockAppointmentDao).deleteById(appointmentId);
+		
+	}
+	
+	/**
+	* Tests Deleting an Appointment from an existing Campaign where the User has Edit rights at Campaign level
+	*/
+	@Test
+	void testDeleteAppointmentEditCampaignLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteAppointment(appointmentId, currentUserId);
+		
+		verify(this.mockAppointmentDao).deleteById(appointmentId);
+		
+	}
+	
+	/**
+	* Tests exception is thrown if an attempt is made to delete 
+	* an Appointment by a user that does not have Admin or Edit 
+	* level access at the Role level
+	*/
+	@Test
+	void testDeleteAppointmentNotAdminOrEditRoleLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(null).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> 
+			this.service.deleteAppointment(appointmentId, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Deleting an Appointment from an existing Role where the User has admin rights at Role level
+	* but not at the Campaign level
+	*/
+	@Test
+	void testDeleteAppointmentAdminRoleLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+	
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteAppointment(appointmentId, currentUserId);
+		
+		verify(this.mockAppointmentDao).deleteById(appointmentId);
+		
+	}
+	
+	/**
+	* Tests Deleting an Appointment from an existing Role where the User has Edit rights at Role level
+	* but not at the Campaign level
+	*/
+	@Test
+	void testDeleteAppointmentEditRoleLevel() {
+		
+		final UUID 				appointmentId	= UUID.randomUUID();
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			name			= "Appointment name";
+		final String 			description		= "appointment desc";
+		final String 			phoneNumber		= "0031 643 220 866";
+		final String 			videoLink		= "https:www.vidapp1.com/dsad11";
+		final ZonedDateTime 	when 			= ZonedDateTime.now();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Appointment		appointment		= Appointment.builder().appointmentId(appointmentId).campaignId(campaignId).description(description).name(name).phoneNumber(phoneNumber).roleId(roleId).videoLink(videoLink).when(when).build();
+		
+		when(this.mockAppointmentDao.fetchAppointmentById(appointmentId)).thenReturn(Optional.of(appointment));
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteAppointment(appointmentId, currentUserId);
+		
+		verify(this.mockAppointmentDao).deleteById(appointmentId);
+		
+	}
 	
 	
 	
