@@ -9,10 +9,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaigns.beans.Appointment;
@@ -46,13 +48,17 @@ public class CampaignServiceImpl implements CampaignService{
 	public static final String ERR_MSG_NO_ADMIN_RIGHTS					= "No rights to perform this action.";
 	public static final String ERR_MSG_UNKNOWN_NOTE 					= "Cannot retrieve unknown Note.";
 	public static final String ERR_MSG_UNKNOWN_APPOINTMENT 				= "Cannot retrieve unknown Appointment.";
+	public static final String ERR_MSG_UNKNOWN_DOCUMENT 				= "Cannot retrieve unknown Document.";
+	public static final String ERR_MSG_UNSUPPORTED_DOC_TYPE 			= "Document type not supported.";
 	
 	
-	private final CampaignDao 				campaignDao;
-	private final ContactEntityDao 			contactDao;
-	private final ParticipationEntityDao 	participationDao;
-	private final NoteEntityDao				noteDao;
-	private final AppointmentEntityDao		appointmentDao;
+	private final CampaignDao 					campaignDao;
+	private final ContactEntityDao 				contactDao;
+	private final ParticipationEntityDao 		participationDao;
+	private final NoteEntityDao					noteDao;
+	private final AppointmentEntityDao			appointmentDao;
+	private final DocumentEntityDao				documentDao;
+	private final CampaignFileSecurityParser	fileSecurityParser;
 	
 	/**
 	* Constructor
@@ -60,13 +66,24 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param contactDao			- For working with Contacts
 	* @param participationDao	- For working with Paricipation's
 	* @param appointmentDao		- For working with Appointments
+	* @param documentDao		- For working with Documents
+	* @param fileSecurityParser	- To check file is of type specified
 	*/
-	public CampaignServiceImpl(CampaignDao campaignDao, ContactEntityDao contactDao, ParticipationEntityDao participationDao, NoteEntityDao noteDao, AppointmentEntityDao appointmentDao) {
+	public CampaignServiceImpl(
+			CampaignDao 				campaignDao, 
+			ContactEntityDao 			contactDao, 
+			ParticipationEntityDao 		participationDao, 
+			NoteEntityDao 				noteDao, 
+			AppointmentEntityDao 		appointmentDao,
+			DocumentEntityDao			documentDao,
+			CampaignFileSecurityParser	fileSecurityParser) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
 		this.noteDao 			= noteDao;
 		this.appointmentDao		= appointmentDao;
+		this.documentDao  		= documentDao;
+		this.fileSecurityParser = fileSecurityParser;
 	}
 	
 	/**
@@ -329,6 +346,7 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void deleteAppointment(UUID appointmentId, String currentUserId) {
+		
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Appointment appointment = this.appointmentDao.fetchAppointmentById(appointmentId).orElseThrow(() 	 -> new IllegalArgumentException(ERR_MSG_UNKNOWN_APPOINTMENT));
@@ -345,7 +363,28 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes, String currentUserId) {	
+		
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
+		
+		if (!this.fileSecurityParser.isSafe(bytes)) {		
+			throw new IllegalArgumentException(ERR_MSG_UNSUPPORTED_DOC_TYPE);
+		}
+		
+		this.documentDao.saveDocument(Document
+				.builder()
+					.bytes(bytes)
+					.campaignId(campaignId)
+					.created(LocalDateTime.now())
+					.documentId(UUID.randomUUID())
+					.roleId(roleId)
+					.title(title)
+					.type(type)
+				.build());
+		
 	}
 	
 	/**
@@ -353,7 +392,16 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void deleteDocument(UUID documentId, String currentUserId) {
+		
 		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		
+		Document document = this.documentDao.fetchDocumentById(documentId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_DOCUMENT));
+		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUserId);
+		
+		this.documentDao.deleteById(documentId);
+		
 	}
 
 	/**

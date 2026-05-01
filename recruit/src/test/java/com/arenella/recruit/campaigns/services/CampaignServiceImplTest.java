@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaigns.beans.Appointment;
@@ -32,6 +33,7 @@ import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
@@ -59,6 +61,12 @@ class CampaignServiceImplTest {
 
 	@Mock
 	private AppointmentEntityDao		mockAppointmentDao;
+	
+	@Mock
+	private DocumentEntityDao			mockDocumentDao;
+	
+	@Mock
+	private CampaignFileSecurityParser	mockFileSecurityParser;
 	
 	@InjectMocks
 	private CampaignServiceImpl 		service;
@@ -2472,5 +2480,532 @@ class CampaignServiceImplTest {
 		
 	}
 	
+	/**
+	* Tests case that Document is added to an unknown Campaign 
+	*/
+	@Test
+	void testAddDocumentUnknownCampaign() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if current User does not have Admin
+	* or Edit permission. For Campaign
+	*/
+	@Test
+	void testAddDocumentNoAdminOrEditCampaign() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.addDocument(campaignId, null, title, type, bytes, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception is thrown if current User does not have Admin
+	* or Edit permission. For Role
+	*/
+	@Test
+	void testAddDocumentNoAdminOrEditRole() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+		
+	}
+	
+	/**
+	* Tests adding a document at Campaign level where the user has Admin permission 
+	* at Campaign level 
+	*/
+	@Test
+	void testAddDocumentAdminCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		
+		this.service.addDocument(campaignId, null, title, type, bytes, currentUserId);
+		
+		verify(this.mockDocumentDao).saveDocument(any(Document.class));
+		
+	}
+	
+	/**
+	* Tests adding a document at Campaign level where the user has Admin permission 
+	* at Campaign level 
+	*/
+	@Test
+	void testAddDocumentEditCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		
+		this.service.addDocument(campaignId, null, title, type, bytes, currentUserId);
+		
+		verify(this.mockDocumentDao).saveDocument(any(Document.class));
+		
+		
+	}
+	
+	/**
+	* Tests adding a document at Role level where the user has Admin permission 
+	* at Role level 
+	*/
+	@Test
+	void testAddDocumentAdminRoleLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		
+		this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		
+		verify(this.mockDocumentDao).saveDocument(any(Document.class));
+		
+	}
+	
+	/**
+	* Tests adding a document at Role level where the user has Edit permission 
+	* at Role level 
+	*/
+	@Test
+	void testAddDocumentEditRoleLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		
+		this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		
+		verify(this.mockDocumentDao).saveDocument(any(Document.class));
+		
+	}
+	
+	/**
+	* Tests adding document where the user does not have specific Admin or Edit 
+	* permission on the specific role but inherits Admin permissions from the 
+	* Campaign
+	*/
+	@Test
+	void testAddDocumentAdminRoleLevelRightsAtCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		
+		this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		
+		verify(this.mockDocumentDao).saveDocument(any(Document.class));
+		
+	}
+	
+	/**
+	* Tests adding document where the user does not have specific Admin or Edit 
+	* permission on the specific role but inherits Edit permissions from the 
+	* Campaign
+	*/
+	@Test
+	void testAddDocumentEditRoleLevelRightsAtCampaignLevel() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(true);
+		
+		this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
+		
+		verify(this.mockDocumentDao).saveDocument(any(Document.class));
+		
+	}
+	
+	/**
+	* Tests Exception is thrown if an attempt is made to add a Document which 
+	* is considered unsafe  
+	*/
+	@Test
+	void testAddDocumentUnsafeDocument() {
+		
+		final UUID 				campaignId		= UUID.randomUUID();
+		final UUID 				roleId			= UUID.randomUUID();
+		final String 			title			= "doc title";
+		final DocumentType 		type			= DocumentType.PDF;
+		final byte[] 			bytes			= new byte[] {};
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockFileSecurityParser.isSafe(any())).thenReturn(false);
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> 
+			this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNSUPPORTED_DOC_TYPE, ex.getMessage());
+		
+		verify(this.mockDocumentDao, never()).saveDocument(any(Document.class));
+		
+	}
+	
+	/**
+	* Tests case when an attempt is made to delete a Document that doesnt exist
+	*/
+	@Test
+	void deleteDocumentUnknownDocument() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> 
+			this.service.deleteDocument(documentId, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_DOCUMENT, ex.getMessage());
+		
+		verify(this.mockDocumentDao, never()).deleteById(any());
+		
+	}
+	
+	/**
+	* Tests case when an attempt is made to delete a Document whose associated Campaign 
+	* doesn't exist
+	*/
+	@Test
+	void deleteDocumentUnknownCampaign() {
+	
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).build();
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> 
+			this.service.deleteDocument(documentId, currentUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+		verify(this.mockDocumentDao, never()).deleteById(any());
+		
+	}
+	
+	/**
+	* Tests it is not possible to delete a Document at the campaign level if the User
+	* has neither Admin or Edit permissions
+	*/
+	@Test
+	void deleteDocumentRoleLevelNoAdminOrEditPermission() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final UUID				roleId			= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).build();
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteDocument(documentId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests it is not possible to delete a Document at the Role level if the User
+	* has neigther Admin or Edit permissions
+	*/
+	@Test
+	void deleteDocumentCampaignLevelNoAdminOrEditPermission() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).build();
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, ()-> {
+			this.service.deleteDocument(documentId, currentUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+		
+	}
+	
+	/**
+	* Tests it is possible to Delete a Document from the Campaign level with Admin permissions
+	* at Campaign level 
+	*/
+	@Test
+	void deleteDocumentCampaignLevelAdminPermission() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).build();
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteDocument(documentId, currentUserId);
+		
+		verify(this.mockDocumentDao).deleteById(documentId);
+		
+	}
+	
+	/**
+	* Tests it is possible to Delete a Document from the Campaign level with Edit permissions
+	* at Campaign level 
+	*/
+	@Test
+	void deleteDocumentCampaignLevelEditPermission() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).build();
+		final Campaign			campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteDocument(documentId, currentUserId);
+		
+		verify(this.mockDocumentDao).deleteById(documentId);
+	
+	}
+	
+	/**
+	* Tests it is possible to Delete a Document from the Role level with Admin permissions
+	* at Campaign level 
+	*/
+	@Test
+	void deleteDocumentRoleLevelAdminPermissionAtCampaignLevel() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				roleId			= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteDocument(documentId, currentUserId);
+		
+		verify(this.mockDocumentDao).deleteById(documentId);
+		
+	}
+	
+	/**
+	* Tests it is possible to Delete a Document from the Role level with Edit permissions
+	* at Campaign level 
+	*/
+	@Test
+	void deleteDocumentRoleLevelEditPermissionAtCampaignLevel() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				roleId			= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteDocument(documentId, currentUserId);
+		
+		verify(this.mockDocumentDao).deleteById(documentId);
+		
+	}
+	
+	/**
+	* Tests it is possible to Delete a Document from the Role level with ADMIN permissions
+	* at Role level 
+	*/
+	@Test
+	void deleteDocumentRoleLevelAdminPermissionAtRoleLevel() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				roleId			= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteDocument(documentId, currentUserId);
+		
+		verify(this.mockDocumentDao).deleteById(documentId);
+		
+	}
+	
+	/**
+	* Tests it is possible to Delete a Document from the Role level with Edit permissions
+	* at Role level 
+	*/
+	@Test
+	void deleteDocumentRoleLevelEditPermissionAtRoleLevel() {
+		
+		final UUID				documentId		= UUID.randomUUID();
+		final UUID				roleId			= UUID.randomUUID();
+		final UUID				campaignId		= UUID.randomUUID();
+		final String 			currentUserId 	= "rec35";
+		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
+		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
+		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		
+		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteDocument(documentId, currentUserId);
+		
+		verify(this.mockDocumentDao).deleteById(documentId);
+		
+	}
 	
 }
