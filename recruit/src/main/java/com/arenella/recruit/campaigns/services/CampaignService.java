@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
-import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 
@@ -132,12 +131,5 @@ public interface CampaignService {
 	* @param currentUser 	- Id of the authenticated User
 	*/
 	void deleteDocument(UUID documentId, String currentUser);
-
-	/**
-	* Retrieves a Document based upon its Id
-	* @param documentId 	- Id of Document to retrieve
-	* @param currentUser 	- Id of the authenticated User		
-	*/
-	Document fetchCampaignDocument(UUID documentId, String currentUser);
 
 } 

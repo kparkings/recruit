@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
@@ -402,14 +401,6 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		this.documentDao.deleteById(documentId);
 		
-	}
-
-	/**
-	* Refer to the CampaignService interface for details 
-	*/
-	@Override
-	public Document fetchCampaignDocument(UUID documentId, String currentUserId) {
-		return null;
 	}
 	
 	/**
