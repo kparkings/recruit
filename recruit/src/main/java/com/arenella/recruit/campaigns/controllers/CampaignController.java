@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.Contact;
-import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
 
@@ -237,11 +236,11 @@ public class CampaignController {
 	* @param principal  - Currently authenticated User
 	* @return Bytes of Document
 	*/
-	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@GetMapping(path="campaign/document/{documentId}")
-	public ResponseEntity<CampaignDocumentAPIOutbound> fetchCampaignDocument(@PathVariable("documentId") UUID documentId, Principal principal) {
-		Document document = this.campaignService.fetchCampaignDocument(documentId, principal.getName());
-		return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.getTitle(), document.getType(), document.getBytes(), document.getCreated()), HttpStatus.OK);
-	}
+	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	//@GetMapping(path="campaign/document/{documentId}")
+	//public ResponseEntity<CampaignDocumentAPIOutbound> fetchCampaignDocument(@PathVariable("documentId") UUID documentId, Principal principal) {
+	//	Document document = this.campaignService.fetchCampaignDocument(documentId, principal.getName());
+	//	return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.getTitle(), document.getType(), document.getBytes(), document.getCreated()), HttpStatus.OK);
+	//}
 	
 }
