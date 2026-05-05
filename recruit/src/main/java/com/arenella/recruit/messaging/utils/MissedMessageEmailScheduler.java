@@ -157,7 +157,7 @@ public class MissedMessageEmailScheduler {
 					if (lastViewed.isBefore(chat.getLastUpdated())) {
 						chat.getLastMissedMessageAlertRecipient().ifPresent(calert -> {
 							if (calert.isBefore(lastViewed)) {
-								System.out.println("Recipient -> You have an unread message from " + chat.getSenderId());
+								//System.out.println("Recipient -> You have an unread message from " + chat.getSenderId());
 								
 								emailCommandBuilder
 									.recipients(Set.of(new EmailRecipient<UUID>(UUID.randomUUID(), chat.getRecipientId(), ContactType.CANDIDATE)))

@@ -26,8 +26,7 @@ public class RecruiterUpdatedEvent {
 		this.surname					= builder.surname;
 		this.email						= builder.email;
 		this.companyName				= builder.companyName;
-		
-		this.language		= builder.language;
+		this.language					= builder.language;
 	}
 	
 	/**

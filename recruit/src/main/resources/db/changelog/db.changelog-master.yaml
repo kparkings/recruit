@@ -2953,3 +2953,365 @@ databaseChangeLog:
              - column:
                  name: last_nofication_newsfeed_view
                  type: timestamp
+  - changeSet:
+     id: campaigns
+     author: kparkings
+     changes:
+       - createTable:
+           tableName: campaigns
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: description
+                 type: varchar
+                 constraints:
+                   nullable: true
+             - column:
+                 name: created
+                 type: timestamp
+                 constraints:
+                   nullable: false
+             - column:
+                 name: logo_bytes
+                 type: bytea
+                 constraints:
+                   nullable: true
+             - column:
+                 name: logo_format
+                 type: varchar
+                 constraints:
+                   nullable: true
+       - createTable:
+           tableName: roles
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   nullable: false
+                   foreignKeyName: fk_campaigns_roles
+                   references: campaigns.campaigns(id)
+             - column:
+                 name: name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: description
+                 type: varchar
+                 constraints:
+                   nullable: true
+             - column:
+                 name: created
+                 type: timestamp
+                 constraints:
+                   nullable: false
+             - column:
+                 name: logo_bytes
+                 type: bytea
+                 constraints:
+                   nullable: true
+             - column:
+                 name: logo_format
+                 type: varchar
+                 constraints:
+                   nullable: true
+       - createTable:
+           tableName: candidates
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: type
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: first_name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: country_code
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: job_title
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: email
+                 type: varchar
+                 constraints:
+                   nullable: true
+             - column:
+                 name: deleted_from_system
+                 type: boolean
+                 constraints:
+                   nullable: true
+                   default: false
+       - createTable:
+           tableName: participations
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: contact_id
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   nullable: false
+                   foreignKeyName: fk_campaigns_participations
+                   references: campaigns.campaigns(id)
+             - column:
+                 name: role_id
+                 type: uuid
+                 constraints:
+                   nullable: true
+                   foreignKeyName: fk_roles_participations
+                   references: campaigns.roles(id)
+             - column:
+                 name: type
+                 type: varchar
+                 constraints:
+                   nullable: false
+       - createTable:
+           tableName: notes
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   nullable: false
+                   foreignKeyName: fk_campaigns_notes
+                   references: campaigns.campaigns(id)
+             - column:
+                 name: role_id
+                 type: uuid
+                 constraints:
+                   nullable: true
+                   foreignKeyName: fk_roles_notes
+                   references: campaigns.roles(id)
+             - column:
+                 name: created
+                 type: timestamp
+                 constraints:
+                   nullable: false
+             - column:
+                 name: title
+                 type: varchar
+                 constraints:
+                   nullable: true
+             - column:
+                 name: text
+                 type: varchar
+                 constraints:
+                   nullable: false
+       - createTable:
+           tableName: appointments
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   nullable: false
+                   foreignKeyName: fk_campaigns_appointments
+                   references: campaigns.campaigns(id)
+             - column:
+                 name: role_id
+                 type: uuid
+                 constraints:
+                   nullable: true
+                   foreignKeyName: fk_roles_appointments
+                   references: campaigns.roles(id)
+             - column:
+                 name: name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: description
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: video_link
+                 type: varchar
+                 constraints:
+                   nullable: true
+             - column:
+                 name: phone_number
+                 type: varchar
+                 constraints:
+                   nullable: true
+             - column:
+                 name: when
+                 type: timestamp
+                 constraints:
+                   nullable: false
+       - createTable:
+           tableName: documents
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   nullable: false
+                   foreignKeyName: fk_campaigns_document
+                   references: campaigns.campaigns(id)
+             - column:
+                 name: role_id
+                 type: uuid
+                 constraints:
+                   nullable: true
+                   foreignKeyName: fk_roles_documents
+                   references: campaigns.roles(id)
+             - column:
+                 name: title
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: type
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: bytes
+                 type: bytea
+                 constraints:
+                   nullable: false
+             - column:
+                 name: created
+                 type: timestamp
+                 constraints:
+                   nullable: false
+       - createTable:
+           tableName: campaign_candidates
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+                   foreignKeyName: fk_campaigns_can
+                   references: campaigns.candidates(id)
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+                   foreignKeyName: fk_campaigns_can_cam
+                   references: campaigns.campaigns(id)
+       - createTable:
+           tableName: role_candidates
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+                   foreignKeyName: fk_campaigns_rol
+                   references: campaigns.roles(id)
+             - column:
+                 name: campaign_id
+                 type: uuid
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+                   foreignKeyName: fk_campaigns_rol_cam
+                   references: campaigns.roles(id)
+  - changeSet:
+     id: campaign_contacts
+     author: kparkings
+     changes:
+       - createTable:
+           tableName: contacts
+           schemaName: campaigns
+           columns:
+             - column:
+                 name: id
+                 type: varchar
+                 constraints:
+                   primaryKey: true
+                   nullable: false
+             - column:
+                 name: first_name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: surname
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: email
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: subscription_type
+                 type: varchar
+                 constraints:
+                   nullable: false

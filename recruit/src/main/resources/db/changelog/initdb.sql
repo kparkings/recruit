@@ -10,6 +10,7 @@ CREATE SCHEMA listings;
 CREATE SCHEMA email;
 CREATE SCHEMA newsfeed;
 CREATE SCHEMA chats;
+CREATE SCHEMA campaigns;
 
 GRANT ALL PRIVILEGES ON SCHEMA recruiter 	TO recruitadmin;
 GRANT ALL PRIVILEGES ON SCHEMA candidate 	TO recruitadmin;
@@ -19,3 +20,4 @@ GRANT ALL PRIVILEGES ON SCHEMA listings 	TO recruitadmin;
 GRANT ALL PRIVILEGES ON SCHEMA email 		TO recruitadmin;
 GRANT ALL PRIVILEGES ON SCHEMA newsfeed 	TO recruitadmin;
 GRANT ALL PRIVILEGES ON SCHEMA chats	 	TO recruitadmin;
+GRANT ALL PRIVILEGES ON SCHEMA campaigns	TO recruitadmin;
