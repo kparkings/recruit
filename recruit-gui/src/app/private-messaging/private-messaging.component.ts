@@ -138,6 +138,7 @@ export class PrivateMessagingComponent {
 	* for the current chat
 	*/
 	private startReplyScheduler():void{
+		window.clearInterval(this.scheduleOpenChatRefresh);
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.chatService.fetchPrivateChatById(this.currentChat!.id).subscribe(chat => {
 				this.currentChat 		= chat;
@@ -396,7 +397,7 @@ export class PrivateMessagingComponent {
 	*/
 	public closeChat():void{
 		this.appComponent.currentChatWindowState = "closed";
-		clearInterval(this.scheduleOpenChatRefresh);
+		window.clearInterval(this.scheduleOpenChatRefresh);
 	}
 	
 	//TODO: Used in other places. Add to environemnt and refactor everywhere

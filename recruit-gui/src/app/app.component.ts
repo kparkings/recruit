@@ -121,6 +121,7 @@ export class AppComponent {
 		if (this.tandcBox.nativeElement && this.termsAndConditionsAccepted != true) {
 			this.tandcBox.nativeElement.showModal();
 		}
+		
 		this.privateChat.startChatContactListPolling();
 		
 		if(sessionStorage.getItem("loggedIn") == "true") {
@@ -140,7 +141,6 @@ export class AppComponent {
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.refreshUnreadNewsFeedNotifications();		
 			this.hasUnreadNewsFeedItems();
-			console.log("Notificaion schedulre running");
 		},30000);
 					
 	}
@@ -485,7 +485,6 @@ export class AppComponent {
 	
 	public hasUnreadNewsFeedItems():void{
 		this.publicMessagingService.hasUnreadNewsFeedItems().subscribe(response =>{
-			console.log("eeeeeeeeeeeeeeee + " + response);
 			 this.unreadNewFeedItems = response;
 		});
 	}
