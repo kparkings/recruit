@@ -72,7 +72,7 @@ export class AppComponent {
 				private readonly cookieService: 			CookieService, 
 				private readonly modalService: 				NgbModal, 
 				private readonly mpService:					RecruiterMarketplaceService,
-				private readonly emailService:				EmailService,
+				public readonly emailService:				EmailService,
 				public  popupsService:						PopupsService,
 				private readonly candidateNavService: 		CandidateNavService,
 				public  creditsService:						CreditsService,
@@ -176,6 +176,33 @@ export class AppComponent {
 	
 	private lastAlertRefresh!:Date;
 	
+	/**
+	* Refreshes generic notification that are required regardless of roll
+	* - Newsfeed new items
+	* - Newsfeed alerts
+	* - IM
+	* - Emails
+	*/
+	public refreschUnreadNotifications():void{
+		
+		if (!sessionStorage.getItem('loggedIn') || sessionStorage.getItem('loggedIn') !='true') {
+			console.log("Exiting for "+sessionStorage.getItem('loggedIn'));
+			return;
+		}
+				
+		this.refreshUnreadNewsFeedNotifications();
+		this.hasUnreadNewsFeedItems();
+		this.privateChat.fetchChats();
+		this.emailService.updateUnseenEmails();
+		//this.emailService.fetchUnseenEmailsCount().subscribe(val => {
+		//	this.unseenEmails = val;
+		//});
+	}
+	
+	/**
+	* Refreshes notifications that are for non Candidate roles
+	* - Marketplace 
+	*/
 	public refreschUnreadAlerts():void{
 		
 		if (this.isAuthenticatedAsCandidate()) {
@@ -191,11 +218,6 @@ export class AppComponent {
 			this.unseenMpPosts = val;
 		});
 		
-		this.emailService.updateUnseenEmails();
-		this.emailService.fetchUnseenEmailsCount().subscribe(val => {
-			this.unseenEmails = val;
-		});
-		
 	}
 	
 	/**
@@ -203,7 +225,7 @@ export class AppComponent {
 	*/
 	public refreshUnreadNewsFeedNotifications():void{
 		this.publicMessagingService.fetchNotificationsForUser().subscribe(notifications => {
-			this.publicMessagingService.unreadNotifications = notifications.filter(n => n.viewed == false).length;
+			this.publicMessagingService.unreadNotifications = notifications.filter(n => !n.viewed).length;
 		});
 	}
 		

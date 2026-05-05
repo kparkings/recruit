@@ -12,6 +12,10 @@
 	.unread-notifications-true{
 		color:green;
 	}
+	
+	.unread-notifications-false{
+		color:#002549;
+	}
 
 	.no-chat-box{
 		text-align:center;

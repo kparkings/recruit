@@ -14,7 +14,8 @@ import { OfferedCandidate } 						from './recruiter-marketplace/offered-candidat
 })
 export class EmailService {
 
-	public unseenEmails = new BehaviorSubject(0);
+	//public unseenEmails = new BehaviorSubject(0);
+	public unseenEmails:number = 0;
 	
 	/**
 	* Updates the unseenEmails count
@@ -22,7 +23,12 @@ export class EmailService {
 	public updateUnseenEmails():void{
 		if (sessionStorage.getItem("userId")) {
 			this.fetchEmails().subscribe(emails => {
-				this.unseenEmails.next(emails.filter(a => a.viewed == false).length);
+				console.log("AA " + emails.length);
+				console.log("BB " + emails.filter(a => !a.viewed).length);
+				//this.unseenEmails.next(emails.filter(a => !a.viewed).length);
+				
+				this.unseenEmails = emails.filter(a => !a.viewed).length;
+				
 			});
 		}
 	}
@@ -30,9 +36,9 @@ export class EmailService {
 	/**
 	* Returns number of unseen email as observable
 	*/
-	public fetchUnseenEmailsCount():Observable<number>{
-		return this.unseenEmails;
-	}
+	//public fetchUnseenEmailsCount():Observable<number>{
+	//	return this.unseenEmails;
+	//}
 
 	/**
  	* Constructor

@@ -100,10 +100,11 @@ export class PrivateMessagingComponent {
 	* Fetches the Chat's for the User. It will subsequently 
 	* retrieve all the Candidates involved in the Chat's 
 	*/
-	private fetchChats():void{
+	public fetchChats():void{
 		if (this.appComponent.isAuthenticated()) {
 			this.chatService.fetchChatsByUserId().subscribe(chats => {
 				this.chats = chats;
+				this.hasUnreadMessagesTracker = this.hasUnreadMessages();
 			});			
 		}
 	}
@@ -163,7 +164,7 @@ export class PrivateMessagingComponent {
 	public startChatContactListPolling():void{
 		this.scheduleContactListRefresh = window.setInterval(()=> {
 			this.fetchChats();		
-			this.hasUnreadMessagesTracker = this.hasUnreadMessages();
+			//this.hasUnreadMessagesTracker = this.hasUnreadMessages();
 		},20000);
 	}
 	
