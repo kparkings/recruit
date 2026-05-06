@@ -1,5 +1,7 @@
 package com.arenella.recruit.campaign.dao;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,15 @@ public interface CandidateEntityDao extends ListCrudRepository<CandidateEntity, 
 	*/
 	default void saveCandidate(Candidate candidate) {
 		this.save(CandidateEntity.toEntity(candidate));
+	}
+
+	/**
+	* If present returns the Candidate references by the ID
+	* @param candidateId - Unique id of the Candidate
+	* @return
+	*/
+	default Optional<Candidate> findCandidateById(String candidateId){
+		return this.findById(candidateId).map(CandidateEntity::fromEntity);
 	}
 	
 }

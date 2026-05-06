@@ -10,14 +10,21 @@ import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
+import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,13 +34,16 @@ import static org.mockito.Mockito.*;
 * Unit tests for the CampaignsMonolithExternalEventPublisher class 
 */
 @ExtendWith(MockitoExtension.class)
-class CampaignsMonolithExternalEventPublisherTest {
+class CampaignsMonolithExternalEventListenerTest {
 
 	@Mock
-	private ContactEntityDao mockContactDao;
+	private ContactEntityDao 						mockContactDao;
+	
+	@Mock
+	private CandidateEntityDao 						mockCandidateDao;
 	
 	@InjectMocks
-	private CampaignsMonolithExternalEventListener listener;
+	private CampaignsMonolithExternalEventListener 	listener;
 	
 	/**
 	* Tests handling of adding a new contact where contact already exists
@@ -259,4 +269,163 @@ class CampaignsMonolithExternalEventPublisherTest {
 		
 	}
 	
+	/**
+	* Tests case event is received informing of newly created
+	* Candidate but the Candidate already exists 
+	*/
+	@Test
+	void testListenForCandidateCreatedEventExists() {
+		
+		final String candidateId = "59";
+		
+		when(mockCandidateDao.existsById(candidateId)).thenReturn(true);
+		
+		this.listener.listenFor(CandidateCreatedEvent
+				.builder()
+					.candidateId(candidateId)
+				.build());
+		
+		verify(this.mockCandidateDao, never()).saveCandidate(any(Candidate.class));
+		
+	}
+	
+	/**
+	* Tests case event is received informing of newly created
+	* Candidate
+	*/
+	@Test
+	void testListenForCandidateCreatedEventDoesntExists() {
+		
+		final String candidateId = "59";
+		
+		this.listener.listenFor(CandidateCreatedEvent
+				.builder()
+					.candidate(com.arenella.recruit.candidates.beans.Candidate
+							.builder()
+								.candidateId(candidateId)
+								.country(COUNTRY.AUSTRIA)
+							.build())
+				.build());
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		
+	}
+	
+	/**
+	* Tests case in which an update event is received but the corresponding
+	* Candidate doesn't exists 
+	*/
+	@Test
+	void testListenForCandidateUpdatedEventDoesntExists() {
+		
+		final String candidateId 	= "59";
+		final String firstName 		= "Kevin";
+		final String surname 		= "Parkings";
+		final String email 			= "kparkings@gmail.com";
+		
+		when(this.mockCandidateDao.findCandidateById(candidateId)).thenReturn(Optional.empty());
+		
+		this.listener.listenFor(new CandidateUpdatedEvent(candidateId, firstName, surname, email));
+		
+		verify(this.mockCandidateDao, never()).saveCandidate(any(Candidate.class));
+		
+	}
+	
+	/**
+	* Tests case in which an update event is received but the corresponding
+	* Candidate exists 
+	*/
+	@Test
+	void testListenForCandidateUpdatedEventExists() {
+		
+		final String candidateId 	= "59";
+		final String firstName 		= "Kevin";
+		final String surname 		= "Parkings";
+		final String email 			= "kparkings@gmail.com";
+		
+		when(this.mockCandidateDao.findCandidateById(candidateId)).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		this.listener.listenFor(new CandidateUpdatedEvent(candidateId, firstName, surname, email));
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		
+		
+	}
+	
+	/**
+	* Tests case in which an update event is received but the corresponding
+	* Candidate doesn't exists 
+	*/
+	@Test
+	void testListenForCandidateUpdateEventDoesntExists() {
+		
+		final int	 candidateId 	= 59;
+		
+		when(this.mockCandidateDao.findCandidateById(""+candidateId)).thenReturn(Optional.empty());
+		
+		this.listener.listenFor(CandidateUpdateEvent.builder().candidateId(candidateId).build());
+		
+		verify(this.mockCandidateDao, never()).saveCandidate(any(Candidate.class));
+		
+	}
+	
+	/**
+	* Tests case in which an update event is received but the corresponding
+	* Candidate exists 
+	*/
+	@Test
+	void testListenForCandidateUpdateEventEventExists() {
+		
+		final int	 candidateId 	= 59;
+		
+		when(this.mockCandidateDao.findCandidateById(""+candidateId)).thenReturn(Optional.of(Candidate.builder().build()));
+		
+		this.listener.listenFor(CandidateUpdateEvent.builder().candidateId(candidateId).build());
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		
+		
+	}
+	
+	/**
+	* Tests case in which an Delete event is received but the corresponding
+	* Candidate doesn't exists 
+	*/
+	@Test
+	void testListenForCandidateDeletedEventDoesntExists() {
+		
+		final String candidateId 	= "59";
+		
+		when(this.mockCandidateDao.findCandidateById(candidateId)).thenReturn(Optional.empty());
+		
+		this.listener.listenFor(new CandidateDeletedEvent(candidateId));
+		
+		verify(this.mockCandidateDao, never()).saveCandidate(any(Candidate.class));
+		
+	}
+	
+	/**
+	* Tests case in which an Delete event is received but the corresponding
+	* Candidate exists 
+	*/
+	@Test
+	void testListenForCandidateDeletedEventEventExists() {
+		
+		final String candidateId 	= "59";
+		
+		ArgumentCaptor<Candidate> argCapt = ArgumentCaptor.forClass(Candidate.class);
+		
+		when(this.mockCandidateDao.findCandidateById(candidateId)).thenReturn(Optional.of(Candidate.builder().build()));
+		doNothing().when(this.mockCandidateDao).saveCandidate(argCapt.capture());
+		
+		this.listener.listenFor(new CandidateDeletedEvent(candidateId));
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		
+		Candidate candidate = argCapt.getValue();
+		
+		assertEquals("NA", candidate.getEmail());
+		assertEquals("NA", candidate.getSurname());
+		
+	}
 }

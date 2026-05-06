@@ -127,6 +127,26 @@ public class Candidate {
 		private boolean deletedFromSystem;
 		
 		/**
+		* Populates builder with values from existing Candidate
+		* @param candidate - Contains initialization values
+		* @return Builder
+		*/
+		public CandidateBuilder from(Candidate candidate) {
+			
+			this.id 				= candidate.id;
+			this.type 				= candidate.type;
+			this.firstName 			= candidate.firstName;
+			this.surname 			= candidate.surname;
+			this.countryCode 		= candidate.countryCode;
+			this.jobTitle 			= candidate.jobTitle;
+			this.email 				= candidate.email;
+			this.deletedFromSystem 	= candidate.deletedFromSystem;
+			
+			return this;
+		} 
+		
+		
+		/**
 		* Sets the Id of the Candidate
 		* @param id - Candidate Id 
 		* @return Builder

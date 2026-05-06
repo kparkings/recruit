@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
@@ -16,6 +15,7 @@ import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
+import com.arenella.recruit.campaigns.adapters.CampaignsExternalEventListener;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -29,7 +29,7 @@ import com.arenella.recruit.messaging.adapters.MessagingMessagingServiceExternal
 import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
 /**
-* An implementation of ExternalEventPublisher optimised to work when the 
+* An implementation of ExternalEventPublisher optimized to work when the 
 * external services are physically located in the same Monolith.
 * 
 * Here we are calling we are connecting to the other services directly. If the 
@@ -43,20 +43,36 @@ import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 @Service
 public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 
-	@Autowired
-	private CurriculumExternalEventListener 				curriculumExternalEventListener;
+	private final CurriculumExternalEventListener 					curriculumExternalEventListener;
+	private final AuthenticationExternalEventListener 				authenticationExternalEventListener;
+	private final MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
+	private final NewsFeedExternalEventListener						newsFeedExternalEventListener;
+	private final MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
+	private final CampaignsExternalEventListener					campaignsExternalEventListener;
 	
-	@Autowired
-	private AuthenticationExternalEventListener 			authenticationExternalEventListener;
-	
-	@Autowired
-	private MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
-	
-	@Autowired
-	private NewsFeedExternalEventListener					newsFeedExternalEventListener;
-	
-	@Autowired
-	private MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
+	/**
+	* Constructor
+	* @param curriculumExternalEventListener
+	* @param authenticationExternalEventListener
+	* @param emailServiceExternalEventListener
+	* @param newsFeedExternalEventListener
+	* @param messagingMessagingServiceExternalEventListener
+	*/
+	public MonolithExternalEventPublisher(
+			CurriculumExternalEventListener 				curriculumExternalEventListener,
+			AuthenticationExternalEventListener 			authenticationExternalEventListener,
+			MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener,
+			NewsFeedExternalEventListener					newsFeedExternalEventListener,
+			MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener,
+			CampaignsExternalEventListener					campaignsExternalEventListener
+			) {
+		this.curriculumExternalEventListener 					= curriculumExternalEventListener;
+		this.authenticationExternalEventListener 				= authenticationExternalEventListener;
+		this.emailServiceExternalEventListener 					= emailServiceExternalEventListener;
+		this.newsFeedExternalEventListener 						= newsFeedExternalEventListener;
+		this.messagingMessagingServiceExternalEventListener		= messagingMessagingServiceExternalEventListener;
+		this.campaignsExternalEventListener 					= campaignsExternalEventListener;
+	}
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
@@ -83,6 +99,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		this.curriculumExternalEventListener.listenForCandidateCreatedEvent(event);
 		this.emailServiceExternalEventListener.listenForCandidateCreatedEvent(event);
 		this.messagingMessagingServiceExternalEventListener.listenForCandidateCreatedEvent(event);
+		this.campaignsExternalEventListener.listenFor(event);
 	}
 
 	/**
@@ -93,9 +110,9 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		
 		Map<String,Object> alerts = new HashMap<>();
 		
-		command.getMatchesByAlert().keySet().stream().forEach(key -> {
-			alerts.put(key, command.getMatchesByAlert().get(key));
-		});
+		command.getMatchesByAlert().keySet().stream().forEach(key -> 
+			alerts.put(key, command.getMatchesByAlert().get(key))
+		);
 	
 		Map<String, Object> model = new HashMap<>();
 		model.put("alerts", alerts);
@@ -139,6 +156,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	@Override
 	public void publishCandidateAccountUpdatedEvent(CandidateUpdatedEvent event) {
 		this.emailServiceExternalEventListener.listenForCandidateUpdatedEvent(event);
+		this.campaignsExternalEventListener.listenFor(event);
 	}
 
 	/**
@@ -159,6 +177,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		this.curriculumExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		this.authenticationExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		this.messagingMessagingServiceExternalEventListener.listenForCandidateDeletedEvent(candidateDeletedEvent);
+		this.campaignsExternalEventListener.listenFor(candidateDeletedEvent);
 	}
 
 	/**
@@ -212,6 +231,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	public void publishCandidateUpdateEvent(CandidateUpdateEvent candidateUpdateEvent) {
 		this.newsFeedExternalEventListener.listenForEventCandidateUpdate(candidateUpdateEvent);
 		this.messagingMessagingServiceExternalEventListener.listenForCandidateUpdateEvent(candidateUpdateEvent);
+		this.campaignsExternalEventListener.listenFor(candidateUpdateEvent);
 	}
 	
 	

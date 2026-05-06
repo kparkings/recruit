@@ -1,10 +1,14 @@
 package com.arenella.recruit.campaigns.adapters;
 
+import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
+import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 
 /**
 * Defines Listeners for incoming events from External services
@@ -47,4 +51,28 @@ public interface CampaignsExternalEventListener {
 	* @param event
 	*/
 	public void listenForRecruiterDeletedEvent(RecruiterDeletedEvent event);
+
+	/**
+	* Listens for events stating a Candidate has been updated
+	* @param candidateUpdateEvent
+	*/
+	public void listenFor(CandidateUpdateEvent candidateUpdateEvent);
+
+	/**
+	* Listens for events stating candidate has been deleted
+	* @param candidateDeletedEvent
+	*/
+	public void listenFor(CandidateDeletedEvent candidateDeletedEvent);
+
+	/**
+	* Listens for event stating candidate has been updated
+	* @param candidateUpdatedEvent
+	*/
+	public void listenFor(CandidateUpdatedEvent candidateUpdatedEvent);
+
+	/**
+	* Listens for event stating candidate has been created
+	* @param candidateCreatedEvent
+	*/
+	public void listenFor(CandidateCreatedEvent candidateCreatedEvent);
 }

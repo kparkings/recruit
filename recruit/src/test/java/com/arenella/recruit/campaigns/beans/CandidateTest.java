@@ -130,4 +130,44 @@ class CandidateTest {
 		assertEquals(DELETED_FROM_SYSTEM, 	candidate.isDeleteFromSystem());
 	}
 	
+	/**
+	* Test populating Builder form existing Candidate 
+	*/
+	@Test
+	void testBulderFromExisting() {
+		
+		Candidate candidate = Candidate
+				.builder()
+					.id(ID)
+					.type(TYPE)
+					.firstName(FIRST_NAME)
+					.surname(SURNAME)
+					.countryCode(COUNTRY_CODE)
+					.jobTitle(JOB_TITLE)
+					.email(EMAIL)
+					.deletedFromSystem(DELETED_FROM_SYSTEM)
+				.build();
+		
+		assertEquals(ID, 					candidate.getId());
+		assertEquals(TYPE, 					candidate.getType());
+		assertEquals(FIRST_NAME, 			candidate.getFirstName());
+		assertEquals(SURNAME, 				candidate.getSurname());
+		assertEquals(COUNTRY_CODE, 			candidate.getCountryCode());
+		assertEquals(JOB_TITLE, 			candidate.getJobTitle());
+		assertEquals(EMAIL, 				candidate.getEmail());
+		assertEquals(DELETED_FROM_SYSTEM, 	candidate.isDeleteFromSystem());
+		
+		Candidate clone = Candidate.builder().from(candidate).build();
+	
+		assertEquals(ID, 					clone.getId());
+		assertEquals(TYPE, 					clone.getType());
+		assertEquals(FIRST_NAME, 			clone.getFirstName());
+		assertEquals(SURNAME, 				clone.getSurname());
+		assertEquals(COUNTRY_CODE, 			clone.getCountryCode());
+		assertEquals(JOB_TITLE, 			clone.getJobTitle());
+		assertEquals(EMAIL, 				clone.getEmail());
+		assertEquals(DELETED_FROM_SYSTEM, 	clone.isDeleteFromSystem());
+		
+	}
+	
 }
