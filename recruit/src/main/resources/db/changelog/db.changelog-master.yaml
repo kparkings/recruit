@@ -3040,7 +3040,7 @@ databaseChangeLog:
            columns:
              - column:
                  name: id
-                 type: uuid
+                 type: varchar
                  constraints:
                    primaryKey: true
                    nullable: false
@@ -3051,6 +3051,11 @@ databaseChangeLog:
                    nullable: false
              - column:
                  name: first_name
+                 type: varchar
+                 constraints:
+                   nullable: false
+             - column:
+                 name: surname
                  type: varchar
                  constraints:
                    nullable: false
@@ -3247,7 +3252,7 @@ databaseChangeLog:
            columns:
              - column:
                  name: id
-                 type: uuid
+                 type: varchar
                  constraints:
                    primaryKey: true
                    nullable: false

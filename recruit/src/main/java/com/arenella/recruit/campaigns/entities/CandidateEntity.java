@@ -5,6 +5,8 @@ import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -20,6 +22,7 @@ public class CandidateEntity {
 	private String 	id;
 	
 	@Column(name="type")
+	@Enumerated(EnumType.STRING)
 	private Type 	type;
 	
 	@Column(name="first_name")
