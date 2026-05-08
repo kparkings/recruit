@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateAccountCreatedEvent;
@@ -43,36 +44,23 @@ import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 @Service
 public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 
-	private final CurriculumExternalEventListener 					curriculumExternalEventListener;
-	private final AuthenticationExternalEventListener 				authenticationExternalEventListener;
-	private final MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
-	private final NewsFeedExternalEventListener						newsFeedExternalEventListener;
-	private final MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
-	private final CampaignsExternalEventListener					campaignsExternalEventListener;
+	@Autowired
+	private CurriculumExternalEventListener 				curriculumExternalEventListener;
 	
-	/**
-	* Constructor
-	* @param curriculumExternalEventListener
-	* @param authenticationExternalEventListener
-	* @param emailServiceExternalEventListener
-	* @param newsFeedExternalEventListener
-	* @param messagingMessagingServiceExternalEventListener
-	*/
-	public MonolithExternalEventPublisher(
-			CurriculumExternalEventListener 				curriculumExternalEventListener,
-			AuthenticationExternalEventListener 			authenticationExternalEventListener,
-			MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener,
-			NewsFeedExternalEventListener					newsFeedExternalEventListener,
-			MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener,
-			CampaignsExternalEventListener					campaignsExternalEventListener
-			) {
-		this.curriculumExternalEventListener 					= curriculumExternalEventListener;
-		this.authenticationExternalEventListener 				= authenticationExternalEventListener;
-		this.emailServiceExternalEventListener 					= emailServiceExternalEventListener;
-		this.newsFeedExternalEventListener 						= newsFeedExternalEventListener;
-		this.messagingMessagingServiceExternalEventListener		= messagingMessagingServiceExternalEventListener;
-		this.campaignsExternalEventListener 					= campaignsExternalEventListener;
-	}
+	@Autowired
+	private AuthenticationExternalEventListener 			authenticationExternalEventListener;
+	
+	@Autowired
+	private MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
+	
+	@Autowired
+	private NewsFeedExternalEventListener					newsFeedExternalEventListener;
+	
+	@Autowired
+	private MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
+	
+	@Autowired
+	private CampaignsExternalEventListener					campaignsExternalEventListener;
 	
 	/**
 	* Refer to ExternalEventPublisher for details 
