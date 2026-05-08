@@ -19,7 +19,7 @@ import com.arenella.recruit.campaigns.entities.CampaignEntity;
 @Repository
 public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 
-	@Query("FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
+	@Query("SELECT CampaignEntity FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
 	Set<CampaignEntity> fetchCampaignsWhereUserIsParticipant(String userId);
 	
 	/**

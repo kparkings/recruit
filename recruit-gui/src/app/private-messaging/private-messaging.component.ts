@@ -100,10 +100,11 @@ export class PrivateMessagingComponent {
 	* Fetches the Chat's for the User. It will subsequently 
 	* retrieve all the Candidates involved in the Chat's 
 	*/
-	private fetchChats():void{
+	public fetchChats():void{
 		if (this.appComponent.isAuthenticated()) {
 			this.chatService.fetchChatsByUserId().subscribe(chats => {
 				this.chats = chats;
+				this.hasUnreadMessagesTracker = this.hasUnreadMessages();
 			});			
 		}
 	}
@@ -138,6 +139,7 @@ export class PrivateMessagingComponent {
 	* for the current chat
 	*/
 	private startReplyScheduler():void{
+		window.clearInterval(this.scheduleOpenChatRefresh);
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.chatService.fetchPrivateChatById(this.currentChat!.id).subscribe(chat => {
 				this.currentChat 		= chat;
@@ -162,7 +164,7 @@ export class PrivateMessagingComponent {
 	public startChatContactListPolling():void{
 		this.scheduleContactListRefresh = window.setInterval(()=> {
 			this.fetchChats();		
-			this.hasUnreadMessagesTracker = this.hasUnreadMessages();
+			//this.hasUnreadMessagesTracker = this.hasUnreadMessages();
 		},20000);
 	}
 	
@@ -396,7 +398,7 @@ export class PrivateMessagingComponent {
 	*/
 	public closeChat():void{
 		this.appComponent.currentChatWindowState = "closed";
-		clearInterval(this.scheduleOpenChatRefresh);
+		window.clearInterval(this.scheduleOpenChatRefresh);
 	}
 	
 	//TODO: Used in other places. Add to environemnt and refactor everywhere
