@@ -212,8 +212,8 @@ public class CampaignController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="campaign/document",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<Void> addDocument(@RequestPart("document") AddDocumentAPIInbound document, @RequestPart("documentBytes")MultipartFile documentBytes, Principal principal) throws IOException{
-		this.campaignService.addDocument(document.getCampaignId(), document.getRoleId().orElse(null), document.getTitle(), document.getType(), documentBytes.getBytes(), principal.getName());
+	public ResponseEntity<Void> addDocument(@RequestPart("document") AddDocumentAPIInbound document, @RequestPart("documentFile")MultipartFile documentFile, Principal principal) throws IOException{
+		this.campaignService.addDocument(document.getCampaignId(), document.getRoleId().orElse(null), document.getTitle(), document.getType(), documentFile.getBytes(), principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	

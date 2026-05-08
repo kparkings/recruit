@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } 					from '@angular/common/http';
+import { Injectable }	 							from '@angular/core';
+import { Observable } 								from 'rxjs';
+import { environment } 								from './../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +15,259 @@ export class CampaingsService {
   
 	constructor(private httpClient: HttpClient){}
 	
-	//public fetchCampaignsForUser() : CampaignOverview
-	//pubilc fetchCampaign(campaignId:string) : Campaign
-	//public addNewCampaign(@RequestBody NewCampaignAPIInbound campaign) :Void
-	//public addParticipation(@RequestBody AddParticipationAPIInbound participation) :Void
-	//public deleteParticipation(@PathVariable("participationId") UUID participationId) : Void
-	//public addNote(@RequestBody AddNoteAPIInbound note) : Void
-	//public updateNote(@PathVariable("noteId")UUID noteId, @RequestBody UpdateNoteAPIInbound note): Void
-	//public deleteNote(@PathVariable("noteId") UUID noteId) :  Void
-	//public addAppointment(@RequestBody AddAppointmentAPIInbound appointment) : Void
-	//public updateAppointment(@PathVariable("appointmentId")UUID appointmentId, @RequestBody UpdateAppointmentAPIInbound appointment) : Void
-	//public deleteAppointment(@PathVariable("appointmentId") UUID appointmentId) : Void
-	//public addDocument(@RequestPart("document") AddDocumentAPIInbound document, @RequestPart("documentBytes")MultipartFile documentBytes) : Void
-	//public deleteDocument(@PathVariable("documentId") UUID documentId) : Void
+	httpOptions = {
+		headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
+	};
+	
+	/**
+	* Returns an overview of all the current Users Campaigins
+	*/
+	public fetchCampaignsForUser(): Observable<Array<CampaignOverview>>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign';
+
+	  	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Returns a specific Campaigin
+	* @param campaiginId - Unique Id of the Campaigin to return
+	*/
+	public fetchCampaign(campaiginId:string): Observable<Array<Campaign>>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
+
+	  	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Creates a new Campaign
+	* @param name 			- Name of the Campaign
+	* @param description  	- Description of the Campaigin
+	* @param logo 			- Optional logo to identify the Campaign 
+	*/
+	public addNewCampaign(name:string, description:string, logo:CampaignLogo):Observable<Void>{
+		
+		let command:CommandAddCampaign = new CommandAddCampaign();
+		
+		command.name 			= name;
+		command.description 	= description;
+		command.logo 			= logo;
+		
+		const backendUrl:string = environment.backendUrl +'campaign';
+
+		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+
+		
+	}
+	
+	/**
+	* Creates a new Participation for a Campaigin
+	* @param contacId 	- Id of Contact that will be participating in the Campaigin
+	* @param campaignId - Id of the Campaign the Contact will be participating in
+	* @param roleId 	- If role Level the Id of the Role the Participation relates to
+	* @param type 		- Type of participation the Contact will have in the Campaign
+	*/
+	public addParticipation(contactId:string, campaignId:string, roleId:string, type:string):Observable<Void>{
+		
+		let command:CommandAddParticipation = new CommandAddParticipation();
+		
+		command.contactId 		= contactId;
+		command.campaignId 		= campaignId;
+		command.roleId 			= roleId;
+		command.type 			= type;
+				
+		const backendUrl:string = environment.backendUrl +'campaign/participant';
+
+		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+	
+	}
+	
+	/**
+	* Deletes an existing Participation
+	* @param participationId - Id of the Participation to Delete 
+	*/
+	public deleteParticipation(participationId:string):Observable<Void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/participant/'+participationId;
+
+		return this.httpClient.delete<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Adds a Note to a Campaign
+	* @param campaignId - Campaigin to add the Note to
+	* @param roleId		- If Note is for a specific Role the Id of the Role
+	* @param title		- Title of the Note
+	* @param text		- Note content 
+	*/
+	public addNote(campaignId:string, roleId:string, title:string, text:string):Observable<Void>{
+			
+			let command:CommandAddNote = new CommandAddNote();
+			
+			command.campaignId 		= campaignId;
+			command.roleId 			= roleId;
+			command.title 			= title;
+			command.text 			= text;
+					
+			const backendUrl:string = environment.backendUrl +'campaign/note';
+
+			return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Update an existing Note in a Campaign
+	* @param noteId		- Id of the Note to be updates
+	* @param title		- Title of the Note
+	* @param text		- Note content 
+	*/
+	public updateNote(noteId:string, title:string, text:string):Observable<Void>{
+			
+			let command:CommandUpdateNote = new CommandUpdateNote();
+			
+			command.title 		= title;
+			command.text 		= text;
+			
+			const backendUrl:string = environment.backendUrl +'campaign/note/'+noteId;
+
+			return this.httpClient.put<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Delete an existing Note from a Campaign
+	* @param noteId		- Id of the Note to be updates
+	*/
+	public deleteNote(noteId:string):Observable<Void>{
+			
+		const backendUrl:string = environment.backendUrl +'campaign/note/'+noteId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Adds an Appointment to a Campaign
+	* @param campaignId 	- Campaigin to add the Note to
+	* @param roleId			- If Note is for a specific Role the Id of the Role
+	* @param name			- Name of the Appointment
+	* @param description	- Description of the Apppointment
+	* @param videoLink		- If Video appointment, the link
+	* @param phoneNumber 	- If Phone appointment, the number
+	* @param when			- When the Appointment will take place
+	*/
+	public addAppointment(campaignId:string,
+					roleId:string,
+					name:string,
+					description:string,
+					videoLink:string,
+					phoneNumber:string,
+					when:Date):Observable<Void>{
+			
+			let command:CommandAddAppointment = new CommandAddAppointment();
+			
+			command.campaignId 		= campaignId;
+			command.roleId 			= roleId;
+			command.name 			= name;
+			command.descroption 	= description;
+			command.videoLink 		= videoLink;
+			command.phoneNumber 	= phoneNumber;
+			command.when			= when;
+					
+			const backendUrl:string = environment.backendUrl +'campaign/appointment';
+
+			return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Updates an Appointment in a Campaign
+	* @param appointmentId 	- Id of the Appointment to be updated
+	* @param campaignId 	- Campaigin to add the Note to
+	* @param roleId			- If Note is for a specific Role the Id of the Role
+	* @param name			- Name of the Appointment
+	* @param description	- Description of the Apppointment
+	* @param videoLink		- If Video appointment, the link
+	* @param phoneNumber 	- If Phone appointment, the number
+	* @param when			- When the Appointment will take place
+	*/
+	public updateAppointment(
+					appointmentId:string,
+					name:string,
+					description:string,
+					videoLink:string,
+					phoneNumber:string,
+					when:Date):Observable<Void>{
+			
+			let command:CommandUpdateAppointment = new CommandUpdateAppointment();
+			
+			command.campaignId 		= campaignId;
+			command.roleId 			= roleId;
+			command.name 			= name;
+			command.descroption 	= description;
+			command.videoLink 		= videoLink;
+			command.phoneNumber 	= phoneNumber;
+			command.when			= when;
+					
+			const backendUrl:string = environment.backendUrl +'campaign/appointment/'+appointmentId;
+
+			return this.httpClient.put<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Deletes an existing Appointment from a Campaign
+	* @param appointmentId - Id of the Appointment to delete
+	*/
+	public deleteAppointment(appointmentId:string):Observable<Void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/appointment/'+appointmentId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Adds a Document to an existing Campaign
+	* @param campaignId 	- Id of the Campaigin to add the Document to
+	* @param roleId 		- If Role specific the Role to add the Document to
+	* @param title			- The title of the Document
+	* @param type			- Document type ( i.e jped / pdf )
+	* @param documentFile 	- Actual document File 
+	*/
+	public addDocument( campaignId:string,
+						roleId:string,
+						title:string,
+						type:string,
+						documentFile:File): Observable<any>{
+
+		CommandAddDocument command = new CommandAddDocument();
+		
+		const backendUrl:string = environment.backendUrl + 'campaign/document';
+		
+		var fd = new FormData();
+		fd.append('documentFile', profileImage);
+		fd.append("document", new Blob([JSON.stringify(command)], { type: 'application/json' }));
+			
+		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+
+	}
+	
+	/**
+	* Deletes a Document from an existing Campaign
+	* @param documentId 	- Id of the Document to delete
+	*/
+	public deleteDocument( documentId:string): Observable<any>{
+
+		const backendUrl:string = environment.backendUrl +'campaign/document/'+documentId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+
+	}
 	
 }
 
