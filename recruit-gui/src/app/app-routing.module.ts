@@ -24,6 +24,7 @@ import { CandidateStatisticsComponent } 				from './candidate-statistics/candida
 import { CandidateMiniOverviewComponent }				from './candidate-mini-overview/candidate-mini-overview.component';
 import { PricingComponent }								from './pricing/pricing.component';
 import { FeaturesComponent }							from './features/features.component'
+import { CampaignsComponent }							from './campaigns/campaigns.component'
 
 const routes: Routes = [
 	{path: '', 								component: ListingComponent},
@@ -43,6 +44,7 @@ const routes: Routes = [
 	{path: 'recruiter-profile', 			component: RecruiterProfileComponent, 					canActivate: [AuthGuardService]},
 	{path: 'newsfeed', 						component: NewsfeedComponent, 							canActivate: [AuthGuardService]},
 	{path: 'candidate-statistics', 			component: CandidateStatisticsComponent, 				canActivate: [AuthGuardService]},
+	{path: 'campaigns', 					component: CampaignsComponent, 							canActivate: [AuthGuardService]},
 	{path: 'login-user', 					component: LoginUserComponent},
 	{path: 'login-user', 					component: LoginUserComponent},
 	{path: 'listing/:id',		 			component: ListingComponent},

@@ -1,0 +1,41 @@
+<div class="add-campaign-box">
+	
+	<!-- Existing Campaign List -->
+	<div *ngIf="showCampaignSelectionList">
+		<div>
+			<button class="btn btn-secondary campaign-selectionbox-addcampaign-btn" (click)="addCampaign()">+</button>
+		</div>
+		<div>
+			List of Campaigns
+		</div>
+	</div>
+	
+	<!-- Add Campaign Form -->
+	<div *ngIf="showAddCampaignForm">
+		<div class="add-campaign-div">
+			<form [formGroup]="addCampaignForm">
+				<table>
+					<tr>
+						<th>Name</th>
+						<td><input type="text" formControlName="name"/></td>
+					</tr>
+					<tr>
+						<th>Logo [jpeg]</th>
+						<td><input type="file" accept="image/jpeg" alt="Jped max 1 MB" formControlName="file"></td>
+					</tr>
+					<tr>
+						<th colspan="2">Description</th>
+					</tr>
+					<tr>
+						<td colspan="2"	><textarea class="add-campaign-div-textarea" formControlName="description"></textarea></td>
+					</tr>
+					
+				</table>
+			</form>
+		</div>
+		<div>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">Save</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">Cancel</button>
+		</div>
+	</div>
+</div>

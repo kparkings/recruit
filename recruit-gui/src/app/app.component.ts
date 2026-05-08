@@ -245,6 +245,15 @@ export class AppComponent {
 	}
 	
 	/**
+	* Navigates to the Campaigns page
+	*/
+	public navToCampaigns():void{
+		this.candidateNavService.reset();
+		this.router.navigate(['campaigns']);
+	}
+
+	
+	/**
 	* Returns the name of the current T&C acceptance cookie
 	*/
 	public navToNewCandidate():void{

@@ -40,7 +40,8 @@ export class CandidateProfileComponent {
 	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
-	
+	@ViewChild('campaignsBox', { static: true }) 		campaignsDialogBox!: ElementRef<HTMLDialogElement>;
+		
 	public currentUserAuth:CurrentUserAuth 				= new CurrentUserAuth();
 	public candidateIsRemoved:boolean					= false;
 	public contactCandidateView:string 					= 'message';
@@ -134,6 +135,14 @@ export class CandidateProfileComponent {
 	
 		this.notesDialogBox.nativeElement.showModal();
 
+	}
+	
+	/**
+	* Opens the Campaigns Dialog box to allow the User to add 
+	* a Candidate to a Campaign 
+	*/
+	public showCampaignsSelectionBox():void{
+		this.campaignsDialogBox.nativeElement.showModal();
 	}
 	
 	/**

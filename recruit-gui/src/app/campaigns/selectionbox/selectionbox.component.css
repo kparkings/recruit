@@ -1,0 +1,40 @@
+ .add-campaign-box{
+ 	height:400px;
+ }
+ 
+ .campaign-selectionbox-btn{
+ 	float:right;
+ 	margin:5px;
+ 	margin-bottom:10px;
+ }
+ 
+ .campaign-selectionbox-addcampaign-btn{
+ 	float:right;
+ 	margin:20px;
+ }
+ 
+ .add-campaign-div{
+ 	padding:10px;
+ }
+
+ .add-campaign-div table{
+ 	width:100%;
+ }
+
+.add-campaign-div-textarea{
+ 	width:100%;
+ 	
+ }
+ 
+ .add-campaign-div table tr td{
+ 	padding-top:10px;
+ }
+  
+ .add-campaign-div table tr th{
+ 	width:100px;
+ }
+ 
+ .add-campaign-div table tr td input{
+ 	width:300px;
+ }
+ 

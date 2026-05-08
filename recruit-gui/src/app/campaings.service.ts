@@ -34,7 +34,7 @@ export class CampaingsService {
 	* Returns a specific Campaigin
 	* @param campaiginId - Unique Id of the Campaigin to return
 	*/
-	public fetchCampaign(campaiginId:string): Observable<Array<Campaign>>{
+	public fetchCampaign(campaignId:string): Observable<Array<Campaign>>{
 		
 		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
 
@@ -48,13 +48,9 @@ export class CampaingsService {
 	* @param description  	- Description of the Campaigin
 	* @param logo 			- Optional logo to identify the Campaign 
 	*/
-	public addNewCampaign(name:string, description:string, logo:CampaignLogo):Observable<Void>{
+	public addNewCampaign(name:string, description:string, logo:CampaignLogo):Observable<void>{
 		
-		let command:CommandAddCampaign = new CommandAddCampaign();
-		
-		command.name 			= name;
-		command.description 	= description;
-		command.logo 			= logo;
+		let command:CommandAddCampaign = new CommandAddCampaign(name, description, logo);
 		
 		const backendUrl:string = environment.backendUrl +'campaign';
 
@@ -70,15 +66,10 @@ export class CampaingsService {
 	* @param roleId 	- If role Level the Id of the Role the Participation relates to
 	* @param type 		- Type of participation the Contact will have in the Campaign
 	*/
-	public addParticipation(contactId:string, campaignId:string, roleId:string, type:string):Observable<Void>{
+	public addParticipation(contactId:string, campaignId:string, roleId:string, type:string):Observable<void>{
 		
-		let command:CommandAddParticipation = new CommandAddParticipation();
+		let command:CommandAddParticipation = new CommandAddParticipation(contactId, campaignId, roleId, type);
 		
-		command.contactId 		= contactId;
-		command.campaignId 		= campaignId;
-		command.roleId 			= roleId;
-		command.type 			= type;
-				
 		const backendUrl:string = environment.backendUrl +'campaign/participant';
 
 		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
@@ -89,11 +80,11 @@ export class CampaingsService {
 	* Deletes an existing Participation
 	* @param participationId - Id of the Participation to Delete 
 	*/
-	public deleteParticipation(participationId:string):Observable<Void>{
+	public deleteParticipation(participationId:string):Observable<void>{
 		
 		const backendUrl:string = environment.backendUrl +'campaign/participant/'+participationId;
 
-		return this.httpClient.delete<any>(backendUrl, command, this.httpOptions);
+		return this.httpClient.delete<void>(backendUrl, this.httpOptions);
 		
 	}
 	
@@ -104,14 +95,9 @@ export class CampaingsService {
 	* @param title		- Title of the Note
 	* @param text		- Note content 
 	*/
-	public addNote(campaignId:string, roleId:string, title:string, text:string):Observable<Void>{
+	public addNote(campaignId:string, roleId:string, title:string, text:string):Observable<void>{
 			
-			let command:CommandAddNote = new CommandAddNote();
-			
-			command.campaignId 		= campaignId;
-			command.roleId 			= roleId;
-			command.title 			= title;
-			command.text 			= text;
+			let command:CommandAddNote = new CommandAddNote(campaignId, roleId, title, text);
 					
 			const backendUrl:string = environment.backendUrl +'campaign/note';
 
@@ -125,12 +111,9 @@ export class CampaingsService {
 	* @param title		- Title of the Note
 	* @param text		- Note content 
 	*/
-	public updateNote(noteId:string, title:string, text:string):Observable<Void>{
+	public updateNote(noteId:string, title:string, text:string):Observable<void>{
 			
-			let command:CommandUpdateNote = new CommandUpdateNote();
-			
-			command.title 		= title;
-			command.text 		= text;
+			let command:CommandUpdateNote = new CommandUpdateNote(title, text);
 			
 			const backendUrl:string = environment.backendUrl +'campaign/note/'+noteId;
 
@@ -142,7 +125,7 @@ export class CampaingsService {
 	* Delete an existing Note from a Campaign
 	* @param noteId		- Id of the Note to be updates
 	*/
-	public deleteNote(noteId:string):Observable<Void>{
+	public deleteNote(noteId:string):Observable<void>{
 			
 		const backendUrl:string = environment.backendUrl +'campaign/note/'+noteId;
 
@@ -166,21 +149,13 @@ export class CampaingsService {
 					description:string,
 					videoLink:string,
 					phoneNumber:string,
-					when:Date):Observable<Void>{
+					when:Date):Observable<void>{
 			
-			let command:CommandAddAppointment = new CommandAddAppointment();
+			let command:CommandAddAppointment = new CommandAddAppointment(campaignId, roleId, name,  description, videoLink, phoneNumber, when);
 			
-			command.campaignId 		= campaignId;
-			command.roleId 			= roleId;
-			command.name 			= name;
-			command.descroption 	= description;
-			command.videoLink 		= videoLink;
-			command.phoneNumber 	= phoneNumber;
-			command.when			= when;
-					
 			const backendUrl:string = environment.backendUrl +'campaign/appointment';
 
-			return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+			return this.httpClient.post<void>(backendUrl, command, this.httpOptions);
 		
 	}
 	
@@ -201,21 +176,13 @@ export class CampaingsService {
 					description:string,
 					videoLink:string,
 					phoneNumber:string,
-					when:Date):Observable<Void>{
+					when:Date):Observable<void>{
 			
-			let command:CommandUpdateAppointment = new CommandUpdateAppointment();
-			
-			command.campaignId 		= campaignId;
-			command.roleId 			= roleId;
-			command.name 			= name;
-			command.descroption 	= description;
-			command.videoLink 		= videoLink;
-			command.phoneNumber 	= phoneNumber;
-			command.when			= when;
+			let command:CommandUpdateAppointment = new CommandUpdateAppointment(name, description, videoLink, phoneNumber, when);
 					
 			const backendUrl:string = environment.backendUrl +'campaign/appointment/'+appointmentId;
 
-			return this.httpClient.put<any>(backendUrl, command, this.httpOptions);
+			return this.httpClient.put<void>(backendUrl, command, this.httpOptions);
 		
 	}
 	
@@ -223,11 +190,11 @@ export class CampaingsService {
 	* Deletes an existing Appointment from a Campaign
 	* @param appointmentId - Id of the Appointment to delete
 	*/
-	public deleteAppointment(appointmentId:string):Observable<Void>{
+	public deleteAppointment(appointmentId:string):Observable<void>{
 		
 		const backendUrl:string = environment.backendUrl +'campaign/appointment/'+appointmentId;
 
-		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		return this.httpClient.delete<void>(backendUrl, this.httpOptions);
 		
 	}
 	
@@ -245,12 +212,12 @@ export class CampaingsService {
 						type:string,
 						documentFile:File): Observable<any>{
 
-		CommandAddDocument command = new CommandAddDocument();
+		let command:CommandAddDocument = new CommandAddDocument(campaignId, roleId, title, type);
 		
 		const backendUrl:string = environment.backendUrl + 'campaign/document';
 		
 		var fd = new FormData();
-		fd.append('documentFile', profileImage);
+		fd.append('documentFile', documentFile);
 		fd.append("document", new Blob([JSON.stringify(command)], { type: 'application/json' }));
 			
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});

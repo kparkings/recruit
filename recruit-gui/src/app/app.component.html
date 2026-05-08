@@ -84,6 +84,11 @@
         <li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
            <a  class="dropdown-item" (click)="navToSuggestions()">{{'arenella-app-menu-suggestions' | translate}}</a>
         </li>
+        
+        <li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
+           <a  class="dropdown-item" (click)="navToCampaigns()">{{'arenella-app-menu-campaigns' | translate}}</a>
+        </li>
+        
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="refreschUnreadAlerts()">
         	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>{{'arenella-app-menu-mp' | translate}}</a>
 			<a *ngIf="unseenMpPosts <= 0" 	class="dropdown-item" routerLink="/recruiter-marketplace">{{'arenella-app-menu-mp' | translate}}</a>
