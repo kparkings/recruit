@@ -206,7 +206,7 @@ export class CandidateProfileComponent {
 		
 		let emailRequest:EmailRequest = new EmailRequest();
 		
-		emailRequest.title = this.sendMessageGroup.get('title')?.value;;
+		emailRequest.title = this.sendMessageGroup.get('title')?.value;
 		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
 		
 		this.emailService.sendCandidateContactEmail(emailRequest,this.candidateProfile.candidateId).subscribe(body => {

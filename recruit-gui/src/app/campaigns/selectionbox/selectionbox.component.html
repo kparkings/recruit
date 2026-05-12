@@ -6,7 +6,11 @@
 			<button class="btn btn-secondary campaign-selectionbox-addcampaign-btn" (click)="addCampaign()">+</button>
 		</div>
 		<div>
-			List of Campaigns
+			<div *ngFor="let campaign of campaigns">
+				{{campaign.name}}
+				{{campaign.description}}
+				
+			</div>
 		</div>
 	</div>
 	
@@ -21,7 +25,7 @@
 					</tr>
 					<tr>
 						<th>Logo [jpeg]</th>
-						<td><input type="file" accept="image/jpeg" alt="Jped max 1 MB" formControlName="file"></td>
+						<td><input type="file" accept="image/jpeg" alt="Jped max 1 MB" (change)="updateCampaignImageFile($event)"></td>
 					</tr>
 					<tr>
 						<th colspan="2">Description</th>
@@ -34,7 +38,7 @@
 			</form>
 		</div>
 		<div>
-			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">Save</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="addNewCampaign()">Save</button>
 			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">Cancel</button>
 		</div>
 	</div>
