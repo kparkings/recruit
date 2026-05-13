@@ -28,7 +28,7 @@ export class SelectionboxComponent {
 	/**
 	* Image log  
 	*/
-	private logoImageFile!:File;
+	private logoImageFile!:File | undefined;
 	
 	/**
 	* Campaigins 
@@ -41,6 +41,7 @@ export class SelectionboxComponent {
 	public addCampaignForm:UntypedFormGroup = new UntypedFormGroup({
 		name: 			new UntypedFormControl(),
 		description: 	new UntypedFormControl(),
+		roleName: 		new UntypedFormControl()
 	});
 	
 	/**
@@ -59,6 +60,7 @@ export class SelectionboxComponent {
 	public listCampaigns():void{
 		this.showCampaignSelectionList = true;
 		this.showAddCampaignForm = false;
+		this.resetAddCampaignForm();
 	}
 	
 	/**
@@ -69,11 +71,12 @@ export class SelectionboxComponent {
 		let name:string 		= this.addCampaignForm.get("name")?.value;
 		let description:string 	= this.addCampaignForm.get("description")?.value;
 		
-		let logo:CampaignLogo = new CampaignLogo(new Array<any>(), 'jpeg');
+		//let logo:CampaignLogo = new CampaignLogo(new Array<any>(), 'jpeg');
 		
-		this.campaignService.addNewCampaign(name, description, logo).subscribe(res => {
-			this. fetchExistingCampaigns();
+		this.campaignService.addNewCampaign(name, description, this.logoImageFile).subscribe(res => {
+			this.fetchExistingCampaigns();
 			this.listCampaigns();
+			this.resetAddCampaignForm();
 		});
 		
 	}
@@ -98,6 +101,19 @@ export class SelectionboxComponent {
 		this.campaignService.fetchCampaignsForUser().subscribe(campaigns => {
 			this.campaigns = campaigns;
 		})
+	}
+	
+	/**
+	* Resets the values in the addCampaiginForm and associated logo if present
+	*/
+	private resetAddCampaignForm():void{
+		this.addCampaignForm = new UntypedFormGroup({
+			name: 			new UntypedFormControl(),
+			description: 	new UntypedFormControl(),
+			roleName: 		new UntypedFormControl()
+		});
+			
+		this.logoImageFile = undefined;
 	}
 	
 	

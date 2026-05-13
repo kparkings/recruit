@@ -38,3 +38,24 @@
  	width:300px;
  }
  
+ .campaign-selection-panel{
+ 	height:400px;
+ 	width:530px;
+ 	overflow-y: auto;
+ 	
+ }
+ 
+ .campaign-selection{
+ 	width:490px;
+ 	height:80px;
+ 	padding-left:20px;
+ 	padding-right:20px;
+ 	margin:20px;
+ 	font-size:36px;
+ 	font-weight:bold;
+ 	text-align:center;
+ 	background:#694F90;
+ 	cursor:pointer;
+ 	line-height:80px;
+ }
+ 

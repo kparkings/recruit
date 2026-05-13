@@ -48,13 +48,22 @@ export class CampaingsService {
 	* @param description  	- Description of the Campaigin
 	* @param logo 			- Optional logo to identify the Campaign 
 	*/
-	public addNewCampaign(name:string, description:string, logo:CampaignLogo):Observable<void>{
+	public addNewCampaign(name:string, description:string, logo:File | undefined):Observable<void>{
 		
-		let command:CommandAddCampaign = new CommandAddCampaign(name, description, logo);
+		let command:CommandAddCampaign = new CommandAddCampaign(name, description);
 		
 		const backendUrl:string = environment.backendUrl +'campaign';
+		
+		var fd = new FormData();
+		fd.append("command", new Blob([JSON.stringify(command)], { type: 'application/json' }));
+		if (logo) {
+			fd.append('logo', logo);
+		}
+		
+					
+		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});	
 
-		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+//		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
 
 		
 	}
@@ -247,8 +256,8 @@ export class CommandAddCampaign{
 	* Constructor 
 	*/
 	constructor(public name:string,
-				public description:string,
-				public logo:CampaignLogo){}
+				public description:string){}
+		//		public logo:CampaignLogo){}
 }
 
 /**

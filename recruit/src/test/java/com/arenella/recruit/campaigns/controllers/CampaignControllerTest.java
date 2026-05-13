@@ -3,6 +3,8 @@ package com.arenella.recruit.campaigns.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +14,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,6 +52,9 @@ class CampaignControllerTest {
 	
 	@Mock
 	private	Principal					mockPrincipal;
+	
+	@Mock
+	private MultipartFile				mockFile;
 	
 	@InjectMocks
 	private CampaignController 			controller;
@@ -98,9 +104,10 @@ class CampaignControllerTest {
 	
 	/**
 	* Tests adding a new Campaign 
+	* @throws Exception 
 	*/
 	@Test
-	void testAddCampaign() {
+	void testAddCampaign() throws Exception {
 		
 		final String 		userId 			= "rec1";
 		final String 		name 			= "";
@@ -114,11 +121,11 @@ class CampaignControllerTest {
 					.name(name)
 					.description(description)
 					.logo(logo)
-				.build(), mockPrincipal);
+				.build(), Optional.of(mockFile),  mockPrincipal);
 		
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
-		verify(this.mockCampaignService).addCampaign(name, description, logo, userId);
+		verify(this.mockCampaignService).addCampaign(eq(name), eq(description), any(), eq(userId));
 		
 	}
 	

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild }		from '@angular/core';
+import { Campaign  } 				from '../campaings.service';
+import { SelectionboxComponent} 	from '../campaigns/selectionbox/selectionbox.component'
 
 @Component({
   selector: 'app-campaigns',
@@ -7,5 +9,10 @@ import { Component } from '@angular/core';
   standalone:false
 })
 export class CampaignsComponent {
+	
+	@ViewChild(SelectionboxComponent) 			public selectionBox!:SelectionboxComponent;
+	
+	public campaign:Campaign | undefined;
+	
 
 }

@@ -3,6 +3,7 @@ package com.arenella.recruit.campaigns.controllers;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
@@ -84,9 +88,14 @@ public class CampaignController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PostMapping(path="campaign")
-	public ResponseEntity<Void> addNewCampaign(@RequestBody NewCampaignAPIInbound campaign, Principal currentUser) {
-		this.campaignService.addCampaign(campaign.getName(), campaign.getDescription(), campaign.getLogo().orElse(null), currentUser.getName());
+	@PostMapping(path="campaign",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> addNewCampaign(@RequestPart("command") NewCampaignAPIInbound campaign, @RequestPart("logo") Optional<MultipartFile> logo, Principal currentUser) throws Exception{
+		
+		byte[] logoBytes = logo.isPresent()  ? logo.get().getBytes() : null;
+		
+		CampaignLogo logoX = Optional.of(logo).map(_ -> new CampaignLogo(logoBytes,PHOTO_FORMAT.jpeg)).orElse(null);
+		
+		this.campaignService.addCampaign(campaign.getName(), campaign.getDescription(), Optional.ofNullable(logoX).orElse(null), currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	

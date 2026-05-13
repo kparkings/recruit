@@ -5,10 +5,10 @@
 		<div>
 			<button class="btn btn-secondary campaign-selectionbox-addcampaign-btn" (click)="addCampaign()">+</button>
 		</div>
-		<div>
+		<div class="campaign-selection-panel">
 			<div *ngFor="let campaign of campaigns">
-				{{campaign.name}}
-				{{campaign.description}}
+				
+				<div class="campaign-selection">{{campaign.name}}</div>
 				
 			</div>
 		</div>
