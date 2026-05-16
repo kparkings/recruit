@@ -132,4 +132,13 @@ public interface CampaignService {
 	*/
 	void deleteDocument(UUID documentId, String currentUser);
 
+	/**
+	* Adds a Role to an existing Campaign
+	* @param campaignId		- Unique id of the Campaign to add the Role to
+	* @param name			- Name of the Role
+	* @param description	- Description of the Role
+	* @param currentUser	- Id of the authenticated User
+	 */
+	void addRole(UUID campaignId, String name, String description, String currentUser);
+
 } 

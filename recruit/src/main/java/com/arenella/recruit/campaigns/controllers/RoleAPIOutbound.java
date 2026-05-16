@@ -1,25 +1,21 @@
 package com.arenella.recruit.campaigns.controllers;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.arenella.recruit.campaigns.beans.Campaign;
-import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Contact;
+import com.arenella.recruit.campaigns.beans.Role;
 
 /**
-* API Outbound representation of a Campaign with full details. 
+* API Outbound represenation of a Role 
 */
-public class CampaignAPIOutbound {
+public class RoleAPIOutbound {
 
 	private UUID 							id;
 	private String 							name;
 	private String 							description;
-	private CampaignLogo 					logo;
-	private Set<RoleAPIOutbound>			roles			= new LinkedHashSet<>();
 	private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
 	private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
 	private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
@@ -30,21 +26,17 @@ public class CampaignAPIOutbound {
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
-	public CampaignAPIOutbound(CampaignAPIOutboundBuilder builder) {
+	public RoleAPIOutbound(RoleAPIOutboundBuilder builder) {
 		
 		this.id 			= builder.id;
 		this.name 			= builder.name;
 		this.description 	= builder.description;
-		this.logo 			= builder.logo;
-		
-		this.roles.clear();
 		this.candidates.clear();
 		this.participations.clear(); 
 		this.notes.clear();
 		this.appointments.clear();
 		this.documents.clear();
 		
-		this.roles.addAll(builder.roles);
 		this.candidates.addAll(builder.candidates);
 		this.participations.addAll(builder.participations); 
 		this.notes.addAll(builder.notes);
@@ -76,23 +68,7 @@ public class CampaignAPIOutbound {
 	public String getDescription(){
 		return this.description;
 	}
-	
-	/**
-	* If present returns the Logo for the Campaign
-	* @return logo
-	*/
-	public Optional<CampaignLogo> getLogo(){
-		return Optional.ofNullable(this.logo);
-	}
 
-	/**
-	* Returns Campaign level Candidates. 
-	* @return
-	*/
-	public Set<RoleAPIOutbound> getRoles(){
-		return this.roles;
-	} 
-	
 	/**
 	* Returns Campaign level Candidates. 
 	* @return
@@ -137,20 +113,18 @@ public class CampaignAPIOutbound {
 	* Returns a Builder for the Class
 	* @return Builder
 	*/
-	public static CampaignAPIOutboundBuilder builder() {
-		return new CampaignAPIOutboundBuilder();
+	public static RoleAPIOutboundBuilder builder() {
+		return new RoleAPIOutboundBuilder();
 	}
 	
 	/**
 	* Builder for the Class
 	*/
-	public static class CampaignAPIOutboundBuilder {
+	public static class RoleAPIOutboundBuilder {
 		
 		private UUID 							id;
 		private String 							name;
 		private String 							description;
-		private CampaignLogo 					logo;
-		private Set<RoleAPIOutbound>			roles			= new LinkedHashSet<>();
 		private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
 		private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
 		private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
@@ -163,23 +137,20 @@ public class CampaignAPIOutbound {
 		* @param contacts - Collection of all Contacts referenced in the Campaigns Participations
 		* @return Builder
 		*/
-		public CampaignAPIOutboundBuilder from(Campaign campaign, Set<Contact> contacts) {
+		public RoleAPIOutboundBuilder from(Role role, Set<Contact> contacts) {
 			
-			this.id 			= campaign.getId();
-			this.name 			= campaign.getName();
-			this.description 	= campaign.getDescription();
+			this.id 			= role.getId();
+			this.name 			= role.getName();
+			this.description 	= role.getDescription();
 			
-			campaign.getLogo().ifPresent(campaignLogo -> this.logo = campaignLogo);
-			
-			campaign.getParticipations().stream().forEach(participation -> {
+			role.getParticipations().stream().forEach(participation -> {
 				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build());
 			});
 			
-			this.roles.addAll(campaign.getRoles().stream().map(r -> RoleAPIOutbound.builder().from(r, contacts).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.notes.addAll(campaign.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.appointments.addAll(campaign.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.candidates.addAll(role.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.notes.addAll(role.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.appointments.addAll(role.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.documents.addAll(role.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
 			
 			return this;
 		}
@@ -188,10 +159,10 @@ public class CampaignAPIOutbound {
 		* Returns a new Initialized instance of the Class
 		* @return Initialized instance
 		*/
-		public CampaignAPIOutbound build() {
-			return new CampaignAPIOutbound(this);
+		public RoleAPIOutbound build() {
+			return new RoleAPIOutbound(this);
 		}
 		
 	}
-
+	
 }

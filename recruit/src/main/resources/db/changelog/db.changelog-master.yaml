@@ -3251,7 +3251,7 @@ databaseChangeLog:
            schemaName: campaigns
            columns:
              - column:
-                 name: id
+                 name: candidates_id
                  type: varchar
                  constraints:
                    primaryKey: true
@@ -3271,15 +3271,15 @@ databaseChangeLog:
            schemaName: campaigns
            columns:
              - column:
-                 name: id
-                 type: uuid
+                 name: candidates_id
+                 type: varchar
                  constraints:
                    primaryKey: true
                    nullable: false
-                   foreignKeyName: fk_campaigns_rol
-                   references: campaigns.roles(id)
+                   foreignKeyName: fk_rol_can
+                   references: campaigns.candidates(id)
              - column:
-                 name: campaign_id
+                 name: role_id
                  type: uuid
                  constraints:
                    primaryKey: true

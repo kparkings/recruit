@@ -304,6 +304,11 @@ public class CampaignEntity {
 		* @return Builder
 		*/
 		public CampaignEntityBuilder logo(CampaignLogo logo) {
+			
+			if (logo == null) {
+				return this;
+			}
+			
 			this.logoBytes  = logo.imageBytes();
 			this.logoFormat = logo.format();
 			return this;

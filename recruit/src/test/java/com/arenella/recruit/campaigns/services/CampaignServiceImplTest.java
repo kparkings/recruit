@@ -3008,4 +3008,140 @@ class CampaignServiceImplTest {
 		
 	}
 	
+	/**
+	* Test case where loggedInUser does not have a paid subscription and cannot
+	* add a new Role to a Campaign  
+	*/
+	@Test
+	void testAddRoleToCampaignLoggedInUserNotPaidUser() {
+		
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(Campaign.builder().build()));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addRole(campaignId, "title", "text", loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where an attempt is made to add a Note to a Campaign
+	* that doesn't exist 
+	*/
+	@Test
+	void testAddRoleToCampaignUnknownCampaign() {
+		
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.addRole(campaignId, "title", "text", loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Role to a Campaign 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testRoleNoteToCampaignUserNotAdminOrEditForCampaign() {
+		
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.addRole(campaignId, "title", "text", loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Role to a Campaign 
+	* and the User is an Admin at Campaign level 
+	*/
+	@Test
+	void testAddRoleToCampaignUserIsAdminAdminCampaign() {
+		
+		final ArgumentCaptor<Campaign>	argCaptCampaign = ArgumentCaptor.forClass(Campaign.class);
+		
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final String 	name					= "Role name";
+		final String 	desc					= "Role desc";
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		doNothing().when(this.mockCampaignDao).saveCampaign(argCaptCampaign.capture());
+		
+		this.service.addRole(campaignId, name, desc, loggedInUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Role savedRole = argCaptCampaign.getValue().getRoles().stream().findFirst().orElseThrow();
+		
+		assertEquals(name, 	savedRole.getName());
+		assertEquals(desc, 	savedRole.getDescription());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Role to a Campaign 
+	* and the User is an Edit at Campaign level 
+	*/
+	@Test
+	void testAddRoleToCampaignUserIsEditCampaign() {
+		
+		final ArgumentCaptor<Campaign>	argCaptCampaign = ArgumentCaptor.forClass(Campaign.class);
+		
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final String 	name					= "Role name";
+		final String 	desc					= "Role desc";
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		doNothing().when(this.mockCampaignDao).saveCampaign(argCaptCampaign.capture());
+		
+		this.service.addRole(campaignId, name, desc, loggedInUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		Role savedRole = argCaptCampaign.getValue().getRoles().stream().findFirst().orElseThrow();
+		
+		assertEquals(name, 	savedRole.getName());
+		assertEquals(desc, 	savedRole.getDescription());
+		
+	}
+	
 }

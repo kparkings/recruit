@@ -1,7 +1,7 @@
-import { Component } 											from '@angular/core';
-import { UntypedFormGroup, UntypedFormControl }					from '@angular/forms';
-import { CampaingsService, CampaignLogo, CampaignOverview}		from 'src/app/campaings.service';
-import { CurriculumService } 									from 'src/app/curriculum.service';
+import { Component, EventEmitter, Output } 									from '@angular/core';
+import { UntypedFormGroup, UntypedFormControl }								from '@angular/forms';
+import { CampaingsService, Campaign, Role, CampaignOverview}				from 'src/app/campaings.service';
+import { CurriculumService } 												from 'src/app/curriculum.service';
 
 @Component({
   selector: 'app-selectionbox',
@@ -11,6 +11,12 @@ import { CurriculumService } 									from 'src/app/curriculum.service';
 })
 export class SelectionboxComponent {
 
+	@Output() selectedCampaignEmitter 							= new EventEmitter<Campaign>();
+	@Output() selectedRoleEmitter 								= new EventEmitter<Role>();
+	
+	public selectedCampaign:Campaign | undefined;
+	public selectedRole:Role | undefined;
+	
 	/**
 	* Constructor
 	* @param campaignService - Services for interacting with Campaigns
@@ -24,6 +30,8 @@ export class SelectionboxComponent {
 	*/
 	public showCampaignSelectionList:boolean 		= true;
 	public showAddCampaignForm:boolean 				= false;
+	public showRoleSelectionList:boolean			= false;
+	public showAddRoleForm:boolean					= false;
 	
 	/**
 	* Image log  
@@ -40,8 +48,12 @@ export class SelectionboxComponent {
 	*/
 	public addCampaignForm:UntypedFormGroup = new UntypedFormGroup({
 		name: 			new UntypedFormControl(),
-		description: 	new UntypedFormControl(),
-		roleName: 		new UntypedFormControl()
+		description: 	new UntypedFormControl()
+	});
+	
+	public addRoleForm:UntypedFormGroup = new UntypedFormGroup({
+			name: 			new UntypedFormControl(),
+			description: 	new UntypedFormControl(),
 	});
 	
 	/**
@@ -49,8 +61,7 @@ export class SelectionboxComponent {
 	* User to select a Campaign to add the Candidate to 
  	*/
 	public addCampaign():void{
-		this.showCampaignSelectionList = false;
-		this.showAddCampaignForm = true;
+		this.showAddCampaign();
 	}
 	
 	/**
@@ -71,11 +82,26 @@ export class SelectionboxComponent {
 		let name:string 		= this.addCampaignForm.get("name")?.value;
 		let description:string 	= this.addCampaignForm.get("description")?.value;
 		
-		//let logo:CampaignLogo = new CampaignLogo(new Array<any>(), 'jpeg');
-		
 		this.campaignService.addNewCampaign(name, description, this.logoImageFile).subscribe(res => {
 			this.fetchExistingCampaigns();
 			this.listCampaigns();
+			this.resetAddCampaignForm();
+		});
+		
+	}
+	
+	/**
+	* Adds a new Role to the currently selected Campaign 
+	*/
+	public addNewRole():void{
+		
+		let name:string 		= this.addRoleForm.get("name")?.value;
+		let description:string 	= this.addRoleForm.get("description")?.value;
+		
+		this.campaignService.addNewRole(''+this.selectedCampaign?.id, name, description).subscribe(res => {
+			//this.fetchExistingCampaigns();
+			this.selectCampaignById(""+this.selectedCampaign?.id);
+			this.showRoleList()
 			this.resetAddCampaignForm();
 		});
 		
@@ -109,12 +135,92 @@ export class SelectionboxComponent {
 	private resetAddCampaignForm():void{
 		this.addCampaignForm = new UntypedFormGroup({
 			name: 			new UntypedFormControl(),
-			description: 	new UntypedFormControl(),
-			roleName: 		new UntypedFormControl()
+			description: 	new UntypedFormControl()
 		});
 			
 		this.logoImageFile = undefined;
 	}
 	
+	/**
+	* Switches view to the Campaign list view
+	*/
+	public showCampaignList():void{
+		this.showCampaignSelectionList 		= true;
+		this.showAddCampaignForm 			= false;
+		this.showRoleSelectionList			= false;
+		this.showAddRoleForm				= false;
+		this.selectedCampaign 				= undefined;
+		this.selectedCampaignEmitter.emit(undefined);
+		this.selectedRoleEmitter.emit(undefined);
+	}
+	
+	/**
+	* Switches view to the Role list view
+	*/
+	public showRoleList():void{
+		this.showCampaignSelectionList 		= false;
+		this.showAddCampaignForm 			= false;
+		this.showRoleSelectionList			= true;
+		this.showAddRoleForm				= false;		
+	}
+
+	/**
+	* Switches view to the Add Campaign view
+	*/
+	public showAddCampaign():void{
+		this.showCampaignSelectionList 		= false;
+		this.showAddCampaignForm 			= true;
+		this.showRoleSelectionList			= false;
+		this.showAddRoleForm				= false;
+	}
+	
+	/**
+	* Switches view to the Add Role view
+	*/
+	public showAddRole():void{
+		this.showCampaignSelectionList 		= false;
+		this.showAddCampaignForm 			= false;
+		this.showRoleSelectionList			= false;
+		this.showAddRoleForm				= true;
+	}
+		
+	/**
+	* Handles event in which a Campaign is selected. Fetches the 
+	* Full Campaign from the backend and updates the parent component
+	* @param campaignOverview - Selected Campaign 
+	*/
+	public selectCampaign(campaignOverview:CampaignOverview):void{
+		
+		this.selectCampaignById(""+campaignOverview?.id);
+		//this.campaignService.fetchCampaign(campaignOverview.id).subscribe(campaign => {
+		//	this.selectedCampaign = campaign;
+		//	this.selectedCampaignEmitter.emit(campaign);
+		//	this.selectedRoleEmitter.emit(undefined);
+		//	this.showRoleList();
+		//});
+		
+	}
+	
+	public selectCampaignById(id:string):void{
+			
+			this.campaignService.fetchCampaign(id).subscribe(campaign => {
+				this.selectedCampaign = campaign;
+				this.selectedCampaignEmitter.emit(campaign);
+				this.selectedRoleEmitter.emit(undefined);
+				this.showRoleList();
+			});
+			
+		}
+	
+	/**
+	* Handles event in which a Role is selected. 
+	* @param role - Selected Role 
+	*/
+	public selectRole(role:Role):void{
+		this.selectedRole = role;
+		this.selectedRoleEmitter.emit(role);
+		this.showRoleList();
+		
+	}
 	
 }

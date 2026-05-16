@@ -34,7 +34,7 @@ export class CampaingsService {
 	* Returns a specific Campaigin
 	* @param campaiginId - Unique Id of the Campaigin to return
 	*/
-	public fetchCampaign(campaignId:string): Observable<Array<Campaign>>{
+	public fetchCampaign(campaignId:string): Observable<Campaign>{
 		
 		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
 
@@ -62,9 +62,19 @@ export class CampaingsService {
 		
 					
 		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds a Role to an existing Campaign 
+	*/
+	public addNewRole(campaignId:string, name:string, description:string):Observable<void>{
+		
+		let command:CommandAddRole = new CommandAddRole(name, description);
+				
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role';
 
-//		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
-
+		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
 		
 	}
 	
@@ -353,6 +363,18 @@ export class CommandUpdateNote{
 }
 
 /**
+* Command to add role to existing Campaign
+*/
+export class CommandAddRole{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public name:string, 
+				public description:string){}
+}
+
+/**
 * Class represents a Logo that can be added to visually identify a 
 * Campaign. For example if the Campaign is for a Bank, the Bank's 
 * Logo. 
@@ -406,6 +428,27 @@ export class Campaign{
 				public name:string,
 				public description:string,
 				public logo:CampaignLogo,
+				public candidates:Array<Candidate>,
+				public participations:Array<Participation>,
+				public notes:Array<Note>,
+				public appointments:Array<Appointment>,
+				public documents:Array<Document>,
+				public roles:Array<Role>){}
+	
+}
+
+/**
+* Campaign 
+*/
+export class Role{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string,
+				public name:string,
+				public description:string,
+				private created:Date,
 				public candidates:Array<Candidate>,
 				public participations:Array<Participation>,
 				public notes:Array<Note>,

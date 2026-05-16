@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,6 +97,22 @@ public class CampaignController {
 		this.campaignService.addCampaign(campaign.getName(), campaign.getDescription(), Optional.ofNullable(logoX).orElse(null), currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+	
+	/**
+	* Adds a Role to an existing Campaign
+	* @param campaignId - Id of the Campaign to add the Role to
+	* @param command	- Details of the new Campaign
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/role")
+	public ResponseEntity<Void> addRole(@PathVariable("campaignId") UUID campaignId, @RequestBody NewRoleAPIInbound command, Principal currentUser) {
+		
+		this.campaignService.addRole(campaignId, command.getName(), command.getDescription(), currentUser.getName());
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	
+	}	
 	
 	/**
 	* Adds a new Participation at either Campaign or Role level.
@@ -238,6 +253,14 @@ public class CampaignController {
 		this.campaignService.deleteDocument(documentId, currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
+	
+	
+	//TODO: Add Role
+	//TODO: Delete Role
+	//TODO: Update Role ( Name | Description )
+	
+	//TODO: Update Campaign ( Name | Descriotion )
+	//TODO: Delete Campaign
 	
 	/**
 	* Retrieves the bytes for a specific Document

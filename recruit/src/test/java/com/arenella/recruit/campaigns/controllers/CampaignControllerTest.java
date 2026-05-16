@@ -396,6 +396,31 @@ class CampaignControllerTest {
 	}
 	
 	/**
+	* Tests adding a Role to an existing Campaign 
+	*/
+	@Test
+	void testAddRole() {
+		
+		final UUID 		campaiginId 	= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		final String 	name 			= "Java developer";
+		final String 	desc 			= "Java developer role for 6 months";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addRole(campaiginId, NewRoleAPIInbound
+				.builder()
+					.name(name)
+					.description(desc)
+				.build(), this.mockPrincipal);
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
+		verify(this.mockCampaignService).addRole(campaiginId, name, desc, userId);
+		
+	}
+	
+	/**
 	* Tests retrieval of the Document requested by the documentId
 	*/
 	//@Test

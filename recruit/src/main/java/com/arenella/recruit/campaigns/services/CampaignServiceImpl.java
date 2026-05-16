@@ -16,6 +16,7 @@ import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
+import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
@@ -58,6 +59,7 @@ public class CampaignServiceImpl implements CampaignService{
 	private final AppointmentEntityDao			appointmentDao;
 	private final DocumentEntityDao				documentDao;
 	private final CampaignFileSecurityParser	fileSecurityParser;
+	private final RoleDao						roleDao;
 	
 	/**
 	* Constructor
@@ -67,6 +69,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param appointmentDao		- For working with Appointments
 	* @param documentDao		- For working with Documents
 	* @param fileSecurityParser	- To check file is of type specified
+	* @param roleDao			- For working with Roles
 	*/
 	public CampaignServiceImpl(
 			CampaignDao 				campaignDao, 
@@ -75,7 +78,8 @@ public class CampaignServiceImpl implements CampaignService{
 			NoteEntityDao 				noteDao, 
 			AppointmentEntityDao 		appointmentDao,
 			DocumentEntityDao			documentDao,
-			CampaignFileSecurityParser	fileSecurityParser) {
+			CampaignFileSecurityParser	fileSecurityParser,
+			RoleDao						roleDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
@@ -83,6 +87,7 @@ public class CampaignServiceImpl implements CampaignService{
 		this.appointmentDao		= appointmentDao;
 		this.documentDao  		= documentDao;
 		this.fileSecurityParser = fileSecurityParser;
+		this.roleDao			= roleDao;
 	}
 	
 	/**
@@ -400,6 +405,38 @@ public class CampaignServiceImpl implements CampaignService{
 		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUserId);
 		
 		this.documentDao.deleteById(documentId);
+		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details 
+	*/
+	@Override
+	public void addRole(UUID campaignId, String name, String description, String currentUserId) {
+		
+		final UUID roleId = UUID.randomUUID();
+		
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, null, currentUserId);
+		
+		this.roleDao.saveRole(Role
+			.builder()
+				.id(roleId)
+				.name(name)
+				.description(description)
+				.created(LocalDateTime.now())
+				.participation(Participation
+						.builder()
+							.campaignId(campaignId)
+							.roleId(roleId)
+							.contactId(currentUserId)
+							.participationId(UUID.randomUUID())
+							.type(Participation.ParticipantType.ADMIN)
+						.build())
+			.build(), campaignId);
+		
 		
 	}
 	

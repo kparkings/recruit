@@ -6,17 +6,38 @@
 			<button class="btn btn-secondary campaign-selectionbox-addcampaign-btn" (click)="addCampaign()">+</button>
 		</div>
 		<div class="campaign-selection-panel">
-			<div *ngFor="let campaign of campaigns">
-				
+			<div *ngFor="let campaign of campaigns" (click)="selectCampaign(campaign)">
 				<div class="campaign-selection">{{campaign.name}}</div>
 				
 			</div>
 		</div>
 	</div>
-	
+
+	<!-- Existing Roles List -->
+	<div *ngIf="showRoleSelectionList">
+		<div style="margin-top:20px;width:50px;float:right;">
+		
+			<button class="btn btn-secondary campaign-selectionbox-vert-btn" (click)="showCampaignList()">x</button>
+			<button class="btn btn-secondary campaign-selectionbox-vert-btn" (click)="showAddRole()">+</button>
+		</div>
+		<div class="campaign-selection-panel">
+			<div *ngIf="selectedCampaign !== undefined">
+				<div class="campaign-selection">{{selectedCampaign.name}}</div>
+		
+				<div *ngFor="let role of selectedCampaign.roles">
+				
+					<div class="campaign-selection role-selection" (click)="selectRole(role)">{{role.name}}</div>
+				
+				</div>
+			</div>
+			
+		</div>
+	</div>
+		
 	<!-- Add Campaign Form -->
 	<div *ngIf="showAddCampaignForm">
 		<div class="add-campaign-div">
+			<h5>Add Campaign</h5>
 			<form [formGroup]="addCampaignForm">
 				<table>
 					<tr>
@@ -42,4 +63,31 @@
 			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">Cancel</button>
 		</div>
 	</div>
+	
+	<!-- Add Role Form -->
+	<div *ngIf="showAddRoleForm">
+		<div class="add-campaign-div">
+			<h5>Add Role</h5>
+			<form [formGroup]="addRoleForm">
+				<table>
+					<tr>
+						<th>Name</th>
+						<td><input type="text" formControlName="name"/></td>
+					</tr>
+					<tr>
+						<th colspan="2">Description</th>
+					</tr>
+					<tr>
+						<td colspan="2"	><textarea class="add-campaign-div-textarea" formControlName="description"></textarea></td>
+					</tr>
+					
+				</table>
+			</form>
+		</div>
+		<div>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="addNewRole()">Save</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="showRoleList()">Cancel</button>
+		</div>
+	</div>
+	
 </div>

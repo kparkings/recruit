@@ -1,8 +1,78 @@
 
-<div>
-	<div style="width:610px;margin-top:20px;">
-		<app-selectionbox></app-selectionbox>
+<div style="margin-top:20px;">
+
+
+	<div style="width:610px;float:left">
+		<app-selectionbox (selectedCampaignEmitter)="handleCampaignSelectedEmitterEvent($event)" (selectedRoleEmitter)="handleRoleSelectedEmitterEvent($event)"></app-selectionbox>
 	</div>
+	
+	
+	<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="campaign !== undefined && role == undefined">
+		<h3>{{campaign.name}}</h3>
+		<p>{{campaign.description}}</p>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+			<button class="btn btn-secondary campaign-btn">Add Document</button>
+			<button class="btn btn-secondary campaign-btn">Add Note</button>
+			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
+			<button class="btn btn-secondary campaign-btn">Add Participant</button>
+		</div>
+		
+	</div>
+	
+		<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="role !== undefined">
+		<h3>{{role.name}}</h3>
+		<p>{{role.description}}</p>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+		
+		</div>
+		
+		<div>
+			<button class="btn btn-secondary campaign-btn">Add Document</button>
+			<button class="btn btn-secondary campaign-btn">Add Note</button>
+			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
+			<button class="btn btn-secondary campaign-btn">Add Participant</button>
+		</div>
+		
+	</div>
+	
 </div>
 
 
