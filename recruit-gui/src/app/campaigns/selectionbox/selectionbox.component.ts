@@ -72,6 +72,9 @@ export class SelectionboxComponent {
 		this.showCampaignSelectionList = true;
 		this.showAddCampaignForm = false;
 		this.resetAddCampaignForm();
+		this.selectedCampaign 	= undefined;
+		this.selectedRole 		= undefined;
+		this.showCampaignList();
 	}
 	
 	/**
@@ -203,14 +206,14 @@ export class SelectionboxComponent {
 	
 	public selectCampaignById(id:string):void{
 			
-			this.campaignService.fetchCampaign(id).subscribe(campaign => {
-				this.selectedCampaign = campaign;
-				this.selectedCampaignEmitter.emit(campaign);
-				this.selectedRoleEmitter.emit(undefined);
-				this.showRoleList();
-			});
-			
-		}
+		this.campaignService.fetchCampaign(id).subscribe(campaign => {
+			this.selectedCampaign = campaign;
+			this.selectedCampaignEmitter.emit(campaign);
+			this.selectedRoleEmitter.emit(undefined);
+			this.showRoleList();
+		});
+		
+	}
 	
 	/**
 	* Handles event in which a Role is selected. 

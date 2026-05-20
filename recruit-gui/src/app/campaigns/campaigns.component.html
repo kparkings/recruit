@@ -8,6 +8,7 @@
 	
 	
 	<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="campaign !== undefined && role == undefined">
+		<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;">Delete Campaign</button>
 		<h3>{{campaign.name}}</h3>
 		<p>{{campaign.description}}</p>
 		
@@ -36,11 +37,13 @@
 			<button class="btn btn-secondary campaign-btn">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
 			<button class="btn btn-secondary campaign-btn">Add Participant</button>
+			
 		</div>
 		
 	</div>
 	
 		<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="role !== undefined">
+		<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;">Delete Role</button>
 		<h3>{{role.name}}</h3>
 		<p>{{role.description}}</p>
 		
@@ -69,10 +72,24 @@
 			<button class="btn btn-secondary campaign-btn">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
 			<button class="btn btn-secondary campaign-btn">Add Participant</button>
+			
 		</div>
 		
 	</div>
 	
 </div>
 
-
+<!-- Paid subscription only -->
+<dialog #confirmDelete>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Confirm Delete</h4>
+		<div class="filter-close-box" (click)="confirmDelete.close()">X</div>
+	</div>
+	<div class="modal-body">
+		<p>Please confirm Deletion.</p>
+		<p>This action cannot be undone.</p>
+		<button class="btn btn-secondary campaign-btn" (click)="handleCancelDelete()">Cancel</button>
+		<button class="btn btn-secondary campaign-btn" (click)="handleConfirmDelete()">Confirm</button>
+	</div> 
+</dialog>

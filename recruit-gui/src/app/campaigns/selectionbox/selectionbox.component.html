@@ -22,7 +22,7 @@
 		</div>
 		<div class="campaign-selection-panel">
 			<div *ngIf="selectedCampaign !== undefined">
-				<div class="campaign-selection">{{selectedCampaign.name}}</div>
+				<div class="campaign-selection" (click)="selectCampaign(selectedCampaign)">{{selectedCampaign.name}}</div>
 		
 				<div *ngFor="let role of selectedCampaign.roles">
 				

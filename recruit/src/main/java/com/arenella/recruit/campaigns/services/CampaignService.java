@@ -141,4 +141,18 @@ public interface CampaignService {
 	 */
 	void addRole(UUID campaignId, String name, String description, String currentUser);
 
+	/**
+	* Deletes a Campaign and all its Roles and associated objects
+	* @param campaignId - Id of Campaign to Delete
+	* @param currentUser	- Id of the authenticated User
+	*/
+	void deleteCampaign(UUID campaignId, String name);
+
+	/**
+	* Deletes a Role and all its Roles and associated objects
+	* @param roleId 		- Id of Role to Delete
+	* @param currentUser	- Id of the authenticated User
+	*/
+	void deleteRole(UUID roleId, String name);
+
 } 

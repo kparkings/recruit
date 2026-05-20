@@ -77,6 +77,28 @@ export class CampaingsService {
 		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
 		
 	}
+
+	/**
+	* Deletes a Role from a Campaign 
+	*/
+	public deleteCampaign(campaignId:string):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+		
+	/**
+	* Deletes a Role from a Campaign 
+	*/
+	public deleteRole(campaignId:string, roleId:string):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
 	
 	/**
 	* Creates a new Participation for a Campaigin

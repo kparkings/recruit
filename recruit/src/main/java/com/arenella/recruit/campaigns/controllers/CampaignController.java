@@ -99,6 +99,20 @@ public class CampaignController {
 	}
 	
 	/**
+	* Deletes a Campaign and all its associated data
+	* @param campaiginId - Id of Campaign to delete
+	* @param currentUser - currently logged in User
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}")
+	public ResponseEntity<Void> deleteCampaign(@PathVariable("campaignId")UUID campaignId, Principal currentUser) {
+		
+		this.campaignService.deleteCampaign(campaignId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
 	* Adds a Role to an existing Campaign
 	* @param campaignId - Id of the Campaign to add the Role to
 	* @param command	- Details of the new Campaign
@@ -113,6 +127,20 @@ public class CampaignController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	
 	}	
+	
+	/**
+	* Deletes a Role and all its associated data
+	* @param roleId - Id of Role to delete
+	* @param currentUser - currently logged in User
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}/role/{roleId}")
+	public ResponseEntity<Void> deleteRole(@PathVariable("roleId")UUID roleId, Principal currentUser) {
+		
+		this.campaignService.deleteRole(roleId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 	
 	/**
 	* Adds a new Participation at either Campaign or Role level.

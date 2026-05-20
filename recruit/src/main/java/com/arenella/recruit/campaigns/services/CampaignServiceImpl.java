@@ -534,4 +534,16 @@ public class CampaignServiceImpl implements CampaignService{
 		
 	}
 
+	@Override
+	public void deleteCampaign(UUID campaignId, String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteRole(UUID roleId, String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

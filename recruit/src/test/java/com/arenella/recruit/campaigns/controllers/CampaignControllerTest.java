@@ -421,6 +421,44 @@ class CampaignControllerTest {
 	}
 	
 	/**
+	* Tests endpoint for deleting a Campaign 
+	*/
+	@Test
+	void testDeleteCampaign() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteCampaign(campaignId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteCampaign(campaignId, userId);
+		
+	}
+	
+	/**
+	* Tests endpoint for deleting a Campaign 
+	*/
+	@Test
+	void testDeleteRole() {
+		
+		final UUID 		roleId	 		= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteRole(roleId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteRole(roleId, userId);
+		
+	}
+	
+	/**
 	* Tests retrieval of the Document requested by the documentId
 	*/
 	//@Test

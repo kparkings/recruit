@@ -1,6 +1,6 @@
-import { Component, ViewChild }		from '@angular/core';
-import { Campaign, Role  } 			from '../campaings.service';
-import { SelectionboxComponent} 	from '../campaigns/selectionbox/selectionbox.component'
+import { Component, ViewChild, ElementRef }									from '@angular/core';
+import { SelectionboxComponent} 								from '../campaigns/selectionbox/selectionbox.component'
+import { CampaingsService, Campaign, Role}						from 'src/app/campaings.service';
 
 @Component({
   selector: 'app-campaigns',
@@ -10,10 +10,13 @@ import { SelectionboxComponent} 	from '../campaigns/selectionbox/selectionbox.co
 })
 export class CampaignsComponent {
 	
-	@ViewChild(SelectionboxComponent) 			public selectionBox!:SelectionboxComponent;
+	@ViewChild(SelectionboxComponent) 				public selectionBox!:SelectionboxComponent;
+	@ViewChild('confirmDelete', {static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
 	
 	public campaign:Campaign | undefined;
 	public role:Role | undefined;
+	
+	public constructor(private readonly campaignService:CampaingsService) {}
 	
 	/**
 	* When a new Campaign is selected an event is emmited. This is the 
@@ -29,6 +32,53 @@ export class CampaignsComponent {
 	*/
 	public handleRoleSelectedEmitterEvent(role:Role):void{
 		this.role = role;
+	}
+	
+	/**
+	* Shows the confirm Delete box 
+	*/
+	public showConfirmDeleteModal():void {
+		this.confirmDeleteBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Deletes the currently selected Campaign 
+	*/
+	private deleteCampaign():void{
+		this.campaignService.deleteCampaign(''+this.campaign?.id).subscribe(result => {
+			this.selectionBox.listCampaigns();
+			this.confirmDeleteBox.nativeElement.close();
+		});
+	}
+
+	/**
+	* Deletes the currently selected Role 
+	*/
+	private deleteRole():void{
+		this.campaignService.deleteRole(''+this.campaign?.id, ''+this.role?.id).subscribe(result => {
+			this.selectionBox.listCampaigns();
+			this.confirmDeleteBox.nativeElement.close();
+		});		
+	}
+	
+	/**
+	* Closes the confirm delete box 
+	*/
+	public handleCancelDelete():void{
+		this.confirmDeleteBox.nativeElement.close();
+	}
+	
+	/**
+	* Deletes the currently selected Campaign or Role 
+	*/
+	public handleConfirmDelete():void{
+		
+		if (this.role == undefined) {
+			this.deleteCampaign();
+		} else {
+			this.deleteRole();
+		}
+		
 	}
 	
 
