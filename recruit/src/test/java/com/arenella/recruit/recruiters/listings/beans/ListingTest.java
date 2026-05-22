@@ -160,6 +160,11 @@ class ListingTest {
 		listing.setCreated(updatedCreated);
 		
 		assertEquals(updatedCreated, listing.getCreated());
+		
+		listing.setViews(Set.of(ListingViewedEvent.builder().build(),ListingViewedEvent.builder().build(),ListingViewedEvent.builder().build()));
+		
+		assertEquals(3, listing.getViews().size());
+		
 	}
 	
 	/**
