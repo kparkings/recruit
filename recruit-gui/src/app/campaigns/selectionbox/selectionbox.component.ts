@@ -22,7 +22,7 @@ export class SelectionboxComponent {
 	* @param campaignService - Services for interacting with Campaigns
 	*/
 	constructor(private readonly campaignService:CampaingsService){
-		this. fetchExistingCampaigns();
+		this.fetchExistingCampaigns();
 	}
 	
 	/**
@@ -69,6 +69,7 @@ export class SelectionboxComponent {
 	* the Candidate will be added to 
 	*/
 	public listCampaigns():void{
+		this.fetchExistingCampaigns();
 		this.showCampaignSelectionList = true;
 		this.showAddCampaignForm = false;
 		this.resetAddCampaignForm();
@@ -129,6 +130,7 @@ export class SelectionboxComponent {
 	public fetchExistingCampaigns():void{
 		this.campaignService.fetchCampaignsForUser().subscribe(campaigns => {
 			this.campaigns = campaigns;
+			this.campaigns.sort((a,b) => a.name > b.name ? 0 : -1);
 		})
 	}
 	
@@ -193,15 +195,7 @@ export class SelectionboxComponent {
 	* @param campaignOverview - Selected Campaign 
 	*/
 	public selectCampaign(campaignOverview:CampaignOverview):void{
-		
 		this.selectCampaignById(""+campaignOverview?.id);
-		//this.campaignService.fetchCampaign(campaignOverview.id).subscribe(campaign => {
-		//	this.selectedCampaign = campaign;
-		//	this.selectedCampaignEmitter.emit(campaign);
-		//	this.selectedRoleEmitter.emit(undefined);
-		//	this.showRoleList();
-		//});
-		
 	}
 	
 	public selectCampaignById(id:string):void{
@@ -210,6 +204,7 @@ export class SelectionboxComponent {
 			this.selectedCampaign = campaign;
 			this.selectedCampaignEmitter.emit(campaign);
 			this.selectedRoleEmitter.emit(undefined);
+			this.selectedCampaign.roles = this.selectedCampaign.roles.sort((a,b) => a.name > b.name ? 0 : -1);
 			this.showRoleList();
 		});
 		

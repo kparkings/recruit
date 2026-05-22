@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -28,6 +29,7 @@ import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
+import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
@@ -64,6 +66,9 @@ class CampaignServiceImplTest {
 	
 	@Mock
 	private DocumentEntityDao			mockDocumentDao;
+	
+	@Mock
+	private RoleDao						mockRoleDao;
 	
 	@Mock
 	private CampaignFileSecurityParser	mockFileSecurityParser;
@@ -3083,8 +3088,6 @@ class CampaignServiceImplTest {
 	@Test
 	void testAddRoleToCampaignUserIsAdminAdminCampaign() {
 		
-		final ArgumentCaptor<Campaign>	argCaptCampaign = ArgumentCaptor.forClass(Campaign.class);
-		
 		final UUID		campaignId				= UUID.randomUUID();
 		final String 	loggedInUserId 			= "rec2";
 		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
@@ -3097,16 +3100,10 @@ class CampaignServiceImplTest {
 		
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
-		doNothing().when(this.mockCampaignDao).saveCampaign(argCaptCampaign.capture());
 		
 		this.service.addRole(campaignId, name, desc, loggedInUserId);
 		
-		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
-		
-		Role savedRole = argCaptCampaign.getValue().getRoles().stream().findFirst().orElseThrow();
-		
-		assertEquals(name, 	savedRole.getName());
-		assertEquals(desc, 	savedRole.getDescription());
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
 	}
 	
@@ -3116,8 +3113,6 @@ class CampaignServiceImplTest {
 	*/
 	@Test
 	void testAddRoleToCampaignUserIsEditCampaign() {
-		
-		final ArgumentCaptor<Campaign>	argCaptCampaign = ArgumentCaptor.forClass(Campaign.class);
 		
 		final UUID		campaignId				= UUID.randomUUID();
 		final String 	loggedInUserId 			= "rec2";
@@ -3131,16 +3126,182 @@ class CampaignServiceImplTest {
 		
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
-		doNothing().when(this.mockCampaignDao).saveCampaign(argCaptCampaign.capture());
 		
 		this.service.addRole(campaignId, name, desc, loggedInUserId);
 		
-		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
-		Role savedRole = argCaptCampaign.getValue().getRoles().stream().findFirst().orElseThrow();
+	}
+	
+	/**
+	* Test no deletion if the Role does not exist
+	*/
+	@Test
+	void testDeleteRoleUnknownRole() {
 		
-		assertEquals(name, 	savedRole.getName());
-		assertEquals(desc, 	savedRole.getDescription());
+		final UUID 		roleId 				= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> 
+			this.service.deleteRole(roleId, loggedInUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+	}
+	
+	/**
+	* Test no deletion if User is not a participant in the 
+	* role 
+	*/
+	@Test
+	void testDeleteRoleNotParitcipant() {
+		
+		final UUID 		roleId 				= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		final Role		role				= Role.builder().participation(Participation.builder().contactId("NotLoggedInuser").type(Participation.ParticipantType.ADMIN).build()).build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> 
+			this.service.deleteRole(roleId, loggedInUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_ROLE_FOR_USER, ex.getMessage());
+		
+	}
+	
+	/**
+	* Test no deletion if User is a participant in the 
+	* role but does not have an Admin role 
+	*/
+	@Test
+	void testDeleteRoleNotAdminParitcipant() {
+		
+		final UUID 		roleId 				= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		final Role		role				= Role.builder().participation(Participation.builder().contactId(loggedInUserId).type(Participation.ParticipantType.EDIT).build()).build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> 
+			this.service.deleteRole(roleId, loggedInUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_ROLE_FOR_USER, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests successful deletion of a Role by an Admin 
+	* participant
+	*/
+	@Test
+	void testDeleteRoleAdminParitcipant() {
+		
+		final UUID 		roleId 				= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		final Role		role				= Role.builder().participation(Participation.builder().contactId(loggedInUserId).type(Participation.ParticipantType.ADMIN).build()).build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		this.service.deleteRole(roleId, loggedInUserId);
+		
+		verify(this.mockRoleDao).deleteById(roleId);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Test no deletion if the Campaign does not exist
+	*/
+	@Test
+	void testDeleteCampaignUnknownRole() {
+		
+		final UUID 		campaignId 			= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> 
+			this.service.deleteCampaign(campaignId, loggedInUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+	}
+	
+	/**
+	* Test no deletion if User is not a participant in the 
+	* Campaign 
+	*/
+	@Test
+	void testDeleteCampaignNotParitcipant() {
+		
+		final UUID 		campaignId 			= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		final Campaign	campaign			= Campaign.builder().participation(Participation.builder().contactId("NotLoggedInuser").type(Participation.ParticipantType.ADMIN).build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> 
+			this.service.deleteCampaign(campaignId, loggedInUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_ROLE_FOR_USER, ex.getMessage());
+		
+	}
+	
+	/**
+	* Test no deletion if User is a participant in the 
+	* role but does not have an Admin role 
+	*/
+	@Test
+	void testDeleteCampaignNotAdminParitcipant() {
+		
+		final UUID 		campaignId 			= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		final Campaign	campaign			= Campaign.builder().participation(Participation.builder().contactId(loggedInUserId).type(Participation.ParticipantType.EDIT).build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> 
+			this.service.deleteCampaign(campaignId, loggedInUserId)
+		);
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_ROLE_FOR_USER, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests successful deletion of a Campaign by an Admin 
+	* participant
+	*/
+	@Test
+	void testDeleteCampaignAdminParitcipant() {
+		
+		final UUID 		campaignId 			= UUID.randomUUID();
+		final String 	loggedInUserId 		= "rec2";
+		final Campaign	campaign			= Campaign.builder().participation(Participation.builder().contactId(loggedInUserId).type(Participation.ParticipantType.ADMIN).build()).build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		
+		this.service.deleteCampaign(campaignId, loggedInUserId);
+		
+		verify(this.mockCampaignDao).deleteById(campaignId);
 		
 	}
 	

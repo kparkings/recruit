@@ -12,7 +12,8 @@ export class CampaignsComponent {
 	
 	@ViewChild(SelectionboxComponent) 				public selectionBox!:SelectionboxComponent;
 	@ViewChild('confirmDelete', {static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
-	
+	@ViewChild('addParticipant', { static: true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
+		
 	public campaign:Campaign | undefined;
 	public role:Role | undefined;
 	
@@ -81,5 +82,19 @@ export class CampaignsComponent {
 		
 	}
 	
+	/**
+	* Opens dialog box to add a Participant to a Campaign 
+	* or Role 
+	*/
+	public showAddParticipantBox():void{
+		this.participantDialogBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Closes the Add Participant dialog box 
+	*/
+	public handleCancelAddParticipant():void{
+		this.participantDialogBox.nativeElement.close();
+	}
 
 }

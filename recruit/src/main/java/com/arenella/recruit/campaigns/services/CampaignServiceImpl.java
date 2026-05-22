@@ -437,6 +437,33 @@ public class CampaignServiceImpl implements CampaignService{
 						.build())
 			.build(), campaignId);
 		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void deleteCampaign(UUID campaignId, String name) {
+		
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		campaign.getParticipations().stream().filter(p -> p.getContactId().equals(name) && p.getType() == ParticipantType.ADMIN).findFirst().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
+		
+		this.campaignDao.deleteById(campaignId);
+		
+	}
+
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void deleteRole(UUID roleId, String name) {
+		
+		Role role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		
+		role.getParticipations().stream().filter(p -> p.getContactId().equals(name) && p.getType() == ParticipantType.ADMIN).findFirst().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
+	
+		this.roleDao.deleteById(roleId);
 		
 	}
 	
@@ -531,18 +558,6 @@ public class CampaignServiceImpl implements CampaignService{
 		if (!adminAtCampaignLevelIfParticipantRemoved.get()) {
 			throw new IllegalStateException(ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT);
 		}
-		
-	}
-
-	@Override
-	public void deleteCampaign(UUID campaignId, String name) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteRole(UUID roleId, String name) {
-		// TODO Auto-generated method stub
 		
 	}
 

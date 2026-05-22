@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaign.dao;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,5 +28,15 @@ public interface RoleDao extends ListCrudRepository<RoleEntity, UUID>{
 	default void saveRole(Role role, UUID campaignId) {
 		this.save(RoleEntity.toEntity(role, campaignId));
 	}
+	
+	/**
+	* If present returns the Role for the corresponding Id
+	* @param roleId - Id of Role to fetch
+	* @return if present the associated Role
+	*/
+	default Optional<Role> fetchRoleById(UUID roleId) {
+		return this.findById(roleId).map(RoleEntity::fromEntity);
+	}
+	
 
 }
