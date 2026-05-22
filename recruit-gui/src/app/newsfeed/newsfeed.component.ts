@@ -324,9 +324,15 @@ export class NewsfeedComponent {
 			if (yPos > this.pageYPos) {
 				this.pageYPos = yPos +  500; 
 				this.loadedPages=this.loadedPages + 1;
-				console.log("Adding page " + this.loadedPages);
 				this.service.fetchPageOfTopLevelChats(this.loadedPages,this.pageSize).subscribe(chats => {
 					chats.forEach(chat => {
+						//
+						this.service.fetchChatChildren(chat.id).subscribe(replies => {
+							replies.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));
+							chat.replies = replies;
+						});
+						//
+						
 						this.topLevelPosts.push(chat);
 					});
 					this.topLevelPosts.sort((one:PublicChat, two:PublicChat) => this.isGreater(one,two));

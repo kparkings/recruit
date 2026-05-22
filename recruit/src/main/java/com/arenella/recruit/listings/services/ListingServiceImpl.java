@@ -150,6 +150,8 @@ public class ListingServiceImpl implements ListingService{
 		listing.setOwnerId(originalListing.getOwnerId());
 		listing.setListingId(originalListing.getListingId());
 		listing.setCreated(originalListing.getCreated());
+		listing.setViews(originalListing.getViews());
+		
 		this.listingRepository.saveListings(Set.of(listing));
 		
 	}
