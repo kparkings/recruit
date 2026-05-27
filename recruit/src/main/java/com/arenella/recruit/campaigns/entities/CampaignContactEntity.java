@@ -21,7 +21,7 @@ public class CampaignContactEntity {
 	@Column(name="id")
 	private String 				id; 
 	
-	@Column(name="firstname")
+	@Column(name="first_name")
 	private String 				firstName; 
 	
 	@Column(name="surname")
