@@ -262,6 +262,8 @@ public class PublicChatServiceImpl implements PublicChatService {
 				throw new IllegalArgumentException("Cannot delete other users Chat");
 			}
 			
+			chat.getLikes().clear();
+			this.chatDao.saveChat(chat);
 			this.notificationService.deleteNotificationsForChat(chat.getId());
 			this.deleteChatChildrenNotifications(chat);
 			this.deleteChatChildren(chat);

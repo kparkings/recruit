@@ -329,6 +329,15 @@ public class Listing {
 	}
 	
 	/**
+	* Sets the views for the Listing
+	* @param views - Views by site visitors
+	*/
+	public void setViews(Set<ListingViewedEvent> views) {
+		this.views.clear();
+		this.views.addAll(views);
+	}
+	
+	/**
 	* Sets the unique Id of the Listing
 	* @param id - unique Id
 	*/
