@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -45,6 +46,7 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	* Saves a Campaign
 	* @param campaign - Campaign to be persisted
 	*/
+	@Modifying
 	default void saveCampaign(Campaign campaign) {
 		this.save(CampaignEntity.toEntity(campaign));
 	}

@@ -198,14 +198,37 @@ export class SelectionboxComponent {
 		this.selectCampaignById(""+campaignOverview?.id);
 	}
 	
+	/**
+	* Refreshes the Campaign data. To be called if the Campaign is updated in the 
+	* backend and we want to see the change in the view 
+	*/
+	public refreshCampaign():void{
+		
+		if (this.selectedCampaign == undefined) {
+			return;
+		}
+		
+		this.campaignService.fetchCampaign(this.selectedCampaign?.id).subscribe(campaign => {
+			this.selectedCampaign = campaign;
+			this.selectedCampaignEmitter.emit(campaign);
+			if (this.selectedRole !== undefined) {
+					this.selectedRole = campaign.roles.filter(r => r.id == this.selectedRole?.id)[0];
+					this.selectedRoleEmitter.emit(this.selectedRole);
+			}			
+		});
+		
+	}
+	
 	public selectCampaignById(id:string):void{
 			
 		this.campaignService.fetchCampaign(id).subscribe(campaign => {
 			this.selectedCampaign = campaign;
+			this.selectedRole = undefined;
 			this.selectedCampaignEmitter.emit(campaign);
 			this.selectedRoleEmitter.emit(undefined);
 			this.selectedCampaign.roles = this.selectedCampaign.roles.sort((a,b) => a.name > b.name ? 0 : -1);
 			this.showRoleList();
+			
 		});
 		
 	}

@@ -52,7 +52,7 @@ public class CampaignEntity {
 	@Enumerated(EnumType.STRING)
 	private PHOTO_FORMAT 		logoFormat;
 	
-	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.DETACH, orphanRemoval=true, fetch=FetchType.LAZY)
 	private Set<RoleEntity>		roles		= new LinkedHashSet<>();
 	
 	@ElementCollection(targetClass=CandidateEntity.class, fetch=FetchType.LAZY)

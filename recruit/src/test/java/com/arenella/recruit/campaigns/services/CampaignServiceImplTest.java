@@ -418,7 +418,7 @@ class CampaignServiceImplTest {
 		final String 	contactId 		= "rec22";
 		final String 	loggedInUserId 	= "rec88";
 		
-		ArgumentCaptor<Campaign> campaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		ArgumentCaptor<Participation> participationArgCapt = ArgumentCaptor.forClass(Participation.class);
 		
 		Contact loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		Contact newParticipantContact 	= new Contact("rec3", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
@@ -430,7 +430,7 @@ class CampaignServiceImplTest {
 				.build())
 				.build();
 		
-		doNothing().when(this.mockCampaignDao).saveCampaign(campaignArgCapt.capture());
+		doNothing().when(this.mockParticipationDao).saveParticipation(participationArgCapt.capture());
 		
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
@@ -438,11 +438,12 @@ class CampaignServiceImplTest {
 		
 		this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.EDIT, loggedInUserId);
 		
-		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		verify(this.mockParticipationDao).saveParticipation(any(Participation.class));
 		
-		Campaign saved = campaignArgCapt.getValue();
+		Participation participation = participationArgCapt.getValue();
 		
-		saved.getParticipations().stream().filter(p -> p.getType() == ParticipantType.EDIT && p.getContactId().equals(contactId)).findAny().orElseThrow();
+		assertEquals(ParticipantType.EDIT, 	participation.getType());
+		assertEquals(contactId, 			participation.getContactId());
 		
 	}
 	
@@ -598,10 +599,17 @@ class CampaignServiceImplTest {
 		
 		Contact loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(Role.builder()
+				.id(roleId)
+				.participation(Participation.builder().participationId(participationId).contactId(contactIdRole1).build())
+				.participation(Participation.builder().participationId(UUID.randomUUID()).contactId(contactIdRole2).build())
+				.build()));
+		
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockParticipationDao.fetchParticipationById(participationId)).thenReturn(Optional.of(Participation.builder().participationId(participationId).campaignId(campaignId).roleId(roleId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(Campaign
 				.builder()
+					.id(campaignId)
 					.participation(Participation.builder().contactId(contactIdCampaign).type(ParticipantType.ADMIN).build())
 					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
 					.role(Role.builder()
@@ -615,7 +623,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteParticipation(participationId, loggedInUserId);
 		
-		verify(this.mockParticipationDao).deleteById(participationId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
 	}
 	
@@ -636,6 +644,7 @@ class CampaignServiceImplTest {
 		when(this.mockParticipationDao.fetchParticipationById(participationId)).thenReturn(Optional.of(Participation.builder().participationId(participationId).campaignId(campaignId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(Campaign
 				.builder()
+					.id(campaignId)
 					.participation(Participation.builder().participationId(participationId).contactId(contactIdCampaign).type(ParticipantType.ADMIN).build())
 					.participation(Participation.builder().participationId(UUID.randomUUID()).contactId(loggedInUserId).type(ParticipantType.ADMIN).build())		
 					.build()));
@@ -643,7 +652,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteParticipation(participationId, loggedInUserId);
 		
-		verify(this.mockParticipationDao).deleteById(participationId);
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
 		
 	}
 	

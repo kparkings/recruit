@@ -13,7 +13,13 @@
 		<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{campaign.description}}</pre>
 		
 		<div>
-		
+			<h5>Participations</h5>
+			<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Delete Participant</button>
+			<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of getCampaignLevelParticipation()" (click)="selectParticipation(participation)">
+				{{participation.contact.firstName}} {{participation.contact.surname}} 
+				<br>
+				{{participation.type}}
+			</div>
 		</div>
 		
 		<div>
@@ -32,7 +38,7 @@
 		
 		</div>
 		
-		<div>
+		<div class="campaign-button-panel">
 			<button class="btn btn-secondary campaign-btn">Add Document</button>
 			<button class="btn btn-secondary campaign-btn">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
@@ -43,12 +49,18 @@
 	</div>
 	
 		<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="role !== undefined">
-		<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;">Delete Role</button>
+		<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Delete Role</button>
 		<h3>{{role.name}}</h3>
 		<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{role.description}}</pre>
 		
 		<div>
-		
+			<h5>Participations</h5>
+			<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()" style="float:right;">Delete Participant</button>
+			<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of role.participations" (click)="selectParticipation(participation)">
+				{{participation.contact.firstName}} {{participation.contact.surname}} 
+				<br>
+				{{participation.type}}
+			</div>
 		</div>
 		
 		<div>
@@ -67,7 +79,7 @@
 		
 		</div>
 		
-		<div>
+		<div class="campaign-button-panel">
 			<button class="btn btn-secondary campaign-btn">Add Document</button>
 			<button class="btn btn-secondary campaign-btn">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
@@ -101,33 +113,47 @@
 		<h4 class="modal-title">Add Participant</h4>
 		<div class="filter-close-box" (click)="addParticipant.close()">X</div>
 	</div>
-	<div class="modal-body">
+	
+	<div class="modal-body" *ngIf="errMshActive">
+		<h3>Unable to add participant.</h3>
+		<p>
+		We are currently unable to add the participant. Please check the userId of the participant is correct and that the 
+		user is not already an existing participant.
+		</p>
+		<p>
+		If the problem persists please message  admin@arenella-ict.com and we will help you resolve this issue.
+		</p>
+	</div>
+	
+	<div class="modal-body" *ngIf="!errMshActive">
 		<p>Please enter the user Id and assign a Role to the new participant.</p>
 		<p>The User will then be able to participate in the Campaign/Role.</p>
 		
 		<div style="width:200px;margin: 0 auto;text-align:left;">
-			<table style="margin-top:20px;margin-bottom:20px;">
-				<tr>
-					<td style="padding-right:15px;font-weight:bold;">UserId</td>
-					<td><input type="text" value=""  style="width:150px"/></td>
-				</tr>
-				<tr>
-					<td style="padding-right:15px;font-weight:bold;">Role</td>
-					<td>
-						<select style="width:150px">
-							<option></option>
-							<option>Admin</option>
-							<option>Edit</option>
-							<option>View</option>
-						</select>	
-					</td>
-				</tr>
-			</table>
+			<form [formGroup]="newParticipantForm">
+				<table style="margin-top:20px;margin-bottom:20px;">
+					<tr>
+						<td style="padding-right:15px;font-weight:bold;">UserId</td>
+						<td><input type="text" value=""  style="width:150px" formControlName="userId"/></td>
+					</tr>
+					<tr>
+						<td style="padding-right:15px;font-weight:bold;">Role</td>
+						<td>
+							<select style="width:150px" formControlName="role">
+								<option></option>
+								<option value="ADMIN">Admin</option>
+								<option value="EDIT">Edit</option>
+								<option value="VIEW">View</option>
+							</select>	
+						</td>
+					</tr>
+				</table>
+			</form>
 		</div>
 	
 		<div>
 			<button class="btn btn-secondary campaign-btn" (click)="handleCancelAddParticipant()">Cancel</button>
-			<button class="btn btn-secondary campaign-btn">Confirm</button>
+			<button class="btn btn-secondary campaign-btn" (click)="handleAddParticipant()">Confirm</button>
 		</div>
 		
 	</div> 

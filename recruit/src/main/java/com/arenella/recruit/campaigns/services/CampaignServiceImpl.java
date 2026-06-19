@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
@@ -28,6 +29,8 @@ import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
+import com.arenella.recruit.campaigns.entities.CampaignEntity;
+import com.arenella.recruit.campaigns.entities.ParticipationEntity;
 
 /**
 * Services for working with Campaigns 
@@ -177,19 +180,24 @@ public class CampaignServiceImpl implements CampaignService{
 			)
 		);
 		
-		campaign.getParticipations().stream().filter(p -> p.getContactId().equals(contactId)).findAny().ifPresent(_ -> {
-			throw new IllegalArgumentException(ERR_MSG_CONTACT_ALREADY_PARTICIPANT);
-		});
+		if (Optional.ofNullable(roleId).isEmpty()) {
+			campaign.getParticipations().stream().filter(p -> p.getContactId().equals(contactId) && p.getRoleId().isEmpty()).findAny().ifPresent(_ -> {
+				throw new IllegalArgumentException(ERR_MSG_CONTACT_ALREADY_PARTICIPANT);
+			});
+		} else {
+			campaign.getParticipations().stream().filter(p -> p.getContactId().equals(contactId) && p.getRoleId().isPresent() && p.getRoleId().get().equals(roleId)).findAny().ifPresent(_ -> {
+				throw new IllegalArgumentException(ERR_MSG_CONTACT_ALREADY_PARTICIPANT);
+			});
+		}
 		
-		this.campaignDao.saveCampaign(Campaign.builder().from(campaign)
-				.participation(Participation
+		this.participationDao.saveParticipation(Participation
 						.builder()
 							.participationId(UUID.randomUUID())
 							.campaignId(campaignId)
 							.contactId(contactId)
 							.roleId(roleId)
 							.type(type)
-						.build()).build());
+						.build());
 		
 	}
 
@@ -207,7 +215,25 @@ public class CampaignServiceImpl implements CampaignService{
 		this.checkLoggedInUserIsAdminForParticipation(campaign, participation, currentUserId);
 		this.checkAtLeastOneAdminUserLeftAfterAction(campaign, participation);
 		
-		this.participationDao.deleteById(participationId);
+		if (participation.getRoleId().isEmpty()) {
+			campaign = Campaign
+				.builder()
+				.from(campaign)
+				.participants(campaign.getParticipations().stream().filter(p -> !p.getParticipationId().equals(participationId)).collect(Collectors.toSet()))
+				.build();
+			
+			this.campaignDao.saveCampaign(campaign);
+			
+		} else {
+			
+			Role role = this.roleDao.fetchRoleById(participation.getRoleId().get()).get();
+			
+			role = Role.builder().from(role).participants(role.getParticipations().stream().filter(p -> !p.getParticipationId().equals(participationId)).collect(Collectors.toSet())).build();
+			
+			this.roleDao.saveRole(role, campaign.getId());
+			
+		}
+	
 	}
 	
 	/**
@@ -525,7 +551,7 @@ public class CampaignServiceImpl implements CampaignService{
 		AtomicBoolean adminAtRoleLevel 		= new AtomicBoolean(false);
 	
 		participation.getRoleId().ifPresent(roleId -> {
-			Role role = campaign.getRoles().stream().filter(r -> r.getId() == roleId).findAny().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			Role role = campaign.getRoles().stream().filter(r -> r.getId() .equals(roleId)).findAny().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
 			adminAtRoleLevel.set(role.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && p.getType() == ParticipantType.ADMIN));
 		});
 		
@@ -547,7 +573,7 @@ public class CampaignServiceImpl implements CampaignService{
 		AtomicBoolean adminAtRoleLevelIfParticipantRemoved 		= new AtomicBoolean(false);
 		
 		participation.getRoleId().ifPresent(roleId -> {
-			Role role = campaign.getRoles().stream().filter(r -> r.getId() == roleId).findAny().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			Role role = campaign.getRoles().stream().filter(r -> r.getId().equals(roleId)).findAny().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
 			adminAtRoleLevelIfParticipantRemoved.set(role.getParticipations().stream().anyMatch(p -> p.getParticipationId() != participation.getParticipationId() && p.getType() == ParticipantType.ADMIN));
 		});
 		

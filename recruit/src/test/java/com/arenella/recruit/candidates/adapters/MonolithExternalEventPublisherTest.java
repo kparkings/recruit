@@ -16,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,6 +27,7 @@ import com.arenella.recruit.adapters.events.CandidateNoLongerAvailableEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
+import com.arenella.recruit.campaigns.adapters.CampaignsExternalEventListener;
 import com.arenella.recruit.candidates.beans.CandidateSearchAlertMatch;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
@@ -54,6 +56,9 @@ class MonolithExternalEventPublisherTest {
 	
 	@Mock
 	private MessagingMessagingServiceExternalEventListener	mockMessagingMessagingServiceExternalEventListener;
+	
+	@Mock
+	private CampaignsExternalEventListener					campaignsExternalEventListener;
 	
 	@InjectMocks
 	private MonolithExternalEventPublisher 					publisher;

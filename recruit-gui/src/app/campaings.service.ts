@@ -508,6 +508,8 @@ export class Participation{
 	*/
 	constructor(public participationId:string,
 				public contact:Contact,
+				public campaignId:string,
+				public roleId:string| undefined,
 				public type:string){}
 	
 }
@@ -535,5 +537,5 @@ export class Contact{
 	/**
 	* Constructor
 	*/
-	constructor(public firstName:string, public surname:string){}
+	constructor(public contactId:string, public firstName:string, public surname:string){}
 }		
