@@ -152,6 +152,6 @@
  		<div class="filter-close-box" (click)="campaignsBox.close()">X</div>
 	</div>
 	<div >
-		<app-selectionbox></app-selectionbox>
+		<app-selectionbox [showAddCandidateButton]="true" (selectedCampaignEmitter)="handleCampaignSelectedEmitterEvent($event)" (selectedRoleEmitter)="handleRoleSelectedEmitterEvent($event)"></app-selectionbox>
 	</div>
 </dialog>

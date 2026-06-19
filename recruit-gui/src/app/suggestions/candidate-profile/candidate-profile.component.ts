@@ -15,6 +15,8 @@ import { CandidateServiceService } 											from 'src/app/candidate-service.se
 import { Router } 															from '@angular/router';
 import { AppComponent } 													from 'src/app/app.component';
 import { CurrentUserAuth } 													from 'src/app/current-user-auth';
+import { CampaingsService, Campaign, Role, Participation}					from 'src/app/campaings.service';
+import { SelectionboxComponent} 											from '../../campaigns/selectionbox/selectionbox.component'
 
 /**
 * Candidate profile showing canidates details and options to interact with 
@@ -41,6 +43,7 @@ export class CandidateProfileComponent {
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('campaignsBox', { static: true }) 		campaignsDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild(SelectionboxComponent) 					public selectionBox!:SelectionboxComponent;
 		
 	public currentUserAuth:CurrentUserAuth 				= new CurrentUserAuth();
 	public candidateIsRemoved:boolean					= false;
@@ -529,6 +532,35 @@ export class CandidateProfileComponent {
 	*/
 	public isAuthenticatedAsCandidate():boolean {
 		return sessionStorage.getItem('isCandidate') === 'true';
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* When a new Campaign is selected an event is emmited. This is the 
+	* handler for that emitted event 
+	*/
+	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
+		console.log("XX CAMPAIGN SELECTED " + campaign);
+	}
+
+	/**
+	* When a new Role is selected an event is emmited. This is the 
+	* handler for that emitted event 
+	*/
+	public handleRoleSelectedEmitterEvent(role:Role):void{
+	
+		console.log("XX ROLE SELECTED " + role);
 	}
 	
 }

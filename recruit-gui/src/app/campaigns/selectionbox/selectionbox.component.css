@@ -70,3 +70,23 @@
  	background:#2AAA8A;
  }
  
+ .campaign-selected-true{
+ 	border:3px solid black;
+ }
+
+ .campaign-selected-false{
+ 	border:3px solid #694F90;
+ }
+ 
+ .role-selected-true{
+ 	border:3px solid black;
+ }
+
+ .role-selected-false{
+ 	border:3px solid #2AAA8A;
+ }
+  
+ .role-selected{
+ 	border:3px solid red;
+ }
+ 

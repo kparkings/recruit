@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } 									from '@angular/core';
+import { Component, EventEmitter, Output, Input } 							from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }								from '@angular/forms';
 import { CampaingsService, Campaign, Role, CampaignOverview}				from 'src/app/campaings.service';
 import { CurriculumService } 												from 'src/app/curriculum.service';
@@ -13,6 +13,8 @@ export class SelectionboxComponent {
 
 	@Output() selectedCampaignEmitter 							= new EventEmitter<Campaign>();
 	@Output() selectedRoleEmitter 								= new EventEmitter<Role>();
+	
+	@Input()  showAddCandidateButton:boolean 		= false;
 	
 	public selectedCampaign:Campaign | undefined;
 	public selectedRole:Role | undefined;
@@ -103,7 +105,6 @@ export class SelectionboxComponent {
 		let description:string 	= this.addRoleForm.get("description")?.value;
 		
 		this.campaignService.addNewRole(''+this.selectedCampaign?.id, name, description).subscribe(res => {
-			//this.fetchExistingCampaigns();
 			this.selectCampaignById(""+this.selectedCampaign?.id);
 			this.showRoleList()
 			this.resetAddCampaignForm();

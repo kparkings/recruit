@@ -22,16 +22,20 @@
 		</div>
 		<div class="campaign-selection-panel">
 			<div *ngIf="selectedCampaign !== undefined">
-				<div class="campaign-selection" (click)="selectCampaign(selectedCampaign)">{{selectedCampaign.name}}</div>
+				<div class="campaign-selection campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{selectedCampaign.name}}</div>
 		
 				<div *ngFor="let role of selectedCampaign.roles">
 				
-					<div class="campaign-selection role-selection" (click)="selectRole(role)">{{role.name}}</div>
+					<div class="campaign-selection role-selection role-selected-{{selectedRole && role.id == selectedRole.id}}" (click)="selectRole(role)">{{role.name}}</div>
 				
 				</div>
+				<div *ngIf="showAddCandidateButton" style="width:510px;">
+					<button class="btn btn-secondary" style="float:right;">Add Candidate</button>
+				</div>
 			</div>
-			
+				
 		</div>
+		
 	</div>
 		
 	<!-- Add Campaign Form -->
