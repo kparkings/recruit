@@ -29,7 +29,7 @@ public class Candidate {
 		this.countryCode 		= builder.countryCode;
 		this.jobTitle 			= builder.jobTitle;
 		this.email 				= builder.email;
-		this.deletedFromSystem 	=  builder.deletedFromSystem;
+		this.deletedFromSystem 	= builder.deletedFromSystem;
 	}
 	
 	/**

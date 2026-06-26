@@ -13,6 +13,7 @@ export class SelectionboxComponent {
 
 	@Output() selectedCampaignEmitter 							= new EventEmitter<Campaign>();
 	@Output() selectedRoleEmitter 								= new EventEmitter<Role>();
+	@Output() addedCandidateEmitter 							= new EventEmitter<string>();
 	
 	@Input()  showAddCandidateButton:boolean 		= false;
 	
@@ -232,6 +233,10 @@ export class SelectionboxComponent {
 			
 		});
 		
+	}
+	
+	public addCandidateToCampaign():void{
+		this.addedCandidateEmitter.emit();
 	}
 	
 	/**

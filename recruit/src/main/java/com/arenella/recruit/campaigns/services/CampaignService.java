@@ -155,4 +155,13 @@ public interface CampaignService {
 	*/
 	void deleteRole(UUID roleId, String name);
 
+	/**
+	* Adds a Candidate to a Campaign/Role
+	* @param campaignId		- Campaign to add Candidate to
+	* @param roleId			- If Role level Role to add Candidate to
+	* @param candidateId	- Id of Candidate to add to the Campaign / Role
+	* @param currentUser	- Id of authenticated Use
+	*/
+	void addCandidateToCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
+
 } 

@@ -277,6 +277,34 @@ export class CampaingsService {
 
 	}
 	
+	/**
+	* Adds a Candidate to a Campaign
+	* @param campaignId 	- Id of the Campaign to add the Candidate to
+	* @param candidateId 	- Id of the Candidate to add the Campaign
+	*/
+	public addCandidateToCampaign(campaignId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/candidate/'+candidateId;
+
+		return this.httpClient.put<any>(backendUrl, {}, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds a Candidate to a Campaign
+	* @param campaignId 	- Id of the Campaign to add the Candidate to
+	* @param roleId 		- Id of the Role  to add the Candidate to
+	* @param candidateId 	- Id of the Candidate to add the Campaign
+	*/
+	public addCandidateToRole(campaignId:string, roleId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/candidate/'+candidateId;
+
+		return this.httpClient.put<any>(backendUrl, {}, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	
 }
 
 /**

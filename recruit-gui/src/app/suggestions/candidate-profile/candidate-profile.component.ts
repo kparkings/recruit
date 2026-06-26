@@ -65,11 +65,12 @@ export class CandidateProfileComponent {
 	*/
 	constructor(private readonly emailService:				EmailService, 
 				private readonly curriculumService:			CurriculumService,
-				private readonly creditsService:				CreditsService,
-				private readonly sanitizer: 					DomSanitizer,
+				private readonly creditsService:			CreditsService,
+				private readonly sanitizer: 				DomSanitizer,
 				private readonly candidateNavService:		CandidateNavService,
-				public candidateService:			CandidateServiceService,
-				private readonly router:						Router,
+				public readonly candidateService:			CandidateServiceService,
+				public readonly CampaingsService:			CampaingsService,
+				private readonly router:					Router,
 				private readonly appComponent:				AppComponent){
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -543,8 +544,8 @@ export class CandidateProfileComponent {
 	
 	
 	
-	
-	
+	private selboxCampaign:Campaign|undefined;
+	private selboxRole:Role|undefined;
 	
 	/**
 	* When a new Campaign is selected an event is emmited. This is the 
@@ -552,6 +553,7 @@ export class CandidateProfileComponent {
 	*/
 	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
 		console.log("XX CAMPAIGN SELECTED " + campaign);
+		this.selboxCampaign = campaign;
 	}
 
 	/**
@@ -559,8 +561,29 @@ export class CandidateProfileComponent {
 	* handler for that emitted event 
 	*/
 	public handleRoleSelectedEmitterEvent(role:Role):void{
-	
+		this.selboxRole = role;
 		console.log("XX ROLE SELECTED " + role);
+	}
+	
+	/**
+	* Adds candidate to Campaign or Role 
+	*/
+	public handleCandidateAddedEvent():void{
+		
+		if (this.selboxCampaign == undefined) {
+			return;
+		}
+		
+		if (this.selboxRole == undefined) {
+			this.CampaingsService.addCandidateToCampaign(this.selboxCampaign.id, this.candidateProfile.candidateId).subscribe(res => {
+				console.log("XX Addning candidate to campaigin ");	
+			});	
+		} else {
+			this.CampaingsService.addCandidateToRole(this.selboxCampaign.id, this.selboxRole.id, this.candidateProfile.candidateId).subscribe(res => {
+				console.log("XX Addning candidate to role ");
+			});
+		}
+		
 	}
 	
 }

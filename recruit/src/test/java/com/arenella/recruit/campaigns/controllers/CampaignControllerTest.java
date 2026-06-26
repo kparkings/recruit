@@ -459,6 +459,47 @@ class CampaignControllerTest {
 	}
 	
 	/**
+	* Tests adding a Candidate to a Campaign
+	*/
+	@Test
+	void  testAddCandidateToCampaign() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addCandidateToCampaign(campaignId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).addCandidateToCampaign(campaignId, null, candidateId, userId);
+		
+	}
+	
+	/**
+	* Tests adding a Candidate to a Campaign
+	*/
+	@Test
+	void  testAddCandidateToRole() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final UUID 		roleId	 		= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addCandidateToCampaign(campaignId, roleId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).addCandidateToCampaign(campaignId, roleId, candidateId, userId);
+		
+	}
+	
+	/**
 	* Tests retrieval of the Document requested by the documentId
 	*/
 	//@Test

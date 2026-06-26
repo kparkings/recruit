@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
+import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
@@ -21,6 +22,7 @@ import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 import com.arenella.recruit.campaigns.beans.Document;
@@ -43,6 +45,7 @@ public class CampaignServiceImpl implements CampaignService{
 	public static final String ERR_MSG_CONTACT_NOT_FOUND 				= "Unknown Contact.";
 	public static final String ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE = "Only paid subscription users can perform this action.";
 	public static final String ERR_MSG_CAMPAIGN_NOT_FOUND 				= "Unknown Campaign.";
+	public static final String ERR_MSG_UNKNOWN_CANDIDATE				= "Unknown Candidate.";
 	public static final String ERR_MSG_CONTACT_ALREADY_PARTICIPANT 		= "Cannot add existing participant.";
 	public static final String ERR_MSG_NO_ADMIN_ROLE_FOR_USER			= "Only Admin Users can perform this action.";
 	public static final String ERR_MSG_UNKNOWN_PARTICIPATION			= "Unknown Participation.";
@@ -63,6 +66,7 @@ public class CampaignServiceImpl implements CampaignService{
 	private final DocumentEntityDao				documentDao;
 	private final CampaignFileSecurityParser	fileSecurityParser;
 	private final RoleDao						roleDao;
+	private final CandidateEntityDao			candidateDao;
 	
 	/**
 	* Constructor
@@ -73,6 +77,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param documentDao		- For working with Documents
 	* @param fileSecurityParser	- To check file is of type specified
 	* @param roleDao			- For working with Roles
+	* @param candidateDao		- For working with Candidates
 	*/
 	public CampaignServiceImpl(
 			CampaignDao 				campaignDao, 
@@ -82,7 +87,8 @@ public class CampaignServiceImpl implements CampaignService{
 			AppointmentEntityDao 		appointmentDao,
 			DocumentEntityDao			documentDao,
 			CampaignFileSecurityParser	fileSecurityParser,
-			RoleDao						roleDao) {
+			RoleDao						roleDao,
+			CandidateEntityDao			candidateDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
@@ -91,6 +97,7 @@ public class CampaignServiceImpl implements CampaignService{
 		this.documentDao  		= documentDao;
 		this.fileSecurityParser = fileSecurityParser;
 		this.roleDao			= roleDao;
+		this.candidateDao		= candidateDao;
 	}
 	
 	/**
@@ -490,6 +497,50 @@ public class CampaignServiceImpl implements CampaignService{
 		role.getParticipations().stream().filter(p -> p.getContactId().equals(name) && p.getType() == ParticipantType.ADMIN).findFirst().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
 	
 		this.roleDao.deleteById(roleId);
+		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void addCandidateToCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser) {
+		
+		//!!!!!!!!!!!!!!!!!!!1
+		//TODO: [KP] Working. Now we just need to write the unit tests
+		//!!!!!!!!!!!!!!!!!!!1
+		//!!!!!!!!!!!!!!!!!!!1
+		//!!!!!!!!!!!!!!!!!!!1
+		//!!!!!!!!!!!!!!!!!!!1
+		
+		Campaign 	campaign;
+		Role 		role = null;
+		Candidate 	candidate;
+		
+		//0. Check user has access to Campaigns
+		this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		// 1. Check campaign exists
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		// 2. Check Role exists if Role level		
+		if (Optional.ofNullable(roleId).isPresent()) {
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		}
+
+		// 3. Check candidate exists
+		candidate = this.candidateDao.findCandidateById(candidateId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_CANDIDATE));
+		
+		// 4. Check is admin or edit participant 
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		
+		//5. Add Candidate to Campaign or role
+		
+		if (Optional.ofNullable(role).isEmpty()) {
+			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidate(candidate).build());
+		}else {
+			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
+		}
 		
 	}
 	

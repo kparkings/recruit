@@ -282,6 +282,33 @@ public class CampaignController {
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
+	/**
+	* Adds a Candidate to a Campaign
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(path="campaign/{campaignId}/candidate/{candidateId}")
+	public ResponseEntity<Void> addCandidateToCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.addCandidateToCampaign(campaignId, null, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	/**
+	* Adds a Candidate to a Role
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param roleId			- Id of the Role to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(path="campaign/{campaignId}/role/{roleId}/candidate/{candidateId}")
+	public ResponseEntity<Void> addCandidateToCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.addCandidateToCampaign(campaignId, roleId, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
 	
 	//TODO: Add Role
 	//TODO: Delete Role
