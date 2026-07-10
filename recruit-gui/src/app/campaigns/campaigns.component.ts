@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef }										from '@angular/core';
 import { SelectionboxComponent} 												from '../campaigns/selectionbox/selectionbox.component'
-import { CampaingsService, Campaign, Role, Participation, Candidate}			from 'src/app/campaings.service';
+import { CampaingsService, Campaign, Role, Participation, Candidate, Note}		from 'src/app/campaings.service';
 import { UntypedFormControl, UntypedFormGroup } 								from '@angular/forms';
 import { AppComponent } 														from 'src/app/app.component';
 import { PublicChat}															from '../newsfeed/public-chat';
@@ -14,16 +14,20 @@ import { PublicChat}															from '../newsfeed/public-chat';
 })
 export class CampaignsComponent {
 	
-	@ViewChild(SelectionboxComponent) 				public selectionBox!:SelectionboxComponent;
-	@ViewChild('confirmDelete', {static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addParticipant', { static: true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild(SelectionboxComponent) 					public selectionBox!:SelectionboxComponent;
+	@ViewChild('confirmDelete', 	{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addNote', 			{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addParticipant',	{ static: true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
 		
 	public campaign:Campaign | undefined;
 	public role:Role | undefined;
+	public note:Note | undefined;
 	public errMshActive:boolean = false
 	public participation:Participation | undefined;
 	public candidate:Candidate | undefined;
-		
+	public showParticipants:boolean = false;
+	public showNotes:boolean = false;
+	public showCandidates:boolean = false;
 	
 	/**
 	* Constructor
@@ -37,12 +41,18 @@ export class CampaignsComponent {
 		role: 			new UntypedFormControl(),
 	});
 	
+	public addNoteForm:UntypedFormGroup = new UntypedFormGroup({
+		title: new UntypedFormControl(),
+		text: new UntypedFormControl(),
+	});
+	
 	/**
 	* When a new Campaign is selected an event is emmited. This is the 
 	* handler for that emitted event 
  	*/
 	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
 		this.campaign = campaign;
+		this.showParticipants = false;
 	}
 	
 	/**
@@ -51,6 +61,7 @@ export class CampaignsComponent {
 	*/
 	public handleRoleSelectedEmitterEvent(role:Role):void{
 		this.role = role;
+		this.showParticipants = false;
 	}
 	
 	/**
@@ -58,6 +69,46 @@ export class CampaignsComponent {
 	*/
 	public showConfirmDeleteModal():void {
 		this.confirmDeleteBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Shows the addNote  box 
+	*/
+	public showAddNotModal():void {
+		this.note = undefined;
+		this.addNoteBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Shows the addNote  box 
+	*/
+	public showNote(note:Note):void {
+		this.note = note;
+		this.addNoteBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Closes the addNote  box 
+	*/
+	public closeAddNotModal():void {
+		this.addNoteBox.nativeElement.close();
+	}
+	
+	/**
+	* Adds a new Note
+	*/
+	public handleAddNote():void{
+		
+		
+		let title:string 				= this.addNoteForm.get("title")?.value;
+		let text:string 				= this.addNoteForm.get("text")?.value;
+		let roleId:string | undefined	= this.role !== undefined ? this.role.id : undefined;
+		
+		
+		this.campaignService.addNote(''+this.campaign?.id, roleId, title, text).subscribe(res => {
+			this.closeAddNotModal();	
+			this.selectionBox.refreshCampaign();
+		});
 	}
 	
 	/**
@@ -132,6 +183,21 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Returns Notes for the current Campaign. Exludes Role level 
+	* Participations
+	*/
+	public getCampaignLevelNotes():Array<Note>{
+		
+		
+		if (this.campaign) {
+			return this.campaign?.notes.filter(n => n.roleId == undefined);	
+		}
+		
+		return new Array<Note>();
+		
+	}
+	
+	/**
 	* Sets the current Participation that has been selected or de-selects it in the case 
 	* the Participation was already selected
 	*/
@@ -169,7 +235,6 @@ export class CampaignsComponent {
 		}
 		
 		return"";
-		
 		
 	}
 	
@@ -274,6 +339,27 @@ export class CampaignsComponent {
 	public openChat(candidate:Candidate):void{
 		this.appComponent.privateChat.showContactsItemView();
 		this.appComponent.privateChat.openChat(candidate.id);	
+	}
+	
+	/**
+	* Toggles the display of the Participants section on the view
+	*/
+	public toggleShowParticipants():void{
+		this.showParticipants = !this.showParticipants;
+	}
+	
+	/**
+	* Toggles the display of the Candidates section on the view
+	*/
+	public toggleShowCandidates():void{
+		this.showCandidates = !this.showCandidates;
+	}
+	
+	/**
+	* Toggles the display of the Notes section on the view
+	*/
+	public toggleShowNotes():void{
+		this.showNotes = !this.showNotes;
 	}
 	
 }

@@ -54,3 +54,8 @@
 	margin-top:10px;
 	cursor:pointer;
 }
+
+.campaigin-section-hdr{
+	display: inline-block;
+	width:200px;
+}

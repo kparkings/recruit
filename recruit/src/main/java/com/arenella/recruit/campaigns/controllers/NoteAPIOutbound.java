@@ -12,6 +12,8 @@ import com.arenella.recruit.campaigns.beans.Note;
 public class NoteAPIOutbound {
 
 	private UUID			id;
+	private UUID			campaignId;
+	private UUID			roleId;
 	private LocalDateTime 	created;
 	private String 			title;
 	private String 			text;
@@ -22,6 +24,8 @@ public class NoteAPIOutbound {
 	*/
 	public NoteAPIOutbound(NoteAPIOutboundBuilder builder) {
 		this.id 			= builder.id;
+		this.campaignId		= builder.campaignId;
+		this.roleId			= builder.roleId;
 		this.created 		= builder.created;
 		this.title 			= builder.title;
 		this.text 			= builder.text;
@@ -36,6 +40,22 @@ public class NoteAPIOutbound {
 		return this.id;
 	}
 	
+	/**
+	* Returns the Unique id of the Campaign the Note 
+	* is associated with
+	* @return id of the Campaign
+	*/
+	public UUID getCampaignId() {
+		return this.campaignId;
+	}
+	/**
+	* Returns the Id of the Role the Note is associated
+	* with if this is a Role level note
+	* @return id of the Role
+	*/
+	public Optional<UUID> getRoleId() {
+		return Optional.ofNullable(this.roleId);
+	}
 	/**
 	* Returns when the Note was created
 	* @return Date/Time of creation
@@ -75,6 +95,8 @@ public class NoteAPIOutbound {
 	public static class NoteAPIOutboundBuilder {
 		
 		private UUID			id;
+		private UUID			campaignId;
+		private UUID			roleId;
 		private LocalDateTime 	created;
 		private String 			title;
 		private String 			text;
@@ -88,6 +110,8 @@ public class NoteAPIOutbound {
 		public NoteAPIOutboundBuilder from(Note note) {
 			
 			this.id 		= note.getId();
+			this.campaignId = note.getCampaignId();
+			this.roleId		= note.getRoleId().orElse(null);
 			this.created 	= note.getCreated();
 			this.text 		= note.getText();
 			
@@ -104,6 +128,26 @@ public class NoteAPIOutbound {
 		*/
 		public NoteAPIOutboundBuilder id(UUID id) {
 			this.id = id;
+			return this;
+		}
+		
+		/**
+		* Sets the Unique Id of the Campaign the Note is associated with
+		* @param id - Id of the Campaign
+		* @return Builder
+		*/
+		public NoteAPIOutboundBuilder campaignId(UUID campaignId) {
+			this.campaignId = campaignId;
+			return this;
+		}
+		
+		/**
+		* Sets the Unique Id of the Role the Note is associated with
+		* @param id - Id of the Role
+		* @return Builder
+		*/
+		public NoteAPIOutboundBuilder roleId(UUID roleId) {
+			this.roleId = roleId;
 			return this;
 		}
 		

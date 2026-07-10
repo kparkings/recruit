@@ -136,7 +136,7 @@ export class CampaingsService {
 	* @param title		- Title of the Note
 	* @param text		- Note content 
 	*/
-	public addNote(campaignId:string, roleId:string, title:string, text:string):Observable<void>{
+	public addNote(campaignId:string, roleId:string|undefined, title:string, text:string):Observable<void>{
 			
 			let command:CommandAddNote = new CommandAddNote(campaignId, roleId, title, text);
 					
@@ -390,7 +390,7 @@ export class CommandAddNote{
 	* Constructor 
 	*/
 	constructor(public campaignId:string,
-				public roleId:string,
+				public roleId:string|undefined,
 				public title:string,
 				public text:string){}
 	
@@ -579,6 +579,8 @@ export class Note{
 	* Constructor 
 	*/
 	constructor(public id:string,
+				public campaignId:string,
+				public roleId:string,
 				public created:Date,
 				public title:string,
 				public text:string){}
