@@ -491,11 +491,57 @@ class CampaignControllerTest {
 		
 		when(this.mockPrincipal.getName()).thenReturn(userId);
 		
-		ResponseEntity<Void> response = this.controller.addCandidateToCampaign(campaignId, roleId, candidateId, mockPrincipal);
+		ResponseEntity<Void> response = this.controller.addCandidateToRole(campaignId, roleId, candidateId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 		verify(this.mockCampaignService).addCandidateToCampaign(campaignId, roleId, candidateId, userId);
+		
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests deleting a Candidate to a Campaign
+	*/
+	@Test
+	void  testDeleteCandidateFromCampaign() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteCandidateFromCampaign(campaignId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteCandidateFromCampaign(campaignId, null, candidateId, userId);
+		
+	}
+	
+	/**
+	* Tests deleting a Candidate from a Campaign
+	*/
+	@Test
+	void  testDeleteCandidateFromRole() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final UUID 		roleId	 		= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteCandidateFromRole(campaignId, roleId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteCandidateFromCampaign(campaignId, roleId, candidateId, userId);
 		
 	}
 	

@@ -3576,4 +3576,251 @@ class CampaignServiceImplTest {
 	
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests User without paid subscription cannot delete Candidates from Campaign
+	*/
+	@Test
+	void deleteCandidateFromCampaignNotPaidUser() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+
+	}
+	
+	/**
+	* Tests Case where Campaign referenced doesn't exist
+	*/
+	@Test
+	void deleteCandidateFromCampaignCampaignDoesntExist() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Case where Role referenced doesn't exist
+	*/
+	@Test
+	void deleteCandidateFromCampaignRoleDoesntExist() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.empty());
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Case where user has no admin or edit rights at the Campaign level
+	*/
+	@Test
+	void deleteCandidateFromCampaignNoRightsCampaignLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.deleteCandidateFromCampaign(campaignId, null, candidateId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Case where user has no admin or edit rights at 
+	* either the Campaign or Role level
+	*/
+	@Test
+	void deleteCandidateFromCampaignNoRightsRoleLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role		role					= Role.builder().id(roleId).participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build()).build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests happy path deleting from Campaign where Participation is at Campaign level
+	*/
+	@Test
+	void deleteCandidateFromCampaignRightsCampaignLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		this.service.deleteCandidateFromCampaign(campaignId, null, candidateId, loggedInUserId);
+		
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Tests happy path deleting from Role where Participation is at Campaign level
+	*/
+	@Test
+	void deleteCandidateFromCampaignRoleRightsCampaignLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role		role					= Role.builder().id(roleId).participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build()).build();
+		
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.role(role)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		
+		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		
+	}
+	
+	/**
+	* Tests happy path deleting from Role where Participation is at Role level
+	*/
+	@Test
+	void deleteCandidateFromCampaignRoleRightsLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role		role					= Role.builder().id(roleId).participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build()).build();
+		
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.role(role)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		
+		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+	
+	}
+	
 }

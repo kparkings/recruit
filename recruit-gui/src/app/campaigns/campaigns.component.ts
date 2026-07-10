@@ -1,7 +1,10 @@
-import { Component, ViewChild, ElementRef }									from '@angular/core';
-import { SelectionboxComponent} 								from '../campaigns/selectionbox/selectionbox.component'
-import { CampaingsService, Campaign, Role, Participation}						from 'src/app/campaings.service';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { Component, ViewChild, ElementRef }										from '@angular/core';
+import { SelectionboxComponent} 												from '../campaigns/selectionbox/selectionbox.component'
+import { CampaingsService, Campaign, Role, Participation, Candidate}			from 'src/app/campaings.service';
+import { UntypedFormControl, UntypedFormGroup } 								from '@angular/forms';
+import { AppComponent } 														from 'src/app/app.component';
+import { PublicChat}															from '../newsfeed/public-chat';
+
 
 @Component({
   selector: 'app-campaigns',
@@ -19,12 +22,15 @@ export class CampaignsComponent {
 	public role:Role | undefined;
 	public errMshActive:boolean = false
 	public participation:Participation | undefined;
+	public candidate:Candidate | undefined;
+		
 	
 	/**
 	* Constructor
 	* @oaram campaignService - Services and Domain objects for Campaigns 
+	* @param appComponent	 - Ref to main app component
 	*/
-	public constructor(private readonly campaignService:CampaingsService) {}
+	public constructor(private readonly campaignService:CampaingsService,private readonly appComponent:AppComponent) {}
 	
 	public newParticipantForm:UntypedFormGroup = new UntypedFormGroup({
 		userId: 		new UntypedFormControl(),
@@ -138,6 +144,18 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Sets the current Candidate that has been selected or de-selects it in the case 
+	* the Candiate was already selected
+	*/
+	public selectCandidate(candidate:Candidate):void{
+		if (this.candidate == candidate) {
+			this.candidate = undefined;
+		} else {
+			this.candidate = candidate;
+		}
+	}
+	
+	/**
 	* Returns the correct CSS class to highlight the Participation in the view if it 
 	* has been selected
 	*/
@@ -148,6 +166,24 @@ export class CampaignsComponent {
 		
 		if(this.participation === participation) {
 			return "participant-selected";
+		}
+		
+		return"";
+		
+		
+	}
+	
+	/**
+	* Returns the correct CSS class to highlight the Candidate in the view if it 
+	* has been selected
+	*/
+	public getSelectedCandidateCSSClass(candidate:Candidate):string{
+		if (this.candidate == undefined) {
+			return "";
+		}
+		
+		if(this.candidate === candidate) {
+			return "candidate-selected";
 		}
 		
 		return"";
@@ -192,7 +228,29 @@ export class CampaignsComponent {
 			});
 		}
 	}
-	
+
+	/**
+	* Sends request to delete Candidate
+	*/
+	public deleteCandidate():void{
+		
+		if (this.campaign == undefined) {
+			return;
+		}
+		
+		if (this.candidate !== undefined) {
+			if (this.role == undefined) {
+				this.campaignService.deleteCandidateFromCampaign(this.campaign.id, this.candidate.id).subscribe(res => {
+					this.selectionBox.refreshCampaign();
+				});
+			} else {
+				this.campaignService.deleteCandidateFromRole(this.campaign.id, this.role.id, this.candidate.id).subscribe(res => {
+					this.selectionBox.refreshCampaign();
+				});
+			}
+		}
+	}
+		
 	public currentUserAdminForSelectedObject():boolean {
 		
 		let currentUser = sessionStorage.getItem("userId");
@@ -208,6 +266,14 @@ export class CampaignsComponent {
 		}	
 		
 		return false;
+	}
+	
+	/**
+	* Opens Chat session with the owner of the Chat 
+	*/
+	public openChat(candidate:Candidate):void{
+		this.appComponent.privateChat.showContactsItemView();
+		this.appComponent.privateChat.openChat(candidate.id);	
 	}
 	
 }

@@ -304,11 +304,37 @@ public class CampaignController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PutMapping(path="campaign/{campaignId}/role/{roleId}/candidate/{candidateId}")
-	public ResponseEntity<Void> addCandidateToCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+	public ResponseEntity<Void> addCandidateToRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("candidateId") String candidateId, Principal currentUser){
 		this.campaignService.addCandidateToCampaign(campaignId, roleId, candidateId, currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
+	/**
+	* Deletes a Candidate from a Campaign
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}/candidate/{candidateId}")
+	public ResponseEntity<Void> deleteCandidateFromCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.deleteCandidateFromCampaign(campaignId, null, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	/**
+	* Deletes a Candidate from a Role
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param roleId			- Id of the Role to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}/role/{roleId}/candidate/{candidateId}")
+	public ResponseEntity<Void> deleteCandidateFromRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.deleteCandidateFromCampaign(campaignId, roleId, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
 	
 	//TODO: Add Role
 	//TODO: Delete Role

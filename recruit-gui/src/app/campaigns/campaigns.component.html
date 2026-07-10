@@ -12,9 +12,10 @@
 		<h3>{{campaign.name}}</h3>
 		<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{campaign.description}}</pre>
 		
-		<div>
+		<div style="width:100%;clear:both;">
 			<h5>Participations</h5>
-			<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Delete Participant</button>
+			<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()" style="float:right;">Add Participant</button>
+			<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()"   style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Delete Participant</button>
 			<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of getCampaignLevelParticipation()" (click)="selectParticipation(participation)">
 				{{participation.contact.firstName}} {{participation.contact.surname}} 
 				<br>
@@ -22,8 +23,35 @@
 			</div>
 		</div>
 		
-		<div>
-		
+		<div style="width:100%;clear:both;">
+			<h5>Candidates</h5>
+			
+			<!--  
+			<div class="candidate-block {{getSelectedCandidateCSSClass(candidate)}}" *ngFor="let candidate of campaign.candidates" (click)="selectCandidate(candidate)">
+				{{candidate.firstName}} {{candidate.surname}} 
+				<br>
+				{{candidate.jobTitle}}
+			</div>
+			-->
+			<table class="campaign-candidate-table">
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Title</th>
+					<th>Options</th>
+				</tr>
+				<tr *ngFor="let candidate of campaign.candidates" class="candidate-block {{getSelectedCandidateCSSClass(candidate)}}" (click)="selectCandidate(candidate)">
+					<td>{{candidate.id}}</td>
+					<td>{{candidate.firstName}} {{candidate.surname}}</td>
+					<td>{{candidate.jobTitle}}</td>
+					<td>
+						<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate)">chat</div>
+					</td>
+				</tr>
+			</table>
+			<button class="btn btn-secondary campaign-btn" (click)="deleteCandidate()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Remove Candidate</button>
+			
+			
 		</div>
 		
 		<div>
@@ -42,7 +70,7 @@
 			<button class="btn btn-secondary campaign-btn">Add Document</button>
 			<button class="btn btn-secondary campaign-btn">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
-			<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()">Add Participant</button>
+			
 			
 		</div>
 		
@@ -55,7 +83,8 @@
 		
 		<div>
 			<h5>Participations</h5>
-			<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()" style="float:right;">Delete Participant</button>
+			<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()" style="float:right;">Add Participant</button>
+			<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()"   style="float:right;">Delete Participant</button>
 			<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of role.participations" (click)="selectParticipation(participation)">
 				{{participation.contact.firstName}} {{participation.contact.surname}} 
 				<br>
@@ -63,8 +92,35 @@
 			</div>
 		</div>
 		
-		<div>
-		
+		<div style="width:100%;clear:both;">
+			<h5>Candidates</h5>
+			
+			<!--  
+			<div class="candidate-block {{getSelectedCandidateCSSClass(candidate)}}" *ngFor="let candidate of campaign.candidates" (click)="selectCandidate(candidate)">
+				{{candidate.firstName}} {{candidate.surname}} 
+				<br>
+				{{candidate.jobTitle}}
+			</div>
+			-->
+			<table class="campaign-candidate-table">
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Title</th>
+					<th>Options</th>
+				</tr>
+				<tr *ngFor="let candidate of role.candidates" class="candidate-block {{getSelectedCandidateCSSClass(candidate)}}" (click)="selectCandidate(candidate)">
+					<td>{{candidate.id}}</td>
+					<td>{{candidate.firstName}} {{candidate.surname}}</td>
+					<td>{{candidate.jobTitle}}</td>
+					<td>
+						<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate)">chat</div>
+					</td>
+				</tr>
+			</table>
+			<button class="btn btn-secondary campaign-btn" (click)="deleteCandidate()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Remove Candidate</button>
+			
+			
 		</div>
 		
 		<div>
@@ -83,7 +139,7 @@
 			<button class="btn btn-secondary campaign-btn">Add Document</button>
 			<button class="btn btn-secondary campaign-btn">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
-			<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()">Add Participant</button>
+			
 			
 		</div>
 		

@@ -291,7 +291,7 @@ export class CampaingsService {
 	}
 	
 	/**
-	* Adds a Candidate to a Campaign
+	* Adds a Candidate to a Role
 	* @param campaignId 	- Id of the Campaign to add the Candidate to
 	* @param roleId 		- Id of the Role  to add the Candidate to
 	* @param candidateId 	- Id of the Candidate to add the Campaign
@@ -301,6 +301,34 @@ export class CampaingsService {
 		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/candidate/'+candidateId;
 
 		return this.httpClient.put<any>(backendUrl, {}, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+
+	/**
+	* Deletes a Candidate from a Campaign
+	* @param campaignId 	- Id of the Campaign to add the Candidate to
+	* @param candidateId 	- Id of the Candidate to add the Campaign
+	*/
+	public deleteCandidateFromCampaign(campaignId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/candidate/'+candidateId;
+
+		return this.httpClient.delete<any>(backendUrl, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+
+	/**
+	* Deletes a Candidate from a Role
+	* @param campaignId 	- Id of the Campaign to delete the Candidate from
+	* @param roleId 		- Id of the Role to delte the Candidate from
+	* @param candidateId 	- Id of the Candidate to delete from the Campaign
+	*/
+	public deleteCandidateFromRole(campaignId:string, roleId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/candidate/'+candidateId;
+
+		return this.httpClient.delete<any>(backendUrl, {headers: new HttpHeaders({ }), withCredentials: true});	
 		
 	}
 	

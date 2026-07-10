@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
@@ -31,8 +30,6 @@ import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
-import com.arenella.recruit.campaigns.entities.CampaignEntity;
-import com.arenella.recruit.campaigns.entities.ParticipationEntity;
 
 /**
 * Services for working with Campaigns 
@@ -506,13 +503,6 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void addCandidateToCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser) {
 		
-		//!!!!!!!!!!!!!!!!!!!1
-		//TODO: [KP] Working. Now we just need to write the unit tests
-		//!!!!!!!!!!!!!!!!!!!1
-		//!!!!!!!!!!!!!!!!!!!1
-		//!!!!!!!!!!!!!!!!!!!1
-		//!!!!!!!!!!!!!!!!!!!1
-		
 		Campaign 	campaign;
 		Role 		role = null;
 		Candidate 	candidate;
@@ -540,6 +530,39 @@ public class CampaignServiceImpl implements CampaignService{
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidate(candidate).build());
 		}else {
 			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
+		}
+		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void deleteCandidateFromCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser) {
+		
+		Campaign 	campaign;
+		Role 		role = null;
+		
+		//0. Check user has access to Campaigns
+		this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		// 1. Check campaign exists
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		// 2. Check Role exists if Role level		
+		if (Optional.ofNullable(roleId).isPresent()) {
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		}
+	
+		// 3. Check is admin or edit participant 
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		
+		//4. Add Candidate to Campaign or role
+		
+		if (Optional.ofNullable(role).isEmpty()) {
+			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidates(campaign.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build());
+		}else {
+			this.roleDao.saveRole(Role.builder().from(role).candidates(role.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build(), campaignId);
 		}
 		
 	}

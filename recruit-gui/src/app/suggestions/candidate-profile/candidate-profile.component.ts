@@ -552,7 +552,6 @@ export class CandidateProfileComponent {
 	* handler for that emitted event 
 	*/
 	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
-		console.log("XX CAMPAIGN SELECTED " + campaign);
 		this.selboxCampaign = campaign;
 	}
 
@@ -562,7 +561,6 @@ export class CandidateProfileComponent {
 	*/
 	public handleRoleSelectedEmitterEvent(role:Role):void{
 		this.selboxRole = role;
-		console.log("XX ROLE SELECTED " + role);
 	}
 	
 	/**
@@ -576,11 +574,11 @@ export class CandidateProfileComponent {
 		
 		if (this.selboxRole == undefined) {
 			this.CampaingsService.addCandidateToCampaign(this.selboxCampaign.id, this.candidateProfile.candidateId).subscribe(res => {
-				console.log("XX Addning candidate to campaigin ");	
+				this.campaignsDialogBox.nativeElement.close();
 			});	
 		} else {
 			this.CampaingsService.addCandidateToRole(this.selboxCampaign.id, this.selboxRole.id, this.candidateProfile.candidateId).subscribe(res => {
-				console.log("XX Addning candidate to role ");
+				this.campaignsDialogBox.nativeElement.close();
 			});
 		}
 		

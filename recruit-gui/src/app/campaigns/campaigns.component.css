@@ -2,6 +2,10 @@
 	margin-right:10px;
 }
 
+.candidate-block{
+	cursor:pointer;
+}
+
 .participant-block{
 	width:100px;
 	height:100px;
@@ -23,4 +27,30 @@
 
 .participant-selected{
 	border:3px solid red;
+}
+
+.candidate-selected{
+	background:grey;
+}
+
+.campaign-candidate-table{
+	width:100%;
+	border:1px solid black;
+	margin-bottom:10px;
+}
+
+.campaign-candidate-table th{
+	width:400px;
+	padding:5px;
+	text-align:left;
+	background:#002549;
+	color:white;
+	font-weight:bold;
+}
+
+.public-chat-option{
+	float:right;
+	margin-right:10px;
+	margin-top:10px;
+	cursor:pointer;
 }

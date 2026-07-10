@@ -164,4 +164,14 @@ public interface CampaignService {
 	*/
 	void addCandidateToCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
 
+	
+	/**
+	* Deletes a Candidate form a Campaign/Role
+	* @param campaignId		- Campaign to delete the Candidate from
+	* @param roleId			- If Role level Role to delete the Candidate from
+	* @param candidateId	- Id of Candidate to remove from the Campaign / Role
+	* @param currentUser	- Id of authenticated Use
+	*/
+	void deleteCandidateFromCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
+
 } 
