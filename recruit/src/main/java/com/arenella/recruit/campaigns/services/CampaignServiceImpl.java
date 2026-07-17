@@ -305,10 +305,30 @@ public class CampaignServiceImpl implements CampaignService{
 		Note 		note 		= this.noteDao.fetchNoteById(noteId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_NOTE));
 		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		
 		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
 		
-		this.noteDao.deleteById(noteId);
+		if (note.getRoleId().isPresent()) {
+			note.getRoleId().ifPresent(roleId -> {
+				
+				Role role = this.roleDao.fetchRoleById(roleId).get();
+				
+				role = Role.builder().from(role).notes(role.getNotes().stream().filter(n -> !n.getId().equals(noteId)).collect(Collectors.toSet())).build();
+				
+				this.roleDao.saveRole(role, campaign.getId());
+				
+			});
+		} else {
+			this.campaignDao.saveCampaign(Campaign
+				.builder()
+					.from(campaign)
+					.notes(campaign.getNotes().stream().filter(n -> n.getId() != noteId).collect(Collectors.toSet()))
+				.build());
+		}
+		
+		
+		
+		
+		//this.noteDao.deleteById(noteId);
 	}
 
 	/**

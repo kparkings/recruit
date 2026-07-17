@@ -28,6 +28,7 @@ export class CampaignsComponent {
 	public showParticipants:boolean = false;
 	public showNotes:boolean = false;
 	public showCandidates:boolean = false;
+	public editNote:boolean			=false;
 	
 	/**
 	* Constructor
@@ -99,11 +100,9 @@ export class CampaignsComponent {
 	*/
 	public handleAddNote():void{
 		
-		
 		let title:string 				= this.addNoteForm.get("title")?.value;
 		let text:string 				= this.addNoteForm.get("text")?.value;
 		let roleId:string | undefined	= this.role !== undefined ? this.role.id : undefined;
-		
 		
 		this.campaignService.addNote(''+this.campaign?.id, roleId, title, text).subscribe(res => {
 			this.closeAddNotModal();	
@@ -314,6 +313,56 @@ export class CampaignsComponent {
 				});
 			}
 		}
+	}
+	
+	/**
+	* Sends request to delete Candidate
+	*/
+	public deleteNote():void{
+		
+		if (this.note == undefined) {
+			return;
+		}
+		
+		this.campaignService.deleteNote(this.note.id).subscribe(res => {
+			this.closeAddNotModal();	
+			this.selectionBox.refreshCampaign();
+		});
+		
+	}
+	
+	/**
+	* Toggles between view and edit mode
+	*/
+	public toggleEditNote():void{	
+
+		if (this.note == undefined) {
+			return;
+		}
+		
+		this.addNoteForm.get("title")?.setValue(this.note.title);
+		this.addNoteForm.get("text")?.setValue(this.note.text);
+				
+		this.editNote = !this.editNote;
+	}
+	
+	/**
+	* Sends request to delete Candidate
+	*/
+	public updateNote():void{
+		
+		if (this.note == undefined) {
+			return;
+		}
+		
+		let title:string 				= this.addNoteForm.get("title")?.value;
+		let text:string 				= this.addNoteForm.get("text")?.value;
+						
+		this.campaignService.updateNote(this.note.id, title, text).subscribe(res => {
+			this.closeAddNotModal();	
+			this.selectionBox.refreshCampaign();
+		});
+		
 	}
 		
 	public currentUserAdminForSelectedObject():boolean {

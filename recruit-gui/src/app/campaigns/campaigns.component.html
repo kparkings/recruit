@@ -79,7 +79,9 @@
 						<td>{{note.title}}</td>		
 					</tr>
 				</table>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()" style="float:right;">Add Note</button>
 			</div>
+			<div style="clear:both;"></div>
 		</div>
 		
 		<div>
@@ -92,7 +94,6 @@
 		
 		<div class="campaign-button-panel">
 			<button class="btn btn-secondary campaign-btn">Add Document</button>
-			<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
 			
 			
@@ -168,6 +169,8 @@
 						<td>{{note.title}}</td>		
 					</tr>
 				</table>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()" style="float:right;">Add Note</button>
+				<div style="clear:both;"></div>
 			</div>
 		</div>
 		
@@ -181,9 +184,8 @@
 		
 		</div>
 		
-		<div class="campaign-button-panel">
+		<div class="campaign-button-panel" >
 			<button class="btn btn-secondary campaign-btn">Add Document</button>
-			<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()">Add Note</button>
 			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
 			
 			
@@ -212,30 +214,70 @@
 <dialog #addNote>
 	<!--  Options -->
 	<div class="modal-header">
-		<h4 class="modal-title">Add Note</h4>
+		<h4 *ngIf="!note" class="modal-title">Add Note</h4>
+		<h4 *ngIf="note" class="modal-title">{{note.title}}</h4>
 		<div class="filter-close-box" (click)="addNote.close()">X</div>
 	</div>
 	<div class="modal-body">
 		
 		<div *ngIf="note" style="text-align:left;">
-			<h5>{{note.title}}</h5>
-			<div style="overflow:overflow-y;height:500px;border:1px solid black;padding:10ox;">
-				<pre>{{note.text}}</pre>
+			
+			
+			<div *ngIf="editNote">
+				<div style="width:550px;margin: 0 auto;text-align:left;">
+					<form [formGroup]="addNoteForm">
+						<table style="margin-top:20px;margin-bottom:20px;width:550px;">
+							<tr>
+								<th style="padding-right:15px;font-weight:bold;">Title</th>
+							</tr>
+							<tr>
+								<td><input type="text" value=""  style="width:100%;" formControlName="title"/></td>
+							</tr>
+							<tr>
+								<th style="padding-right:15px;font-weight:bold;">Body</th>
+							</tr>
+							<tr>
+								<td>
+									<textarea formControlName="text" style="width:100%;"></textarea>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
 			</div>
+			
+			
+			<div style="border:1px solid black;padding:10ox;" *ngIf="!editNote">
+				<pre style="padding:5px;white-space: pre-line; font-family: Roboto, 'Helvetica Neue', sans-serif; overflow:overflow-y;height:450px;">{{note.text}}</pre>
+			</div>
+			<div style="margin-top:10px;">
+				<button class="btn btn-secondary campaign-btn" (click)="addNote.close()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Close</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteNote()" 	 style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Remove Note</button>
+				<button class="btn btn-secondary campaign-btn" (click)="toggleEditNote()" style="float:right;" *ngIf="currentUserAdminForSelectedObject() && !editNote" >Edit</button>
+				<button class="btn btn-secondary campaign-btn" (click)="updateNote()" style="float:right;" *ngIf="currentUserAdminForSelectedObject() && editNote" >Update</button>
+			</div>
+			<div style="clear:both;margin-top:10px;margin-bottom:10px;background:green">
+			
+			</div>
+			
 		</div>
 		
 		<div *ngIf="!note">
-			<div style="width:200px;margin: 0 auto;text-align:left;">
+			<div style="width:550px;margin: 0 auto;text-align:left;">
 				<form [formGroup]="addNoteForm">
-					<table style="margin-top:20px;margin-bottom:20px;">
+					<table style="margin-top:20px;margin-bottom:20px;width:550px;">
 						<tr>
-							<td style="padding-right:15px;font-weight:bold;">Name</td>
-							<td><input type="text" value=""  style="width:150px" formControlName="title"/></td>
+							<th style="padding-right:15px;font-weight:bold;">Title</th>
 						</tr>
 						<tr>
-							<td style="padding-right:15px;font-weight:bold;">Text</td>
+							<td><input type="text" value=""  style="width:100%;" formControlName="title"/></td>
+						</tr>
+						<tr>
+							<th style="padding-right:15px;font-weight:bold;">Body</th>
+						</tr>
+						<tr>
 							<td>
-								<textarea formControlName="text"></textarea>
+								<textarea formControlName="text" style="width:100%;"></textarea>
 							</td>
 						</tr>
 					</table>

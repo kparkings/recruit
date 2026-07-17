@@ -1376,13 +1376,18 @@ class CampaignServiceImplTest {
 		final Note		note			= Note.builder().campaignId(campaignId).build();
 		final Campaign	campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
 		
+		ArgumentCaptor<Campaign> capaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		doNothing().when(mockCampaignDao).saveCampaign(capaignArgCapt.capture());
 		
 		this.service.deleteNote(noteId, currentUserId);
 		
-		verify(this.mockNoteDao).deleteById(noteId);
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		assertEquals(0, capaignArgCapt.getValue().getNotes().size());
 		
 	}
 	
@@ -1435,13 +1440,18 @@ class CampaignServiceImplTest {
 		final Note		note			= Note.builder().campaignId(campaignId).build();
 		final Campaign	campaign		= Campaign.builder().participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
 		
+		ArgumentCaptor<Campaign> capaignArgCapt = ArgumentCaptor.forClass(Campaign.class);
+		
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		doNothing().when(mockCampaignDao).saveCampaign(capaignArgCapt.capture());
 		
 		this.service.deleteNote(noteId, currentUserId);
 		
-		verify(this.mockNoteDao).deleteById(noteId);
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		assertEquals(0, capaignArgCapt.getValue().getNotes().size());
 		
 	}
 	
@@ -1496,15 +1506,21 @@ class CampaignServiceImplTest {
 		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).build();
 		final Role		role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
-		final Campaign	campaign		= Campaign.builder().role(role).build();
+		final Campaign	campaign		= Campaign.builder().id(campaignId).role(role).build();
 		
+		ArgumentCaptor<Role> capaignArgCapt = ArgumentCaptor.forClass(Role.class);
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		doNothing().when(mockRoleDao).saveRole(capaignArgCapt.capture(), eq(campaignId));
 		
 		this.service.deleteNote(noteId, currentUserId);
 		
-		verify(this.mockNoteDao).deleteById(noteId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
+		
+		assertEquals(0, capaignArgCapt.getValue().getNotes().size());
 		
 	}
 	
@@ -1550,24 +1566,30 @@ class CampaignServiceImplTest {
 	* Tests happy path for Delete where User has Admin level participation at Campaign level
 	*/
 	@Test
-	void testDeleteNoteUserNotParticipantAtRoleEditLevel() {
+	void testDeleteNoteUserParticipantAtRoleEditLevel() {
 		
 		final UUID 		noteId 			= UUID.randomUUID();
 		final UUID		campaignId		= UUID.randomUUID();
 		final UUID		roleId			= UUID.randomUUID();
 		final String 	currentUserId 	= "rec35";
 		final Contact 	currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
-		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).build();
+		final Note		note			= Note.builder().campaignId(campaignId).roleId(roleId).id(noteId).build();
 		final Role		role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
-		final Campaign	campaign		= Campaign.builder().role(role).build();
+		final Campaign	campaign		= Campaign.builder().id(campaignId).role(role).build();
 		
+		ArgumentCaptor<Role> capaignArgCapt = ArgumentCaptor.forClass(Role.class);
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockNoteDao.fetchNoteById(noteId)).thenReturn(Optional.of(note));
+		doNothing().when(mockRoleDao).saveRole(capaignArgCapt.capture(), eq(campaignId));
 		
 		this.service.deleteNote(noteId, currentUserId);
 		
-		verify(this.mockNoteDao).deleteById(noteId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
+		
+		assertEquals(0, capaignArgCapt.getValue().getNotes().size());
 		
 	}
 	
