@@ -451,10 +451,19 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		Document document = this.documentDao.fetchDocumentById(documentId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_DOCUMENT));
 		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Role role = null;
+		
+		if (document.getRoleId().isPresent()) {
+			role = campaign.getRoles().stream().filter(aRole -> aRole.getId().equals(document.getRoleId().get())).findFirst().get();
+		}
 		
 		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUserId);
 		
-		this.documentDao.deleteById(documentId);
+		if (Optional.ofNullable(role).isEmpty()) {
+			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).documents(campaign.getDocuments().stream().filter(d -> !d.getDocumentId().equals(documentId)).collect(Collectors.toSet())).build());
+		}else {
+			this.roleDao.saveRole(Role.builder().from(role).documents(role.getDocuments().stream().filter(d -> !d.getDocumentId().equals(documentId)).collect(Collectors.toSet())).build(), campaign.getId());
+		}
 		
 	}
 	
@@ -588,6 +597,23 @@ public class CampaignServiceImpl implements CampaignService{
 	}
 	
 	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public Document fetchDocumentById(UUID documentId, String currentUser) {
+		
+		this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		Document document = this.documentDao.fetchDocumentById(documentId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_DOCUMENT));
+		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		this.checkLoggedInUserIsParticipantForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUser);
+		
+		return document;
+		
+	}
+	
+	/**
 	* Attempts to retrieve the Contact of the current user and validate that
 	* they have access to Campaigns
 	* @param currentUserId - Id of currently logged in User
@@ -626,6 +652,27 @@ public class CampaignServiceImpl implements CampaignService{
 		Optional.ofNullable(roleId).ifPresent(rId -> 
 			campaign.getRoles().stream().filter(r -> r.getId() == rId).findAny().ifPresent(matchingRole ->
 				adminAtRoleLevel.set(matchingRole.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT)))
+			)
+		);
+	
+		if (!adminAtCampaignLevel.get() && !adminAtRoleLevel.get()) {
+			throw new IllegalArgumentException(ERR_MSG_NO_ADMIN_RIGHTS);
+		}
+		
+	}
+	
+	/**
+	* Checks that loggedIn user is Participant at the Role or Campaign level
+	* If not throws an Exception
+	*/
+	private void checkLoggedInUserIsParticipantForCampaignOrRole(Campaign campaign, UUID roleId, String currentUserId) {
+		
+		AtomicBoolean adminAtCampaignLevel 	= new AtomicBoolean(campaign.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT || p.getType() == ParticipantType.VIEW)));
+		AtomicBoolean adminAtRoleLevel 		= new AtomicBoolean(false);
+	
+		Optional.ofNullable(roleId).ifPresent(rId -> 
+			campaign.getRoles().stream().filter(r -> r.getId() == rId).findAny().ifPresent(matchingRole ->
+				adminAtRoleLevel.set(matchingRole.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT|| p.getType() == ParticipantType.VIEW)))
 			)
 		);
 	

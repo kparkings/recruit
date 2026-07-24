@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaigns.controllers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashSet;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,8 +28,10 @@ import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
+import com.arenella.recruit.curriculum.beans.Curriculum;
 
 /**
 * Rest API for working with Campaign's 
@@ -136,7 +140,7 @@ public class CampaignController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@DeleteMapping(path="campaign/{campaignId}/role/{roleId}")
-	public ResponseEntity<Void> deleteRole(@PathVariable("roleId")UUID roleId, Principal currentUser) {
+	public ResponseEntity<Void> deleteRole(@PathVariable("campaignId")UUID campaignId, @PathVariable("roleId")UUID roleId, Principal currentUser) {
 		
 		this.campaignService.deleteRole(roleId, currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -155,7 +159,6 @@ public class CampaignController {
 		this.campaignService.addParticipationToCampaign(participation.getContactId(), participation.getCampaignId(), participation.getRoleId().orElse(null), participation.getType(), currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
 	
 	/**
 	* Deletes an existing Participation from a Campaign or Role
@@ -336,24 +339,26 @@ public class CampaignController {
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
-	//TODO: Add Role
-	//TODO: Delete Role
-	//TODO: Update Role ( Name | Description )
-	
-	//TODO: Update Campaign ( Name | Descriotion )
-	//TODO: Delete Campaign
-	
 	/**
-	* Retrieves the bytes for a specific Document
-	* @param documentId - Id of the document to retrieve
+	* Returns the bytes of a Document
+	* @param documentId - Id of the Document to retrieve
 	* @param principal  - Currently authenticated User
-	* @return Bytes of Document
+	* @return bytes of Document
+	* @throws Exception
 	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	//@GetMapping(path="campaign/document/{documentId}")
-	//public ResponseEntity<CampaignDocumentAPIOutbound> fetchCampaignDocument(@PathVariable("documentId") UUID documentId, Principal principal) {
-	//	Document document = this.campaignService.fetchCampaignDocument(documentId, principal.getName());
-	//	return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.getTitle(), document.getType(), document.getBytes(), document.getCreated()), HttpStatus.OK);
-	//}
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@GetMapping(value = "/campaign/document/{documentId}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public byte[] getDocumentAsPDF(@PathVariable("documentId")UUID documentId, Principal principal) throws Exception{
+		
+		Document 				document 		= this.campaignService.fetchDocumentById(documentId, principal.getName());
+		byte[] 					fileBytes 		= null;
+		ByteArrayOutputStream 	stream;
+		
+		fileBytes 	= document.getBytes();
+		stream 		= new ByteArrayOutputStream(fileBytes.length);
+		stream.write(fileBytes);
+		
+		return stream.toByteArray();
+	}
 	
 }

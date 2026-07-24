@@ -33,6 +33,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Participation;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
@@ -445,12 +446,13 @@ class CampaignControllerTest {
 	@Test
 	void testDeleteRole() {
 		
+		final UUID 		campaignId	 	= UUID.randomUUID();
 		final UUID 		roleId	 		= UUID.randomUUID();
 		final String 	userId 			= "rec1";
 		
 		when(this.mockPrincipal.getName()).thenReturn(userId);
 		
-		ResponseEntity<Void> response = this.controller.deleteRole(roleId, mockPrincipal);
+		ResponseEntity<Void> response = this.controller.deleteRole(campaignId, roleId, mockPrincipal);
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
@@ -544,29 +546,24 @@ class CampaignControllerTest {
 		verify(this.mockCampaignService).deleteCandidateFromCampaign(campaignId, roleId, candidateId, userId);
 		
 	}
-	
+
 	/**
-	* Tests retrieval of the Document requested by the documentId
+	* Tests retrieval of Document 
 	*/
-	//@Test
-	//void testFetchCampaignDocument() {
+	@Test
+	void testGetDocumentAsPDF() throws Exception{
 		
-	//	final UUID 				documentId 	= UUID.randomUUID();
-	//	final String 			userId 		= "rec1";
-	//	final String 			title		= "A title"; 
+		final String 	userId 			= "rec1";
+		final UUID 		documentId 		= UUID.randomUUID();
+		final byte[]	data			= new byte[] {1,2,3,4,5};
+		final Document 	document = Document.builder().bytes(data).build();
 		
-	//	when(this.mockPrincipal.getName()).thenReturn(userId);
-	//	when(this.mockCampaignService.fetchCampaignDocument(documentId, userId)).thenReturn(Document.builder().title(title).build());
+		when(this.mockCampaignService.fetchDocumentById(documentId, userId)).thenReturn(document);
+		when(this.mockPrincipal.getName()).thenReturn(userId);
 		
-	//	ResponseEntity<CampaignDocumentAPIOutbound> response = this.controller.fetchCampaignDocument(documentId, mockPrincipal);
+		byte[] results = this.controller.getDocumentAsPDF(documentId, mockPrincipal);
 		
-	//	assertEquals(HttpStatus.OK, response.getStatusCode());
-		
-	//	verify(this.mockCampaignService).fetchCampaignDocument(documentId, userId);
-		
-	//	assertNotNull(response.getBody());
-	//	assertEquals(title, response.getBody().title());
-		
-	//}
+		assertEquals(data.length, results.length);
+	}
 	
 }

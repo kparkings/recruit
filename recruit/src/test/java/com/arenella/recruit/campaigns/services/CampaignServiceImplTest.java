@@ -2917,7 +2917,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteDocument(documentId, currentUserId);
 		
-		verify(this.mockDocumentDao).deleteById(documentId);
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
 		
 	}
 	
@@ -2941,7 +2941,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteDocument(documentId, currentUserId);
 		
-		verify(this.mockDocumentDao).deleteById(documentId);
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
 	
 	}
 	
@@ -2959,7 +2959,7 @@ class CampaignServiceImplTest {
 		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
 		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
-		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
+		final Campaign			campaign		= Campaign.builder().id(campaignId).role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();		
 		
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
@@ -2967,7 +2967,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteDocument(documentId, currentUserId);
 		
-		verify(this.mockDocumentDao).deleteById(documentId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
 	}
 	
@@ -2985,7 +2985,7 @@ class CampaignServiceImplTest {
 		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
 		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();
-		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
+		final Campaign			campaign		= Campaign.builder().id(campaignId).role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();		
 		
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
@@ -2993,7 +2993,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteDocument(documentId, currentUserId);
 		
-		verify(this.mockDocumentDao).deleteById(documentId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
 	}
 	
@@ -3011,7 +3011,7 @@ class CampaignServiceImplTest {
 		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
 		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.ADMIN).build()).build();
-		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Campaign			campaign		= Campaign.builder().id(campaignId).role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
 		
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
@@ -3019,7 +3019,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteDocument(documentId, currentUserId);
 		
-		verify(this.mockDocumentDao).deleteById(documentId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
 	}
 	
@@ -3037,7 +3037,7 @@ class CampaignServiceImplTest {
 		final Contact 			currentUser 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
 		final Document			document		= Document.builder().campaignId(campaignId).roleId(roleId).build();
 		final Role				role			= Role.builder().id(roleId).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.EDIT).build()).build();
-		final Campaign			campaign		= Campaign.builder().role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
+		final Campaign			campaign		= Campaign.builder().id(campaignId).role(role).participation(Participation.builder().contactId(currentUserId).type(ParticipantType.VIEW).build()).build();		
 		
 		when(this.mockContactDao.fetchContact(currentUserId)).thenReturn(Optional.of(currentUser));
 		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
@@ -3045,7 +3045,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteDocument(documentId, currentUserId);
 		
-		verify(this.mockDocumentDao).deleteById(documentId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), eq(campaignId));
 		
 	}
 	
@@ -3843,6 +3843,291 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
 	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Test case where loggedInUser does not have a paid subscription and cannot
+	* view a Document  
+	*/
+	@Test
+	void testFetchDocumentByIdLoggedInUserNotPaidUser() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.fetchDocumentById(documentId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where an attempt is made to fetch a Document 
+	* that doesn't exist 
+	*/
+	@Test
+	void testFetchDocumentByIdUnknownDocument() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.fetchDocumentById(documentId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_DOCUMENT, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to fetch a Document
+	* and the User is an Admin at Campaign level 
+	*/
+	@Test
+	void testFetchDocumentByIdUserIsAdminCampaign() {
+	
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
+		
+		assertEquals(documentId, result.getDocumentId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to fetch a Document
+	* and the User is an Edit at Campaign level 
+	*/
+	@Test
+	void testFetchDocumentByIdUserIsEditCampaign() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
+		
+		assertEquals(documentId, result.getDocumentId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to fetch a Document
+	* and the User is an Edit at Campaign level 
+	*/
+	@Test
+	void testFetchDocumentByIdUserIsViewCampaign() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
+		
+		assertEquals(documentId, result.getDocumentId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to view a Document but the User has no participation in the Campaign
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testFetchDocumentByIdUserNotParticipantForCampaign() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.fetchDocumentById(documentId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to fetch a Document
+	* and the loggedIn User is ADMIN at Role level
+	*/
+	@Test
+	void testFetchDocumentByIdUserIsAdminAtRoleLevel() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).roleId(roleId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(Role
+						.builder()
+							.id(roleId)
+							.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+						.build())
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
+		
+		assertEquals(documentId, result.getDocumentId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to fetch a Document
+	* and the loggedIn User is EDIT at Role level
+	*/
+	@Test
+	void testFetchDocumentByIdUserIsEditAtRoleLevel() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).roleId(roleId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(Role
+						.builder()
+							.id(roleId)
+							.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+						.build())
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
+		
+		assertEquals(documentId, result.getDocumentId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to fetch a Document
+	* and the loggedIn User is View at Role level
+	*/
+	@Test
+	void testFetchDocumentByIdUserIsViewAtRoleLevel() {
+		
+		final UUID		documentId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Document	document				= Document.builder().documentId(documentId).campaignId(campaignId).roleId(roleId).build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(Role
+						.builder()
+							.id(roleId)
+							.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+						.build())
+				.build();
+		
+		when(this.mockDocumentDao.fetchDocumentById(documentId)).thenReturn(Optional.of(document));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
+		
+		assertEquals(documentId, result.getDocumentId());
+		
 	}
 	
 }

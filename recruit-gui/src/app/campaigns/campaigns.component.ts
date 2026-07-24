@@ -125,7 +125,7 @@ export class CampaignsComponent {
 		
 
 	//	http://127.0.0.1:8080/curriculum-test/74.pdf
-		let url = environment.backendUrl + 'curriculum-test/' + '74' + '.pdf'; 
+		let url = environment.backendUrl + 'campaign/document/'+document.id; 
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		this.showInlineCVView = true;
 		
@@ -334,7 +334,7 @@ export class CampaignsComponent {
 	public handleAddDocument():void{
 		
 		let role:string 				= this.role ? ''+this.role?.id : '';
-		let title:string 				= this.addNoteForm.get("title")?.value;
+		let title:string 				= this.addDocumentForm.get("title")?.value;
 		let type:string 				= 'PDF';
 		
 		if (!this.uploadedDocument){

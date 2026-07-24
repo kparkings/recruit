@@ -224,8 +224,8 @@
 
 <div style="float:left;padding-top:20px;padding-left:20px;width:55%;" *ngIf="showInlineCVView">
 	<div class="action-buttons">
-		<button class="btn btn-secondary arenella-btn" (click)="closeDocument()">{{'arenella-suggestions-inlinecv-btn-back' | translate}}</button>
 		<button class="btn btn-secondary arenella-btn" (click)="deleteDocument()">Delete</button>
+		<button class="btn btn-secondary arenella-btn" (click)="closeDocument()">{{'arenella-suggestions-inlinecv-btn-back' | translate}}</button>
 	</div>		
 	<object id="content"  class="document-inline" [attr.data]="trustedResourceUrl"></object>
 </div>
@@ -391,7 +391,7 @@
 	<div class="modal-body">
 	
 		<div>
-			<form [formGroup]="addNoteForm">
+			<form [formGroup]="addDocumentForm">
 				<table>
 					<tr>
 						<th>Document Name</th>
