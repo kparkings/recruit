@@ -59,3 +59,16 @@
 	display: inline-block;
 	width:200px;
 }
+
+.document-inline{
+	left:50px;
+	margin:20px;
+	width:100%;
+	border:3px solid black;
+	background:#002549;
+/*	z-index:1000;*/
+/*	position:fixed;*/
+	top:20%;
+	margin-left:0%;
+	height:500px;
+}

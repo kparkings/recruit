@@ -150,7 +150,7 @@ public class RoleAPIOutbound {
 			this.candidates.addAll(role.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(role.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(role.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.documents.addAll(role.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.documents.addAll(role.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getDocumentId(), d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
 			
 			return this;
 		}

@@ -125,10 +125,7 @@ export class AppComponent {
 		this.privateChat.startChatContactListPolling();
 		
 		if(sessionStorage.getItem("loggedIn") == "true") {
-			console.log("STARTING NOTIFICATION SCHEDULRE")
 			this.runNotificationScheduler();
-		} else {
-			console.log("NOT  !!  STARTING NOTIFICATION SCHEDULRE")
 		}
 	
 	}

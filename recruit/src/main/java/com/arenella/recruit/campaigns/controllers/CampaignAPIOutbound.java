@@ -179,7 +179,7 @@ public class CampaignAPIOutbound {
 			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(campaign.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(campaign.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getDocumentId(), d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
 			
 			return this;
 		}

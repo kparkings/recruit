@@ -252,7 +252,7 @@ export class CampaingsService {
 						title:string,
 						type:string,
 						documentFile:File): Observable<any>{
-
+							
 		let command:CommandAddDocument = new CommandAddDocument(campaignId, roleId, title, type);
 		
 		const backendUrl:string = environment.backendUrl + 'campaign/document';
@@ -516,7 +516,19 @@ export class Campaign{
 }
 
 /**
-* Campaign 
+* Role 
+*/
+export class Document{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string, public title:string, public type:string, public created:Date){}
+	
+}
+
+/**
+* Role 
 */
 export class Role{
 	

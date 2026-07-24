@@ -1,10 +1,10 @@
-import { Component, ViewChild, ElementRef }										from '@angular/core';
-import { SelectionboxComponent} 												from '../campaigns/selectionbox/selectionbox.component'
-import { CampaingsService, Campaign, Role, Participation, Candidate, Note}		from 'src/app/campaings.service';
-import { UntypedFormControl, UntypedFormGroup } 								from '@angular/forms';
-import { AppComponent } 														from 'src/app/app.component';
-import { PublicChat}															from '../newsfeed/public-chat';
-
+import { Component, ViewChild, ElementRef, Input }										from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } 												from '@angular/platform-browser';
+import { SelectionboxComponent} 														from '../campaigns/selectionbox/selectionbox.component'
+import { CampaingsService, Campaign, Role, Participation, Candidate, Note, Document}	from 'src/app/campaings.service';
+import { UntypedFormControl, UntypedFormGroup } 										from '@angular/forms';
+import { AppComponent } 																from 'src/app/app.component';
+import { environment } 								      							  	from './../../environments/environment';
 
 @Component({
   selector: 'app-campaigns',
@@ -17,25 +17,34 @@ export class CampaignsComponent {
 	@ViewChild(SelectionboxComponent) 					public selectionBox!:SelectionboxComponent;
 	@ViewChild('confirmDelete', 	{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('addNote', 			{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addDocument', 		{static:true})		public addDocumentBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('addParticipant',	{ static: true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
 		
+	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
+	
 	public campaign:Campaign | undefined;
 	public role:Role | undefined;
 	public note:Note | undefined;
+	public document:Document | undefined;
 	public errMshActive:boolean = false
 	public participation:Participation | undefined;
 	public candidate:Candidate | undefined;
 	public showParticipants:boolean = false;
-	public showNotes:boolean = false;
-	public showCandidates:boolean = false;
+	public showNotes:boolean 		= false;
+	public showDocuments:boolean 	= false;
+	public showCandidates:boolean 	= false;
 	public editNote:boolean			=false;
+	public uploadedDocument:File | undefined;
+	public showInlineCVView:boolean = false;
 	
 	/**
 	* Constructor
 	* @oaram campaignService - Services and Domain objects for Campaigns 
 	* @param appComponent	 - Ref to main app component
 	*/
-	public constructor(private readonly campaignService:CampaingsService,private readonly appComponent:AppComponent) {}
+	public constructor(private readonly campaignService:CampaingsService,private readonly appComponent:AppComponent, readonly sanitizer:DomSanitizer) {
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+	}
 	
 	public newParticipantForm:UntypedFormGroup = new UntypedFormGroup({
 		userId: 		new UntypedFormControl(),
@@ -47,6 +56,10 @@ export class CampaignsComponent {
 		text: new UntypedFormControl(),
 	});
 	
+	public addDocumentForm:UntypedFormGroup = new UntypedFormGroup({
+		title: new UntypedFormControl(),
+	});
+		
 	/**
 	* When a new Campaign is selected an event is emmited. This is the 
 	* handler for that emitted event 
@@ -76,8 +89,24 @@ export class CampaignsComponent {
 	* Shows the addNote  box 
 	*/
 	public showAddNotModal():void {
+		
+		this.addNoteForm = new UntypedFormGroup({
+			title: new UntypedFormControl(),
+			text: new UntypedFormControl(),
+		});
 		this.note = undefined;
 		this.addNoteBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Shows the addDocument  box 
+	*/
+	public showAddDocumentModal():void {
+		this.addDocumentForm = new UntypedFormGroup({
+			title: new UntypedFormControl(),
+		});
+		this.document = undefined;
+		this.addDocumentBox.nativeElement.showModal();
 	}
 	
 	/**
@@ -89,10 +118,54 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Shows the addNote  box 
+	*/
+	public showDocument(document:Document):void {
+		this.document = document;
+		
+
+	//	http://127.0.0.1:8080/curriculum-test/74.pdf
+		let url = environment.backendUrl + 'curriculum-test/' + '74' + '.pdf'; 
+		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+		this.showInlineCVView = true;
+		
+	}
+	
+	
+	/**
 	* Closes the addNote  box 
 	*/
 	public closeAddNotModal():void {
 		this.addNoteBox.nativeElement.close();
+	}
+
+	/**
+	* Closes the addDocument  box 
+	*/
+	public closeAddDocumentModal():void {
+		this.addDocumentBox.nativeElement.close();
+	}
+	
+	/**
+	* Closes the Inline document view 
+	*/		
+	public closeDocument():void{
+		this.showInlineCVView = false;
+	}
+	
+	/**
+	* Deletes the current document 
+	*/
+	public deleteDocument():void{
+		
+		if (!this.document){
+			return;
+		}
+		
+		this.campaignService.deleteDocument(this.document.id).subscribe(res => {
+			this.closeDocument();
+			this.selectionBox.refreshCampaign();
+		});
 	}
 	
 	/**
@@ -256,6 +329,45 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Handles the request to create a new Document
+	*/
+	public handleAddDocument():void{
+		
+		let role:string 				= this.role ? ''+this.role?.id : '';
+		let title:string 				= this.addNoteForm.get("title")?.value;
+		let type:string 				= 'PDF';
+		
+		if (!this.uploadedDocument){
+		 return;
+		}
+		
+		this.campaignService.addDocument( ''+this.campaign?.id, role,
+			title,
+			type,
+			this.uploadedDocument).subscribe(res => {
+				this.closeAddDocumentModal();
+				this.selectionBox.refreshCampaign();
+			}, err => {
+				this.errMshActive = true;
+			});
+		
+	}
+	
+	/**
+	* Uploads the file for the Document and stores 
+	* it ready to be sent to the backend
+	*/
+	public uploadDocumentFile(event:any):void{
+
+		if (event.target.files.length <= 0) {
+			return;
+		}
+	
+		this.uploadedDocument = event.target.files[0];
+		
+	}
+	
+	/**
 	* Handles the request to create a new Participant
 	*/
 	public handleAddParticipant():void{
@@ -410,5 +522,13 @@ export class CampaignsComponent {
 	public toggleShowNotes():void{
 		this.showNotes = !this.showNotes;
 	}
+	
+	/**
+	* Toggles the display of the Documents section on the view
+	*/
+	public toggleShowDocuments():void{
+		this.showDocuments = !this.showDocuments;
+	}
+	
 	
 }
