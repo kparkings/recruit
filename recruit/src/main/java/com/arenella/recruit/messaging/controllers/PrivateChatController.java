@@ -140,6 +140,18 @@ public class PrivateChatController {
 	}
 	
 	/**
+	* Sends a private message to multiple Users
+	* @param multiMessage - Contains message and list of Users to message
+	* @param principal    - Authenticated User
+	* @return 
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PutMapping(path="privatechat/message", produces="application/json")
+	public ResponseEntity<Void> messageMultipleUsers(@RequestBody MultiUserChatMessageAPIInbound multiMessage, Principal principal) {
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
 	* Marks the Message as deleted
 	* @param chatId 	- Id of Chat to delete Message from
 	* @param messageId	- Id of Message to delete

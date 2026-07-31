@@ -1,9 +1,17 @@
 .campaign-btn{
 	margin-right:10px;
+	float:right;
 }
 
 .candidate-block{
 	cursor:pointer;
+}
+
+.candidate-table{
+	height:250px;
+	overflow-y: scroll;
+	width:100%;
+	margin-bottom:20px;
 }
 
 .participant-block{
@@ -35,7 +43,6 @@
 
 .campaign-candidate-table{
 	width:100%;
-	border:1px solid black;
 	margin-bottom:10px;
 }
 
@@ -66,9 +73,50 @@
 	width:100%;
 	border:3px solid black;
 	background:#002549;
-/*	z-index:1000;*/
-/*	position:fixed;*/
 	top:20%;
 	margin-left:0%;
 	height:500px;
+}
+
+.campaign_candidate_select{
+	margin-left:10px;
+}
+
+.campaing_candidate_btn_selectall{
+	float:right;
+	margin-bottom:10px;
+}
+
+.campaign-box{
+	float:left;
+	padding-top:20px;
+	padding-left:20px;
+	width:50%;
+}
+
+.campaign-box-header{
+	background:#694F90;
+	padding:10px;
+	margin-bottom:20px;
+}
+
+.role-box-header{
+	background:#2AAA8A;
+	padding:10px;
+	margin-bottom:20px;
+}
+
+.campaign-arrow{
+	float:right;
+	margin-right:10px;
+}
+
+.campaign-btn{
+	float:right;
+	min-width:180px;
+	
+}
+
+.modal-buttons{
+	margin-bottom:10xp;
 }

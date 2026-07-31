@@ -18,7 +18,8 @@ export class CampaignsComponent {
 	@ViewChild('confirmDelete', 	{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('addNote', 			{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('addDocument', 		{static:true})		public addDocumentBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addParticipant',	{ static: true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addParticipant',	{static:true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('massMessageBox',	{static:true}) 		public massMessageBox!: ElementRef<HTMLDialogElement>;
 		
 	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
 	
@@ -26,16 +27,18 @@ export class CampaignsComponent {
 	public role:Role | undefined;
 	public note:Note | undefined;
 	public document:Document | undefined;
-	public errMshActive:boolean = false
+	public errMshActive:boolean 						= false
 	public participation:Participation | undefined;
-	public candidate:Candidate | undefined;
-	public showParticipants:boolean = false;
-	public showNotes:boolean 		= false;
-	public showDocuments:boolean 	= false;
-	public showCandidates:boolean 	= false;
-	public editNote:boolean			=false;
+	//public candidate:Candidate | undefined;
+	public showParticipants:boolean 					= false;
+	public showNotes:boolean 							= false;
+	public showDocuments:boolean 						= false;
+	public showCandidates:boolean 						= false;
+	public editNote:boolean								=false;
 	public uploadedDocument:File | undefined;
-	public showInlineCVView:boolean = false;
+	public showInlineCVView:boolean 					= false;
+	public wrappedCandidates:Array<SelectableCandidate> = new Array<SelectableCandidate>();
+		
 	
 	/**
 	* Constructor
@@ -60,6 +63,10 @@ export class CampaignsComponent {
 		title: new UntypedFormControl(),
 	});
 		
+	public addMassMessageForm:UntypedFormGroup = new UntypedFormGroup({
+		message: new UntypedFormControl(),
+	})
+	
 	/**
 	* When a new Campaign is selected an event is emmited. This is the 
 	* handler for that emitted event 
@@ -67,6 +74,7 @@ export class CampaignsComponent {
 	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
 		this.campaign = campaign;
 		this.showParticipants = false;
+		this.getWrappedCandidates(campaign.candidates);
 	}
 	
 	/**
@@ -76,6 +84,7 @@ export class CampaignsComponent {
 	public handleRoleSelectedEmitterEvent(role:Role):void{
 		this.role = role;
 		this.showParticipants = false;
+		this.getWrappedCandidates(role.candidates);
 	}
 	
 	/**
@@ -114,6 +123,7 @@ export class CampaignsComponent {
 	*/
 	public showNote(note:Note):void {
 		this.note = note;
+		this.editNote = false;
 		this.addNoteBox.nativeElement.showModal();
 	}
 	
@@ -233,10 +243,25 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Open the Mass message box
+	*/
+	public showMassMessageBox():void{
+		this.errMshActive = false;
+		this.massMessageBox.nativeElement.showModal();
+	}
+	
+	/**
 	* Closes the Add Participant dialog box 
 	*/
 	public handleCancelAddParticipant():void{
 		this.participantDialogBox.nativeElement.close();
+	}
+	
+	/**
+	* Closes the massMessageBox box 
+	*/
+	public handleCancelMassMessageBox():void{
+		this.massMessageBox.nativeElement.close();
 	}
 	
 	/**
@@ -285,13 +310,13 @@ export class CampaignsComponent {
 	* Sets the current Candidate that has been selected or de-selects it in the case 
 	* the Candiate was already selected
 	*/
-	public selectCandidate(candidate:Candidate):void{
-		if (this.candidate == candidate) {
-			this.candidate = undefined;
-		} else {
-			this.candidate = candidate;
-		}
-	}
+	//public selectCandidate(candidate:Candidate):void{
+	//	if (this.candidate == candidate) {
+	//		this.candidate = undefined;
+	//	} else {
+	//		this.candidate = candidate;
+	//	}
+	//}
 	
 	/**
 	* Returns the correct CSS class to highlight the Participation in the view if it 
@@ -314,19 +339,19 @@ export class CampaignsComponent {
 	* Returns the correct CSS class to highlight the Candidate in the view if it 
 	* has been selected
 	*/
-	public getSelectedCandidateCSSClass(candidate:Candidate):string{
-		if (this.candidate == undefined) {
-			return "";
-		}
-		
-		if(this.candidate === candidate) {
-			return "candidate-selected";
-		}
-		
-		return"";
-		
-		
-	}
+	//public getSelectedCandidateCSSClass(candidate:Candidate):string{
+	//	if (this.candidate == undefined) {
+	//		return "";
+	//	}
+	//	
+	//	if(this.candidate === candidate) {
+	//		return "candidate-selected";
+	//	}
+	//	
+	//	return"";
+	//	
+	//	
+	//}
 	
 	/**
 	* Handles the request to create a new Document
@@ -408,23 +433,44 @@ export class CampaignsComponent {
 	/**
 	* Sends request to delete Candidate
 	*/
-	public deleteCandidate():void{
+	public deleteCandidates():void{
+		
+		this.wrappedCandidates.forEach(c => console.log(c.candidate.id + " " + c.selected));
 		
 		if (this.campaign == undefined) {
 			return;
 		}
 		
-		if (this.candidate !== undefined) {
-			if (this.role == undefined) {
-				this.campaignService.deleteCandidateFromCampaign(this.campaign.id, this.candidate.id).subscribe(res => {
-					this.selectionBox.refreshCampaign();
-				});
-			} else {
-				this.campaignService.deleteCandidateFromRole(this.campaign.id, this.role.id, this.candidate.id).subscribe(res => {
-					this.selectionBox.refreshCampaign();
-				});
-			}
+		if (this.role == undefined) {
+			this.wrappedCandidates.filter(c => c.selected).forEach(c => {
+				if (this.campaign){
+					this.campaignService.deleteCandidateFromCampaign(this.campaign.id, c.candidate.id).subscribe(res => {
+						this.selectionBox.refreshCampaign();
+					});	
+				}
+			});
+		} else {
+			this.wrappedCandidates.filter(c => c.selected).forEach(c => {
+				if (this.campaign && this.role){
+					this.campaignService.deleteCandidateFromRole(this.campaign.id, this.role.id, c.candidate.id).subscribe(res => {
+						this.selectionBox.refreshCampaign();
+					});
+				}
+			});
 		}
+	
+	}
+	
+	/**
+	* Sends message to multiple recipeints
+	*/
+	public messageCandidates():void{
+
+		let message:string = ''+this.addMassMessageForm.get("message")?.value;
+		
+		this.campaignService.sendMultiRecipientMessage(this.wrappedCandidates.filter(c => c.selected).map(wc => wc.candidate.id), message).subscribe( res => {
+			this.selectionBox.refreshCampaign();
+		});
 	}
 	
 	/**
@@ -530,5 +576,49 @@ export class CampaignsComponent {
 		this.showDocuments = !this.showDocuments;
 	}
 	
+	/**
+	* Extracts the Candidates and applies a wrapper for the UI to allow candidates to 
+	* be selected/de-selected
+	* @param candidates - Candidates to be wrapped
+	*/
+	public getWrappedCandidates(candidates:Array<Candidate>):void{
+		this.wrappedCandidates = candidates.map(c => new SelectableCandidate(c));
+	}
+	
+	/**
+	* Selects all Candidates
+	*/
+	public selectAllCandidates():void{
+		this.wrappedCandidates.forEach(c => c.selected = true);
+	}
+	
+	/**
+	* De-selects all Candidates
+	*/
+	public deselectAllCandidates():void{
+		this.wrappedCandidates.forEach(c => c.selected = false);
+	}
+	
+	/**
+	* Tgooles Select option for selected Candidate
+	* @param candidate - Candidate to toggle select for
+	*/
+	public toggleCandidateSelect(candidate:SelectableCandidate):void{
+		candidate.selected = !candidate.selected;
+	}
+	
+}
+
+/**
+* UI specific wrapper to allow candidates to be selected / de-selected 
+*/
+export class SelectableCandidate{
+	
+	public candidate:Candidate;
+	public selected:boolean = false;
+	
+	constructor(candidate:Candidate){
+		this.candidate = candidate;
+	}		
 	
 }

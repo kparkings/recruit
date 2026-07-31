@@ -7,10 +7,10 @@
 	</div>
 	
 	
-	<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="campaign !== undefined && role == undefined && !showInlineCVView">
+	<div class="campaign-box" *ngIf="campaign !== undefined && role == undefined && !showInlineCVView">
 	
-		<div style="background:#694F90;padding:10px;margin-bottom:20px;">
-			<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;">Delete Campaign</button>
+		<div class="campaign-box-header">
+			<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()">Delete Campaign</button>
 			<h3>{{campaign.name}}</h3>
 			<pre style="color:white;white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{campaign.description}}</pre>
 		</div>
@@ -21,13 +21,13 @@
 		
 			<div style="cursor:pointer;" (click)="toggleShowParticipants()">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Participations</span>  [{{getCampaignLevelParticipation().length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="showParticipants">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="!showParticipants">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="showParticipants">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showParticipants">arrow_drop_down</mat-icon>
 			</div>
 	
 			<div style="clear:both;margin-top:20px;" *ngIf="showParticipants">
-				<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()" style="float:right;">Add Participant</button>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()"   style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Delete Participant</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()">Add Participant</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()" *ngIf="currentUserAdminForSelectedObject()">Delete Participant</button>
 				<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of getCampaignLevelParticipation()" (click)="selectParticipation(participation)">
 					{{participation.contact.firstName}} {{participation.contact.surname}} 
 					<br>
@@ -39,28 +39,35 @@
 		<div style="width:100%;clear:both;">
 			<div (click)="toggleShowCandidates()" style="cursor:pointer">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Candidates</span>  [{{campaign.candidates.length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;" *ngIf="showCandidates">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;" *ngIf="!showCandidates">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow" *ngIf="showCandidates">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow" *ngIf="!showCandidates">arrow_drop_down</mat-icon>
 			</div>
 			
 			<div style="clear:both;margin-top:20px;" *ngIf="showCandidates">
-				<table class="campaign-candidate-table">
-					<tr>
-						<th>Id</th>
-						<th>Name</th>
-						<th>Title</th>
-						<th>Options</th>
-					</tr>
-					<tr *ngFor="let candidate of campaign.candidates" class="candidate-block {{getSelectedCandidateCSSClass(candidate)}}" (click)="selectCandidate(candidate)">
-						<td>{{candidate.id}}</td>
-						<td>{{candidate.firstName}} {{candidate.surname}}</td>
-						<td>{{candidate.jobTitle}}</td>
-						<td>
-							<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate)">chat</div>
-						</td>
-					</tr>
-				</table>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteCandidate()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Remove Candidate</button>
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="selectAllCandidates()">Select All</button>
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="deselectAllCandidates()">De-select All</button>
+				<div class="candidate-table">
+					<table class="campaign-candidate-table" >
+						<tr>
+							<th></th>
+							<th>Id</th>
+							<th>Name</th>
+							<th>Title</th>
+							<th>Options</th>
+						</tr>
+						<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
+							<td><input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select"></td>
+							<td>{{candidate.candidate.id}}</td>
+							<td>{{candidate.candidate.firstName}} {{candidate.candidate.surname}}</td>
+							<td>{{candidate.candidate.jobTitle}}</td>
+							<td>
+								<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">Remove Candidates</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">Message Candidates</button>
 			</div>
 			
 		</div>
@@ -68,8 +75,8 @@
 		<div style="width:100%;clear:both;">
 			<div style="cursor:pointer;" (click)="toggleShowNotes()">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Notes</span>  [{{getCampaignLevelNotes().length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="showParticipants">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="!showParticipants">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="showParticipants">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showParticipants">arrow_drop_down</mat-icon>
 			</div>
 	
 			<div style="clear:both;margin-top:20px;" *ngIf="showNotes">
@@ -79,7 +86,7 @@
 						<td>{{note.title}}</td>		
 					</tr>
 				</table>
-				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()" style="float:right;">Add Note</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()">Add Note</button>
 			</div>
 			<div style="clear:both;"></div>
 		</div>
@@ -87,8 +94,8 @@
 		<div style="width:100%;clear:both;">
 			<div style="cursor:pointer;" (click)="toggleShowDocuments()">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Documents</span>  [{{campaign.documents.length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="showDocuments">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="!showDocuments">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="showDocuments">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showDocuments">arrow_drop_down</mat-icon>
 			</div>
 	
 			<div style="clear:both;margin-top:20px;" *ngIf="showDocuments">
@@ -103,20 +110,10 @@
 			</div>
 		</div>
 		
-		<div>
-		
-		</div>
-		
-		<div class="campaign-button-panel">
-			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
-			
-			
-		</div>
-		
 	</div>
 	
-		<div style="float:left;padding-top:20px;padding-left:20px;width:50%;" *ngIf="role !== undefined && !showInlineCVView">
-		<div style="background:#2AAA8A;padding:10px;margin-bottom:20px;">
+		<div class="campaign-box" *ngIf="role !== undefined && !showInlineCVView">
+		<div class="role-box-header">
 			<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Delete Role</button>
 			<h3>{{role.name}}</h3>
 			<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{role.description}}</pre>
@@ -126,12 +123,12 @@
 			
 			<div (click)="toggleShowParticipants()" style="cursor:pointer">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Participations</span>  [{{role.participations.length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;" *ngIf="showParticipants">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;" *ngIf="!showParticipants">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow" *ngIf="showParticipants">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow" *ngIf="!showParticipants">arrow_drop_down</mat-icon>
 			</div>
 			<div style="clear:both;margin-top:20px;" *ngIf="showParticipants">
-				<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()" style="float:right;">Add Participant</button>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()"   style="float:right;">Delete Participant</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()">Add Participant</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()">Delete Participant</button>
 				<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of role.participations" (click)="selectParticipation(participation)">
 					{{participation.contact.firstName}} {{participation.contact.surname}} 
 					<br>
@@ -145,35 +142,40 @@
 		<div style="width:100%;clear:both;">
 			<div (click)="toggleShowCandidates()"  style="cursor:pointer">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Candidates</span>  [{{role.candidates.length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="showCandidates">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="!showCandidates">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="showCandidates">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showCandidates">arrow_drop_down</mat-icon>
 			</div>
 			
 			<div style="clear:both;margin-top:20px;" *ngIf="showCandidates">
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="selectAllCandidates()">Select All</button>
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="deselectAllCandidates()">De-select All</button>
 				<table class="campaign-candidate-table">
 					<tr>
+						<th></th>
 						<th>Id</th>
 						<th>Name</th>
 						<th>Title</th>
 						<th>Options</th>
 					</tr>
-					<tr *ngFor="let candidate of role.candidates" class="candidate-block {{getSelectedCandidateCSSClass(candidate)}}" (click)="selectCandidate(candidate)">
-						<td>{{candidate.id}}</td>
-						<td>{{candidate.firstName}} {{candidate.surname}}</td>
-						<td>{{candidate.jobTitle}}</td>
+					<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
+						<td><input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select"></td>
+						<td>{{candidate.candidate.id}}</td>
+						<td>{{candidate.candidate.firstName}} {{candidate.candidate.surname}}</td>
+						<td>{{candidate.candidate.jobTitle}}</td>
 						<td>
-							<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate)">chat</div>
+							<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
 						</td>
 					</tr>
 				</table>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteCandidate()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Remove Candidate</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">Remove Candidates</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">Message Candidates</button>
 			</div>
 			
 		<div style="width:100%;clear:both;">
 			<div style="cursor:pointer;" (click)="toggleShowNotes()">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Notes</span>  [{{role.notes.length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="showNotes">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="!showNotes">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="showNotes">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showNotes">arrow_drop_down</mat-icon>
 			</div>
 	
 			<div style="clear:both;margin-top:20px;" *ngIf="showNotes">
@@ -183,7 +185,7 @@
 						<td>{{note.title}}</td>		
 					</tr>
 				</table>
-				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()" style="float:right;">Add Note</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()">Add Note</button>
 				<div style="clear:both;"></div>
 			</div>
 		</div>
@@ -191,8 +193,8 @@
 		<div style="width:100%;clear:both;">
 			<div style="cursor:pointer;" (click)="toggleShowDocuments()">
 				<h5 style="float:left;"><span class="campaigin-section-hdr">Documents</span>  [{{role.documents.length}}]</h5>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="showDocuments">arrow_drop_up</mat-icon>
-				<mat-icon style="float:right;margin-right:10px;"  *ngIf="!showDocuments">arrow_drop_down</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="showDocuments">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showDocuments">arrow_drop_down</mat-icon>
 			</div>
 	
 			<div style="clear:both;margin-top:20px;" *ngIf="showDocuments">
@@ -202,19 +204,11 @@
 						<td>{{document.title}}</td>		
 					</tr>
 				</table>
-				<button class="btn btn-secondary campaign-btn" (click)="showAddDocumentModal()" style="float:right;">Add Document</button>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddDocumentModal()">Add Document</button>
 				<div style="clear:both;"></div>
 			</div>
 		</div>
 		
-		</div>
-		
-		<div>
-		
-		</div>
-		
-		<div class="campaign-button-panel" >
-			<button class="btn btn-secondary campaign-btn">Add Appointment / Todo</button>
 		</div>
 		
 	</div>
@@ -253,7 +247,7 @@
 		<h4 *ngIf="note" class="modal-title">{{note.title}}</h4>
 		<div class="filter-close-box" (click)="addNote.close()">X</div>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body" style="width:700px;">
 		
 		<div *ngIf="note" style="text-align:left;">
 			
@@ -273,7 +267,7 @@
 							</tr>
 							<tr>
 								<td>
-									<textarea formControlName="text" style="width:100%;"></textarea>
+									<textarea formControlName="text" style="width:100%; height:320px;"></textarea>
 								</td>
 							</tr>
 						</table>
@@ -286,10 +280,10 @@
 				<pre style="padding:5px;white-space: pre-line; font-family: Roboto, 'Helvetica Neue', sans-serif; overflow:overflow-y;height:450px;">{{note.text}}</pre>
 			</div>
 			<div style="margin-top:10px;">
-				<button class="btn btn-secondary campaign-btn" (click)="addNote.close()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Close</button>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteNote()" 	 style="float:right;" *ngIf="currentUserAdminForSelectedObject()">Remove Note</button>
-				<button class="btn btn-secondary campaign-btn" (click)="toggleEditNote()" style="float:right;" *ngIf="currentUserAdminForSelectedObject() && !editNote" >Edit</button>
-				<button class="btn btn-secondary campaign-btn" (click)="updateNote()" style="float:right;" *ngIf="currentUserAdminForSelectedObject() && editNote" >Update</button>
+				<button class="btn btn-secondary campaign-btn" (click)="addNote.close()"  *ngIf="currentUserAdminForSelectedObject()">Close</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteNote()" 	  *ngIf="currentUserAdminForSelectedObject()">Delete</button>
+				<button class="btn btn-secondary campaign-btn" (click)="toggleEditNote()" *ngIf="currentUserAdminForSelectedObject() && !editNote" >Edit</button>
+				<button class="btn btn-secondary campaign-btn" (click)="updateNote()" 	  *ngIf="currentUserAdminForSelectedObject() && editNote" >Update</button>
 			</div>
 			<div style="clear:both;margin-top:10px;margin-bottom:10px;background:green">
 			
@@ -381,7 +375,7 @@
 	</div> 
 </dialog>
 
-<!-- Add Note Box -->
+<!-- Add Document Box -->
 <dialog #addDocument>
 	<!--  Options -->
 	<div class="modal-header">
@@ -410,6 +404,46 @@
 		<div>
 			<button class="btn btn-secondary campaign-btn" (click)="closeAddDocumentModal()">Cancel</button>
 			<button class="btn btn-secondary campaign-btn" (click)="handleAddDocument()">Confirm</button>
+		</div>
+		
+		
+	</div> 
+</dialog>
+
+<!-- Mass Message Box -->
+<dialog #massMessageBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Message</h4>
+		<div class="filter-close-box" (click)="massMessageBox.close()">X</div>
+	</div>
+	<div class="modal-body" style="width:700px;height:350px;">
+	
+	
+		<div style="width:15%,">
+			<div style="float:left;">
+				<div style="background:grey">
+					Variable Key:
+				</div>
+				<ul style="text-align:left;list-style:none;margin-left:0px;padding-left:0px;">
+					<li>#firstname</li>
+					<li>#surname</li>
+					<li>#date</li>
+					<li>#time</li>		
+				</ul>
+			</div>
+		
+			<div style="float:right;width:80%;">
+				<form [formGroup]="addMassMessageForm">
+					<textarea formControlName="message" style="width:100%;height:280px;"></textarea>
+				</form>
+			</div>
+		</div>
+		
+		
+		<div class="modal-buttons" style="clear:both">
+			<button class="btn btn-secondary campaign-btn" (click)="handleCancelMassMessageBox()">Cancel</button>
+			<button class="btn btn-secondary campaign-btn" (click)="messageCandidates()">Send</button>
 		</div>
 		
 		

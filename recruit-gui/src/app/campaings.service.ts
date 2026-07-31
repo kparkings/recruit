@@ -228,6 +228,22 @@ export class CampaingsService {
 	}
 	
 	/**
+	* Sends a request to message multiple Users with the same Message
+	* @param recipientIds 	- Ids of recipients to send the message to
+	* @param message 		- Message to send to the recipients 
+	*/
+	public sendMultiRecipientMessage(recipients:Array<string>, message:string):Observable<void>{
+		
+		let command:SendMultiRecipientMessageCommand = new SendMultiRecipientMessageCommand(recipients, message);
+		
+		const backendUrl:string = environment.backendUrl +'privatechat/message';
+
+		return this.httpClient.put<void>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	
+	/**
 	* Deletes an existing Appointment from a Campaign
 	* @param appointmentId - Id of the Appointment to delete
 	*/
@@ -609,3 +625,18 @@ export class Contact{
 	*/
 	constructor(public contactId:string, public firstName:string, public surname:string){}
 }		
+
+/**
+* Command to send to backend to request a message is sent to multiple
+* Recipients 
+*/
+export class SendMultiRecipientMessageCommand{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public recipientIds:Array<string>, public message:string){
+		
+	}
+	
+}
