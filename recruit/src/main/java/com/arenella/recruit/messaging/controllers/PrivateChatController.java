@@ -148,6 +148,7 @@ public class PrivateChatController {
 	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
 	@PutMapping(path="privatechat/message", produces="application/json")
 	public ResponseEntity<Void> messageMultipleUsers(@RequestBody MultiUserChatMessageAPIInbound multiMessage, Principal principal) {
+		this.privateChatService.messageMultipleUsers(multiMessage.getRecipientIds(), multiMessage.getMessage(), principal);
 		return ResponseEntity.ok().build();
 	}
 	

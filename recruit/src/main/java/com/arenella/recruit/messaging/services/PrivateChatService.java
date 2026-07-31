@@ -116,5 +116,13 @@ public interface PrivateChatService {
 	* @return Chats requiring a reminder
 	 */
 	Set<PrivateChat> getUnblockedChatsBeforeCuttoff(LocalDateTime cuttoff);
+
+	/**
+	* Sends a message to each of the recipients
+	* @param recipientIds	- Id's of recipients to send the message to
+	* @param message		- Message to be sent 
+	* @param user 			- Authenticated User
+	*/
+	void messageMultipleUsers(Set<String> recipientIds, String message, Principal user);
 	
 }

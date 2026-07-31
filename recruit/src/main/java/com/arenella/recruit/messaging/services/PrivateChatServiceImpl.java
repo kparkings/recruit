@@ -2,9 +2,13 @@ package com.arenella.recruit.messaging.services;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -255,6 +259,62 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	@Override
 	public Set<PrivateChat> getUnblockedChatsBeforeCuttoff(LocalDateTime cuttoff) {
 		return this.privateChatDao.getUnblockedChatsBeforeCuttoff(cuttoff);
+	}
+	
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
+	public void messageMultipleUsers(Set<String> recipientIds, String message, Principal user) {
+		
+		
+		Set<String> 		newChats 		= new LinkedHashSet<>();
+		Set<PrivateChat> 	existingChats 	= new LinkedHashSet<>();
+		
+		this.getUsersChats(user).forEach(chat -> {
+			if (recipientIds.contains(chat.getRecipientId()) || recipientIds.contains(chat.getSenderId())) {
+				existingChats.add(chat);
+			}
+		});
+		
+		Stream<String> existingChatUserIds = Stream.concat(
+				existingChats.stream().map(ec -> ec.getRecipientId()), 
+				existingChats.stream().map(ec -> ec.getSenderId()));
+		
+		Set<String> existingIds = existingChatUserIds.collect(Collectors.toSet());
+		
+		recipientIds.stream().forEach(rId -> {
+			if(!existingIds.contains(rId)) {
+				newChats.add(rId);
+			}
+		});
+		
+		//Create new Chats and send message
+		newChats.stream().forEach(newChat -> {
+			try {
+				UUID chatId = saveChat(PrivateChat
+						.builder()
+							.created(LocalDateTime.now())
+							.id(UUID.randomUUID())
+							.recipientId(newChat)
+							.senderId(user.getName())
+						.build(), user);
+				this.addMessage(chatId, message, user);
+			}catch(Exception e) {
+				e.printStackTrace(); //Temp. Decide whether to pass back summary of success/failure messages
+			}
+		});
+		
+		
+		//Send message to existing chats
+		existingChats.stream().forEach(chat -> {
+			try {
+				this.addMessage(chat.getId(), message, user);
+			}catch(Exception e) {
+				e.printStackTrace(); //Temp. Decide whether to pass back summary of success/failure messages
+			}
+		});
+		
 	}
 	
 	/**
