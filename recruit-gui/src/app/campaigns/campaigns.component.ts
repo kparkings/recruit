@@ -5,6 +5,8 @@ import { CampaingsService, Campaign, Role, Participation, Candidate, Note, Docum
 import { UntypedFormControl, UntypedFormGroup } 										from '@angular/forms';
 import { AppComponent } 																from 'src/app/app.component';
 import { environment } 								      							  	from './../../environments/environment';
+import { CandidateServiceService }														from '../candidate-service.service';
+import { SupportedCountry } 															from '../supported-candidate';
 
 @Component({
   selector: 'app-campaigns',
@@ -14,12 +16,13 @@ import { environment } 								      							  	from './../../environments/enviro
 })
 export class CampaignsComponent {
 	
-	@ViewChild(SelectionboxComponent) 					public selectionBox!:SelectionboxComponent;
-	@ViewChild('confirmDelete', 	{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addNote', 			{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addDocument', 		{static:true})		public addDocumentBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addParticipant',	{static:true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('massMessageBox',	{static:true}) 		public massMessageBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild(SelectionboxComponent) 							public selectionBox!:SelectionboxComponent;
+	@ViewChild('confirmDelete', 			{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addNote', 					{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addDocument', 				{static:true})		public addDocumentBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addParticipant',			{static:true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('massMessageBox',			{static:true}) 		public massMessageBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addExternalCandidateBox', 	{static:true}) 		public addExternalCandidateBox!: ElementRef<HTMLDialogElement>;
 		
 	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
 	
@@ -38,6 +41,7 @@ export class CampaignsComponent {
 	public uploadedDocument:File | undefined;
 	public showInlineCVView:boolean 					= false;
 	public wrappedCandidates:Array<SelectableCandidate> = new Array<SelectableCandidate>();
+	public countries:Array<SupportedCountry> 			= new Array<SupportedCountry>();
 		
 	
 	/**
@@ -45,8 +49,9 @@ export class CampaignsComponent {
 	* @oaram campaignService - Services and Domain objects for Campaigns 
 	* @param appComponent	 - Ref to main app component
 	*/
-	public constructor(private readonly campaignService:CampaingsService,private readonly appComponent:AppComponent, readonly sanitizer:DomSanitizer) {
+	public constructor(private readonly campaignService:CampaingsService,private readonly appComponent:AppComponent, readonly sanitizer:DomSanitizer, private readonly candidateService: 			CandidateServiceService,) {
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
+		this.countries 			= this.candidateService.getSupportedCountries();
 	}
 	
 	public newParticipantForm:UntypedFormGroup = new UntypedFormGroup({
@@ -66,6 +71,14 @@ export class CampaignsComponent {
 	public addMassMessageForm:UntypedFormGroup = new UntypedFormGroup({
 		message: new UntypedFormControl(),
 	})
+	
+	public newExternalCandidateForm:UntypedFormGroup = new UntypedFormGroup({
+		firstName: new UntypedFormControl(),
+		surname: new UntypedFormControl(),
+		country: new UntypedFormControl(),
+		JobTitle: new UntypedFormControl(),
+		email: new UntypedFormControl(),
+	});
 	
 	/**
 	* When a new Campaign is selected an event is emmited. This is the 
@@ -251,6 +264,21 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Opens dialogue box to add new external candidate.
+	*/
+	public showAddExternalCandidateBox():void{
+		this.errMshActive = false;
+		this.newExternalCandidateForm = new UntypedFormGroup({
+				firstName: new UntypedFormControl(),
+				surname: new UntypedFormControl(),
+				country: new UntypedFormControl(),
+				JobTitle: new UntypedFormControl(),
+				email: new UntypedFormControl(),
+			});
+		this.addExternalCandidateBox.nativeElement.showModal();
+	}
+	
+	/**
 	* Closes the Add Participant dialog box 
 	*/
 	public handleCancelAddParticipant():void{
@@ -263,6 +291,15 @@ export class CampaignsComponent {
 	public handleCancelMassMessageBox():void{
 		this.massMessageBox.nativeElement.close();
 	}
+	
+	/**
+	* Closes the addExternalCandidateBox  
+	*/
+	public handleCancelAddExternalCandidateBox():void{
+		this.addExternalCandidateBox.nativeElement.close();
+	}
+		
+	
 	
 	/**
 	* Returns Participations for the current Campaign. Exludes Role level 

@@ -361,4 +361,29 @@ public class CampaignController {
 		return stream.toByteArray();
 	}
 	
+	/**
+	* Adds an External Candidate to a Campaign
+	* @param campaignId 		- Id of Campaign to add the Candidate to
+	* @param externalCandidate 	- Contains details of the Candidate
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> addExternalCandidateToCampaign(@PathVariable("campaignId")UUID campaignId, @RequestBody NewExternalCandidateAPIInbound externalCandidate){
+		return null;
+	}
+	
+	/**
+	* Adds an External Candidate to a Role
+	* @param campaignId 		- Id of Campaign to add the Candidate to
+	* @param roleId 			- Id of Role to add the Candidate to
+	* @param externalCandidate 	- Contains details of the Candidate
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/role/{roleId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> addExternalCandidateToRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId,@RequestBody NewExternalCandidateAPIInbound externalCandidate){
+		return null;
+	}
+	
 }

@@ -66,8 +66,13 @@
 						</tr>
 					</table>
 				</div>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">Remove Candidates</button>
-				<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">Message Candidates</button>
+				
+				<div style="margin-bottom:10px;">
+					<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">Remove Candidates</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">Message Candidates</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showAddExternalCandidateBox()">Add External Candidates</button>
+				</div>
+				<div style="clear:both;margin-bottom:10px;"></div>
 			</div>
 			
 		</div>
@@ -167,8 +172,12 @@
 						</td>
 					</tr>
 				</table>
-				<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">Remove Candidates</button>
-				<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">Message Candidates</button>
+				<div style="margin-bottom:10px;">
+					<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">Remove Candidates</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">Message Candidates</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showAddExternalCandidateBox()">Add External Candidates</button>
+				</div>
+				<div style="clear:both;margin-bottom:10px;"></div>
 			</div>
 			
 		<div style="width:100%;clear:both;">
@@ -446,6 +455,82 @@
 			<button class="btn btn-secondary campaign-btn" (click)="messageCandidates()">Send</button>
 		</div>
 		
+		
+	</div> 
+</dialog>
+
+<!-- Add External Candidate Box -->
+<dialog #addExternalCandidateBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Add External Candidate</h4>
+		<div class="filter-close-box" (click)="addExternalCandidateBox.close()">X</div>
+	</div>
+	<div class="modal-body" style="width:830px;height:350px;">
+		
+	<div>
+		<div style="float:left;width:350px;margin:10px;padding:5px;text-align:left;font-size:14px;">
+				<p>
+					You can add a Candidate to the Campaign/Role that is not registered in Arenella-ICT. This Candidate will only be visible to you.
+				</p>
+				<p>
+					You  <b>must</b> gain the Candidates permission before you add them to the Campaign/Role
+				</p>
+				<p>
+					Candidates will receive an email informing them you have added their details to the Campaign/Role.
+				</p>
+				<p>
+					Candidates will be removed from the Campaign/Role in the following circumstances
+				</p>
+				<ul>
+					<li>They decline to have their details added to the Campaign/Role</li>
+					<li>They do not confirm within 7 days</li>
+				</ul>
+		</div>
+		
+		<div style="float:left;width:400px;margin:10px;padding:5px;text-align:left;">
+		
+			<div style="margin-bottom:30px;">
+				<form [formGroup]="newExternalCandidateForm">
+					<table class="campaign-ext-candidate-table">
+						<tr>
+							<th>First Name</th>
+							<td><input type="text" value=""  style="width:250px" formControlName="firstName"/></td>
+						</tr>
+						<tr>
+							<th>Surname</th>
+							<td><input type="text" value=""  style="width:250px" formControlName="surname"/></td>
+						</tr>
+						<tr>
+							<th>Country</th>
+							<td>
+								<select formControlName="country" class="new-candidate-country-list" style="width:250px">
+									<option></option>
+									<option *ngFor="let country of countries" value="{{country.name}}">{{country.name | translate}}</option>
+									
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>Job Title</th>
+							<td><input type="text" value=""  style="width:250px" formControlName="jobTitle"/></td>
+						</tr>
+						<tr>
+							<th>Email</th>
+							<td><input type="text" value=""  style="width:250px" formControlName="email"/></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		
+			<div class="modal-buttons" style="clear:both">
+				<button class="btn btn-secondary campaign-btn" (click)="handleCancelAddExternalCandidateBox()">Cancel</button>
+				<button class="btn btn-secondary campaign-btn" (click)="messageCandidates()">Add</button>
+			</div>
+		</div>
+	</div>
+	
+	
 		
 	</div> 
 </dialog>

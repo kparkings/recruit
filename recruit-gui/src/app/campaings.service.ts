@@ -348,6 +348,55 @@ export class CampaingsService {
 		
 	}
 	
+	/**
+	* Adds an External Candidate to a Campaign
+	* @oaran campaignId  - Id of Campaign to add Candidate to 
+	* @oaran firstName   - First name of the Candidate
+	* @oaran surname	 - Surname of the Candidate
+	* @oaran countryCode - Country code of where the Candidate lives
+	* @oaran jobTitle    - Candidates role
+	* @oaran email       - Email for the Candidate
+	*/
+	public addExternalCandidateToCampaign(campaignId:string, 
+								firstName:string,
+								surname:string,
+								countryCode:string,
+								jobTitle:string,
+								email:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
+
+		let command:CreateExternalCandidateCommand = new CreateExternalCandidateCommand(firstName, surname, countryCode, jobTitle, email);
+		
+		return this.httpClient.post<any>(backendUrl,command, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds an External Candidate to a Role
+	* @oaran campaignId  - Id of Campaign to add Candidate to
+	* @oaran roleId  	 - Id of Role to add Candidate to 
+	* @oaran firstName   - First name of the Candidate
+	* @oaran surname	 - Surname of the Candidate
+	* @oaran countryCode - Country code of where the Candidate lives
+	* @oaran jobTitle    - Candidates role
+	* @oaran email       - Email for the Candidate
+	*/
+	public addExternalCandidateToRole(campaignId:string, 
+								roleId:string, 	
+								firstName:string,
+								surname:string,
+								countryCode:string,
+								jobTitle:string,
+								email:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId + '/role/' + roleId;
+
+		let command:CreateExternalCandidateCommand = new CreateExternalCandidateCommand(firstName, surname, countryCode, jobTitle, email);
+		
+		return this.httpClient.post<any>(backendUrl, command, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
 	
 }
 
@@ -639,4 +688,21 @@ export class SendMultiRecipientMessageCommand{
 		
 	}
 	
+}
+
+/**
+* Command to send to backend to add an External Candidate to a Campaign 
+* or Role
+*/
+export class CreateExternalCandidateCommand{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public firstName:string,
+				public surname:string,
+				public countryCode:string,
+				public jobTitle:string,
+				public email:string){}
+				
 }
