@@ -267,7 +267,6 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	@Override
 	public void messageMultipleUsers(Set<String> recipientIds, String message, Principal user) {
 		
-		
 		Set<String> 		newChats 		= new LinkedHashSet<>();
 		Set<PrivateChat> 	existingChats 	= new LinkedHashSet<>();
 		

@@ -17,6 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -795,6 +796,35 @@ class PrivateChatServiceImplTest {
 		this.service.systemDeleteChatsForUser(userId);
 		
 		verify(this.mockChatDao, times(2)).deleteById(any());
+		
+	}
+	
+	/**
+	* Tests sending messages to multiple recipients
+	*/
+	@Test
+	void testMessageMultipleUsers() {
+		
+		final String		userId 			= "rec56";
+		final String		recipientId1 	="c1";
+		final String 		recipientId2 	="c2";
+		final String 		recipientId3 	="c3";
+		final UUID 			chatId1 		= UUID.randomUUID();
+		final UUID 			chatId2 		= UUID.randomUUID();
+		final PrivateChat 	chat1 			= PrivateChat.builder().id(chatId1).recipientId(userId).senderId(recipientId1).build();
+		final PrivateChat 	chat2 			= PrivateChat.builder().id(chatId2).recipientId(recipientId2).senderId(userId).build();
+		
+		Set<PrivateChat> privateChats = Set.of(chat1,chat2);
+		
+		when(this.mockChatDao.fetchChatById(chatId1)).thenReturn(Optional.of(chat1));
+		when(this.mockChatDao.fetchChatById(chatId2)).thenReturn(Optional.of(chat2));
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockPrincipal.getClaim("useCredits")).thenReturn(Optional.of(false));
+		when(this.mockChatDao.fetchUserChats(userId)).thenReturn(privateChats);
+		
+		this.service.messageMultipleUsers(Set.of(recipientId1,recipientId2,recipientId3), "a Message", mockPrincipal);
+		
+		verify(this.mockChatDao, times(3)).saveChat(any());
 		
 	}
 	
