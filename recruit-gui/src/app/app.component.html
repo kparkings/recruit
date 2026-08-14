@@ -4,21 +4,28 @@
 <div class="mobile-only-element">
 	<span class="material-icons" style="width:100%;">
 	 	 
-		<a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:left;" (click)="toggleMobileMenuOpt()">
+		<a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:left;margin-left:10px;margin-top:5px;" (click)="toggleMobileMenuOpt()">
 			menu
 		</a>
-		<a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:right;" (click)="toggleMobileAuthMenuOpt()">
+		
+       <a class="mobile-menu-bar-icon" style="text-decoration:none; cursor:pointer; color:#002549;float:right;margin-top:5px;" *ngIf="!isAuthenticated()" (click)="toggleMobileAuthMenuOpt()">
 			account_box
 		</a> 
-		<a class="mobile-menu-bar-icon unread-notifications-{{getUnreadNewsFeedNotifications() > 0 }}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeedNotifications()" *ngIf="isAuthenticated()">
+		<a class="mobile-menu-bar-icon unread-notifications-{{getUnreadNewsFeedNotifications() > 0 }}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;margin-top:5px;"  (click)="openNewsFeedNotifications()" *ngIf="isAuthenticated()">
            notifications
         </a> 
 		<a class="mobile-menu-bar-icon unread-notifications-{{unreadNewFeedItems}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeed()" *ngIf="isAuthenticated()">
            bubble_chart
         </a>
-		<a class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openChat()" *ngIf="isAuthenticated()">
+		<a class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;margin-top:5px;"  (click)="openChat()" *ngIf="isAuthenticated()">
            chat
         </a> 
+        <a *ngIf="emailService.unseenEmails > 0 && isAuthenticated()" 	class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;color:green" routerLink="/email">
+        	email
+        </a>
+		<a *ngIf="emailService.unseenEmails <= 0 && isAuthenticated()"	class="mobile-menu-bar-icon unread-chats-{{hasUnreadMessages()}}" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;" routerLink="/email">
+			email
+	   </a>
 	</span>
 	
 </div>
@@ -102,10 +109,6 @@
  		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin()" (click)="refreschUnreadAlerts()">
            <a  class="dropdown-item" (click)="navToNewCandidate()">{{'arenella-app-menu-new' | translate}}</a>
         </li>
-		<li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-        	<a *ngIf="emailService.unseenEmails > 0" 	class="dropdown-item" routerLink="/email"><span class="unseen-posts">{{emailService.unseenEmails}}</span>{{'arenella-app-menu-emails' | translate}}</a>
-			<a *ngIf="emailService.unseenEmails <= 0"	class="dropdown-item" routerLink="/email">{{'arenella-app-menu-emails' | translate}}</a>
-        </li>
 		<li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isCandidate()" (click)="refreschUnreadAlerts()">	
            <a  class="dropdown-item" routerLink="/suggestions">{{'arenella-app-menu-profile' | translate}}</a>
         </li>
@@ -135,7 +138,15 @@
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a class="dropdown-item recruiter-account " routerLink="/recruiter-account">{{'arenella-app-menu-account' | translate}}</a>
         </li>
-        <li class="li-arenella-nav {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated()" (click)="openChat()">
+        <li  class="li-arenella-nav {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
+        	<a *ngIf="emailService.unseenEmails > 0" 	class="dropdown-item" routerLink="/email">
+        		<span class="chat-icon material-icons" style="color:green">email</span>
+        	</a>
+			<a *ngIf="emailService.unseenEmails <= 0"	class="dropdown-item" routerLink="/email">
+				<span class="chat-icon material-icons">email</span>
+			</a>
+        </li>
+        <li class="li-arenella-nav {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated()" (click)="openChat()" style="margin-top:5px;">
            <span class="chat-icon material-icons unread-chats-{{hasUnreadMessages()}}">chat</span>
         </li>      		
       </ul>

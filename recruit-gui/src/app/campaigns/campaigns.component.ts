@@ -31,9 +31,9 @@ export class CampaignsComponent {
 	public role:Role | undefined;
 	public note:Note | undefined;
 	public document:Document | undefined;
+	public externalCandidate:Candidate | undefined;
 	public errMshActive:boolean 						= false
 	public participation:Participation | undefined;
-	//public candidate:Candidate | undefined;
 	public showParticipants:boolean 					= false;
 	public showNotes:boolean 							= false;
 	public showDocuments:boolean 						= false;
@@ -245,6 +245,20 @@ export class CampaignsComponent {
 	*/
 	public handleMessageExternalCandidate():void{
 		
+		let message:string		= ""+this.externalMessageForm.get("message")?.value;
+		let ids:Array<string> 	= new Array<string>();
+		let roleId  			= this.role ? this.role.id : undefined;
+		
+		if (this.campaign == undefined || this.externalCandidate == undefined) {
+			return;
+		}
+				
+		ids.push(this.externalCandidate.id);
+		
+		this.campaignService.messageExternalCandidates(this.campaign.id, roleId, ids , message).subscribe(response => {
+			this.closeExternalMessageBox();
+		});
+		
 	}
 	
 	/**
@@ -323,9 +337,10 @@ export class CampaignsComponent {
 	* Open the External Candiadte  message box
 	*/
 	public showExternalCandidateMessageBox(candidate:Candidate):void{
-			this.errMshActive = false;
-			this.externalCandidateMessageBox.nativeElement.showModal();
-		}
+		this.externalCandidate = candidate;
+		this.errMshActive = false;
+		this.externalCandidateMessageBox.nativeElement.showModal();
+	}
 	
 	/**
 	* Opens dialogue box to add new external candidate.
@@ -538,10 +553,24 @@ export class CampaignsComponent {
 	public messageCandidates():void{
 
 		let message:string = ''+this.addMassMessageForm.get("message")?.value;
-		
-		this.campaignService.sendMultiRecipientMessage(this.wrappedCandidates.filter(c => c.selected).map(wc => wc.candidate.id), message).subscribe( res => {
+		let ids:Array<string> 	= this.wrappedCandidates.filter(c => c.selected && c.candidate.type == 'EXTERNAL').map(wc => wc.candidate.id);
+		let roleId  			= this.role ? this.role.id : undefined;
+			
+		if (this.campaign == undefined) {
+			return;
+		}
+					
+		//Message Registered candidates via IM
+		this.campaignService.sendMultiRecipientMessage(this.wrappedCandidates.filter(c => c.selected && c.candidate.type == 'INTERNAL').map(wc => wc.candidate.id), message).subscribe( res => {
 			this.selectionBox.refreshCampaign();
 		});
+		
+		//Message external candiadtes via email
+		this.campaignService.messageExternalCandidates(this.campaign.id, roleId, ids , message).subscribe(response => {
+			this.closeExternalMessageBox();
+		});
+		
+		this.handleCancelMassMessageBox();
 	}
 	
 	/**

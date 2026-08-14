@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,7 +31,6 @@ import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
-import com.arenella.recruit.curriculum.beans.Curriculum;
 
 /**
 * Rest API for working with Campaign's 
@@ -409,6 +407,31 @@ public class CampaignController {
 		this.campaignService.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, principal.getName());
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	/**
+	* Sends message to selected external candidates
+	* @param campaignId			- Id of Campaign message is associated with
+	* @param messageDetails		- Details of message and recipients
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/externalMessage")
+	public ResponseEntity<Void> messageExternalCandidatesForCampaigin(@PathVariable("campaignId")UUID campaignId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails){
+		return null;
+	}
+	
+	/**
+	* Sends message to selected external candidates
+	* @param campaignId			- Id of Campaign message is associated with
+	* @param roleId				- Id of the Role message is associated with
+	* @param messageDetails		- Details of message and recipients
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/role/{roleId}/externalMessage")
+	public ResponseEntity<Void> messageExternalCandidatesForRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails){
+		return null;
 	}
 	
 }

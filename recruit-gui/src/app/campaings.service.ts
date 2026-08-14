@@ -398,6 +398,29 @@ export class CampaingsService {
 		
 	}
 	
+	/**
+	* Sends a command to the backend to message selected External Candiadtes 
+	*/
+	public messageExternalCandidates(campaignId:string, roleId:string|undefined, candidateIds:Array<string>, message:string):Observable<any>{
+		
+		let backendUrl:string = "";
+		
+		if (roleId == undefined) {
+			backendUrl =  environment.backendUrl +'campaign/'+campaignId+'/externalMessage';
+		} else {
+			backendUrl =  environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/externalMessage';	
+		}
+		
+		let command:ExternalCandidateMessage = new ExternalCandidateMessage(candidateIds, message);
+				
+		return this.httpClient.post<any>(backendUrl, command, {headers: new HttpHeaders({ }), withCredentials: true});	
+				
+	}
+	
+	
+	
+	
+	
 }
 
 /**
@@ -705,4 +728,21 @@ export class CreateExternalCandidateCommand{
 				public jobTitle:string,
 				public email:string){}
 				
+}
+
+/**
+* Command to send to backend to send a message to selected External candiadtes.
+* These are candidates not registered on the platform but who have been added 
+* by a recruiter to a Campaign or Role
+*/
+export class ExternalCandidateMessage{
+	
+	/**
+	* Constructor 
+	* @param candiadteIds 	- Ids of Candidates to receive a message
+	* @param message 		- Nessage to send to the Candidates
+	*/
+	constructor(public candidateIds:Array<string>, public message:string){
+	}
+
 }
