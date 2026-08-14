@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
+import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
@@ -368,9 +369,21 @@ public class CampaignController {
 	* @return
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PostMapping(path="campaign/{campaignId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Void> addExternalCandidateToCampaign(@PathVariable("campaignId")UUID campaignId, @RequestBody NewExternalCandidateAPIInbound externalCandidate){
-		return null;
+	@PostMapping(path="campaign/{campaignId}")
+	public ResponseEntity<Void> addExternalCandidateToCampaign(@PathVariable("campaignId")UUID campaignId, @RequestBody NewExternalCandidateAPIInbound externalCandidate, Principal principal){
+		
+		Candidate candidate = Candidate
+				.builder()
+				.firstName(externalCandidate.getFirstName())
+				.surname(externalCandidate.getSurname())
+				.email(externalCandidate.getEmail())
+				.jobTitle(externalCandidate.getJobTitle())
+				.countryCode(externalCandidate.getCountryCode())
+				.build();
+		
+		this.campaignService.addExternalCandidateToCampaiginOrRole(campaignId, null, candidate, principal.getName());
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);	
 	}
 	
 	/**
@@ -381,9 +394,21 @@ public class CampaignController {
 	* @return
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PostMapping(path="campaign/{campaignId}/role/{roleId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<Void> addExternalCandidateToRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId,@RequestBody NewExternalCandidateAPIInbound externalCandidate){
-		return null;
+	@PostMapping(path="campaign/{campaignId}/role/{roleId}")
+	public ResponseEntity<Void> addExternalCandidateToRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId,@RequestBody NewExternalCandidateAPIInbound externalCandidate, Principal principal){
+		
+		Candidate candidate = Candidate
+				.builder()
+				.firstName(externalCandidate.getFirstName())
+				.surname(externalCandidate.getSurname())
+				.email(externalCandidate.getEmail())
+				.jobTitle(externalCandidate.getJobTitle())
+				.countryCode(externalCandidate.getCountryCode())
+				.build();
+		
+		this.campaignService.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, principal.getName());
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 }

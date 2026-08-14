@@ -30,6 +30,7 @@ import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
+import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
 /**
 * Services for working with Campaigns 
@@ -586,12 +587,22 @@ public class CampaignServiceImpl implements CampaignService{
 		// 3. Check is admin or edit participant 
 		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
+		AtomicBoolean isExternalCandiadte = new AtomicBoolean();
 		//4. Add Candidate to Campaign or role
-		
 		if (Optional.ofNullable(role).isEmpty()) {
+			campaign.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> {
+				isExternalCandiadte.set(true);
+			});
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidates(campaign.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build());
-		}else {
+		} else {
+			role.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> {
+				isExternalCandiadte.set(true);
+			});
 			this.roleDao.saveRole(Role.builder().from(role).candidates(role.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build(), campaignId);
+		}
+		
+		if (isExternalCandiadte.get()) {
+			this.candidateDao.deleteById(candidateId);
 		}
 		
 	}
@@ -610,6 +621,46 @@ public class CampaignServiceImpl implements CampaignService{
 		this.checkLoggedInUserIsParticipantForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUser);
 		
 		return document;
+		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void addExternalCandidateToCampaiginOrRole(UUID campaignId, UUID roleId, Candidate candidate, String currentUser) {
+		
+		Campaign 	campaign;
+		Role 		role = null;
+		
+		//0. Check user has access to Campaigns
+		this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		// 1. Check campaign exists
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		// 2. Check Role exists if Role level		
+		if (Optional.ofNullable(roleId).isPresent()) {
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		}
+
+		// 4. Check is admin or edit participant 
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		
+		candidate = Candidate.builder()
+				.from(candidate)
+				.id(UUID.randomUUID().toString())
+				.type(Type.EXTERNAL).build();
+		
+		this.candidateDao.saveCandidate(candidate);
+		
+		//5. Add Candidate to Campaign or role
+		
+		if (Optional.ofNullable(role).isEmpty()) {
+			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidate(candidate).build());
+		}else {
+			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
+		}
 		
 	}
 	

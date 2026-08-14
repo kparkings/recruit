@@ -25,6 +25,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
@@ -564,6 +566,57 @@ class CampaignControllerTest {
 		byte[] results = this.controller.getDocumentAsPDF(documentId, mockPrincipal);
 		
 		assertEquals(data.length, results.length);
+	}
+	
+	/**
+	* Tests the Endpoint for adding an External Candidate to a Campaign 
+	*/
+	@Test
+	void testAddExternalCandidateToCampaign() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		final NewExternalCandidateAPIInbound candidate = NewExternalCandidateAPIInbound
+				.builder()
+					.countryCode("nl")
+					.email("a@b.nl")
+					.firstName("peter")
+					.surname(userId)
+					.jobTitle("C# Developer")
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addExternalCandidateToCampaign(campaignId, candidate,  mockPrincipal);
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests the Endpoint for adding an External Candidate to a Campaign 
+	*/
+	@Test
+	void testAddExternalCandidateToRole() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final UUID 		roleId 			= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		final NewExternalCandidateAPIInbound candidate = NewExternalCandidateAPIInbound
+				.builder()
+					.countryCode("nl")
+					.email("a@b.nl")
+					.firstName("peter")
+					.surname(userId)
+					.jobTitle("C# Developer")
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addExternalCandidateToRole(campaignId, roleId, candidate, mockPrincipal);
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
 	}
 	
 }

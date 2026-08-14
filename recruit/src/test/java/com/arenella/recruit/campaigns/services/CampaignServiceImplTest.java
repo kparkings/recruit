@@ -35,6 +35,7 @@ import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
+import com.arenella.recruit.campaigns.beans.Candidate.Type;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 import com.arenella.recruit.campaigns.beans.Document;
@@ -3598,37 +3599,6 @@ class CampaignServiceImplTest {
 	
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	* Tests User without paid subscription cannot delete Candidates from Campaign
 	*/
@@ -3781,6 +3751,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteCandidateFromCampaign(campaignId, null, candidateId, loggedInUserId);
 		
+		verify(this.mockCandidateDao, never()).deleteById(candidateId);
 		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
 		
 	}
@@ -3801,6 +3772,7 @@ class CampaignServiceImplTest {
 		
 		Campaign campaign = Campaign
 				.builder()
+				.candidate(Candidate.builder().id(candidateId).type(Type.INTERNAL).build())
 				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
 				.role(role)
 				.build();
@@ -3811,6 +3783,7 @@ class CampaignServiceImplTest {
 		
 		this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		
+		verify(this.mockCandidateDao, never()).deleteById(candidateId);
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
 		
 	}
@@ -3831,6 +3804,7 @@ class CampaignServiceImplTest {
 		
 		Campaign campaign = Campaign
 				.builder()
+				.candidate(Candidate.builder().id(candidateId).type(Type.INTERNAL).build())
 				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
 				.role(role)
 				.build();
@@ -3845,42 +3819,75 @@ class CampaignServiceImplTest {
 	
 	}
 	
+	/**
+	* Tests happy path deleting from Role where Participation is at Campaign level
+	* and Candidate is External requiring it to be deleted from the system as well 
+	* as the Campaign
+	*/
+	@Test
+	void deleteCandidateFromCampaignRoleRightsCampaignLevelExternalCandidate() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role		role					= Role.builder().id(roleId).participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build()).candidate(Candidate.builder().id(candidateId).type(Type.EXTERNAL).build()).build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.role(role)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		
+		verify(this.mockCandidateDao).deleteById(candidateId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		
+	}
 	
+	/**
+	* Tests happy path deleting from Role where Participation is at Role level
+	* and Candidate is External requiring it to be deleted from the system as well 
+	* as the Campaign
+	*/
+	@Test
+	void deleteCandidateFromCampaignRoleRightsLevelExternalCandidate() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	candidateId 			= "123";
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role		role					= Role.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.candidate(Candidate.builder().id(candidateId).type(Type.EXTERNAL).build())
+				.build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				.candidate(Candidate.builder().id(candidateId).type(Type.INTERNAL).build())
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.role(role)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
+		
+		verify(this.mockCandidateDao).deleteById(candidateId);
+		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}
 	
 	
 	/**
@@ -4127,6 +4134,246 @@ class CampaignServiceImplTest {
 		Document result = this.service.fetchDocumentById(documentId, loggedInUserId);
 		
 		assertEquals(documentId, result.getDocumentId());
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests User without paid subscription cannot add External Candidates to Campaign
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRoleNotPaidUser() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+
+	}
+	
+	/**
+	* Tests Case where Campaign referenced doesnt exist
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRoleCampaignDoesntExist() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Case where Role referenced doesnt exist
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRolenRoleDoesntExist() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		Candidate candidate = Candidate.builder().build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.empty());
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Case where user has no admin or edit rights at the Campaign level
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRolenNoRightsCampaignLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Candidate	candidate				= Candidate.builder().build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addExternalCandidateToCampaiginOrRole(campaignId, null, candidate, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests Case where user has no admin or edit rights at 
+	* either the Campaign or Role level
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRoleNoRightsRoleLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role		role					= Role.builder().id(roleId).participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build()).build();
+		final Candidate	candidate				= Candidate.builder().build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests happy path saving to Campaign where Participation is at Campaign level
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRoleRightsCampaignLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Candidate	candidate				= Candidate.builder().build();
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		this.service.addExternalCandidateToCampaiginOrRole(campaignId, null, candidate, loggedInUserId);
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+	}
+	
+	/**
+	* Tests happy path saving to Role where Participation is at Role level
+	*/
+	@Test
+	void addExternalCandidateToCampaiginOrRoleRightsRoleLevel() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		roleId 					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Candidate	candidate				= Candidate.builder().build();
+		final Role		role					= Role.builder().id(roleId).participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build()).build();
+		
+		
+		Campaign campaign = Campaign
+				.builder()
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.role(role)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		
+		this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
 		
 	}
 	

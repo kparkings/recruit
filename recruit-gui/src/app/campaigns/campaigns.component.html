@@ -49,19 +49,19 @@
 				<div class="candidate-table">
 					<table class="campaign-candidate-table" >
 						<tr>
-							<th></th>
-							<th>Id</th>
 							<th>Name</th>
 							<th>Title</th>
 							<th>Options</th>
 						</tr>
 						<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
-							<td><input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select"></td>
-							<td>{{candidate.candidate.id}}</td>
-							<td>{{candidate.candidate.firstName}} {{candidate.candidate.surname}}</td>
+							<td>
+								<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
+								{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
+							</td>
 							<td>{{candidate.candidate.jobTitle}}</td>
 							<td>
-								<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
+								<div *ngIf="candidate.candidate.type != 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
+								<div *ngIf="candidate.candidate.type == 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
 							</td>
 						</tr>
 					</table>
@@ -156,19 +156,19 @@
 				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="deselectAllCandidates()">De-select All</button>
 				<table class="campaign-candidate-table">
 					<tr>
-						<th></th>
-						<th>Id</th>
 						<th>Name</th>
 						<th>Title</th>
 						<th>Options</th>
 					</tr>
 					<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
-						<td><input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select"></td>
-						<td>{{candidate.candidate.id}}</td>
-						<td>{{candidate.candidate.firstName}} {{candidate.candidate.surname}}</td>
+						<td>
+						<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
+						{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
+						</td>
 						<td>{{candidate.candidate.jobTitle}}</td>
 						<td>
-							<div class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
+							<div *ngIf="candidate.candidate.type != 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
+							<div *ngIf="candidate.candidate.type == 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
 						</td>
 					</tr>
 				</table>
@@ -504,7 +504,7 @@
 						<tr>
 							<th>Country</th>
 							<td>
-								<select formControlName="country" class="new-candidate-country-list" style="width:250px">
+								<select formControlName="countryCode" class="new-candidate-country-list" style="width:250px">
 									<option></option>
 									<option *ngFor="let country of countries" value="{{country.name}}">{{country.name | translate}}</option>
 									
@@ -525,12 +525,33 @@
 		
 			<div class="modal-buttons" style="clear:both">
 				<button class="btn btn-secondary campaign-btn" (click)="handleCancelAddExternalCandidateBox()">Cancel</button>
-				<button class="btn btn-secondary campaign-btn" (click)="messageCandidates()">Add</button>
+				<button class="btn btn-secondary campaign-btn" (click)="handleAddExternalCandidate()">Add</button>
 			</div>
 		</div>
 	</div>
-	
-	
 		
 	</div> 
+</dialog>
+
+<!--External Message Box -->
+<dialog #externalCandidateMessageBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Message</h4>
+		<div class="filter-close-box" (click)="externalCandidateMessageBox.close()">X</div>
+	</div>
+	<div class="modal-body" style="width:700px;height:350px;">
+	
+		<div style="float:right;width:100%;">
+			<form [formGroup]="externalMessageForm">
+				<textarea formControlName="message" style="width:100%;height:280px;"></textarea>
+			</form>
+		</div>
+		
+		<div class="modal-buttons" style="clear:both">
+			<button class="btn btn-secondary campaign-btn" (click)="closeExternalMessageBox()">Cancel</button>
+			<button class="btn btn-secondary campaign-btn" (click)="handleMessageExternalCandidate()">Send</button>
+		</div>
+	</div>
+		
 </dialog>

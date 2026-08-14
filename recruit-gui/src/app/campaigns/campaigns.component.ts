@@ -16,14 +16,15 @@ import { SupportedCountry } 															from '../supported-candidate';
 })
 export class CampaignsComponent {
 	
-	@ViewChild(SelectionboxComponent) 							public selectionBox!:SelectionboxComponent;
-	@ViewChild('confirmDelete', 			{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addNote', 					{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addDocument', 				{static:true})		public addDocumentBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addParticipant',			{static:true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('massMessageBox',			{static:true}) 		public massMessageBox!: ElementRef<HTMLDialogElement>;
-	@ViewChild('addExternalCandidateBox', 	{static:true}) 		public addExternalCandidateBox!: ElementRef<HTMLDialogElement>;
-		
+	@ViewChild(SelectionboxComponent) 								public selectionBox!:SelectionboxComponent;
+	@ViewChild('confirmDelete', 				{static:true})		public confirmDeleteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addNote', 						{static:true})		public addNoteBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addDocument', 					{static:true})		public addDocumentBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addParticipant',				{static:true }) 	public participantDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('massMessageBox',				{static:true}) 		public massMessageBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('addExternalCandidateBox', 		{static:true}) 		public addExternalCandidateBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('externalCandidateMessageBox', 	{static:true}) 		public externalCandidateMessageBox!: ElementRef<HTMLDialogElement>;
+	
 	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
 	
 	public campaign:Campaign | undefined;
@@ -72,11 +73,15 @@ export class CampaignsComponent {
 		message: new UntypedFormControl(),
 	})
 	
+	public externalMessageForm:UntypedFormGroup = new UntypedFormGroup({
+			message: new UntypedFormControl(),
+		})
+	
 	public newExternalCandidateForm:UntypedFormGroup = new UntypedFormGroup({
 		firstName: new UntypedFormControl(),
 		surname: new UntypedFormControl(),
-		country: new UntypedFormControl(),
-		JobTitle: new UntypedFormControl(),
+		countryCode: new UntypedFormControl(),
+		jobTitle: new UntypedFormControl(),
 		email: new UntypedFormControl(),
 	});
 	
@@ -161,7 +166,21 @@ export class CampaignsComponent {
 	public closeAddNotModal():void {
 		this.addNoteBox.nativeElement.close();
 	}
-
+	
+	/**
+	* Closes the adddExternalCandidate  box 
+	*/
+	public closeAddExternalCandidateModal():void {
+		this.addExternalCandidateBox.nativeElement.close();
+	}
+	
+	/**
+	* Closes the externalCandidateMessage  box 
+	*/
+	public closeExternalMessageBox():void{
+		this.externalCandidateMessageBox.nativeElement.close();
+	}
+	
 	/**
 	* Closes the addDocument  box 
 	*/
@@ -189,6 +208,43 @@ export class CampaignsComponent {
 			this.closeDocument();
 			this.selectionBox.refreshCampaign();
 		});
+	}
+	
+	
+	/**
+	* Adds external candidate
+	*/
+	public handleAddExternalCandidate():void{
+		
+		if (this.campaign == undefined) {
+			return;
+		}
+		
+		let firstName:string	= this.newExternalCandidateForm.get("firstName")?.value;
+		let surname:string		= this.newExternalCandidateForm.get("surname")?.value;
+		let countryCode:string	= this.newExternalCandidateForm.get("countryCode")?.value;
+		let jobTitle:string		= this.newExternalCandidateForm.get("jobTitle")?.value;
+		let email:string		= this.newExternalCandidateForm.get("email")?.value;
+										
+		if (this.role == undefined) {
+			this.campaignService.addExternalCandidateToCampaign(this.campaign.id,firstName,surname,countryCode,jobTitle, email).subscribe(res => {
+				this.closeAddExternalCandidateModal();
+				this.selectionBox.refreshCampaign();
+			});
+		} else {
+			this.campaignService.addExternalCandidateToRole(this.campaign.id,this.role?.id,firstName,surname,countryCode,jobTitle,email).subscribe(res => {
+				this.closeAddExternalCandidateModal();	
+				this.selectionBox.refreshCampaign();		
+			});
+		}
+		
+	}
+	
+	/**
+	* Sends email to external candidate 
+	*/
+	public handleMessageExternalCandidate():void{
+		
 	}
 	
 	/**
@@ -264,6 +320,14 @@ export class CampaignsComponent {
 	}
 	
 	/**
+	* Open the External Candiadte  message box
+	*/
+	public showExternalCandidateMessageBox(candidate:Candidate):void{
+			this.errMshActive = false;
+			this.externalCandidateMessageBox.nativeElement.showModal();
+		}
+	
+	/**
 	* Opens dialogue box to add new external candidate.
 	*/
 	public showAddExternalCandidateBox():void{
@@ -271,8 +335,8 @@ export class CampaignsComponent {
 		this.newExternalCandidateForm = new UntypedFormGroup({
 				firstName: new UntypedFormControl(),
 				surname: new UntypedFormControl(),
-				country: new UntypedFormControl(),
-				JobTitle: new UntypedFormControl(),
+				countryCode: new UntypedFormControl(),
+				jobTitle: new UntypedFormControl(),
 				email: new UntypedFormControl(),
 			});
 		this.addExternalCandidateBox.nativeElement.showModal();
@@ -344,18 +408,6 @@ export class CampaignsComponent {
 	}
 	
 	/**
-	* Sets the current Candidate that has been selected or de-selects it in the case 
-	* the Candiate was already selected
-	*/
-	//public selectCandidate(candidate:Candidate):void{
-	//	if (this.candidate == candidate) {
-	//		this.candidate = undefined;
-	//	} else {
-	//		this.candidate = candidate;
-	//	}
-	//}
-	
-	/**
 	* Returns the correct CSS class to highlight the Participation in the view if it 
 	* has been selected
 	*/
@@ -371,24 +423,6 @@ export class CampaignsComponent {
 		return"";
 		
 	}
-	
-	/**
-	* Returns the correct CSS class to highlight the Candidate in the view if it 
-	* has been selected
-	*/
-	//public getSelectedCandidateCSSClass(candidate:Candidate):string{
-	//	if (this.candidate == undefined) {
-	//		return "";
-	//	}
-	//	
-	//	if(this.candidate === candidate) {
-	//		return "candidate-selected";
-	//	}
-	//	
-	//	return"";
-	//	
-	//	
-	//}
 	
 	/**
 	* Handles the request to create a new Document
@@ -620,6 +654,29 @@ export class CampaignsComponent {
 	*/
 	public getWrappedCandidates(candidates:Array<Candidate>):void{
 		this.wrappedCandidates = candidates.map(c => new SelectableCandidate(c));
+		
+		this.wrappedCandidates.sort((one:SelectableCandidate, two:SelectableCandidate) => this.isGreater(one,two));
+		
+	}
+	
+	/**
+	* Comparator to sort Notifications in descending creation time order 
+	*/
+	private isGreater(one:SelectableCandidate, two:SelectableCandidate):number{
+		
+		let oneVal:string = one.candidate.firstName+one.candidate.surname;
+		let twoVal:string = two.candidate.firstName+two.candidate.surname;
+				
+		
+		if(oneVal > twoVal){
+			return 1;
+		}
+		
+		if (oneVal < twoVal){
+			return -1;
+		}
+		
+		return 0;
 	}
 	
 	/**

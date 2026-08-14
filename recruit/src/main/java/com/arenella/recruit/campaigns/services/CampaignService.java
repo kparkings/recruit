@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
@@ -161,7 +162,7 @@ public interface CampaignService {
 	* @param campaignId		- Campaign to add Candidate to
 	* @param roleId			- If Role level Role to add Candidate to
 	* @param candidateId	- Id of Candidate to add to the Campaign / Role
-	* @param currentUser	- Id of authenticated Use
+	* @param currentUser	- Id of authenticated User
 	*/
 	void addCandidateToCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
 
@@ -171,7 +172,7 @@ public interface CampaignService {
 	* @param campaignId		- Campaign to delete the Candidate from
 	* @param roleId			- If Role level Role to delete the Candidate from
 	* @param candidateId	- Id of Candidate to remove from the Campaign / Role
-	* @param currentUser	- Id of authenticated Use
+	* @param currentUser	- Id of authenticated User
 	*/
 	void deleteCandidateFromCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
 
@@ -181,5 +182,14 @@ public interface CampaignService {
 	* @param currentUser	- Id of authenticated Use
 	*/
 	Document fetchDocumentById(UUID documentId, String currentUser);
+
+	/**
+	* Adds an External Candidate to a Campaign or Role
+	* @param campaignId - Id of Campaign to add Candidate to
+	* @param roleId 	- Id of Role to add Candidate to
+	* @param candidate	- Candidate Details
+	* @param currentUser	- Id of authenticated User		
+	*/
+	void addExternalCandidateToCampaiginOrRole(UUID campaignId, UUID roleId, Candidate candidate, String currentUser);
 
 } 
