@@ -150,6 +150,9 @@ public class EmailDispatcherService {
 					r.setEmail(r.getContactId());
 					//In this case we the email was provided so we don't want to fetch it 
 				}
+				else if (r.getContactType() == ContactType.EXTERNAL_CANDIDATE) {
+					model.put("recipientName", r.getFirstName());
+				}
 				else if (recipientOpt.isEmpty()) {
 					r.setEmail("no-reply@arenella-ict.com");
 					r.setFirstName("Failed for " + r.getId() + " " + r.getId());

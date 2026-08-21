@@ -619,4 +619,58 @@ class CampaignControllerTest {
 		
 	}
 	
+	/**
+	* Test sending a Campaign level message to external candidates
+	*/
+	@Test
+	void testMessageExternalCandidatesForCampaigin() {
+		
+		final UUID 			campaignId 			= UUID.randomUUID();
+		final String 		userId 				= "rec1";
+		final String 		messageText 		= "some text";
+		final Set<String> 	externalCanidates 	= Set.of("c1","aah");
+		
+		final ExternaCandidatelMessageAPIInbound message = ExternaCandidatelMessageAPIInbound
+				.builder()
+				.message(messageText)
+				.candidateIds(externalCanidates)
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.messageExternalCandidatesForCampaigin(campaignId, message, mockPrincipal);
+		
+		verify(this.mockCampaignService).messageExternalCampaignCandidates(campaignId, null, externalCanidates, messageText, userId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
+	/**
+	* Test sending a Role level message to external candidates
+	*/
+	@Test
+	void testMessageExternalCandidatesForRole() {
+		
+		final UUID 			campaignId 			= UUID.randomUUID();
+		final UUID 			roleId	 			= UUID.randomUUID();
+		final String 		userId 				= "rec1";
+		final String 		messageText 		= "some text";
+		final Set<String> 	externalCanidates 	= Set.of("c1","aah");
+		
+		final ExternaCandidatelMessageAPIInbound message = ExternaCandidatelMessageAPIInbound
+				.builder()
+				.message(messageText)
+				.candidateIds(externalCanidates)
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.messageExternalCandidatesForRole(campaignId, roleId, message, mockPrincipal);
+		
+		verify(this.mockCampaignService).messageExternalCampaignCandidates(campaignId, roleId, externalCanidates, messageText, userId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
+	
 }

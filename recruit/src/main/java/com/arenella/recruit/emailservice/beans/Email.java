@@ -11,7 +11,7 @@ import java.util.UUID;
 */
 public class Email {
 
-	public static enum EmailTopic {
+	public enum EmailTopic {
 		FORGOTTEN_PWD, 
 		ACCOUNT_CREATED, 
 		CANDIDATE_ACCOUNT_CREATED,
@@ -27,10 +27,11 @@ public class Email {
 		LISTING_MATCHING_ROLE,
 		CANDIDATE_SUMMARY,
 		MISSED_CHAT_MESSAGE,
-		MISSED_NEWSFEED_NOTIFICATION}
+		MISSED_NEWSFEED_NOTIFICATION,
+		CAMPAIGN_MESSAGE}
 		
-	public static enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN}
-	public static enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE}
+	public enum EmailType 	{INTERN, EXTERN, SYSTEM_INTERN, SYSTEM_EXTERN}
+	public enum Status 		{DRAFT, TO_OUTBOX, SENT_INTERN, SENT_EXTERN, FAILURE}
 	
 	private UUID 						id;
 	private String 						title;
@@ -361,7 +362,7 @@ public class Email {
 	*/
 	public static class Sender<T>{
 		
-		public static enum SenderType {SYSTEM, RECRUITER, UNREGISTERED_USER, CANDIDATE};
+		public enum SenderType {SYSTEM, RECRUITER, UNREGISTERED_USER, CANDIDATE}
 		
 		private final T				id;
 		private final SenderType 	contactType;
@@ -424,7 +425,7 @@ public class Email {
 	*/
 	public static class EmailRecipient<T>{
 		
-		public static enum ContactType {SYSTEM, RECRUITER, UNREGISTERED_USER, CANDIDATE}
+		public enum ContactType {SYSTEM, RECRUITER, UNREGISTERED_USER, CANDIDATE, EXTERNAL_CANDIDATE}
 		
 		private final T 				id;
 		private final ContactType 		contactType;

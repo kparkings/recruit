@@ -192,4 +192,15 @@ public interface CampaignService {
 	*/
 	void addExternalCandidateToCampaiginOrRole(UUID campaignId, UUID roleId, Candidate candidate, String currentUser);
 
+	/**
+	* Sends an external email message to specified external candidates. These are candidates that have no profile in 
+	* the system but who have been added to a campaign by a recruiter for a campaigin or role
+	* @param campaignId		- Id of the Campaign the message is associated with
+	* @param roleId			- Id of the role ( optional ) the message is associated with
+	* @param candidateIds	- Id's of external candidates to send message to
+	* @param message		- Message to be sent
+	* @param currentUser	- Id of authenticated user
+	*/
+	void messageExternalCampaignCandidates(UUID campaignId, UUID roleId, Set<String> candidateIds, String message, String currentUser);
+
 } 

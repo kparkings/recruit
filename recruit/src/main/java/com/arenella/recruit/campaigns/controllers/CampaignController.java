@@ -417,8 +417,9 @@ public class CampaignController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="campaign/{campaignId}/externalMessage")
-	public ResponseEntity<Void> messageExternalCandidatesForCampaigin(@PathVariable("campaignId")UUID campaignId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails){
-		return null;
+	public ResponseEntity<Void> messageExternalCandidatesForCampaigin(@PathVariable("campaignId")UUID campaignId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails, Principal principal){
+		this.campaignService.messageExternalCampaignCandidates(campaignId, null, messageDetails.getCandidateIds(), messageDetails.getMessage(), principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	/**
@@ -430,8 +431,9 @@ public class CampaignController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="campaign/{campaignId}/role/{roleId}/externalMessage")
-	public ResponseEntity<Void> messageExternalCandidatesForRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails){
-		return null;
+	public ResponseEntity<Void> messageExternalCandidatesForRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails, Principal principal){
+		this.campaignService.messageExternalCampaignCandidates(campaignId, roleId, messageDetails.getCandidateIds(), messageDetails.getMessage(), principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

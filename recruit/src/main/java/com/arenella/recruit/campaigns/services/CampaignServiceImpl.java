@@ -2,6 +2,7 @@ package com.arenella.recruit.campaigns.services;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -18,6 +19,8 @@ import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaign.dao.RoleDao;
+import com.arenella.recruit.campaigns.adapters.CampaignExternalEventPublisher;
+import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailCommand;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
@@ -30,6 +33,8 @@ import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
+import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
 /**
@@ -38,33 +43,35 @@ import com.arenella.recruit.campaigns.beans.Candidate.Type;
 @Service
 public class CampaignServiceImpl implements CampaignService{
 
-	public static final String ERR_MSG_UNKNOWN_CAMPAIGN 				= "Cannot retrieve unknown Campaign.";
-	public static final String ERR_MSG_USER_NOT_PARTICIPANT 			= "You are not a participant in the Campaign.";
-	public static final String ERR_MSG_CONTACT_NOT_FOUND 				= "Unknown Contact.";
-	public static final String ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE = "Only paid subscription users can perform this action.";
-	public static final String ERR_MSG_CAMPAIGN_NOT_FOUND 				= "Unknown Campaign.";
-	public static final String ERR_MSG_UNKNOWN_CANDIDATE				= "Unknown Candidate.";
-	public static final String ERR_MSG_CONTACT_ALREADY_PARTICIPANT 		= "Cannot add existing participant.";
-	public static final String ERR_MSG_NO_ADMIN_ROLE_FOR_USER			= "Only Admin Users can perform this action.";
-	public static final String ERR_MSG_UNKNOWN_PARTICIPATION			= "Unknown Participation.";
-	public static final String ERR_MSG_UNKNOWN_ROLE						= "Unknown Role";
-	public static final String ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT		= "An Admin Participant must be present after action taken.";
-	public static final String ERR_MSG_NO_ADMIN_RIGHTS					= "No rights to perform this action.";
-	public static final String ERR_MSG_UNKNOWN_NOTE 					= "Cannot retrieve unknown Note.";
-	public static final String ERR_MSG_UNKNOWN_APPOINTMENT 				= "Cannot retrieve unknown Appointment.";
-	public static final String ERR_MSG_UNKNOWN_DOCUMENT 				= "Cannot retrieve unknown Document.";
-	public static final String ERR_MSG_UNSUPPORTED_DOC_TYPE 			= "Document type not supported.";
+	public static final String ERR_MSG_UNKNOWN_CAMPAIGN 					= "Cannot retrieve unknown Campaign.";
+	public static final String ERR_MSG_USER_NOT_PARTICIPANT 				= "You are not a participant in the Campaign.";
+	public static final String ERR_MSG_CONTACT_NOT_FOUND 					= "Unknown Contact.";
+	public static final String ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE 	= "Only paid subscription users can perform this action.";
+	public static final String ERR_MSG_CAMPAIGN_NOT_FOUND 					= "Unknown Campaign.";
+	public static final String ERR_MSG_UNKNOWN_CANDIDATE					= "Unknown Candidate.";
+	public static final String ERR_MSG_CONTACT_ALREADY_PARTICIPANT 			= "Cannot add existing participant.";
+	public static final String ERR_MSG_NO_ADMIN_ROLE_FOR_USER				= "Only Admin Users can perform this action.";
+	public static final String ERR_MSG_UNKNOWN_PARTICIPATION				= "Unknown Participation.";
+	public static final String ERR_MSG_UNKNOWN_ROLE							= "Unknown Role";
+	public static final String ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT			= "An Admin Participant must be present after action taken.";
+	public static final String ERR_MSG_NO_ADMIN_RIGHTS						= "No rights to perform this action.";
+	public static final String ERR_MSG_UNKNOWN_NOTE 						= "Cannot retrieve unknown Note.";
+	public static final String ERR_MSG_UNKNOWN_APPOINTMENT 					= "Cannot retrieve unknown Appointment.";
+	public static final String ERR_MSG_UNKNOWN_DOCUMENT 					= "Cannot retrieve unknown Document.";
+	public static final String ERR_MSG_UNSUPPORTED_DOC_TYPE 				= "Document type not supported.";
+	public static final String ERR_MSG_UNASSOCIATED_CANDIDATE_CAMPAIGN 		= "Cant send message to External User not associated with the Campaign";
+	public static final String ERR_MSG_UNASSOCIATED_CANDIDATE_ROLE	 		= "Cant send message to External User not associated with the Role";
 	
-	
-	private final CampaignDao 					campaignDao;
-	private final ContactEntityDao 				contactDao;
-	private final ParticipationEntityDao 		participationDao;
-	private final NoteEntityDao					noteDao;
-	private final AppointmentEntityDao			appointmentDao;
-	private final DocumentEntityDao				documentDao;
-	private final CampaignFileSecurityParser	fileSecurityParser;
-	private final RoleDao						roleDao;
-	private final CandidateEntityDao			candidateDao;
+	private final CampaignDao 						campaignDao;
+	private final ContactEntityDao 					contactDao;
+	private final ParticipationEntityDao 			participationDao;
+	private final NoteEntityDao						noteDao;
+	private final AppointmentEntityDao				appointmentDao;
+	private final DocumentEntityDao					documentDao;
+	private final CampaignFileSecurityParser		fileSecurityParser;
+	private final RoleDao							roleDao;
+	private final CandidateEntityDao				candidateDao;
+	private final CampaignExternalEventPublisher 	eventPublisher;
 	
 	/**
 	* Constructor
@@ -76,17 +83,19 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param fileSecurityParser	- To check file is of type specified
 	* @param roleDao			- For working with Roles
 	* @param candidateDao		- For working with Candidates
+	* @param eventPublisher		- For publishing events/commands to external services
 	*/
 	public CampaignServiceImpl(
-			CampaignDao 				campaignDao, 
-			ContactEntityDao 			contactDao, 
-			ParticipationEntityDao 		participationDao, 
-			NoteEntityDao 				noteDao, 
-			AppointmentEntityDao 		appointmentDao,
-			DocumentEntityDao			documentDao,
-			CampaignFileSecurityParser	fileSecurityParser,
-			RoleDao						roleDao,
-			CandidateEntityDao			candidateDao) {
+			CampaignDao 					campaignDao, 
+			ContactEntityDao 				contactDao, 
+			ParticipationEntityDao 			participationDao, 
+			NoteEntityDao 					noteDao, 
+			AppointmentEntityDao 			appointmentDao,
+			DocumentEntityDao				documentDao,
+			CampaignFileSecurityParser		fileSecurityParser,
+			RoleDao							roleDao,
+			CandidateEntityDao				candidateDao,
+			CampaignExternalEventPublisher 	eventPublisher) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
@@ -96,6 +105,7 @@ public class CampaignServiceImpl implements CampaignService{
 		this.fileSecurityParser = fileSecurityParser;
 		this.roleDao			= roleDao;
 		this.candidateDao		= candidateDao;
+		this.eventPublisher		= eventPublisher;
 	}
 	
 	/**
@@ -590,14 +600,14 @@ public class CampaignServiceImpl implements CampaignService{
 		AtomicBoolean isExternalCandiadte = new AtomicBoolean();
 		//4. Add Candidate to Campaign or role
 		if (Optional.ofNullable(role).isEmpty()) {
-			campaign.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> {
-				isExternalCandiadte.set(true);
-			});
+			campaign.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> 
+				isExternalCandiadte.set(true)
+			);
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidates(campaign.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build());
 		} else {
-			role.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> {
-				isExternalCandiadte.set(true);
-			});
+			role.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> 
+				isExternalCandiadte.set(true)
+			);
 			this.roleDao.saveRole(Role.builder().from(role).candidates(role.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build(), campaignId);
 		}
 		
@@ -661,6 +671,72 @@ public class CampaignServiceImpl implements CampaignService{
 		}else {
 			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
 		}
+		
+	}
+	
+	/**
+	* Sends a message related to either a Campaign or a Role to external candidates. That being. Candidates with no 
+	* profile but that have been added to the Campaign/Role by the Recruiter. 
+	*/
+	@Override
+	public void messageExternalCampaignCandidates(UUID campaignId, UUID roleId, Set<String> candidateIds, String message, String currentUser) {
+		
+		Campaign 			campaign;
+		Role 				role 		= null;
+		Set<Candidate> 		candidates 	= new HashSet<>();
+		
+		//0. Check user has access to Campaigns
+		Contact contact = this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		// 1. Check campaign exists
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		// 2. Check Role exists if Role level		
+		if (Optional.ofNullable(roleId).isPresent()) {
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		}
+
+		// 4. Check is admin or edit participant 
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		
+		//5. Check candidateIds are associated with specified campaign or role
+		if (Optional.ofNullable(roleId).isPresent()) {
+			Set<String> ids = role.getCandidates().stream().filter(c -> c.getType() == Type.EXTERNAL).map(c -> c.getId()).collect(Collectors.toSet());
+			candidates.addAll(role.getCandidates().stream().filter(c -> c.getType() == Type.EXTERNAL).collect(Collectors.toSet()));
+			candidateIds.stream().filter(candidateId -> !ids.contains(candidateId)).collect(Collectors.toSet()).stream().findAny().ifPresent(_ -> {
+				throw new IllegalArgumentException(ERR_MSG_UNASSOCIATED_CANDIDATE_ROLE);
+			});
+		} else {
+			Set<String> ids = campaign.getCandidates().stream().filter(c -> c.getType() == Type.EXTERNAL).map(c -> c.getId()).collect(Collectors.toSet());
+			candidates.addAll(campaign.getCandidates().stream().filter(c -> c.getType() == Type.EXTERNAL).collect(Collectors.toSet()));
+			candidateIds.stream().filter(candidateId -> !ids.contains(candidateId)).collect(Collectors.toSet()).stream().findAny().ifPresent(_ -> {
+				throw new IllegalArgumentException(ERR_MSG_UNASSOCIATED_CANDIDATE_CAMPAIGN);
+			});
+		}
+		
+		Set<EmailRecipient<UUID>> recipients = new HashSet<>();
+		
+		candidateIds.stream().forEach(extCandidate -> {
+			
+			candidates.stream().filter(c -> c.getId().equals(extCandidate)).findAny().ifPresent(candidate -> {
+				EmailRecipient<UUID> recipient = new EmailRecipient<UUID>(UUID.randomUUID(), extCandidate, ContactType.EXTERNAL_CANDIDATE);
+				recipient.setFirstName(candidate.getFirstName());
+				recipient.setEmail(candidate.getEmail());
+				recipients.add(recipient);
+			});
+						
+		});
+		
+		ExternalCandiateMessageSendEmailCommand command = ExternalCandiateMessageSendEmailCommand
+				.builder()
+					.recipients(recipients)
+					.message(message)
+					.campaignOrRole(Optional.ofNullable(role).isPresent() ? role.getName() : campaign.getName())
+					.recruiterName(contact.firstName() + " " + contact.surname())
+					.recruiterEmail(contact.email())
+				.build();
+		
+		this.eventPublisher.publishSendEmailCommand(command);
 		
 	}
 	
