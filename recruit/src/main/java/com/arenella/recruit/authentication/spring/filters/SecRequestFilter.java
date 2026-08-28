@@ -96,8 +96,15 @@ public class SecRequestFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-		
 
+		/**
+		* We want to allow the listings url to be accessed before authentication
+		*/
+		if (request.getRequestURI().startsWith("/public/campaign")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
 		/**
 		* We want to allow the chart for candidates function url to be accessed before authentication
 		*/

@@ -51,7 +51,7 @@ class CandidateAPIOutboundTest {
 		assertEquals(COUNTRY_CODE, 			outbound.getCountryCode());
 		assertEquals(JOB_TITLE, 			outbound.getJobTitle());
 		assertEquals(EMAIL, 				outbound.getEmail());
-		assertEquals(DELETED_FROM_SYSTEM, 	outbound.isDeleteFromSystem());
+		assertEquals(DELETED_FROM_SYSTEM, 	outbound.isDeletedFromSystem());
 		
 	}
 	

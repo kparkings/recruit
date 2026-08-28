@@ -20,6 +20,7 @@ import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.adapters.CampaignExternalEventPublisher;
+import com.arenella.recruit.campaigns.adapters.ExternalCandiateAddedToSystemSendEmailCommand;
 import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailCommand;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
@@ -600,12 +601,12 @@ public class CampaignServiceImpl implements CampaignService{
 		AtomicBoolean isExternalCandiadte = new AtomicBoolean();
 		//4. Add Candidate to Campaign or role
 		if (Optional.ofNullable(role).isEmpty()) {
-			campaign.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> 
+			campaign.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(_ -> 
 				isExternalCandiadte.set(true)
 			);
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidates(campaign.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build());
 		} else {
-			role.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(candidate -> 
+			role.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(_ -> 
 				isExternalCandiadte.set(true)
 			);
 			this.roleDao.saveRole(Role.builder().from(role).candidates(role.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build(), campaignId);
@@ -664,6 +665,22 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		this.candidateDao.saveCandidate(candidate);
 		
+		Contact recruiter = fetchContactFor(currentUser);
+		
+		EmailRecipient<UUID> recipient = new EmailRecipient<>(UUID.fromString(candidate.getId()), candidate.getId(), ContactType.EXTERNAL_CANDIDATE);
+		recipient.setFirstName(candidate.getFirstName());
+		recipient.setEmail(candidate.getEmail());
+		
+		ExternalCandiateAddedToSystemSendEmailCommand command = ExternalCandiateAddedToSystemSendEmailCommand
+				.builder()
+					.recipients(Set.of(recipient))
+					.campaignOrRole(Optional.ofNullable(role).isPresent() ? role.getName() : campaign.getName())
+					.recruiterName(recruiter.firstName() + " " + recruiter.surname())
+					.recruiterEmail(recruiter.email())
+				.build();
+		
+		this.eventPublisher.publishExternalCandiateMessageSendEmailCommand(command);
+		
 		//5. Add Candidate to Campaign or role
 		
 		if (Optional.ofNullable(role).isEmpty()) {
@@ -719,12 +736,13 @@ public class CampaignServiceImpl implements CampaignService{
 		candidateIds.stream().forEach(extCandidate -> {
 			
 			candidates.stream().filter(c -> c.getId().equals(extCandidate)).findAny().ifPresent(candidate -> {
-				EmailRecipient<UUID> recipient = new EmailRecipient<UUID>(UUID.randomUUID(), extCandidate, ContactType.EXTERNAL_CANDIDATE);
-				recipient.setFirstName(candidate.getFirstName());
-				recipient.setEmail(candidate.getEmail());
-				recipients.add(recipient);
+				if (!candidate.isDeleteFromSystem()) {
+					EmailRecipient<UUID> recipient = new EmailRecipient<>(UUID.fromString(candidate.getId()), extCandidate, ContactType.EXTERNAL_CANDIDATE);
+					recipient.setFirstName(candidate.getFirstName());
+					recipient.setEmail(candidate.getEmail());
+					recipients.add(recipient);
+				}
 			});
-						
 		});
 		
 		ExternalCandiateMessageSendEmailCommand command = ExternalCandiateMessageSendEmailCommand
@@ -738,6 +756,44 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		this.eventPublisher.publishSendEmailCommand(command);
 		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void rejectExternalCandidateConnectionRequest(UUID externalCandidateId) {
+		
+		final String anonymizedDataItem = "-";
+		
+		this.candidateDao.findCandidateById(externalCandidateId.toString()).ifPresent(candidate -> {
+			
+			Candidate deletedCandidate = Candidate
+					.builder()
+					.from(candidate)
+					.surname("")
+					.jobTitle(anonymizedDataItem)
+					.email(anonymizedDataItem)
+					.deletedFromSystem(true)
+					.build();
+			
+			this.candidateDao.saveCandidate(deletedCandidate);
+			
+		});
+		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void acceptExternalCandidateConnectionRequest(UUID externalCandidateId) {
+		// TODO Add created and last confirmation datetimes.
+		// If deleted the last confirmation date needs to be set to null
+		// Need email to ask for 1 year renewal
+		// Need scheduled job to
+			// 1. check for 7 day with no response ( delete external candidates ) using request_sent field
+			// 2. Send renewal email after 1 year and set request_sent field
 	}
 	
 	/**

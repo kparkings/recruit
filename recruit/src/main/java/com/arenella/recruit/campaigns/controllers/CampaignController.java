@@ -37,7 +37,10 @@ import com.arenella.recruit.campaigns.services.CampaignService;
 */
 @RestController
 public class CampaignController {
-
+	
+	public static final String MSG_EXTERNAL_CANDIDATE_REQ_REJECTION = "Thank you. The recruiter has been informed you do not wish them to store your details relating to this role and your imformation has been removed from the system.";
+	public static final String MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE = "Thank you for your confirmation.";
+	
 	private final CampaignService 			campaignService;
 	private final CampaignContactService 	contactService;
 	
@@ -435,5 +438,28 @@ public class CampaignController {
 		this.campaignService.messageExternalCampaignCandidates(campaignId, roleId, messageDetails.getCandidateIds(), messageDetails.getMessage(), principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	/**
+	* Endpoint allows an external candidate to refuse their request to add them to a Campaign or Role
+	* @param externalCandidateId - Id of the external candidate
+	* @return Message informing external candidate their refusal was successful
+	*/
+	@GetMapping(path="/public/campaign/refuse-ecr/{externalCandidateId}")
+	public ResponseEntity<String> refuseExternalCandidateConnectionReuqest(@PathVariable("externalCandidateId")UUID externalCandidateId){
+		this.campaignService.rejectExternalCandidateConnectionRequest(externalCandidateId);
+		return ResponseEntity.ok().body(MSG_EXTERNAL_CANDIDATE_REQ_REJECTION);
+	}
+	
+	/**
+	* Endpoint for an External Candidate to send agreement for their details to be stored
+	* @param externalCandidateId - Id of external candidate being confirmed
+	* @return Message informing external candidate their accpetance was successful
+	*/
+	@GetMapping(path="/public/campaign/accept-ecr/{externalCandidateId}")
+	public ResponseEntity<String> acceptExternalCandidateConnectionReuqest(@PathVariable("externalCandidateId")UUID externalCandidateId){
+		this.campaignService.acceptExternalCandidateConnectionRequest(externalCandidateId);
+		return ResponseEntity.ok().body(MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE);
+	}
+	
 	
 }

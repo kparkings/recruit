@@ -152,6 +152,7 @@ public class EmailDispatcherService {
 				}
 				else if (r.getContactType() == ContactType.EXTERNAL_CANDIDATE) {
 					model.put("recipientName", r.getFirstName());
+					model.put("externalCandidateId", r.getContactId());
 				}
 				else if (recipientOpt.isEmpty()) {
 					r.setEmail("no-reply@arenella-ict.com");

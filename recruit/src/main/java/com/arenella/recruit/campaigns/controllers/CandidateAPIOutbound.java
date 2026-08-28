@@ -100,7 +100,7 @@ public class CandidateAPIOutbound {
 	* longer in the system
 	* @return is the Candidate has been deleted from the System
 	*/
-	public boolean isDeleteFromSystem() {
+	public boolean isDeletedFromSystem() {
 		return deletedFromSystem;
 	}
 	

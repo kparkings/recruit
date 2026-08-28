@@ -11,7 +11,7 @@
 		<div style="margin-top: 10px">Dear ${recipientName}</div>
 		
 		<p>
-		The following message has been send via a Recruiter on the Arenella-ICT platform 
+		The following message has been sent from a Recruiter via the Arenella-ICT platform 
 		</p>
 	
 		<div>
@@ -35,13 +35,24 @@
 		<div>
 			<h3>Message </h3>
 			<div>
-				${message}
+				<pre>${message}</pre>
 			</div>
+		</div>
+		
+		<div>
+			<h3>Please do not reply directly to this email. You can reply to the recruiter using their email address: ${recruiterEmail} </h3>
 		</div>
 	
 		<P>
 			<a href="https://www.arenella-ict.com">https://www.arenella-ict.com</a>
 		</P>
 		
+		<div>
+			<p>
+			As part of the terms and conditions of using Arenella-ICT Recruiters must ask permission from candidates before adding them into their personal 
+			area of the platform. If you have not given permission or would no longer like to be contacted by this recruiter relating to this specific role you can 
+			click here: <a href="https://www.arenella-ict.com/public/campaign/refuse-ecr/${externalCandidateId}">unsubscribe</a>
+			</p>
+		</div>
 	</body>
 </html>

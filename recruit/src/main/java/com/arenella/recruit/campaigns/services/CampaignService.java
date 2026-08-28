@@ -203,4 +203,17 @@ public interface CampaignService {
 	*/
 	void messageExternalCampaignCandidates(UUID campaignId, UUID roleId, Set<String> candidateIds, String message, String currentUser);
 
+	/**
+	* Marks an External Candidates as either having rejected the request to add them to a Campaign/Role or not having responsed within the 
+	* time frame. In either case the user details are anonymized and they are marked as deleted.
+	* @param externalCandidateId - Id of the External Candidate
+	*/
+	void rejectExternalCandidateConnectionRequest(UUID externalCandidateId);
+
+	/**
+	* Marks an External Candidate as having agreed to their details being added to the system
+	* @param externalCandidateId - Id of the External Candidate
+	*/
+	void acceptExternalCandidateConnectionRequest(UUID externalCandidateId);
+
 } 

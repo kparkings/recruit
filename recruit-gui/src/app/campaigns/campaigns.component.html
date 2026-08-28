@@ -61,7 +61,7 @@
 							<td>{{candidate.candidate.jobTitle}}</td>
 							<td>
 								<div *ngIf="candidate.candidate.type != 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
-								<div *ngIf="candidate.candidate.type == 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
+								<div *ngIf="candidate.candidate.type == 'EXTERNAL' && candidate.candidate.deletedFromSystem == false" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
 							</td>
 						</tr>
 					</table>
@@ -168,7 +168,7 @@
 						<td>{{candidate.candidate.jobTitle}}</td>
 						<td>
 							<div *ngIf="candidate.candidate.type != 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
-							<div *ngIf="candidate.candidate.type == 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
+							<div *ngIf="candidate.candidate.type == 'EXTERNAL' && candidate.candidate.deletedFromSystem == false" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
 						</td>
 					</tr>
 				</table>

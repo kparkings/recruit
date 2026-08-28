@@ -45,6 +45,8 @@ public class EmailTemplateFactory {
 			case MISSED_CHAT_MESSAGE					-> loadTemplate("missed-message.ftlh",model);
 			case CAMPAIGN_MESSAGE						-> loadTemplate("campaign-message.ftlh", model);
 			case MISSED_NEWSFEED_NOTIFICATION			-> loadTemplate("missed-newsfeed-notification.ftlh",model);
+			case CAMPAIGN_EXT_CANDIIDATE_ADDED			-> loadTemplate("campaign-externalcandidate-added-message.ftlh",model);
+			
 			default -> "Could not process template";
 		};
 		

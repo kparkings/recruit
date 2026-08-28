@@ -25,8 +25,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
@@ -672,5 +670,33 @@ class CampaignControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 	
+	/**
+	* Tests refusing a Recruiters request to add an external candidate to a Campaign or Role
+	*/
+	@Test
+	void testRefuseExternalCandidateConnectionReuqest() {
+		
+		final UUID externalCandidateId = UUID.randomUUID();
+		
+		ResponseEntity<String> response = this.controller.refuseExternalCandidateConnectionReuqest(externalCandidateId);
+		
+		assertEquals(CampaignController.MSG_EXTERNAL_CANDIDATE_REQ_REJECTION, response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
 	
+	/**
+	* Tests refusing a Recruiters request to add an external candidate to a Campaign or Role
+	*/
+	@Test
+	void testAcceptExternalCandidateConnectionReuqest() {
+		
+		final UUID externalCandidateId = UUID.randomUUID();
+	
+		ResponseEntity<String> response = this.controller.acceptExternalCandidateConnectionReuqest(externalCandidateId);
+		
+		assertEquals(CampaignController.MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE, response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
 }

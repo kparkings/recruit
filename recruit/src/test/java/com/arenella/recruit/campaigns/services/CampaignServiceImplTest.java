@@ -32,6 +32,7 @@ import com.arenella.recruit.campaign.dao.NoteEntityDao;
 import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.adapters.CampaignExternalEventPublisher;
+import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailCommand;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
@@ -4540,13 +4541,15 @@ class CampaignServiceImplTest {
 	void messageExternalCampaignCandidatesRightsCampaignLevel() {
 		
 		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID 		ext1					= UUID.randomUUID();
+		final UUID 		ext2					= UUID.randomUUID();
 		final String 	loggedInUserId 			= "rec2";
 		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
-		final Set<String> externalCandidateIDs	= Set.of("ext1","ext2");
+		final Set<String> externalCandidateIDs	= Set.of(ext1.toString(),ext2.toString());
 		
 		Campaign campaign = Campaign
 				.builder()
-				.candidates(Set.of(Candidate.builder().type(Type.EXTERNAL).id("ext1").build(), Candidate.builder().type(Type.EXTERNAL).id("ext2").build()))
+				.candidates(Set.of(Candidate.builder().type(Type.EXTERNAL).id(ext1.toString()).build(), Candidate.builder().type(Type.EXTERNAL).id(ext2.toString()).build()))
 				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
 				.build();
 		
@@ -4567,14 +4570,15 @@ class CampaignServiceImplTest {
 		
 		final UUID 		campaignId 				= UUID.randomUUID();
 		final UUID 		roleId 					= UUID.randomUUID();
+		final UUID 		ext1 					= UUID.randomUUID();
+		final UUID 		ext2 					= UUID.randomUUID();
 		final String 	loggedInUserId 			= "rec2";
 		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
-		final Set<String> externalCandidateIDs	= Set.of("ext1","ext2");
+		final Set<String> externalCandidateIDs	= Set.of(ext1.toString(),ext2.toString());
 			final Role		role					= Role.builder()
 					.id(roleId)
-					.candidates(Set.of(Candidate.builder().type(Type.EXTERNAL).id("ext1").build(), Candidate.builder().type(Type.EXTERNAL).id("ext2").build()))
+					.candidates(Set.of(Candidate.builder().type(Type.EXTERNAL).id(ext1.toString()).build(), Candidate.builder().type(Type.EXTERNAL).id(ext2.toString()).build()))
 					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build()).build();
-		
 		
 		Campaign campaign = Campaign
 				.builder()
@@ -4653,6 +4657,81 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_UNASSOCIATED_CANDIDATE_ROLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests happy path where both external candidates that have been deleted and not deleted are present.
+	* Only the non deleted external candidates should be sent emails
+	*/
+	@Test
+	void messageExternalCampaignDeletedExternalCandidatePresent() {
+		
+		final UUID 		campaignId 				= UUID.randomUUID();
+		final UUID		ext1					= UUID.randomUUID();
+		final UUID		ext2					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Set<String> externalCandidateIDs	= Set.of(ext1.toString(),ext2.toString());
+		
+		ArgumentCaptor<ExternalCandiateMessageSendEmailCommand> argCaptCommand = ArgumentCaptor.forClass(ExternalCandiateMessageSendEmailCommand.class);
+		
+		Campaign campaign = Campaign
+				.builder()
+				.candidates(Set.of(Candidate.builder().type(Type.EXTERNAL).id(ext1.toString()).deletedFromSystem(false).build(), Candidate.builder().type(Type.EXTERNAL).id(ext2.toString()).deletedFromSystem(true).build()))
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		doNothing().when(this.mockEventPublisher).publishSendEmailCommand(argCaptCommand.capture());
+		
+		this.service.messageExternalCampaignCandidates(campaignId, null, externalCandidateIDs, "", loggedInUserId);
+		
+		verify(this.mockEventPublisher).publishSendEmailCommand(any());
+		
+		ExternalCandiateMessageSendEmailCommand command = argCaptCommand.getValue();
+		
+		command.getRecipients().stream().filter(r -> r.getId().equals(ext1)).findAny().orElseThrow();
+		assertEquals(1, command.getRecipients().size());
+		
+		
+	}
+	
+	/**
+	* Tests anonymizing and deletion (flag) if an external candidate has either
+	* - Rejected the request to have their details in the system
+	* - Not replied to the request to store their details in a given time frame 
+	*/
+	@Test
+	void testRejectExternalCandidateConnectionRequest() {
+		
+		ArgumentCaptor<Candidate> argCaptCandidate = ArgumentCaptor.forClass(Candidate.class);
+		
+		final UUID candidateId = UUID.randomUUID();
+		final Candidate candidate = Candidate
+				.builder()
+					.id(candidateId.toString())
+					.firstName("kevin")
+					.surname("parkings")
+					.deletedFromSystem(false)
+					.email("kparkings@gmail.com")
+					.jobTitle("java developer")
+				.build();
+		
+		when(this.mockCandidateDao.findCandidateById(candidateId.toString())).thenReturn(Optional.of(candidate));
+		doNothing().when(mockCandidateDao).saveCandidate(argCaptCandidate.capture());
+		
+		this.service.rejectExternalCandidateConnectionRequest(candidateId);
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		
+		Candidate anonymizedCandidate = argCaptCandidate.getValue();
+		
+		assertEquals("", anonymizedCandidate.getSurname());
+		assertEquals("-", anonymizedCandidate.getEmail());
+		assertEquals("-", anonymizedCandidate.getJobTitle());
+		assertTrue(anonymizedCandidate.isDeleteFromSystem());
 		
 	}
 	
