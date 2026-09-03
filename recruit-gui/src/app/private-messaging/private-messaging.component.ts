@@ -438,6 +438,8 @@ export class PrivateMessagingComponent {
 	*/
 	public sendMessage():void{
 		
+		//this.setScrollOn();
+		this.initialPollPerformed = false;
 		let msg:string = this.messageForm.get('newMessage')?.value;
 		
 		this.messageForm = new UntypedFormGroup({
@@ -525,12 +527,23 @@ export class PrivateMessagingComponent {
 		
 	}
 	
+	private initialPollPerformed:boolean = false;
+	
 	public setScrollOff():void{
 		this.scrollOff = true;
+		
+		if (this.initialPollPerformed == true) {
+			window.clearInterval(this.scheduleOpenChatRefresh);
+			
+		} else {
+			this.initialPollPerformed = true;
+		}
 	}
 	
 	public setScrollOn():void{
 		this.scrollOff = false;
+		this.initialPollPerformed = false;
+		this.startReplyScheduler();
 	}
 	
 	/**
