@@ -14,7 +14,9 @@
 	<button class="btn btn-secondary arenella-btn" 					(click)="rememberCandidate(suggestedCandidate)" 		*ngIf="showBtnUnsavedCandidateDisabled()" title="Add candidate to your list of saved candidates" disabled>{{'arenella-suggestions-profile-btn-save' | translate}}</button>
 	<button class="btn btn-secondary arenella-btn" 					(click)="forgetCandidate()" 							*ngIf="showBtnUnsaveCandidate()" title="removed candidate from your list of saved candidates">{{'arenella-suggestions-profile-btn-unsave' | translate}}</button>
 	<button class="btn btn-secondary arenella-btn" 					(click)="showNotesDialog(notesBox,suggestedCandidate)" 	*ngIf="showBtnNotes()">{{'arenella-suggestions-profile-btn-notes' | translate}}</button>
-	<button class="btn btn-secondary arenella-btn" 					(click)="showCampaignsSelectionBox()"					*ngIf="!isCandidate()">+</button>
+	<button class="btn btn-secondary arenella-btn" 					(click)="showCampaignsSelectionBox()"					*ngIf="!isCandidate()" style="padding-top:6px;padding-bottom:-6px;height:38px;">
+		<div class="chat-icon material-icons" style="font-size:24px;">donut_small</div>
+	</button>
 	<button class="btn btn-secondary arenella-btn" 					(click)="back()"										*ngIf="!isCandidate()" title="Add to Campaign or Role">{{'arenella-suggestions-profile-btn-back' | translate}}</button>
 
 </div>

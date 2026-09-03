@@ -119,6 +119,13 @@
 		cursor:pointer;
 	}
 	
+	.li-arenella-nav-icon{
+		margin-bottom:5px;
+		min-width:50px;
+		text-align:center;
+		cursor:pointer;
+	}
+	
 	.li-arenella-nav-mob{
 		margin-bottom:5px;
 		width:48%;

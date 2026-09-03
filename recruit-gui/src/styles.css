@@ -72,6 +72,10 @@
 		cursor:pointer;
 	}
 	
+	 .dropdown-item-icon{
+	 	min-width:100px;
+	 }
+	
 	.dropdown-item-preauth{
 		min-width:20px;
 	}

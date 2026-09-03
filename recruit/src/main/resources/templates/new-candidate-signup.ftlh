@@ -18,7 +18,7 @@
 		add extra information to your profile. This will provide extra information to the recruiters and increase the chances of being contacted by them. 
 		</p>
 		<p>
-		If you have any queries please feel free to contact me by replying to this email 
+		If you have any queries please feel free to contact me at admin@arenella-ict.com 
 		</p>
 		<P>
 			<a href="https://www.arenella-ict.com">https://www.arenella-ict.com</a>

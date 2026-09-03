@@ -8,6 +8,7 @@ import { PopupsService }					from './popups.service';
 import { CandidateNavService } 				from './candidate-nav.service';
 import { CreditsService } 					from './credits.service';
 import { ListingService }					from './listing.service';
+import { CampaingsService }					from './campaings.service';
 import { TranslateService} 					from "@ngx-translate/core";
 import { CurrentUserAuth }					from './current-user-auth';
 import { PrivateMessagingComponent }		from './private-messaging/private-messaging.component';
@@ -80,6 +81,7 @@ export class AppComponent {
 				private readonly listingService:			ListingService,
 				private readonly sanitizer:					DomSanitizer, 
 				private readonly curriculumService:			CurriculumService,
+				private readonly campaignService:			CampaingsService,
 				private readonly publicMessagingService:	PublicMessagingService,
 			){
 		
@@ -245,10 +247,17 @@ export class AppComponent {
 	* Navigates to the Campaigns page
 	*/
 	public navToCampaigns():void{
-		this.candidateNavService.reset();
-		this.router.navigate(['campaigns']);
+		
+		this.campaignService.hasChatAccess().subscribe(res => {
+			if (res == true) {
+				this.candidateNavService.reset();
+				this.router.navigate(['campaigns']);
+			} else  {
+				this.openNoChatAccessBox();
+			}
+		});
+		
 	}
-
 	
 	/**
 	* Returns the name of the current T&C acceptance cookie

@@ -92,9 +92,12 @@
            <a  class="dropdown-item" (click)="navToSuggestions()">{{'arenella-app-menu-suggestions' | translate}}</a>
         </li>
         
-        <li  class="li-arenella-nav {{menuItemMobileCss}}"  *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()">	
-           <a  class="dropdown-item" (click)="navToCampaigns()">{{'arenella-app-menu-campaigns' | translate}}</a>
+        <li  class="li-arenella-nav li-arenella-nav-icon {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="navToCampaigns()">
+        	<a class="dropdown-item dropdown-item-icon" title="campaigns">
+        		<span class="chat-icon material-icons">donut_small</span>
+        	</a>		
         </li>
+        
         
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="refreschUnreadAlerts()">
         	<a *ngIf="unseenMpPosts > 0" 	class="dropdown-item" routerLink="/recruiter-marketplace"><span class="unseen-posts">{{unseenMpPosts}}</span>{{'arenella-app-menu-mp' | translate}}</a>
@@ -119,7 +122,7 @@
            <a  class="dropdown-item" routerLink="/recruiter-stats">{{'arenella-app-menu-stats' | translate}}</a>
         </li>
         
-        <li  class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="openNewsFeed()">
+        <li  class="li-arenella-nav li-arenella-nav-icon li-arenella-nav-icon {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="openNewsFeed()">
         	<span class="material-icons" style="float:left;margin:0px;padding:0px;">
         		<a title="news feed notifications" class="mobile-menu-bar-icon  unread-notifications-{{getUnreadNewsFeedNotifications() > 0 }} non-mobile-only-element" style="text-decoration:none; margin-top:2px; padding-right:0px; cursor:pointer; float:right;"  (click)="openNewsFeedNotifications()" *ngIf="isAuthenticated()">
         		   notifications
@@ -129,7 +132,7 @@
        			 </a>
        		</span>
        		<span style="float:left;margin:0px;padding:0px;min-width:0px;">
-       			<a	class="dropdown-item" style="min-width:0px;" >{{'arenella-app-menu-news-feed' | translate}}</a>
+       			<a	class="dropdown-item " style="min-width:0px;" >{{'arenella-app-menu-news-feed' | translate}}</a>
        		</span>
         </li>
         <li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
@@ -138,17 +141,19 @@
 		<li class="li-arenella-nav {{menuItemMobileCss}}" *ngIf="isAuthenticated() && !isAuthenticatedAsAdmin() && !isCandidate()" (click)="refreschUnreadAlerts()">
            <a class="dropdown-item recruiter-account " routerLink="/recruiter-account">{{'arenella-app-menu-account' | translate}}</a>
         </li>
-        <li  class="li-arenella-nav {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
-        	<a *ngIf="emailService.unseenEmails > 0" 	class="dropdown-item" routerLink="/email">
+        <li  class="li-arenella-nav li-arenella-nav-icon {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="refreschUnreadAlerts()">
+        	<a *ngIf="emailService.unseenEmails > 0" 	class="dropdown-item dropdown-item-icon" routerLink="/email">
         		<span class="chat-icon material-icons" style="color:green">email</span>
         	</a>
-			<a *ngIf="emailService.unseenEmails <= 0"	class="dropdown-item" routerLink="/email">
+			<a *ngIf="emailService.unseenEmails <= 0"	class="dropdown-item dropdown-item-icon" routerLink="/email">
 				<span class="chat-icon material-icons">email</span>
 			</a>
         </li>
-        <li class="li-arenella-nav {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated()" (click)="openChat()" style="margin-top:5px;">
-           <span class="chat-icon material-icons unread-chats-{{hasUnreadMessages()}}">chat</span>
-        </li>      		
+        <li  class="li-arenella-nav li-arenella-nav-icon {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated()" (click)="openChat()">
+        	<a class="dropdown-item dropdown-item-icon" title="Instant Messanger">
+        		<span class="chat-icon material-icons">chat</span>
+        	</a>		
+        </li>  		
       </ul>
 </div>
 

@@ -146,7 +146,15 @@ export class CandidateProfileComponent {
 	* a Candidate to a Campaign 
 	*/
 	public showCampaignsSelectionBox():void{
-		this.campaignsDialogBox.nativeElement.showModal();
+		
+		this.CampaingsService.hasChatAccess().subscribe(res => {
+			if (res == true) {
+				this.campaignsDialogBox.nativeElement.showModal();
+			} else  {
+				this.appComponent.openNoChatAccessBox();
+			}
+		});
+		
 	}
 	
 	/**
