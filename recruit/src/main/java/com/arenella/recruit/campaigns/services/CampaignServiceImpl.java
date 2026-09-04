@@ -797,6 +797,18 @@ public class CampaignServiceImpl implements CampaignService{
 	}
 	
 	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public boolean hasAccess(String currentUserId) {
+		
+		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
+		
+		return currentUser.subscriptionType() != SubscriptionType.CREDIT;
+		
+	}
+	
+	/**
 	* Attempts to retrieve the Contact of the current user and validate that
 	* they have access to Campaigns
 	* @param currentUserId - Id of currently logged in User

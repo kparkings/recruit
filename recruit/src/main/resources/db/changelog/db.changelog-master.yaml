@@ -3320,3 +3320,21 @@ databaseChangeLog:
                  type: varchar
                  constraints:
                    nullable: false
+  - changeSet:
+      id: addColumn-campaigin-candidates
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidates
+            schemaName: campaigns
+            columns:
+            - column:
+                name: created
+                type: timestamp
+                constraints:
+                  nullable: false
+            - column:
+                name: last_candidate_data_retention_confirmation
+                type: timestamp
+                constraints:
+                  nullable: true

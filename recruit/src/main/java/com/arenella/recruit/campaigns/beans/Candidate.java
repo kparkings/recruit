@@ -1,5 +1,8 @@
 package com.arenella.recruit.campaigns.beans;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 /**
 * A Candidate that can be added to Campaign or Role 
 * level.  
@@ -8,28 +11,34 @@ public class Candidate {
 
 	public enum Type {INTERNAL, EXTERNAL}
 	
-	private String 	id;
-	private Type 	type;
-	private String 	firstName;
-	private String 	surname;
-	private String  countryCode;
-	private String 	jobTitle;
-	private String 	email;
-	private boolean deletedFromSystem;
+	private String 			id;
+	private Type 			type;
+	private String 			firstName;
+	private String 			surname;
+	private String  		countryCode;
+	private String 			jobTitle;
+	private String 			email;
+	private LocalDateTime	created	= LocalDateTime.now();
+	private LocalDateTime 	lastDataRetentionConfirmation;
+	private boolean 		deletedFromSystem;
 	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
 	public Candidate(CandidateBuilder builder) {
-		this.id 				= builder.id;
-		this.type 				= builder.type;
-		this.firstName 			= builder.firstName;
-		this.surname 			= builder.surname;
-		this.countryCode 		= builder.countryCode;
-		this.jobTitle 			= builder.jobTitle;
-		this.email 				= builder.email;
-		this.deletedFromSystem 	= builder.deletedFromSystem;
+		this.id 							= builder.id;
+		this.type 							= builder.type;
+		this.firstName 						= builder.firstName;
+		this.surname 						= builder.surname;
+		this.countryCode 					= builder.countryCode;
+		this.jobTitle 						= builder.jobTitle;
+		this.email 							= builder.email;
+		this.lastDataRetentionConfirmation 	= builder.lastDataRetentionConfirmation;
+		this.deletedFromSystem 				= builder.deletedFromSystem;
+		
+		Optional.ofNullable(builder.created).ifPresent(createdDate -> this.created = createdDate);
+		
 	}
 	
 	/**
@@ -92,6 +101,23 @@ public class Candidate {
 	}
 	
 	/**
+	* Date the Candidate was added to the Campaign/Role
+	* @return date
+	*/
+	public LocalDateTime getCreated() {
+		return this.created;
+	}
+	
+	/**
+	* Returns the last time the external candidate gave permission to store their
+	* details
+	* @return last date of authorisation
+	*/
+	public Optional<LocalDateTime> getLastDataRetentionConfirmation(){
+		return Optional.ofNullable(this.lastDataRetentionConfirmation);
+	}
+	
+	/**
 	* If a Candidate has deleted their profile form the 
 	* system we need to delete their details. Their Candidate 
 	* record will be updated to remove identifying details but the 
@@ -117,14 +143,16 @@ public class Candidate {
 	*/
 	public static class CandidateBuilder {
 		
-		private String 	id;
-		private Type 	type;
-		private String 	firstName;
-		private String 	surname;
-		private String  countryCode;
-		private String 	jobTitle;
-		private String 	email;
-		private boolean deletedFromSystem;
+		private String 			id;
+		private Type 			type;
+		private String 			firstName;
+		private String 			surname;
+		private String  		countryCode;
+		private String 			jobTitle;
+		private String 			email;
+		private LocalDateTime	created;
+		private LocalDateTime 	lastDataRetentionConfirmation;
+		private boolean 		deletedFromSystem;
 		
 		/**
 		* Populates builder with values from existing Candidate
@@ -133,14 +161,16 @@ public class Candidate {
 		*/
 		public CandidateBuilder from(Candidate candidate) {
 			
-			this.id 				= candidate.id;
-			this.type 				= candidate.type;
-			this.firstName 			= candidate.firstName;
-			this.surname 			= candidate.surname;
-			this.countryCode 		= candidate.countryCode;
-			this.jobTitle 			= candidate.jobTitle;
-			this.email 				= candidate.email;
-			this.deletedFromSystem 	= candidate.deletedFromSystem;
+			this.id 							= candidate.id;
+			this.type 							= candidate.type;
+			this.firstName 						= candidate.firstName;
+			this.surname 						= candidate.surname;
+			this.countryCode 					= candidate.countryCode;
+			this.jobTitle 						= candidate.jobTitle;
+			this.email 							= candidate.email;
+			this.lastDataRetentionConfirmation 	= candidate.lastDataRetentionConfirmation;
+			this.created 						= candidate.created;
+			this.deletedFromSystem 				= candidate.deletedFromSystem;
 			
 			return this;
 		} 
@@ -214,6 +244,27 @@ public class Candidate {
 		*/
 		public CandidateBuilder email(String email) {
 			this.email = email;
+			return this;
+		}
+		
+		/**
+		* Sets when the Candidate added
+		* @param created - Data Candidate added
+		* @return Builder
+		*/
+		public CandidateBuilder created(LocalDateTime created) {
+			this.created = created;
+			return this;
+		}
+		
+		/**
+		* Sets the last time the Candidate agreed to have their details stored in the System. This is specific 
+		* to External candidates. Candidates with profiles can manage/delete their own profile
+		* @param lastDataRetentionConfirmation - Date of last time permission was given to store detials
+		* @return Builder
+		*/
+		public CandidateBuilder lastDataRetentionConfirmation(LocalDateTime lastDataRetentionConfirmation) {
+			this.lastDataRetentionConfirmation = lastDataRetentionConfirmation;
 			return this;
 		}
 		

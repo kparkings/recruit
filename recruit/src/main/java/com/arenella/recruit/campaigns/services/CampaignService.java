@@ -216,4 +216,12 @@ public interface CampaignService {
 	*/
 	void acceptExternalCandidateConnectionRequest(UUID externalCandidateId);
 
+	/**
+	* Returns whether or not the current user has access to Campaigin
+	* features or not
+	* @param currentUser - Id of authenticated User
+	* @return Whether or not user has access to Campaign features
+	*/
+	boolean hasAccess(String currentUser);
+	
 } 

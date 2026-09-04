@@ -1,6 +1,7 @@
 package com.arenella.recruit.campaigns.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -2212,30 +2213,6 @@ class CampaignServiceImplTest {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	* Tests exception is thrown if an attempt is made to add 
 	* an Appointment to an unknown Campaign
@@ -4142,55 +4119,6 @@ class CampaignServiceImplTest {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	* Tests User without paid subscription cannot add External Candidates to Campaign
 	*/
@@ -4381,33 +4309,6 @@ class CampaignServiceImplTest {
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	* Tests User without paid subscription cannot send messages to external users
@@ -4732,6 +4633,34 @@ class CampaignServiceImplTest {
 		assertEquals("-", anonymizedCandidate.getEmail());
 		assertEquals("-", anonymizedCandidate.getJobTitle());
 		assertTrue(anonymizedCandidate.isDeleteFromSystem());
+		
+	}
+	
+	/**
+	* Test case User has access to Campaign functionality
+	*/
+	@Test
+	void testHasAccessYes() {
+		
+		String userId = "rec111";
+		
+		when(this.mockContactDao.fetchContact(userId)).thenReturn(Optional.of(new Contact(userId, "recFN", "recSN", "recEmail", SubscriptionType.PAID)));
+		
+		assertTrue(this.service.hasAccess(userId));
+		
+	}
+	
+	/**
+	* Test case User does not have access to Campaign functionality
+	*/
+	@Test
+	void testHasAccessNo() {
+		
+		String userId = "rec111";
+		
+		when(this.mockContactDao.fetchContact(userId)).thenReturn(Optional.of(new Contact(userId, "recFN", "recSN", "recEmail", SubscriptionType.CREDIT)));
+		
+		assertFalse(this.service.hasAccess(userId));
 		
 	}
 	

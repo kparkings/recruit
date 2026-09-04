@@ -426,6 +426,16 @@ public class CampaignController {
 	}
 	
 	/**
+	* Determines if User has access to the Campaign features
+	* @param principal - currently logged in user
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="campaign/hasAccess", produces="application/json")
+	public ResponseEntity<Boolean> hasChatAccess(Principal principal) {
+		return ResponseEntity.ok(this.campaignService.hasAccess(principal.getName()));
+	}
+	
+	/**
 	* Sends message to selected external candidates
 	* @param campaignId			- Id of Campaign message is associated with
 	* @param roleId				- Id of the Role message is associated with
@@ -460,6 +470,5 @@ public class CampaignController {
 		this.campaignService.acceptExternalCandidateConnectionRequest(externalCandidateId);
 		return ResponseEntity.ok().body(MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE);
 	}
-	
 	
 }

@@ -699,4 +699,23 @@ class CampaignControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
+	
+	/**
+	* Tests endpoint to return if User has access to Campaigin features. This is to provide an indication to the FE. Actual valication
+	* is handled by the backend per request. But using this the FE can decided to show/hide features
+	*/
+	@Test
+	void testHasAccess() {
+		
+		final String 		userId 				= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockCampaignService.hasAccess(userId)).thenReturn(true);
+		
+		ResponseEntity<Boolean> response = this.controller.hasChatAccess(mockPrincipal);
+		
+		assertTrue(response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
 }

@@ -422,13 +422,11 @@ export class CampaingsService {
 	*/
 	public hasChatAccess():Observable<boolean>{
 		
-		const backendUrl:string = environment.backendUrl +'privatechat/hasAccess';
+		const backendUrl:string = environment.backendUrl +'campaign/hasAccess';
 		  
 		return this.httpClient.get<any>(backendUrl, this.httpOptions);
 		
 	}
-	
-	
 	
 }
 

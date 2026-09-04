@@ -1,5 +1,8 @@
 package com.arenella.recruit.campaigns.entities;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
@@ -40,8 +43,15 @@ public class CandidateEntity {
 	@Column(name="email")
 	private String 	email;
 	
+	@Column(name="created")
+	private LocalDateTime		created;
+	
+	@Column(name="last_candidate_data_retention_confirmation")
+	private LocalDateTime lastDataRetentionConfirmation;
+	
 	@Column(name="deleted_from_system")
 	private boolean deletedFromSystem;
+	
 	
 	/**
 	* Default constructor 
@@ -55,14 +65,16 @@ public class CandidateEntity {
 	* @param builder - Contains initialization values
 	*/
 	public CandidateEntity(CandidateEntityBuilder builder) {
-		this.id 				= builder.id;
-		this.type 				= builder.type;
-		this.firstName 			= builder.firstName;
-		this.surname 			= builder.surname;
-		this.countryCode 		= builder.countryCode;
-		this.jobTitle 			= builder.jobTitle;
-		this.email 				= builder.email;
-		this.deletedFromSystem 	=  builder.deletedFromSystem;
+		this.id 							= builder.id;
+		this.type 							= builder.type;
+		this.firstName 						= builder.firstName;
+		this.surname 						= builder.surname;
+		this.countryCode 					= builder.countryCode;
+		this.jobTitle 						= builder.jobTitle;
+		this.email 							= builder.email;
+		this.created						= builder.created;
+		this.lastDataRetentionConfirmation 	= builder.lastDataRetentionConfirmation;
+		this.deletedFromSystem 				= builder.deletedFromSystem;
 	}
 	
 	/**
@@ -125,6 +137,24 @@ public class CandidateEntity {
 	}
 	
 	/**
+	* Date the Candidate was added to the Campaign/Role
+	* @return date
+	*/
+	public LocalDateTime getCreated() {
+		return this.created;
+	}
+	
+	/**
+	* Returns the last time the external candidate gave permission to store their
+	* details
+	* @return last date of authorisation
+	*/
+	public Optional<LocalDateTime> getLastDataRetentionConfirmation(){
+		return Optional.ofNullable(this.lastDataRetentionConfirmation);
+	}
+	
+	
+	/**
 	* If a Candidate has deleted their profile form the 
 	* system we need to delete their details. Their Candidate 
 	* record will be updated to remove identifying details but the 
@@ -150,13 +180,16 @@ public class CandidateEntity {
 	*/
 	public static class CandidateEntityBuilder {
 		
-		private String 	id;
-		private Type 	type;
-		private String 	firstName;
-		private String 	surname;
-		private String  countryCode;
-		private String 	jobTitle;
-		private String 	email;
+		private String 			id;
+		private Type 			type;
+		private String 			firstName;
+		private String 			surname;
+		private String  		countryCode;
+		private String 			jobTitle;
+		private String 			email;
+		private LocalDateTime	created;
+		private LocalDateTime 	lastDataRetentionConfirmation;
+		
 		private boolean deletedFromSystem;
 		
 		/**
@@ -241,6 +274,27 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets when the Candidate added
+		* @param created - Data Candidate added
+		* @return Builder
+		*/
+		public CandidateEntityBuilder created(LocalDateTime created) {
+			this.created = created;
+			return this;
+		}
+		
+		/**
+		* Sets the last time the Candidate agreed to have their details stored in the System. This is specific 
+		* to External candidates. Candidates with profiles can manage/delete their own profile
+		* @param lastDataRetentionConfirmation - Date of last time permission was given to store details
+		* @return Builder
+		*/
+		public CandidateEntityBuilder lastDataRetentionConfirmation(LocalDateTime lastDataRetentionConfirmation) {
+			this.lastDataRetentionConfirmation = lastDataRetentionConfirmation;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized instance 
 		* @return initialized instance
 		*/
@@ -266,6 +320,8 @@ public class CandidateEntity {
 					.jobTitle(entity.getJobTitle())
 					.surname(entity.getSurname())
 					.type(entity.getType())
+					.created(entity.getCreated())
+					.lastDataRetentionConfirmation(entity.getLastDataRetentionConfirmation().orElse(null))
 				.build();
 	}
 	
@@ -285,6 +341,8 @@ public class CandidateEntity {
 					.jobTitle(candidate.getJobTitle())
 					.surname(candidate.getSurname())
 					.type(candidate.getType())
+					.created(candidate.getCreated())
+					.lastDataRetentionConfirmation(candidate.getLastDataRetentionConfirmation().orElse(null))
 				.build();
 	}
 	
