@@ -12,6 +12,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.Set;
@@ -4618,6 +4619,7 @@ class CampaignServiceImplTest {
 					.deletedFromSystem(false)
 					.email("kparkings@gmail.com")
 					.jobTitle("java developer")
+					.lastDataRetentionConfirmation(LocalDateTime.of(2024, 9, 4, 19, 1, 12))
 				.build();
 		
 		when(this.mockCandidateDao.findCandidateById(candidateId.toString())).thenReturn(Optional.of(candidate));
@@ -4633,6 +4635,7 @@ class CampaignServiceImplTest {
 		assertEquals("-", anonymizedCandidate.getEmail());
 		assertEquals("-", anonymizedCandidate.getJobTitle());
 		assertTrue(anonymizedCandidate.isDeleteFromSystem());
+		assertTrue(anonymizedCandidate.getLastDataRetentionConfirmation().isEmpty());
 		
 	}
 	
@@ -4661,6 +4664,43 @@ class CampaignServiceImplTest {
 		when(this.mockContactDao.fetchContact(userId)).thenReturn(Optional.of(new Contact(userId, "recFN", "recSN", "recEmail", SubscriptionType.CREDIT)));
 		
 		assertFalse(this.service.hasAccess(userId));
+		
+	}
+	
+	/**
+	* Test path for external user confirming that details can be stored
+	*/
+	@Test
+	void testAcceptExternalCandidateConnectionRequest() {
+		
+		ArgumentCaptor<Candidate> argCaptCandidate = ArgumentCaptor.forClass(Candidate.class);
+		
+		final UUID candidateId = UUID.randomUUID();
+		final Candidate candidate = Candidate
+				.builder()
+					.id(candidateId.toString())
+					.firstName("kevin")
+					.surname("parkings")
+					.deletedFromSystem(true)
+					.email("kparkings@gmail.com")
+					.jobTitle("java developer")
+				.build();
+		
+		when(this.mockCandidateDao.findCandidateById(candidateId.toString())).thenReturn(Optional.of(candidate));
+		doNothing().when(mockCandidateDao).saveCandidate(argCaptCandidate.capture());
+		
+		this.service.acceptExternalCandidateConnectionRequest(candidateId);
+		
+		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
+		
+		Candidate anonymizedCandidate = argCaptCandidate.getValue();
+		
+		assertEquals("kevin", 				anonymizedCandidate.getFirstName());
+		assertEquals("parkings", 			anonymizedCandidate.getSurname());
+		assertEquals("kparkings@gmail.com", anonymizedCandidate.getEmail());
+		assertEquals("java developer", 		anonymizedCandidate.getJobTitle());
+		assertFalse(anonymizedCandidate.isDeleteFromSystem());
+		assertFalse(anonymizedCandidate.getLastDataRetentionConfirmation().isEmpty());
 		
 	}
 	

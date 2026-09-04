@@ -775,6 +775,7 @@ public class CampaignServiceImpl implements CampaignService{
 					.jobTitle(anonymizedDataItem)
 					.email(anonymizedDataItem)
 					.deletedFromSystem(true)
+					.lastDataRetentionConfirmation(null)
 					.build();
 			
 			this.candidateDao.saveCandidate(deletedCandidate);
@@ -788,8 +789,13 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void acceptExternalCandidateConnectionRequest(UUID externalCandidateId) {
-		// TODO Add created and last confirmation datetimes.
-		// If deleted the last confirmation date needs to be set to null
+		
+		this.candidateDao.findCandidateById(externalCandidateId.toString()).ifPresent(candidate -> 
+			this.candidateDao.saveCandidate(Candidate.builder().from(candidate).deletedFromSystem(false).lastDataRetentionConfirmation(LocalDateTime.now()).build())
+		);
+		
+		// TODO 
+		// 
 		// Need email to ask for 1 year renewal
 		// Need scheduled job to
 			// 1. check for 7 day with no response ( delete external candidates ) using request_sent field
