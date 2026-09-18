@@ -3,6 +3,7 @@ package com.arenella.recruit.campaigns.beans;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,11 @@ class CandidateTest {
 	private static final boolean 			DELETED_FROM_SYSTEM 			= false;
 	public static final LocalDateTime 		CREATED 						= LocalDateTime.of(2026, 9, 4, 18, 13, 01);
 	public static final LocalDateTime 		LAST_DATA_RETENTION_AGREEMENT 	= LocalDateTime.of(2026, 9, 4, 19, 13, 01);
-
+	public static final LocalDateTime 		LAST_DATA_RETENTION_EMAIL 		= LocalDateTime.of(2026, 9, 15, 12, 58, 01);
+	public static final String				CREATED_BY						= "rec1";
+	public static final UUID				CAMPAIGN_ID 					= UUID.randomUUID();
+	public static final UUID				ROLE_ID							= UUID.randomUUID();
+	
 	/**
 	* Tests Construction based upon a Builder 
 	*/
@@ -41,8 +46,12 @@ class CandidateTest {
 					.jobTitle(JOB_TITLE)
 					.email(EMAIL)
 					.created(CREATED)
+					.createdBy(CREATED_BY)
 					.lastDataRetentionConfirmation(LAST_DATA_RETENTION_AGREEMENT)
 					.deletedFromSystem(DELETED_FROM_SYSTEM)
+					.dataRetentionRenewalEmailSent(LAST_DATA_RETENTION_EMAIL)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 				.build();
 		
 		assertEquals(ID, 								candidate.getId());
@@ -55,6 +64,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							candidate.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	candidate.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				candidate.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		candidate.getDataRetentionRenewalEmailSent().orElseThrow());		
+		assertEquals(CREATED_BY, 						candidate.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						candidate.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							candidate.getRoleId().orElseThrow());
 		
 	}
 	
@@ -74,8 +87,12 @@ class CandidateTest {
 					.jobTitle(JOB_TITLE)
 					.email(EMAIL)
 					.created(CREATED)
+					.createdBy(CREATED_BY)
 					.lastDataRetentionConfirmation(LAST_DATA_RETENTION_AGREEMENT)
 					.deletedFromSystem(DELETED_FROM_SYSTEM)
+					.dataRetentionRenewalEmailSent(LAST_DATA_RETENTION_EMAIL)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 				.build();
 		
 		assertEquals(ID, 								candidate.getId());
@@ -88,6 +105,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							candidate.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	candidate.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				candidate.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		candidate.getDataRetentionRenewalEmailSent().orElseThrow());
+		assertEquals(CREATED_BY, 						candidate.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						candidate.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							candidate.getRoleId().orElseThrow());
 		
 		CandidateEntity entity = CandidateEntity.toEntity(candidate);
 		
@@ -101,6 +122,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							entity.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	entity.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				entity.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		entity.getDataRetentionRenewalEmailSent().orElseThrow());
+		assertEquals(CREATED_BY, 						entity.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						entity.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							entity.getRoleId().orElseThrow());
 		
 	}
 	
@@ -120,8 +145,12 @@ class CandidateTest {
 					.jobTitle(JOB_TITLE)
 					.email(EMAIL)
 					.created(CREATED)
+					.createdBy(CREATED_BY)
 					.lastDataRetentionConfirmation(LAST_DATA_RETENTION_AGREEMENT)
 					.deletedFromSystem(DELETED_FROM_SYSTEM)
+					.dataRetentionRenewalEmailSent(LAST_DATA_RETENTION_EMAIL)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 				.build();
 		
 		assertEquals(ID, 								entity.getId());
@@ -134,6 +163,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							entity.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	entity.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				entity.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		entity.getDataRetentionRenewalEmailSent().orElseThrow());
+		assertEquals(CREATED_BY, 						entity.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						entity.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							entity.getRoleId().orElseThrow());
 		
 		Candidate candidate = CandidateEntity.fromEntity(entity);
 		
@@ -147,6 +180,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							candidate.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	candidate.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				candidate.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		candidate.getDataRetentionRenewalEmailSent().orElseThrow());
+		assertEquals(CREATED_BY, 						candidate.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						candidate.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							candidate.getRoleId().orElseThrow());
 	}
 	
 	/**
@@ -165,8 +202,12 @@ class CandidateTest {
 					.jobTitle(JOB_TITLE)
 					.email(EMAIL)
 					.created(CREATED)
+					.createdBy(CREATED_BY)
 					.lastDataRetentionConfirmation(LAST_DATA_RETENTION_AGREEMENT)
 					.deletedFromSystem(DELETED_FROM_SYSTEM)
+					.dataRetentionRenewalEmailSent(LAST_DATA_RETENTION_EMAIL)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 				.build();
 		
 		assertEquals(ID, 								candidate.getId());
@@ -179,6 +220,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							candidate.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	candidate.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				candidate.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		candidate.getDataRetentionRenewalEmailSent().orElseThrow());
+		assertEquals(CREATED_BY, 						candidate.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						candidate.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							candidate.getRoleId().orElseThrow());
 		
 		Candidate clone = Candidate.builder().from(candidate).build();
 	
@@ -192,6 +237,10 @@ class CandidateTest {
 		assertEquals(CREATED, 							clone.getCreated());
 		assertEquals(LAST_DATA_RETENTION_AGREEMENT, 	clone.getLastDataRetentionConfirmation().orElseThrow());
 		assertEquals(DELETED_FROM_SYSTEM, 				clone.isDeleteFromSystem());
+		assertEquals(LAST_DATA_RETENTION_EMAIL, 		clone.getDataRetentionRenewalEmailSent().orElseThrow());
+		assertEquals(CREATED_BY, 						clone.getCreatedBy());
+		assertEquals(CAMPAIGN_ID, 						clone.getCampaignId().orElseThrow());
+		assertEquals(ROLE_ID, 							clone.getRoleId().orElseThrow());
 		
 	}
 	

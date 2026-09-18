@@ -337,10 +337,6 @@ public class CampaignServiceImpl implements CampaignService{
 				.build());
 		}
 		
-		
-		
-		
-		//this.noteDao.deleteById(noteId);
 	}
 
 	/**
@@ -661,7 +657,11 @@ public class CampaignServiceImpl implements CampaignService{
 		candidate = Candidate.builder()
 				.from(candidate)
 				.id(UUID.randomUUID().toString())
-				.type(Type.EXTERNAL).build();
+				.type(Type.EXTERNAL)
+				.campaignId(campaignId)
+				.roleId(roleId)
+				.createdBy(currentUser)
+				.build();
 		
 		this.candidateDao.saveCandidate(candidate);
 		
@@ -688,6 +688,44 @@ public class CampaignServiceImpl implements CampaignService{
 		}else {
 			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
 		}
+		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(Candidate candidate, UUID campaignId, UUID roleId) {
+		
+		Optional<Campaign> 		campaign 		= this.campaignDao.fetchCampaign(campaignId);
+		Optional<Role> 			role 			= this.roleDao.fetchRoleById(roleId);
+		Optional<Contact> 		recruiterOpt 	= this.contactDao.fetchContact(candidate.getCreatedBy());
+		
+		if (recruiterOpt.isEmpty()) {
+			this.rejectExternalCandidateConnectionRequest(UUID.fromString(candidate.getId()));
+			return;
+		}
+		
+		if (campaign.isEmpty() && role.isEmpty()) {
+			this.rejectExternalCandidateConnectionRequest(UUID.fromString(candidate.getId()));
+			return;
+		}
+		
+		recruiterOpt.ifPresent(recruiter -> {
+			EmailRecipient<UUID> recipient = new EmailRecipient<>(UUID.fromString(candidate.getId()), candidate.getId(), ContactType.EXTERNAL_CANDIDATE);
+			recipient.setFirstName(candidate.getFirstName());
+			recipient.setEmail(candidate.getEmail());
+			
+			ExternalCandiateAddedToSystemSendEmailCommand command = ExternalCandiateAddedToSystemSendEmailCommand
+					.builder()
+						.recipients(Set.of(recipient))
+						.campaignOrRole(Optional.ofNullable(role).isPresent() ? role.get().getName() : campaign.get().getName())
+						.recruiterName(recruiter.firstName() + " " + recruiter.surname())
+						.recruiterEmail(recruiter.email())
+					.build();
+			
+			this.eventPublisher.publishExternalCandiateMessageSendEmailCommand(command);
+		});
 		
 	}
 	
@@ -812,6 +850,30 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		return currentUser.subscriptionType() != SubscriptionType.CREDIT;
 		
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationCuttoff(LocalDateTime cuttoff) {
+		return this.candidateDao.fetchExternalCandidatesThatMissedAuthorisationCuttoff(cuttoff);
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff) {
+		return this.candidateDao.fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(cuttoffRenewalEmail, cuttoff);
+	}
+
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff) {
+		return this.candidateDao.fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(cuttoffRenewalEmail, cuttoff);
 	}
 	
 	/**

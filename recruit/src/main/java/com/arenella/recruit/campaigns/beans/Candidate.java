@@ -2,6 +2,7 @@ package com.arenella.recruit.campaigns.beans;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
 * A Candidate that can be added to Campaign or Role 
@@ -18,9 +19,13 @@ public class Candidate {
 	private String  		countryCode;
 	private String 			jobTitle;
 	private String 			email;
-	private LocalDateTime	created	= LocalDateTime.now();
+	private LocalDateTime	created							= LocalDateTime.now();
 	private LocalDateTime 	lastDataRetentionConfirmation;
+	private LocalDateTime 	dataRetentionRenewalEmailSent 	= LocalDateTime.now();
 	private boolean 		deletedFromSystem;
+	private String 			createdBy;
+	private UUID 			campaignId;
+	private UUID 			roleId;
 	
 	/**
 	* Constructor based upon a Builder
@@ -36,8 +41,13 @@ public class Candidate {
 		this.email 							= builder.email;
 		this.lastDataRetentionConfirmation 	= builder.lastDataRetentionConfirmation;
 		this.deletedFromSystem 				= builder.deletedFromSystem;
+		this.dataRetentionRenewalEmailSent	= builder.dataRetentionRenewalEmailSent;
+		this.createdBy						= builder.createdBy;
+		this.campaignId						= builder.campaignId;
+		this.roleId							= builder.roleId;
 		
 		Optional.ofNullable(builder.created).ifPresent(createdDate -> this.created = createdDate);
+		Optional.ofNullable(builder.dataRetentionRenewalEmailSent).ifPresent(emailSent -> this.dataRetentionRenewalEmailSent = emailSent);
 		
 	}
 	
@@ -109,6 +119,15 @@ public class Candidate {
 	}
 	
 	/**
+	* Returns the last time an email was sent to the candidate asking for 
+	* permission to keep their details for longer 
+	* @return last time email sent
+	*/
+	public Optional<LocalDateTime> getDataRetentionRenewalEmailSent(){
+		return Optional.ofNullable(this.dataRetentionRenewalEmailSent);
+	}
+	
+	/**
 	* Returns the last time the external candidate gave permission to store their
 	* details
 	* @return last date of authorisation
@@ -128,6 +147,33 @@ public class Candidate {
 	*/
 	public boolean isDeleteFromSystem() {
 		return deletedFromSystem;
+	}
+	
+	/**
+	* For an external candidate returns the ID of the recruiter that 
+	* added them to the system
+	* @return
+	*/
+	public String getCreatedBy() {
+		return this.createdBy;
+	} 	
+			
+	/**
+	* For external candidates if this is a Campaign level association, the Id
+	* of the Campaign
+	* @return Id of the Campaign External candidates is associated with
+	*/
+	public Optional<UUID> getCampaignId() {
+		return Optional.ofNullable(this.campaignId);
+	}
+	
+	/**
+	* For external candidates if this is a Role level association, the Id
+	* of the Role
+	* @return Id of the Role External candidates is associated with
+	*/
+	public Optional<UUID> getRoleId() {
+		return Optional.ofNullable(this.roleId);
 	}
 	
 	/**
@@ -152,7 +198,11 @@ public class Candidate {
 		private String 			email;
 		private LocalDateTime	created;
 		private LocalDateTime 	lastDataRetentionConfirmation;
+		private LocalDateTime	dataRetentionRenewalEmailSent;
 		private boolean 		deletedFromSystem;
+		private String 			createdBy;
+		private UUID 			campaignId;
+		private UUID 			roleId;
 		
 		/**
 		* Populates builder with values from existing Candidate
@@ -171,6 +221,10 @@ public class Candidate {
 			this.lastDataRetentionConfirmation 	= candidate.lastDataRetentionConfirmation;
 			this.created 						= candidate.created;
 			this.deletedFromSystem 				= candidate.deletedFromSystem;
+			this.dataRetentionRenewalEmailSent	= candidate.dataRetentionRenewalEmailSent;
+			this.createdBy						= candidate.createdBy;
+			this.campaignId						= candidate.campaignId;
+			this.roleId							= candidate.roleId;
 			
 			return this;
 		} 
@@ -269,12 +323,55 @@ public class Candidate {
 		}
 		
 		/**
+		* Sets the last time a email was sent to the Candidate asking for permission to retain their 
+		* details in the system
+		* @param dataRetentionRenewalEmailSent - When last email was sent
+		* @return Builder
+		*/
+		public CandidateBuilder dataRetentionRenewalEmailSent(LocalDateTime dataRetentionRenewalEmailSent) {
+			this.dataRetentionRenewalEmailSent = dataRetentionRenewalEmailSent;
+			return this;
+		}
+		
+		/**
 		* Sets whether the Candidate has been deleted from the System
 		* @param deletedFromSystem - If Candidate has been deleted from the System
 		* @return Builder
 		*/
 		public CandidateBuilder deletedFromSystem(boolean deletedFromSystem) {
 			this.deletedFromSystem = deletedFromSystem;
+			return this;
+		}
+		
+		/**
+		* For External candidates the Id of the Recruiter that created them 
+		* @param createdBy - Id of Recruiter
+		* @return Builder
+		*/
+		public CandidateBuilder createdBy(String createdBy) {
+			this.createdBy = createdBy;
+			return this;
+		}
+		
+		/**
+		* For External candidates the id of the Campaign they are associated with if the 
+		* association is at Campaign level
+		* @param campaignId - Id of the Campaign
+		* @return Builder
+		*/
+		public CandidateBuilder campaignId(UUID campaignId) {
+			this.campaignId = campaignId;
+			return this;
+		}
+		
+		/**
+		* For External candidates the id of the Role they are associated with if the 
+		* association is at Role level
+		* @param roleId - Id of the Role
+		* @return Builder
+		*/
+		public CandidateBuilder roleId(UUID roleId) {
+			this.roleId = roleId;
 			return this;
 		}
 		

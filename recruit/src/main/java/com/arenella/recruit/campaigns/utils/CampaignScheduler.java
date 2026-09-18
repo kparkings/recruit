@@ -1,9 +1,13 @@
 package com.arenella.recruit.campaigns.utils;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.arenella.recruit.candidates.services.CandidateService;
+import com.arenella.recruit.campaign.dao.CandidateEntityDao;
+import com.arenella.recruit.campaigns.services.CampaignService;
 
 /**
 * Scheduler for Campaigns
@@ -14,27 +18,35 @@ import com.arenella.recruit.candidates.services.CandidateService;
 @Service
 public class CampaignScheduler {
 
-	private CandidateService candidateService;
+	private CampaignService 				campaignService;
 	
 	/**
 	* Constructor
 	* @param candidateService - Services relating to Candidates including ExternalCandidate
 	*/
-	public CampaignScheduler(CandidateService candidateService) {
-		this.candidateService = candidateService;
+	public CampaignScheduler(CampaignService campaignService, CandidateEntityDao candidateEntityDao) {
+		this.campaignService 	= campaignService;
 	}
 	
 	@Scheduled(fixedRate=10000)
 	public void runScheduler() {
 		
-		//1. Fetch cadidates ( external , deleted=false, created before today-7 days, lastCandidateDataRetentionConfirmation=null 
-			//Deelete
+		final LocalDateTime cuttoffNoAuthroisationRecieved = LocalDateTime.now().minusDays(7);
+		final LocalDateTime cuttoffAuthorizationEmailSent = LocalDateTime.now().minusDays(7);
+		final LocalDateTime cuttoffForSendEmailLastAuthorizationReceived = LocalDateTime.now().minusDays(365);
+		final LocalDateTime cuttoffForDeleteCandidateNoAuthorizationReceived = LocalDateTime.now().minusDays(372);
 		
-		//2. Fetch cadidates ( external , deleted=false,  lastCandidateDataRetentionConfirmation < today - 1 year + 7 days
-		//Send Email to ask for permission
+		campaignService.fetchExternalCandidatesThatMissedAuthorisationCuttoff(cuttoffNoAuthroisationRecieved).forEach(extCandidate -> {
+			this.campaignService.rejectExternalCandidateConnectionRequest(UUID.fromString(extCandidate.getId()));
+		});
 		
-		//3. Fetch cadidates ( external , deleted=false,  lastCandidateDataRetentionConfirmation < today - 1 year
-			//delete
+		campaignService.fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(cuttoffAuthorizationEmailSent, cuttoffForSendEmailLastAuthorizationReceived).forEach(extCandidate -> {
+			this.campaignService.sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(extCandidate, extCandidate.getCampaignId().orElse(null), extCandidate.getRoleId().orElse(null));
+		});
+		
+		campaignService.fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(cuttoffAuthorizationEmailSent, cuttoffForDeleteCandidateNoAuthorizationReceived).forEach(extCandidate -> {
+			this.campaignService.rejectExternalCandidateConnectionRequest(UUID.fromString(extCandidate.getId()));
+		});
 				
 	}
 	

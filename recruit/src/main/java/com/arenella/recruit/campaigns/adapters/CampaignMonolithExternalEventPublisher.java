@@ -88,5 +88,34 @@ public class CampaignMonolithExternalEventPublisher implements CampaignExternalE
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
 		
 	}
+	
+	/**
+	* Refer to the CampaignExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishExternalCandiateDataRenentionRenewalMessageSendEmailCommand(ExternalCandiateDataRetentionRenewalSendEmailCommand command) {
+		
+		Map<String, Object> modelExt = new HashMap<>();
+		modelExt.put("message", 			command.getMessage()); 
+		modelExt.put("recruiterName", 		command.getRecruiterName()); 
+		modelExt.put("recruiterCompany", 	command.getRecruiterCompany()); 
+		modelExt.put("recruiterEmail", 		command.getRecruiterEmail()); 
+		modelExt.put("campaignOrRole", 		command.getCampaignOrRole()); 
+			
+		RequestSendEmailCommand cExt = 
+				RequestSendEmailCommand
+					.builder()
+						.emailType(EmailType.EXTERN)
+						.model(modelExt)
+						.persistable(false)
+						.recipients(command.getRecipients())
+						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
+						.title("Arenella-ICT - Can we continue to store your data?")
+						.topic(EmailTopic.CAMPAIGN_EXT_CANDIIDATE_ADDED)
+					.build();
+		
+		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);
+		
+	}
 
 }

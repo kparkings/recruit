@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaigns.services;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -115,6 +116,8 @@ public class CampaignContactMigrationUtil {
 							.countryCode(candidate.getCountry().getIsoCode())
 							.deletedFromSystem(false)
 							.type(Type.INTERNAL)		
+							.created(LocalDateTime.now())
+							
 						.build());
 				
 				}catch(Exception e) {

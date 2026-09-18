@@ -2,6 +2,7 @@ package com.arenella.recruit.campaigns.entities;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
@@ -45,13 +46,24 @@ public class CandidateEntity {
 	
 	@Column(name="created")
 	private LocalDateTime		created;
-	
-	@Column(name="last_candidate_data_retention_confirmation")
-	private LocalDateTime lastDataRetentionConfirmation;
-	
+
 	@Column(name="deleted_from_system")
 	private boolean deletedFromSystem;
 	
+	@Column(name="ext_candidate_last_candidate_data_retention_confirmation")
+	private LocalDateTime lastDataRetentionConfirmation;
+	
+	@Column(name="ext_candidate_data_retention_renewal_sent")
+	private LocalDateTime dataRetentionRenewalEmailSent;
+	
+	@Column(name="ext_candidate_created_by")
+	private String createdBy;
+	
+	@Column(name="ext_candidate_campaign_id")
+	private UUID campaignId;
+	
+	@Column(name="ext_candidate_role_id")
+	private UUID roleId;
 	
 	/**
 	* Default constructor 
@@ -74,7 +86,11 @@ public class CandidateEntity {
 		this.email 							= builder.email;
 		this.created						= builder.created;
 		this.lastDataRetentionConfirmation 	= builder.lastDataRetentionConfirmation;
+		this.dataRetentionRenewalEmailSent	= builder.dataRetentionRenewalEmailSent;
 		this.deletedFromSystem 				= builder.deletedFromSystem;
+		this.createdBy 						= builder.createdBy;
+		this.campaignId 					= builder.campaignId;
+		this.roleId 						= builder.roleId;
 	}
 	
 	/**
@@ -153,6 +169,41 @@ public class CandidateEntity {
 		return Optional.ofNullable(this.lastDataRetentionConfirmation);
 	}
 	
+	/**
+	* Returns the last time an email was sent to the candidate asking for 
+	* permission to keep their details for longer 
+	* @return last time email sent
+	*/
+	public Optional<LocalDateTime> getDataRetentionRenewalEmailSent(){
+		return Optional.ofNullable(this.dataRetentionRenewalEmailSent);
+	}
+	
+	/**
+	* For an external candidate returns the ID of the recruiter that 
+	* added them to the system
+	* @return
+	*/
+	public String getCreatedBy() {
+		return this.createdBy;
+	} 	
+			
+	/**
+	* For external candidates if this is a Campaign level association, the Id
+	* of the Campaign
+	* @return Id of the Campaign External candidates is associated with
+	*/
+	public Optional<UUID> getCampaignId() {
+		return Optional.ofNullable(this.campaignId);
+	}
+	
+	/**
+	* For external candidates if this is a Role level association, the Id
+	* of the Role
+	* @return Id of the Role External candidates is associated with
+	*/
+	public Optional<UUID> getRoleId() {
+		return Optional.ofNullable(this.roleId);
+	}
 	
 	/**
 	* If a Candidate has deleted their profile form the 
@@ -180,17 +231,20 @@ public class CandidateEntity {
 	*/
 	public static class CandidateEntityBuilder {
 		
-		private String 			id;
-		private Type 			type;
-		private String 			firstName;
-		private String 			surname;
-		private String  		countryCode;
-		private String 			jobTitle;
-		private String 			email;
-		private LocalDateTime	created;
-		private LocalDateTime 	lastDataRetentionConfirmation;
-		
-		private boolean deletedFromSystem;
+		private String 				id;
+		private Type 				type;
+		private String 				firstName;
+		private String 				surname;
+		private String  			countryCode;
+		private String 				jobTitle;
+		private String 				email;
+		private LocalDateTime		created;
+		private LocalDateTime 		lastDataRetentionConfirmation;
+		private LocalDateTime 		dataRetentionRenewalEmailSent;
+		private boolean 			deletedFromSystem;
+		private String 				createdBy;
+		private UUID 				campaignId;
+		private UUID 				roleId;
 		
 		/**
 		* Sets the Id of the Candidate
@@ -295,6 +349,49 @@ public class CandidateEntity {
 		}
 		
 		/**
+		* Sets the last time a email was sent to the Candidate asking for permission to retain their 
+		* details in the system
+		* @param dataRetentionRenewalEmailSent - When last email was sent
+		* @return Builder
+		*/
+		public CandidateEntityBuilder dataRetentionRenewalEmailSent(LocalDateTime dataRetentionRenewalEmailSent) {
+			this.dataRetentionRenewalEmailSent = dataRetentionRenewalEmailSent;
+			return this;
+		}
+		
+		/**
+		* For External candidates the Id of the Recruiter that created them 
+		* @param createdBy - Id of Recruiter
+		* @return Builder
+		*/
+		public CandidateEntityBuilder createdBy(String createdBy) {
+			this.createdBy = createdBy;
+			return this;
+		}
+		
+		/**
+		* For External candidates the id of the Campaign they are associated with if the 
+		* association is at Campaign level
+		* @param campaignId - Id of the Campaign
+		* @return Builder
+		*/
+		public CandidateEntityBuilder campaignId(UUID campaignId) {
+			this.campaignId = campaignId;
+			return this;
+		}
+		
+		/**
+		* For External candidates the id of the Role they are associated with if the 
+		* association is at Role level
+		* @param roleId - Id of the Role
+		* @return Builder
+		*/
+		public CandidateEntityBuilder roleId(UUID roleId) {
+			this.roleId = roleId;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized instance 
 		* @return initialized instance
 		*/
@@ -322,6 +419,10 @@ public class CandidateEntity {
 					.type(entity.getType())
 					.created(entity.getCreated())
 					.lastDataRetentionConfirmation(entity.getLastDataRetentionConfirmation().orElse(null))
+					.dataRetentionRenewalEmailSent(entity.getDataRetentionRenewalEmailSent().orElse(null))
+					.createdBy(entity.getCreatedBy())
+					.campaignId(entity.getCampaignId().orElse(null))
+					.roleId(entity.getRoleId().orElse(null))
 				.build();
 	}
 	
@@ -343,6 +444,10 @@ public class CandidateEntity {
 					.type(candidate.getType())
 					.created(candidate.getCreated())
 					.lastDataRetentionConfirmation(candidate.getLastDataRetentionConfirmation().orElse(null))
+					.dataRetentionRenewalEmailSent(candidate.getDataRetentionRenewalEmailSent().orElse(null))
+					.createdBy(candidate.getCreatedBy())
+					.campaignId(candidate.getCampaignId().orElse(null))
+					.roleId(candidate.getRoleId().orElse(null))
 				.build();
 	}
 	

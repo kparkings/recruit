@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaigns.services;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -223,5 +224,39 @@ public interface CampaignService {
 	* @return Whether or not user has access to Campaign features
 	*/
 	boolean hasAccess(String currentUser);
+	
+	/**
+	* Returns External Candidates that have missed the cuttoff for agreeing to have their details stored
+	* in the Recruiters Campaign/Role
+	* @param cuttOff - Date before which we consider an external candidate not to have replied
+	* @return External Candidates who didn't respond to the request for authorization request in time
+	*/
+	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationCuttoff(LocalDateTime cuttOff);
+		
+	/**
+	* Retrieves candidates that need to be sent an email asking to extend the recruiters authorization to keep them 
+	* in the system as an external Candidate for a specific Campaign/Role
+	* @param cuttoffRenewalEmail - We only want one email to be sent. If email sent after this cuttoff Candidate wont be included
+	* @param cuttoff - If the candidates has provided permission after this cuttoff then they wont be included
+	* @return Candidates requiring an email asking for extended authorization
+	*/
+	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff);
+
+	/**
+	* Retrieves candidates that were sent and email asking to extend the authorization to retain them as an external Candidate
+	* for a Campaign/Role but did not reply before the cuttoff
+	* @param cuttoffRenewalEmail - 
+	* @param cuttoff - If the candidates has provided permission after this cuttoff then they wont be included
+	* @return Candidates requiring deletion because authroization was not given in time
+	*/
+	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff);
+
+	/**
+	* Sends an email asking the External candidate if their details for a specific Campaign/Role can be kept for another year
+	* @param extCandidate - Details of External Candidate
+	* @param campaign	  - Id of the Campaign the user is part of as an External Candidate
+	* @param role	  	  - Id of the Role the user is part of as an External Candidate
+	*/
+	public void sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(Candidate candidate, UUID campaignId, UUID roleId);
 	
 } 

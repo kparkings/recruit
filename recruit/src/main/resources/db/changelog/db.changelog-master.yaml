@@ -3334,7 +3334,27 @@ databaseChangeLog:
                 constraints:
                   nullable: false
             - column:
-                name: last_candidate_data_retention_confirmation
+                name: ext_candidate_last_candidate_data_retention_confirmation
                 type: timestamp
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_data_retention_renewal_sent
+                type: timestamp
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_created_by
+                type: varchar
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_campaign_id
+                type: uuid
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_role_id
+                type: uuid
                 constraints:
                   nullable: true

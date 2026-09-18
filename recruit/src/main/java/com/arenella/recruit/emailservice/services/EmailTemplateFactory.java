@@ -29,23 +29,24 @@ public class EmailTemplateFactory {
 	public String fetchTemplate(RequestSendEmailCommand sendEmailCommand, Map<String,Object> model) {
 		
 		return switch(sendEmailCommand.getTopic()) {
-			case ACCOUNT_CREATED 						-> loadTemplate("new-recruiter-signup.ftlh", model);
-			case FORGOTTEN_PWD, WEEKLY_UPDATE	 		-> "";
-			case ALERT_MATCHES 							-> loadTemplate("alert-matches.ftlh", model);
-			case PASSWORD_RESET							-> loadTemplate("password-reset.ftlh", model);
-			case REC_TO_REC_EMAIL_REPLY_NOTICICATION 	-> loadTemplate("rec-to-rec-reply-notification.ftlh", model);
-			case OPEN_POSITION_CONTACT_REQUEST 			-> handleOpenPositionContactRequest(sendEmailCommand, model);
-			case OFFERED_CANDIDATE_CONTACT_REQUEST 		-> handleOfferedCandidateContactRequest(sendEmailCommand, model);
-			case LISTING_RECRUITER_CONTACT_REQUEST 		-> handleRecruiterContactRequest(sendEmailCommand, model);
-			case REC_TO_REC_CONTACT_REQUEST 			-> handleRecToRecContactRequest(sendEmailCommand, model);
-			case CANDIDATE_ACCOUNT_CREATED 				-> loadTemplate("new-candidate-signup.ftlh", model);
-			case NEW_CREDITS_ASSIGNED					-> loadTemplate("new-credits-assigned.ftlh", model);
-			case LISTING_MATCHING_ROLE					-> loadTemplate("listing-alert-hit.ftlh",model);
-			case CANDIDATE_SUMMARY						-> loadTemplate("candidate-summary.ftlh", model);
-			case MISSED_CHAT_MESSAGE					-> loadTemplate("missed-message.ftlh",model);
-			case CAMPAIGN_MESSAGE						-> loadTemplate("campaign-message.ftlh", model);
-			case MISSED_NEWSFEED_NOTIFICATION			-> loadTemplate("missed-newsfeed-notification.ftlh",model);
-			case CAMPAIGN_EXT_CANDIIDATE_ADDED			-> loadTemplate("campaign-externalcandidate-added-message.ftlh",model);
+			case ACCOUNT_CREATED 									-> loadTemplate("new-recruiter-signup.ftlh", model);
+			case FORGOTTEN_PWD, WEEKLY_UPDATE	 					-> "";
+			case ALERT_MATCHES 										-> loadTemplate("alert-matches.ftlh", model);
+			case PASSWORD_RESET										-> loadTemplate("password-reset.ftlh", model);
+			case REC_TO_REC_EMAIL_REPLY_NOTICICATION 				-> loadTemplate("rec-to-rec-reply-notification.ftlh", model);
+			case OPEN_POSITION_CONTACT_REQUEST 						-> handleOpenPositionContactRequest(sendEmailCommand, model);
+			case OFFERED_CANDIDATE_CONTACT_REQUEST 					-> handleOfferedCandidateContactRequest(sendEmailCommand, model);
+			case LISTING_RECRUITER_CONTACT_REQUEST 					-> handleRecruiterContactRequest(sendEmailCommand, model);
+			case REC_TO_REC_CONTACT_REQUEST 						-> handleRecToRecContactRequest(sendEmailCommand, model);
+			case CANDIDATE_ACCOUNT_CREATED 							-> loadTemplate("new-candidate-signup.ftlh", model);
+			case NEW_CREDITS_ASSIGNED								-> loadTemplate("new-credits-assigned.ftlh", model);
+			case LISTING_MATCHING_ROLE								-> loadTemplate("listing-alert-hit.ftlh",model);
+			case CANDIDATE_SUMMARY									-> loadTemplate("candidate-summary.ftlh", model);
+			case MISSED_CHAT_MESSAGE								-> loadTemplate("missed-message.ftlh",model);
+			case CAMPAIGN_MESSAGE									-> loadTemplate("campaign-message.ftlh", model);
+			case MISSED_NEWSFEED_NOTIFICATION						-> loadTemplate("missed-newsfeed-notification.ftlh",model);
+			case CAMPAIGN_EXT_CANDIIDATE_ADDED						-> loadTemplate("campaign-externalcandidate-added-message.ftlh",model);
+			case CAMPAIGN_EXT_CANDIIDATE_DATA_RETENTION_RENEWAL 	-> loadTemplate("campaign-externalcandidate-data-retention-renewal-message.ftlh",model);
 			
 			default -> "Could not process template";
 		};
