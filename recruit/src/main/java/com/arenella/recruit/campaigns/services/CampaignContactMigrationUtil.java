@@ -43,7 +43,7 @@ public class CampaignContactMigrationUtil {
 		this.contactEntityDao 		= contactEntityDao;
 	}
 	
-	@PostConstruct
+	//@PostConstruct
 	public void runMigration() throws Exception {
 		
 		

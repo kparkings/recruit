@@ -7,8 +7,8 @@
 		</div>
 		<div class="campaign-selection-panel">
 			<div *ngFor="let campaign of campaigns" (click)="selectCampaign(campaign)">
-				<div class="campaign-selection">{{campaign.name}}</div>
-				
+				<div *ngIf="getCampaignNameFormatted(campaign.name).length <= 25" class="campaign-selection">{{getCampaignNameFormatted(campaign.name)}}</div>
+				<div *ngIf="getCampaignNameFormatted(campaign.name).length > 25" class="campaign-selection campaign-selection-small-text">{{getCampaignNameFormatted(campaign.name)}}</div>
 			</div>
 		</div>
 	</div>
@@ -22,30 +22,31 @@
 		</div>
 		<div class="campaign-selection-panel">
 			<div *ngIf="selectedCampaign !== undefined">
-				<div class="campaign-selection campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{selectedCampaign.name}}</div>
+				
+				<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length <= 25" class="campaign-selection campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
+				<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length > 25"  class="campaign-selection campaign-selection-small-text campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
 		
 				<div *ngFor="let role of selectedCampaign.roles">
-				
-					<div class="campaign-selection role-selection role-selected-{{selectedRole && role.id == selectedRole.id}}" (click)="selectRole(role)">{{role.name}}</div>
-				
+					<div *ngIf="getCampaignNameFormatted(role.name).length <= 25" class="campaign-selection role-selection role-selected-{{selectedRole && role.id == selectedRole.id}}" (click)="selectRole(role)">{{getCampaignNameFormatted(role.name)}}</div>
+					<div *ngIf="getCampaignNameFormatted(role.name).length > 25"  class="campaign-selection campaign-selection-small-text role-selection role-selected-{{selectedRole && role.id == selectedRole.id}}" (click)="selectRole(role)">{{getCampaignNameFormatted(role.name)}}</div>
 				</div>
 				<div *ngIf="showAddCandidateButton" style="width:510px;">
-					<button class="btn btn-secondary" style="float:right;" (click)="addCandidateToCampaign()">Add Candidate</button>
+					<button class="btn btn-secondary" style="float:right;" (click)="addCandidateToCampaign()">{{'campaign-select-add-candidate' | translate}}</button>
 				</div>
 			</div>
 				
 		</div>
 		
 	</div>
-		
+
 	<!-- Add Campaign Form -->
 	<div *ngIf="showAddCampaignForm">
 		<div class="add-campaign-div">
-			<h5>Add Campaign</h5>
+			<h5>{{'campaign-select-add-campaign' | translate}}</h5>
 			<form [formGroup]="addCampaignForm">
 				<table>
 					<tr>
-						<th>Name</th>
+						<th>{{'campaign-select-name' | translate}}		</th>
 						<td><input type="text" formControlName="name"/></td>
 					</tr>
 					<tr>
@@ -53,7 +54,7 @@
 						<td><input type="file" accept="image/jpeg" alt="Jped max 1 MB" (change)="updateCampaignImageFile($event)"></td>
 					</tr>
 					<tr>
-						<th colspan="2">Description</th>
+						<th colspan="2">{{'campaign-select-add-description' | translate}}</th>
 					</tr>
 					<tr>
 						<td colspan="2"	><textarea class="add-campaign-div-textarea" formControlName="description"></textarea></td>
@@ -63,23 +64,23 @@
 			</form>
 		</div>
 		<div>
-			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="addNewCampaign()">Save</button>
-			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">Cancel</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="addNewCampaign()">{{'SAVE' | translate}}</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="listCampaigns()">{{'cancel-btn' | translate}}</button>
 		</div>
 	</div>
 	
 	<!-- Add Role Form -->
 	<div *ngIf="showAddRoleForm">
 		<div class="add-campaign-div">
-			<h5>Add Role</h5>
+			<h5>{{'campaign-select-add-role' | translate}}</h5>
 			<form [formGroup]="addRoleForm">
 				<table>
 					<tr>
-						<th>Name</th>
+						<th>{{'campaign-select-name' | translate}}		</th>
 						<td><input type="text" formControlName="name"/></td>
 					</tr>
 					<tr>
-						<th colspan="2">Description</th>
+						<th colspan="2">{{'campaign-select-add-description' | translate}}</th>
 					</tr>
 					<tr>
 						<td colspan="2"	><textarea class="add-campaign-div-textarea" formControlName="description"></textarea></td>
@@ -89,8 +90,8 @@
 			</form>
 		</div>
 		<div>
-			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="addNewRole()">Save</button>
-			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="showRoleList()">Cancel</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="addNewRole()">{{'SAVE' | translate}}</button>
+			<button class="btn btn-secondary campaign-selectionbox-btn" (click)="showRoleList()">{{'cancel-btn' | translate}}</button>
 		</div>
 	</div>
 	

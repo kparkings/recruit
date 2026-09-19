@@ -66,6 +66,11 @@
  	line-height:80px;
  }
  
+ .campaign-selection-small-text{
+ 	font-size:24px;
+ 	font-weight:bold;
+ }
+ 
  .role-selection{
  	background:#2AAA8A;
  }

@@ -250,4 +250,24 @@ export class SelectionboxComponent {
 		
 	}
 	
+	/**
+	* Returns title that will be truncated if too long 
+	* to be easily displayed on the screen
+	*/
+	public getCampaignNameFormatted(campaignName:string):string{
+		
+		const maxLength:number = 40;
+			 
+		if (!campaignName) {
+			return "";
+		}
+		
+		if (campaignName.length < maxLength) {
+			return campaignName;
+		} else {
+			return campaignName.substring(0,maxLength-1)+"...";
+		}
+		
+	}
+	
 }
