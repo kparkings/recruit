@@ -133,3 +133,102 @@
 	color:#002549;
 	font-weight:bold;
 }
+
+.campaign-box-external-message-body{
+	width:700px;
+	height:350px;
+}
+
+.campaign-box-external-message-body-content{
+	float:right;
+	width:100%;
+}
+
+.campaign-box-external-message-body-content-textarea{
+	width:100%;
+	height:280px;
+}
+
+.campaign-box-external-message-body-buttons{
+	clear:both;
+}
+
+.campaign-box-external-candidates-body{
+	width:830px;
+	height:350px;
+}
+
+.campaign-box-external-candidates-body-desc{
+	float:left;
+	width:350px;
+	margin:10px;
+	padding:5px;
+	text-align:left;
+	font-size:14px;
+}
+
+.campaign-box-external-candidates-body-form{
+	float:left;
+	width:400px;
+	margin:10px;
+	padding:5px;
+	text-align:left;
+}
+
+.campaign-ext-candidate-table tr td input{
+	width:250px;
+}
+
+.campaign-box-external-candidates-body-buttons{
+	clear:both
+}
+
+.campaign-box-messages-body{
+	width:700px;
+	height:410px;
+}
+
+.campaign-box-messages-body-variables{
+	text-align:left;
+	list-style:none;
+	margin-left:0px;
+	padding-left:0px;
+}
+
+.campaign-box-messages-body-textarea-panel{
+	float:right;
+	width:80%;
+}
+
+.campaign-box-messages-body-textarea{
+	width:100%;
+	height:280px;
+}
+
+.campaign-box-messages-buttons{
+	clear:both
+}
+
+.campaign-box-document-body{
+	height:200px;
+}
+
+.campaign-box-document-form-table{
+	text-align:left;
+	width:100%;
+}
+
+.campaign-box-document-form-table-document-name{
+	min-width:200px;
+	margin-bottom:5px;
+}
+
+.campaign-box-document-form-table-document-filesize{
+	min-width:200px;
+}
+
+.campaign-box-document-form-table-name{
+	min-width:200px;
+	margin-bottom:5px;
+}
+
