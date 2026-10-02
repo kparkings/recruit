@@ -57,8 +57,8 @@ public class CampaignsMonolithExternalEventListener implements CampaignsExternal
 	*/
 	@Override
 	public void listenForRecruiterUpdatedEvent(RecruiterUpdatedEvent event) {
-		this.contactDao.fetchContact(event.getRecruiterId()).ifPresent(_ ->{
-			Contact contact = new Contact (event.getRecruiterId(), event.getFirstName(), event.getSurname(), event.getEmail(), SubscriptionType.CREDIT);
+		this.contactDao.fetchContact(event.getRecruiterId()).ifPresent(recruiter ->{
+			Contact contact = new Contact (event.getRecruiterId(), event.getFirstName(), event.getSurname(), event.getEmail(), recruiter.subscriptionType());
 			this.contactDao.saveContact(contact);
 		});
 	}

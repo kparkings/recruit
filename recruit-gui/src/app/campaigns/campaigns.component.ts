@@ -730,7 +730,29 @@ export class CampaignsComponent {
 		candidate.selected = !candidate.selected;
 	}
 	
+	/**
+	* Returns the name of a Particpation shortened to ens 
+	*/
+	public getParticipationNameFormatted(participation:Participation):string{
+		
+		const maxLength:number = 20;
+		
+		if (!participation) {
+			return "";
+		}
+			 
+		const name = participation.contact.firstName + ' ' + participation.contact.surname;
+		
+		if (name.length < maxLength) {
+			return name;
+		} else {
+			return name.substring(0,maxLength-1)+"...";
+		}
+	}
+	
 }
+
+
 
 /**
 * UI specific wrapper to allow candidates to be selected / de-selected 

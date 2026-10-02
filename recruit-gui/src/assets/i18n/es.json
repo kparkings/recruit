@@ -837,7 +837,7 @@
 	"campaigns-add-participant-line2": "El Usuario podrá entonces participar en la Campaña/Rol.",
 	"campaigns-message-box-body-variables-title": "Clave de variable:",
 	"campaigns-message-box-document-doc-name": "Nombre del documento",
-	"campaigns-message-box-document-file-size": "Archivo PDF (máximo 1 MB)",
+	"campaigns-message-box-document-file-size": "Archivo PDF (máx 1 MB)",
 	"campaigns-message-box-document-title": "Agregar documento",
 	"campaigns-message-box-title": "Mensaje",
 	"campaigns-unable-to-add-participant": "No se pudo agregar participante",
