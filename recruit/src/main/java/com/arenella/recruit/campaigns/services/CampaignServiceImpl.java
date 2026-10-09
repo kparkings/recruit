@@ -21,6 +21,7 @@ import com.arenella.recruit.campaign.dao.ParticipationEntityDao;
 import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.adapters.CampaignExternalEventPublisher;
 import com.arenella.recruit.campaigns.adapters.ExternalCandiateAddedToSystemSendEmailCommand;
+import com.arenella.recruit.campaigns.adapters.ExternalCandiateDataRetentionRenewalSendEmailCommand;
 import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailCommand;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
@@ -36,6 +37,9 @@ import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient;
 import com.arenella.recruit.emailservice.beans.Email.EmailRecipient.ContactType;
+
+import jakarta.transaction.Transactional;
+
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
 /**
@@ -695,10 +699,11 @@ public class CampaignServiceImpl implements CampaignService{
 	* Refer to the CampaignService interface for details
 	*/
 	@Override
+	@Transactional
 	public void sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(Candidate candidate, UUID campaignId, UUID roleId) {
 		
 		Optional<Campaign> 		campaign 		= this.campaignDao.fetchCampaign(campaignId);
-		Optional<Role> 			role 			= this.roleDao.fetchRoleById(roleId);
+		Optional<Role> 			role 			= roleId == null ? Optional.empty() :   this.roleDao.fetchRoleById(roleId);
 		Optional<Contact> 		recruiterOpt 	= this.contactDao.fetchContact(candidate.getCreatedBy());
 		
 		if (recruiterOpt.isEmpty()) {
@@ -716,15 +721,18 @@ public class CampaignServiceImpl implements CampaignService{
 			recipient.setFirstName(candidate.getFirstName());
 			recipient.setEmail(candidate.getEmail());
 			
-			ExternalCandiateAddedToSystemSendEmailCommand command = ExternalCandiateAddedToSystemSendEmailCommand
+			ExternalCandiateDataRetentionRenewalSendEmailCommand command = ExternalCandiateDataRetentionRenewalSendEmailCommand
 					.builder()
 						.recipients(Set.of(recipient))
-						.campaignOrRole(Optional.ofNullable(role).isPresent() ? role.get().getName() : campaign.get().getName())
+						.campaignOrRole(role.isPresent() ? role.get().getName() : campaign.get().getName())
 						.recruiterName(recruiter.firstName() + " " + recruiter.surname())
 						.recruiterEmail(recruiter.email())
 					.build();
 			
-			this.eventPublisher.publishExternalCandiateMessageSendEmailCommand(command);
+			this.eventPublisher.publishExternalCandiateDataRenentionRenewalMessageSendEmailCommand(command);
+			
+			
+			this.candidateDao.saveCandidate(Candidate.builder().from(candidate).dataRetentionRenewalEmailSent(LocalDateTime.now()).build());
 		});
 		
 	}
@@ -864,8 +872,8 @@ public class CampaignServiceImpl implements CampaignService{
 	* Refer to the CampaignService interface for details
 	*/
 	@Override
-	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff) {
-		return this.candidateDao.fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(cuttoffRenewalEmail, cuttoff);
+	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoff) {
+		return this.candidateDao.fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(cuttoff);
 	}
 
 	/**

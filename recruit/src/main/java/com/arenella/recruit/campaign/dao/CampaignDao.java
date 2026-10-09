@@ -39,6 +39,7 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	* @return Campaign if present
 	*/
 	default Optional<Campaign> fetchCampaign(UUID campaignId) {
+		
 		return this.findById(campaignId).map(CampaignEntity::fromEntity);
 	}
 	

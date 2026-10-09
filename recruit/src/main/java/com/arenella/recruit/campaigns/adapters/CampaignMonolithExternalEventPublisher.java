@@ -111,7 +111,7 @@ public class CampaignMonolithExternalEventPublisher implements CampaignExternalE
 						.recipients(command.getRecipients())
 						.sender(new Sender<>(UUID.randomUUID(), "", SenderType.SYSTEM, "no-reply@arenella-ict.com"))
 						.title("Arenella-ICT - Can we continue to store your data?")
-						.topic(EmailTopic.CAMPAIGN_EXT_CANDIIDATE_ADDED)
+						.topic(EmailTopic.CAMPAIGN_EXT_CANDIIDATE_DATA_RETENTION_RENEWAL)
 					.build();
 		
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(cExt);

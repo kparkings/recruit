@@ -18,11 +18,11 @@ public interface CandidateEntityDao extends ListCrudRepository<CandidateEntity, 
 	@Query("from CandidateEntity where type = 'EXTERNAL' and deletedFromSystem = false and lastDataRetentionConfirmation is null and created < :cuttoffDate")
 	public Set<CandidateEntity> fetchExternalCandidateEntitiesThatMissedAuthorisationCuttoff(LocalDateTime cuttoffDate);
 	
-	@Query("from CandidateEntity where type = 'EXTERNAL' and deletedFromSystem = false and dataRetentionRenewalEmailSent < :cuttoffRenewalEmail and lastDataRetentionConfirmation < :cuttoffDate")
-	public Set<CandidateEntity> fetchExternalCandidateEntitiesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoffDate);
+	@Query("from CandidateEntity where type = 'EXTERNAL' and deletedFromSystem = false and (dataRetentionRenewalEmailSent is null OR dataRetentionRenewalEmailSent < :cuttoffDate) and lastDataRetentionConfirmation < :cuttoffDate")
+	public Set<CandidateEntity> fetchExternalCandidateEntitiesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffDate);
 	
-	@Query("from CandidateEntity where type = 'EXTERNAL' and deletedFromSystem = false and lastDataRetentionConfirmation < :cuttoffDate and dataRetentionRenewalEmailSent < :cuttoffRenewalEmail")
-	public Set<CandidateEntity> fetchExternalCandidateEntitiesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoffDate);
+	@Query("from CandidateEntity where type = 'EXTERNAL' and deletedFromSystem = false and (lastDataRetentionConfirmation is null OR lastDataRetentionConfirmation < :cuttoffAuthorizationEmailSent) and dataRetentionRenewalEmailSent < :cuttoffForDeleteCandidateNoAuthorizationReceived")
+	public Set<CandidateEntity> fetchExternalCandidateEntitiesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffAuthorizationEmailSent, LocalDateTime cuttoffForDeleteCandidateNoAuthorizationReceived);
 	
 	/**
 	* Saves a Candidate
@@ -53,12 +53,11 @@ public interface CandidateEntityDao extends ListCrudRepository<CandidateEntity, 
 	/**
 	* Returns External candidates requiring an email asking to external the authorization to keep them in 
 	* the system as an External Candidate for a specific Campaign/Role
-	* @param cuttoffRenewalEmail - We only want one email to be sent. If email sent after this cuttoff Candidate wont be included
-	* @param cuttoff - If the candidates has provided permission after this cuttoff then they wont be included
+	* @param cuttoff - Cut off for sending the email. Last email needs to be be before the cutt off and the last time permission was given must also be before the cut off
 	* @return
 	*/
-	default Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff){
-		return this.fetchExternalCandidateEntitiesThatRequireAnnualRenewalAuthorizationEmail(cuttoffRenewalEmail, cuttoff).stream().map(CandidateEntity::fromEntity).collect(Collectors.toSet());
+	default Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoff){
+		return this.fetchExternalCandidateEntitiesThatRequireAnnualRenewalAuthorizationEmail(cuttoff).stream().map(CandidateEntity::fromEntity).collect(Collectors.toSet());
 	}
 	
 	

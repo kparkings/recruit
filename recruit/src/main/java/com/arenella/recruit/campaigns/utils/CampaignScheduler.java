@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaigns.services.CampaignService;
 
+import jakarta.transaction.Transactional;
+
 /**
 * Scheduler for Campaigns
 * - If 7 days after External User is created no confirmation is received their details are anonymized
@@ -29,24 +31,24 @@ public class CampaignScheduler {
 	}
 	
 	@Scheduled(fixedRate=10000)
+	//@Transactional
 	public void runScheduler() {
 		
 		final LocalDateTime cuttoffNoAuthroisationRecieved = LocalDateTime.now().minusDays(7);
-		final LocalDateTime cuttoffAuthorizationEmailSent = LocalDateTime.now().minusDays(7);
 		final LocalDateTime cuttoffForSendEmailLastAuthorizationReceived = LocalDateTime.now().minusDays(365);
-		final LocalDateTime cuttoffForDeleteCandidateNoAuthorizationReceived = LocalDateTime.now().minusDays(372);
+		final LocalDateTime cuttoffForDeleteCandidateNoAuthorizationReceived = LocalDateTime.now().minusDays(7);
 		
-		campaignService.fetchExternalCandidatesThatMissedAuthorisationCuttoff(cuttoffNoAuthroisationRecieved).forEach(extCandidate -> {
-			this.campaignService.rejectExternalCandidateConnectionRequest(UUID.fromString(extCandidate.getId()));
-		});
+		campaignService.fetchExternalCandidatesThatMissedAuthorisationCuttoff(cuttoffNoAuthroisationRecieved).forEach(extCandidate -> 
+			this.campaignService.rejectExternalCandidateConnectionRequest(UUID.fromString(extCandidate.getId()))
+		);
 		
-		campaignService.fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(cuttoffAuthorizationEmailSent, cuttoffForSendEmailLastAuthorizationReceived).forEach(extCandidate -> {
-			this.campaignService.sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(extCandidate, extCandidate.getCampaignId().orElse(null), extCandidate.getRoleId().orElse(null));
-		});
+		campaignService.fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(cuttoffForSendEmailLastAuthorizationReceived).forEach(extCandidate -> 
+			this.campaignService.sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(extCandidate, extCandidate.getCampaignId().orElse(null), extCandidate.getRoleId().orElse(null))
+		);
 		
-		campaignService.fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(cuttoffAuthorizationEmailSent, cuttoffForDeleteCandidateNoAuthorizationReceived).forEach(extCandidate -> {
-			this.campaignService.rejectExternalCandidateConnectionRequest(UUID.fromString(extCandidate.getId()));
-		});
+		campaignService.fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(cuttoffForSendEmailLastAuthorizationReceived, cuttoffForDeleteCandidateNoAuthorizationReceived).forEach(extCandidate -> 
+		this.campaignService.rejectExternalCandidateConnectionRequest(UUID.fromString(extCandidate.getId()))
+	);
 				
 	}
 	

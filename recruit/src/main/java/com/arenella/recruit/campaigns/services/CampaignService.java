@@ -12,6 +12,8 @@ import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 
+import jakarta.transaction.Transactional;
+
 /**
 * Defines services for working with Campaigns 
 */
@@ -209,6 +211,7 @@ public interface CampaignService {
 	* time frame. In either case the user details are anonymized and they are marked as deleted.
 	* @param externalCandidateId - Id of the External Candidate
 	*/
+	@Transactional
 	void rejectExternalCandidateConnectionRequest(UUID externalCandidateId);
 
 	/**
@@ -236,11 +239,10 @@ public interface CampaignService {
 	/**
 	* Retrieves candidates that need to be sent an email asking to extend the recruiters authorization to keep them 
 	* in the system as an external Candidate for a specific Campaign/Role
-	* @param cuttoffRenewalEmail - We only want one email to be sent. If email sent after this cuttoff Candidate wont be included
-	* @param cuttoff - If the candidates has provided permission after this cuttoff then they wont be included
+	* @param cuttoff - Cut off for sending the email. Last email needs to be be before the cutt off and the last time permission was given must also be before the cutt off
 	* @return Candidates requiring an email asking for extended authorization
 	*/
-	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff);
+	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoff);
 
 	/**
 	* Retrieves candidates that were sent and email asking to extend the authorization to retain them as an external Candidate
@@ -249,6 +251,7 @@ public interface CampaignService {
 	* @param cuttoff - If the candidates has provided permission after this cuttoff then they wont be included
 	* @return Candidates requiring deletion because authroization was not given in time
 	*/
+	@Transactional
 	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff);
 
 	/**
