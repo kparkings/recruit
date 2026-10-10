@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaigns.services.CampaignService;
 
-import jakarta.transaction.Transactional;
-
 /**
 * Scheduler for Campaigns
 * - If 7 days after External User is created no confirmation is received their details are anonymized

@@ -981,7 +981,7 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	private void checkAtLeastOneAdminUserLeftAfterAction(Campaign campaign, Participation participation) {
 	
-		AtomicBoolean adminAtCampaignLevelIfParticipantRemoved 	= new AtomicBoolean(campaign.getParticipations().stream().anyMatch(p -> (p.getParticipationId() != participation.getParticipationId()) && p.getType() == ParticipantType.ADMIN));
+		AtomicBoolean adminAtCampaignLevelIfParticipantRemoved 	= new AtomicBoolean(campaign.getParticipations().stream().filter(p -> p.getRoleId().isEmpty()).anyMatch(p -> (p.getParticipationId() != participation.getParticipationId()) && p.getType() == ParticipantType.ADMIN));
 		AtomicBoolean adminAtRoleLevelIfParticipantRemoved 		= new AtomicBoolean(false);
 		
 		participation.getRoleId().ifPresent(roleId -> {
