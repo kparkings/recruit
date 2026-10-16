@@ -586,7 +586,8 @@ export class CampaignOverview{
 	constructor(public id:string,
 				public name:string,
 				public description:string,
-				public logo:CampaignLogo){}
+				public logo:CampaignLogo,
+				public hasUnreadNotifications:boolean){}
 }
 
 /**
@@ -606,7 +607,8 @@ export class Campaign{
 				public notes:Array<Note>,
 				public appointments:Array<Appointment>,
 				public documents:Array<Document>,
-				public roles:Array<Role>){}
+				public roles:Array<Role>,
+				public hasUnreadNotifications:boolean){}
 	
 }
 

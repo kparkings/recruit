@@ -2,6 +2,8 @@ package com.arenella.recruit.campaigns.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.campaigns.beans.Candidate;
@@ -41,7 +43,7 @@ class CandidateAPIOutboundTest {
 		
 		CandidateAPIOutbound outbound = CandidateAPIOutbound
 				.builder()
-					.from(candidate)
+					.from(candidate, Set.of(), false)
 				.build();
 		
 		assertEquals(ID, 					outbound.getId());

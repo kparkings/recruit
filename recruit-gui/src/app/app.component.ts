@@ -139,7 +139,8 @@ export class AppComponent {
 	
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.refreshUnreadNewsFeedNotifications();		
-			this.hasUnreadNewsFeedItems();
+			this.hasUnreadNewsFeedItems()
+			this.fetchHasUnreadCampaignMessages();
 		},30000);
 					
 	}
@@ -193,9 +194,7 @@ export class AppComponent {
 		this.hasUnreadNewsFeedItems();
 		this.privateChat.fetchChats();
 		this.emailService.updateUnseenEmails();
-		//this.emailService.fetchUnseenEmailsCount().subscribe(val => {
-		//	this.unseenEmails = val;
-		//});
+
 	}
 	
 	/**
@@ -480,6 +479,27 @@ export class AppComponent {
 		}
 		
 		return false;
+		
+	}
+	
+	/**
+	* Returns true if there are unread messages from a Candidate in one or 
+	* more of the Recruiters Campaign/Roles 
+	*/
+	public hasUnreadCampaignMessages:boolean = false;
+	
+	public fetchHasUnreadCampaignMessages():void{
+		
+		this.campaignService.fetchCampaignsForUser().subscribe(campaignOverviews => {
+			
+			if (campaignOverviews.filter(co => co.hasUnreadNotifications).length > 0 ){
+				this.hasUnreadCampaignMessages = true;
+			} else {
+				this.hasUnreadCampaignMessages = false;		
+			}
+			
+		});
+		
 		
 	}
 	

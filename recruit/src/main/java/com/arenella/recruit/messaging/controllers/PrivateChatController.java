@@ -64,8 +64,8 @@ public class PrivateChatController {
 	public ResponseEntity<PrivateChatAPIOutbound> fetchPrivateChatById(@PathVariable("chatId") UUID chatId, Principal principal) {
 		
 		PrivateChat 		chat		= this.privateChatService.getChat(chatId, principal);
-		ChatParticipant 	sender 		= this.participantService.fetchById(chat.getSenderId()).orElseThrow(()    -> new IllegalStateException());
-		ChatParticipant 	recipient 	= this.participantService.fetchById(chat.getRecipientId()).orElseThrow(() -> new IllegalStateException());
+		ChatParticipant 	sender 		= this.participantService.fetchById(chat.getSenderId()).orElseThrow(IllegalStateException::new);
+		ChatParticipant 	recipient 	= this.participantService.fetchById(chat.getRecipientId()).orElseThrow(IllegalStateException::new);
 		
 		return ResponseEntity.ok(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient));
 		
@@ -82,13 +82,13 @@ public class PrivateChatController {
 		
 		Set<PrivateChatAPIOutbound> chats = new LinkedHashSet<>();
 		
-		this.privateChatService.getUsersChats(principal).stream().forEach(chat -> {
-			this.participantService.fetchById(chat.getSenderId()).ifPresent(sender -> {
-				this.participantService.fetchById(chat.getRecipientId()).ifPresent(recipient -> {
-					chats.add(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient));
-				});
-			});
-		});
+		this.privateChatService.getUsersChats(principal).stream().forEach(chat -> 
+			this.participantService.fetchById(chat.getSenderId()).ifPresent(sender -> 
+				this.participantService.fetchById(chat.getRecipientId()).ifPresent(recipient -> 
+					chats.add(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient))
+				)
+			)
+		);
 		
 		return ResponseEntity.ok(chats);
 	}

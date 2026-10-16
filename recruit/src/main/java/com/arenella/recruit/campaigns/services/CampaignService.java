@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaigns.services;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -10,6 +11,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 
 import jakarta.transaction.Transactional;
@@ -261,5 +263,22 @@ public interface CampaignService {
 	* @param role	  	  - Id of the Role the user is part of as an External Candidate
 	*/
 	public void sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(Candidate candidate, UUID campaignId, UUID roleId);
+
+	/**
+	* Returns all Instant messaging notification where the current user is a Recruiter involved in the
+	* Chat. 
+	* @param currentUser - Currently authenticated User
+	* @return All IM notification for IM chat's involving the current user
+	*/
+	public Set<IMNotification> fetchIMNotificationsForRecruiter(Principal currentUser);
+
+	/**
+	* Returns all the notification related to the Campaign or one of its Roles where the current recruiter 
+	* is the Recruiter in the Chat
+	* @param currentUser - Currently authenticated User
+	* @param campaignId  - ID of Campaign Notification need to be related to
+	* @return All IM notification for the Campaign and its Roles where the currentUser is part of the Chat the notification relates to
+	*/
+	public Set<IMNotification> fetchRecruitersIMNotificationsForCampaign(Principal currentUser, UUID campaignId);
 	
 } 

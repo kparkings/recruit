@@ -223,5 +223,12 @@
 		background:green;
 	}
 
+	.campaign-unread-messages-true{
+		color:green;
+	}
+	
+	.campaign-unread-messages-false{
+		color:#002549ed;
+	}
     
 }

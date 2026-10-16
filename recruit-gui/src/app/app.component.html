@@ -92,9 +92,9 @@
            <a  class="dropdown-item" (click)="navToSuggestions()">{{'arenella-app-menu-suggestions' | translate}}</a>
         </li>
         
-        <li  class="li-arenella-nav li-arenella-nav-icon {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription()" (click)="navToCampaigns()">
+        <li  class="li-arenella-nav li-arenella-nav-icon {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated() && !isRecruiterNoSubscription() && !hasUnpaidSubscription() && !isCandidate()" (click)="navToCampaigns()">
         	<a class="dropdown-item dropdown-item-icon" title="campaigns">
-        		<span class="chat-icon material-icons">donut_small</span>
+        		<span class="chat-icon material-icons campaign-unread-messages-{{hasUnreadCampaignMessages}}">donut_small</span>
         	</a>		
         </li>
         
@@ -150,7 +150,7 @@
 			</a>
         </li>
         <li  class="li-arenella-nav li-arenella-nav-icon {{menuItemMobileCss}} non-mobile-only-element" *ngIf="isAuthenticated()" (click)="openChat()">
-        	<a class="dropdown-item dropdown-item-icon" title="Instant Messanger">
+        	<a class="dropdown-item dropdown-item-icon unread-chats-{{hasUnreadMessages()}}" title="Instant Messanger">
         		<span class="chat-icon material-icons">chat</span>
         	</a>		
         </li>  		

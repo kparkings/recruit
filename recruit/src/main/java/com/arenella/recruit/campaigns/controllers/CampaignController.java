@@ -29,6 +29,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
 
@@ -63,9 +64,11 @@ public class CampaignController {
 	@GetMapping(path="campaign")
 	public ResponseEntity<Set<CampaignOverviewAPIOutbound>> fetchCampaignsForUser(Principal currentUser) {
 		
+		Set<UUID> imNotificationCampaignIds = this.campaignService.fetchIMNotificationsForRecruiter(currentUser).stream().map(IMNotification::getCampaignId).collect(Collectors.toSet());
+		
 		LinkedHashSet<CampaignOverviewAPIOutbound> campaigns = this.campaignService.fetchCampaignsForUser(currentUser.getName())
 				.stream()
-				.map(c -> CampaignOverviewAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new));
+				.map(c -> CampaignOverviewAPIOutbound.builder().from(c,imNotificationCampaignIds).build()).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		return new ResponseEntity<>(campaigns,  HttpStatus.OK);
 
@@ -84,7 +87,9 @@ public class CampaignController {
 		Campaign 		campaign 	= this.campaignService.fetchCampaignById(campaignId, currentUser.getName());
 		Set<Contact> 	contacts 	= this.contactService.fetchContactsById(campaign.getParticipations().stream().map(p -> p.getContactId()).collect(Collectors.toSet()));
 		
-		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts).build(), HttpStatus.OK);
+		Set<IMNotification> imNotifications = this.campaignService.fetchRecruitersIMNotificationsForCampaign(currentUser, campaignId);
+		
+		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts, imNotifications).build(), HttpStatus.OK);
 	}
 	
 	/**

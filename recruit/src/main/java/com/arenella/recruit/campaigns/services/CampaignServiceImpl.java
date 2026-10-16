@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaigns.services;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -32,6 +33,7 @@ import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Participation;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.beans.Role;
@@ -883,6 +885,25 @@ public class CampaignServiceImpl implements CampaignService{
 	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff) {
 		return this.candidateDao.fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(cuttoffRenewalEmail, cuttoff);
 	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public Set<IMNotification> fetchIMNotificationsForRecruiter(Principal currentUser) {
+		// TODO Auto-generated method stub
+		return Set.of();
+	}
+
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public Set<IMNotification> fetchRecruitersIMNotificationsForCampaign(Principal currentUser, UUID campaignId) {
+		// TODO Auto-generated method stub
+		return Set.of();
+	}
+	
 	
 	/**
 	* Attempts to retrieve the Contact of the current user and validate that

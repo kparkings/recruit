@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.campaigns.beans.Contact;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Role;
 
 /**
@@ -137,7 +138,7 @@ public class RoleAPIOutbound {
 		* @param contacts - Collection of all Contacts referenced in the Campaigns Participations
 		* @return Builder
 		*/
-		public RoleAPIOutboundBuilder from(Role role, Set<Contact> contacts) {
+		public RoleAPIOutboundBuilder from(Role role, Set<Contact> contacts, Set<IMNotification> imNotifications) {
 			
 			this.id 			= role.getId();
 			this.name 			= role.getName();
@@ -147,7 +148,7 @@ public class RoleAPIOutbound {
 				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build());
 			});
 			
-			this.candidates.addAll(role.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.candidates.addAll(role.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c, imNotifications, true).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(role.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(role.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.documents.addAll(role.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getDocumentId(), d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));

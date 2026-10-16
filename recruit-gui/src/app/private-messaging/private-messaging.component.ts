@@ -154,8 +154,8 @@ export class PrivateMessagingComponent {
 		},1000);
 	}
 	
-	private scheduleContactListRefresh = window.setInterval(()=> {},1000);
-	public hasUnreadMessagesTracker:boolean = false;
+	private scheduleContactListRefresh 				= window.setInterval(()=> {},1000);
+	public hasUnreadMessagesTracker:boolean 		= false;
 
 	public getHasUnreadMessagesTracker():boolean{
 		return this.hasUnreadMessagesTracker;
@@ -164,11 +164,12 @@ export class PrivateMessagingComponent {
 	public startChatContactListPolling():void{
 		this.scheduleContactListRefresh = window.setInterval(()=> {
 			this.fetchChats();		
-			//this.hasUnreadMessagesTracker = this.hasUnreadMessages();
 		},20000);
 	}
 	
-	
+	/**
+	* Returns whether there is at least 1 unread chat message  
+	*/
 	public hasUnreadMessages():boolean{
 		
 		let hasUnreadMessages:boolean = false;
