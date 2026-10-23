@@ -95,3 +95,10 @@
  	border:3px solid red;
  }
  
+.campaigns-notifications-true{
+ 	color:green;
+ }
+ 
+.campaigns-notifications-false{
+ 	color:black;
+ }

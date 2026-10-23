@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
+import com.arenella.recruit.campaign.dao.CampaignIMNotificationDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.DocumentEntityDao;
@@ -79,6 +80,7 @@ public class CampaignServiceImpl implements CampaignService{
 	private final RoleDao							roleDao;
 	private final CandidateEntityDao				candidateDao;
 	private final CampaignExternalEventPublisher 	eventPublisher;
+	private final CampaignIMNotificationDao 		imNotificationDao;
 	
 	/**
 	* Constructor
@@ -91,6 +93,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param roleDao			- For working with Roles
 	* @param candidateDao		- For working with Candidates
 	* @param eventPublisher		- For publishing events/commands to external services
+	* @param imNotificationDao	- For working with IM Noficiation's relating to the Campaign
 	*/
 	public CampaignServiceImpl(
 			CampaignDao 					campaignDao, 
@@ -102,7 +105,8 @@ public class CampaignServiceImpl implements CampaignService{
 			CampaignFileSecurityParser		fileSecurityParser,
 			RoleDao							roleDao,
 			CandidateEntityDao				candidateDao,
-			CampaignExternalEventPublisher 	eventPublisher) {
+			CampaignExternalEventPublisher 	eventPublisher,
+			CampaignIMNotificationDao		imNotificationDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
@@ -113,6 +117,7 @@ public class CampaignServiceImpl implements CampaignService{
 		this.roleDao			= roleDao;
 		this.candidateDao		= candidateDao;
 		this.eventPublisher		= eventPublisher;
+		this.imNotificationDao  = imNotificationDao;
 	}
 	
 	/**
@@ -891,8 +896,7 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public Set<IMNotification> fetchIMNotificationsForRecruiter(Principal currentUser) {
-		// TODO Auto-generated method stub
-		return Set.of();
+		return this.imNotificationDao.fetchIMNotificationForRecruiter(currentUser.getName());
 	}
 
 	/**
@@ -900,10 +904,8 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public Set<IMNotification> fetchRecruitersIMNotificationsForCampaign(Principal currentUser, UUID campaignId) {
-		// TODO Auto-generated method stub
-		return Set.of();
+		return this.imNotificationDao.fetchIMNotificationForCampaign(currentUser.getName(), campaignId);
 	}
-	
 	
 	/**
 	* Attempts to retrieve the Contact of the current user and validate that

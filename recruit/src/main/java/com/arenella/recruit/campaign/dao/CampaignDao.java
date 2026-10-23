@@ -23,6 +23,9 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	@Query("SELECT c FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
 	Set<CampaignEntity> fetchCampaignsWhereUserIsParticipant(String userId);
 	
+	@Query("SELECT c FROM CampaignEntity c JOIN c.candidates cc where cc.id = :candidateId")
+	Set<CampaignEntity> fetchCampaignEntitiesForCandidate(String candidateId);
+	
 	/**
 	* Returns Campaigns in which the User is a Participant. Only the basic information 
 	* is loaded.
@@ -39,7 +42,6 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	* @return Campaign if present
 	*/
 	default Optional<Campaign> fetchCampaign(UUID campaignId) {
-		
 		return this.findById(campaignId).map(CampaignEntity::fromEntity);
 	}
 	
@@ -50,6 +52,15 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	@Modifying
 	default void saveCampaign(Campaign campaign) {
 		this.save(CampaignEntity.toEntity(campaign));
+	}
+	
+	/**
+	* Returns Campaigns in which the Candidates one of the associated Candidates
+	* @param candidateId - Id of the Candidate
+	* @return Associated Campaigns
+	*/
+	default Set<Campaign> fetchCampaignsForCandidate(String candidateId) {
+		return this.fetchCampaignEntitiesForCandidate(candidateId).stream().map(CampaignEntity::fromEntity).collect(Collectors.toSet());
 	}
 
 }

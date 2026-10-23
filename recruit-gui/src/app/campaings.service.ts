@@ -640,7 +640,8 @@ export class Role{
 				public participations:Array<Participation>,
 				public notes:Array<Note>,
 				public appointments:Array<Appointment>,
-				public documents:Array<Document>){}
+				public documents:Array<Document>,
+				public hasUnreadNotifications:boolean){}
 	
 }
 
@@ -659,7 +660,8 @@ export class Candidate{
 				public countryCode:string,
 				public jobTitle:string,
 				public email:string,
-				public deletedFromSystem:boolean){}
+				public deletedFromSystem:boolean,
+				public hasUnreadIMmessage:boolean){}
 	
 }
 

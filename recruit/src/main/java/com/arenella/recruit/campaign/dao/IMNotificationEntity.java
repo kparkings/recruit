@@ -3,6 +3,8 @@ package com.arenella.recruit.campaign.dao;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.arenella.recruit.campaigns.beans.IMNotification;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -172,6 +174,38 @@ public class IMNotificationEntity {
 			return new IMNotificationEntity(this);
 		}
 		
+	}
+	
+	/**
+	* Converts from Entity to Domain representation 
+	* @param entity - To convert
+	* @return Domain version of Object
+	*/
+	public static IMNotification fromEntity(IMNotificationEntity entity) {
+		return IMNotification
+				.builder()
+					.notificationId(entity.getNotificationId())
+					.campaignId(entity.getCampaignId())
+					.roleId(entity.getRoleId().orElse(null))
+					.recruiterId(entity.getRecruiterId())
+					.candidateId(entity.getCandidateId())
+				.build();
+	}
+	
+	/**
+	* Converts from Entity to Domain representation 
+	* @param entity - To convert
+	* @return Domain version of Object
+	*/
+	public static IMNotificationEntity toEntity(IMNotification notification) {
+		return IMNotificationEntity
+				.builder()
+					.notificationId(notification.getNotificationId())
+					.campaignId(notification.getCampaignId())
+					.roleId(notification.getRoleId().orElse(null))
+					.recruiterId(notification.getRecruiterId())
+					.candidateId(notification.getCandidateId())
+				.build();
 	}
 	
 }

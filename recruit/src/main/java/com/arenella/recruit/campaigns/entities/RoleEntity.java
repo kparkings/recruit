@@ -399,6 +399,7 @@ public class RoleEntity {
 		return Role
 				.builder()
 				.id(entity.getId())
+				.campaignId(entity.getCampaignId())
 				.name(entity.getName())
 				.description(entity.getDescription())
 				.created(entity.getCreated())

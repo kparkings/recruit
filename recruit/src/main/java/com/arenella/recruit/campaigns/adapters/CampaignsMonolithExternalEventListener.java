@@ -1,18 +1,26 @@
 package com.arenella.recruit.campaigns.adapters;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageCreatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageReadEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.campaign.dao.CampaignDao;
+import com.arenella.recruit.campaign.dao.CampaignIMNotificationDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaign.dao.RoleDao;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
@@ -24,17 +32,32 @@ import com.arenella.recruit.campaigns.beans.Contact;
 @Service
 public class CampaignsMonolithExternalEventListener implements CampaignsExternalEventListener{
 
-	private final ContactEntityDao contactDao;
-	private final CandidateEntityDao candidateDao;
+	private final ContactEntityDao 				contactDao;
+	private final CandidateEntityDao 			candidateDao;
+	private final CampaignDao					campaignDao;
+	private final RoleDao						roleDao;
+	private final CampaignIMNotificationDao 	imNotificationDao;
 	
 	/**
 	* Constructor
-	* @param contactDao 	- Repository for interacting with Contacts
-	* @param candidateDao 	- Repository for interacting with Candidats
+	* @param contactDao 		- Repository for interacting with Contacts
+	* @param candidateDao 		- Repository for interacting with Candidates
+	* @param campaignDao		- Repository for interacting with Campaigns
+	* @param roleDao			- Repository for interacting with Roles
+	* @param imNotificationDao	- Repository for interaction with IM Notifications
 	*/
-	public CampaignsMonolithExternalEventListener(ContactEntityDao contactDao, CandidateEntityDao candidateDao) {
-		this.contactDao 	= contactDao;
-		this.candidateDao 	= candidateDao;
+	public CampaignsMonolithExternalEventListener(
+			ContactEntityDao 			contactDao, 
+			CandidateEntityDao 			candidateDao, 
+			CampaignDao 				campaignDao,
+			RoleDao						roleDao,
+			CampaignIMNotificationDao imNotificationDao) {
+		this.contactDao 		= contactDao;
+		this.candidateDao 		= candidateDao;
+		this.campaignDao 		= campaignDao;
+		this.roleDao			= roleDao;
+		this.imNotificationDao 	= imNotificationDao;
+		
 	}
 	
 	/**
@@ -181,6 +204,57 @@ public class CampaignsMonolithExternalEventListener implements CampaignsExternal
 					.surname(candidateCreatedEvent.getSurname())
 					.type(Type.INTERNAL)
 				.build());
+		
+	}
+
+	/**
+	* Refer to the interface CampaignsExternalEventListener for details 
+	*/
+	@Override
+	public void listenFor(IMMessageCreatedEvent imMessageCreatedEvent) {
+		
+		/**
+		* Campaign level notification identified 
+		*/
+		this.campaignDao.fetchCampaignsForCandidate(imMessageCreatedEvent.getSenderId()).stream().forEach(campaign -> {
+			campaign.getParticipations().stream().filter(participant -> participant.getContactId().equals(imMessageCreatedEvent.getRecipientId())).findAny().ifPresent(_ -> 
+				this.imNotificationDao.addNotification(IMNotification
+						.builder()
+							.notificationId(UUID.randomUUID())
+							.campaignId(campaign.getId())
+							.candidateId(imMessageCreatedEvent.getSenderId())
+							.recruiterId(imMessageCreatedEvent.getRecipientId())
+						.build())
+			);
+		});
+		
+		this.roleDao.fetchRolesForCandidate(imMessageCreatedEvent.getSenderId()).stream().forEach(role -> {
+			role.getParticipations().stream().filter(participant -> participant.getContactId().equals(imMessageCreatedEvent.getRecipientId())).findAny().ifPresent(_ -> 
+				this.imNotificationDao.addNotification(IMNotification
+						.builder()
+							.notificationId(UUID.randomUUID())
+							.campaignId(role.getCampaignId())
+							.roleId(role.getId())
+							.candidateId(imMessageCreatedEvent.getSenderId())
+							.recruiterId(imMessageCreatedEvent.getRecipientId())
+						.build())
+			);
+		});
+		
+	}
+
+	/**
+	* Refer to the interface CampaignsExternalEventListener for details 
+	*/
+	@Override
+	public void listenFor(IMMessageReadEvent imMessageReadEvent) {
+		
+		/**
+		* Campaign level notification identified 
+		*/
+		this.imNotificationDao.fetchNotificationsBetweenRecruiterAndCandodate(imMessageReadEvent.getRecipientId(), imMessageReadEvent.getSenderId()).stream().forEach(n -> 
+			this.imNotificationDao.deleteById(n.getNotificationId())
+		);
 		
 	}
 

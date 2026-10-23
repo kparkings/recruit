@@ -136,6 +136,7 @@ export class AppComponent {
 
 		this.refreshUnreadNewsFeedNotifications();	
 		this.hasUnreadNewsFeedItems();
+		this.fetchHasUnreadCampaignMessages();
 	
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.refreshUnreadNewsFeedNotifications();		
@@ -194,6 +195,7 @@ export class AppComponent {
 		this.hasUnreadNewsFeedItems();
 		this.privateChat.fetchChats();
 		this.emailService.updateUnseenEmails();
+		this.fetchHasUnreadCampaignMessages();
 
 	}
 	

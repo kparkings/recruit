@@ -3,6 +3,7 @@ package com.arenella.recruit.campaign.dao;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -21,6 +22,9 @@ public interface RoleDao extends ListCrudRepository<RoleEntity, UUID>{
 	@Query("SELECT c FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
 	Set<CampaignEntity> fetchCampaignsWhereUserIsParticipant(String userId);
 	
+	@Query("SELECT r FROM RoleEntity r JOIN r.candidates c where c.id = :candidateId")
+	Set<RoleEntity> fetchRoleEntitiesForCandidate(String candidateId);
+	
 	/**
 	* Saves a Role
 	* @param role - Role to be persisted
@@ -36,6 +40,15 @@ public interface RoleDao extends ListCrudRepository<RoleEntity, UUID>{
 	*/
 	default Optional<Role> fetchRoleById(UUID roleId) {
 		return this.findById(roleId).map(RoleEntity::fromEntity);
+	}
+
+	/**
+	* Returns Roles in which the Candidates one of the associated Candidates
+	* @param candidateId - Id of the Candidate
+	* @return Associated Roles
+	*/
+	default Set<Role> fetchRolesForCandidate(String candidateId) {
+		return this.fetchRoleEntitiesForCandidate(candidateId).stream().map(RoleEntity::fromEntity).collect(Collectors.toSet());
 	}
 	
 

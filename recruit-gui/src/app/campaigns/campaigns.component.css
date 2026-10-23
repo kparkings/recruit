@@ -254,3 +254,13 @@
 	margin: 0 auto;
 	text-align:left;
 }
+
+.campaign-candidate-notification-true{
+	color:green;
+}
+
+.campaign-candidate-notification-false{
+	color:black;
+}
+
+

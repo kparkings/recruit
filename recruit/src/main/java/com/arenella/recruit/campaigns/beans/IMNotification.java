@@ -12,6 +12,7 @@ import java.util.UUID;
 */
 public class IMNotification {
 
+	private UUID	notificationId;
 	private UUID 	campaignId;
 	private UUID 	roleId;
 	private String 	recruiterId;
@@ -22,10 +23,19 @@ public class IMNotification {
 	* @param builder - Contains initialization values
 	*/
 	public IMNotification(IMNotificationBuilder builder) {
+		this.notificationId	= builder.notificationId;
 		this.campaignId 	= builder.campaignId;
 		this.roleId 		= builder.roleId;
 		this.recruiterId 	= builder.recruiterId;
 		this.candidateId 	= builder.candidateId;	
+	}
+	
+	/**
+	* Returns the Id of the Notification
+	* @return Id of the Notification
+	*/
+	public UUID getNotificationId() {
+		return this.notificationId;
 	}
 	
 	/**
@@ -74,10 +84,21 @@ public class IMNotification {
 	*/
 	public static class IMNotificationBuilder {
 		
+		private UUID	notificationId;
 		private UUID 	campaignId;
 		private UUID 	roleId;
 		private String 	recruiterId;
 		private String 	candidateId;
+		
+		/**
+		* Sets the unique Id of the Notification
+		* @param notificationId - Id of the Notification
+		* @return Builder
+		*/
+		public IMNotificationBuilder notificationId(UUID notificationId) {
+			this.notificationId = notificationId;
+			return this;
+		}
 		
 		/**
 		* Sets the Id of the Campaign that the Notification is associated with

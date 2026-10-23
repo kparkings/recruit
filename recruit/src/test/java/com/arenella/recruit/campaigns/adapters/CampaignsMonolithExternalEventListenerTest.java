@@ -1,6 +1,8 @@
 package com.arenella.recruit.campaigns.adapters;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,21 +15,31 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageCreatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageReadEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
 import com.arenella.recruit.adapters.events.RecruiterUpdatedEvent;
 import com.arenella.recruit.adapters.events.SubscriptionAddedEvent;
+import com.arenella.recruit.campaign.dao.CampaignDao;
+import com.arenella.recruit.campaign.dao.CampaignIMNotificationDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
+import com.arenella.recruit.campaign.dao.RoleDao;
+import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.IMNotification;
+import com.arenella.recruit.campaigns.beans.Participation;
+import com.arenella.recruit.campaigns.beans.Role;
 import com.arenella.recruit.candidates.adapters.CandidateCreatedEvent;
 import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.recruiters.beans.RecruiterSubscription.subscription_type;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 /**
@@ -41,6 +53,15 @@ class CampaignsMonolithExternalEventListenerTest {
 	
 	@Mock
 	private CandidateEntityDao 						mockCandidateDao;
+	
+	@Mock
+	private  CampaignDao							mockCampaignDao;
+	
+	@Mock
+	private  RoleDao								mockRoleDao;
+	
+	@Mock
+	private  CampaignIMNotificationDao 				mockImNotificationDao;
 	
 	@InjectMocks
 	private CampaignsMonolithExternalEventListener 	listener;
@@ -428,4 +449,186 @@ class CampaignsMonolithExternalEventListenerTest {
 		assertEquals("NA", candidate.getSurname());
 		
 	}
+	
+	/**
+	* Tests that if a Message has been sent by a Candidate associated with a Campaign to a 
+	* Recruiter that is a participant in the campaign that the Notification is created
+	*/
+	@Test
+	void listenForIMMessageCreatedEventCampaignLevel() {
+	
+		final UUID 	campaignId 		= UUID.randomUUID();
+		final String recipientId 	= "recruiter1";
+		final String senderId 		= "candidate78";
+		
+		ArgumentCaptor<IMNotification> argCapt = ArgumentCaptor.forClass(IMNotification.class);
+		
+		IMMessageCreatedEvent event = IMMessageCreatedEvent
+				.builder()
+					.senderId(senderId)
+					.recipientId(recipientId)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaignsForCandidate(senderId)).thenReturn(Set.of(Campaign
+				.builder()
+					.id(campaignId)
+					.participants(Set.of(Participation.builder().contactId(recipientId).build()))
+				.build()));
+		
+		this.listener.listenFor(event);
+		
+		verify(this.mockImNotificationDao).addNotification(argCapt.capture());
+		
+		IMNotification notification = argCapt.getValue();
+		
+		assertEquals(recipientId, 	notification.getRecruiterId());
+		assertEquals(senderId, 		notification.getCandidateId());
+		assertEquals(campaignId, 	notification.getCampaignId());
+		
+		assertNotNull(notification.getNotificationId());
+		
+	}
+	
+	/**
+	* Tests that if there is no Campaign with the Recruiter/Candidate combination 
+	* that the Notification is not saved 
+	*/
+	@Test
+	void listenForIMMessageCreatedEventCampaignLevelNoMatch() {
+	
+		final String recipientId 	= "recruiter1";
+		final String senderId 		= "candidate78";
+		
+		IMMessageCreatedEvent event = IMMessageCreatedEvent
+				.builder()
+					.senderId(senderId)
+					.recipientId(recipientId)
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaignsForCandidate(senderId)).thenReturn(Set.of());
+		
+		this.listener.listenFor(event);
+		
+		verify(this.mockImNotificationDao, never()).addNotification(any());
+		
+	}
+	
+	/**
+	* Tests that if a Message has been sent by a Candidate associated with a Role to a 
+	* Recruiter that is a participant in the Role that the Notification is created
+	*/
+	@Test
+	void listenForIMMessageCreatedEventRoleLevel() {
+		
+		final UUID 	campaignId 		= UUID.randomUUID();
+		final UUID 	roleId 			= UUID.randomUUID();
+		final String recipientId 	= "recruiter1";
+		final String senderId 		= "candidate78";
+		
+		ArgumentCaptor<IMNotification> argCapt = ArgumentCaptor.forClass(IMNotification.class);
+		
+		IMMessageCreatedEvent event = IMMessageCreatedEvent
+				.builder()
+					.senderId(senderId)
+					.recipientId(recipientId)
+				.build();
+		
+		when(this.mockRoleDao.fetchRolesForCandidate(senderId)).thenReturn(Set.of(Role
+				.builder()
+					.id(roleId)
+					.campaignId(campaignId)
+					.participants(Set.of(Participation.builder().contactId(recipientId).build()))
+				.build()));
+		
+		this.listener.listenFor(event);
+		
+		verify(this.mockImNotificationDao).addNotification(argCapt.capture());
+		
+		IMNotification notification = argCapt.getValue();
+		
+		assertEquals(recipientId, 	notification.getRecruiterId());
+		assertEquals(senderId, 		notification.getCandidateId());
+		assertEquals(campaignId, 	notification.getCampaignId());
+		assertEquals(roleId, 		notification.getRoleId().orElse(null));
+		
+		assertNotNull(notification.getNotificationId());
+		
+	}
+	
+	/**
+	* Tests that if there is no Role with the Recruiter/Candidate combination 
+	* that the Notification is not saved 
+	*/
+	@Test
+	void listenForIMMessageCreatedEventRoleLevelNoMatch() {
+	
+		final String recipientId 	= "recruiter1";
+		final String senderId 		= "candidate78";
+		
+		IMMessageCreatedEvent event = IMMessageCreatedEvent
+				.builder()
+					.senderId(senderId)
+					.recipientId(recipientId)
+				.build();
+		
+		when(this.mockRoleDao.fetchRolesForCandidate(senderId)).thenReturn(Set.of());
+		
+		this.listener.listenFor(event);
+		
+		verify(this.mockImNotificationDao, never()).addNotification(any());
+		
+	}
+	
+	/**
+	* Tests case that a recruiter has read an IM sent by a recruiter. All Notifications between 
+	* recruiter and candidate must be deleted.
+	*/
+	@Test
+	void listenForIMMessageReadEvent() {
+		
+		final UUID		notificationId 	= UUID.randomUUID();
+		final String 	recipientId 	= "recruiter1";
+		final String 	senderId 		= "candidate78";
+		
+		when(this.mockImNotificationDao.fetchNotificationsBetweenRecruiterAndCandodate(recipientId, senderId))
+			.thenReturn(Set.of(IMNotification
+					.builder()
+						.notificationId(notificationId)
+						.recruiterId(recipientId)
+						.candidateId(senderId)
+					.build()));
+		
+		this.listener.listenFor(IMMessageReadEvent
+				.builder()
+					.recipientId(recipientId)
+					.senderId(senderId)
+				.build());
+		
+		verify(this.mockImNotificationDao).deleteById(notificationId);
+		
+	}
+	
+	/**
+	* Tests case that a recruiter has read an IM sent by a recruiter but there is no corresponding 
+	* match between a Recruiter/Candidate
+	*/
+	@Test
+	void listenForIMMessageReadEventNoMatch() {
+		
+		final String 	recipientId 	= "recruiter1";
+		final String 	senderId 		= "candidate78";
+		
+		when(this.mockImNotificationDao.fetchNotificationsBetweenRecruiterAndCandodate(recipientId, senderId))
+			.thenReturn(Set.of());
+		
+		this.listener.listenFor(IMMessageReadEvent
+				.builder()
+					.recipientId(recipientId)
+					.senderId(senderId)
+				.build());
+		
+		verify(this.mockImNotificationDao, never()).deleteById(any());
+		
+	}
+	
 }

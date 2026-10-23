@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 class RoleTest {
 
 	private static final UUID 				ID				= UUID.randomUUID();
+	private static final UUID 				CAMPAIGN_ID		= UUID.randomUUID();
 	private static final String 			NAME			= "ABN AMRO";
 	private static final String 			DESCRIPTION		= "Campaign for IT roles for the Client ABN Amro";
 	private static final LocalDateTime		CREATED			= LocalDateTime.of(2026, 3,27,17,49,11);
@@ -38,12 +39,14 @@ class RoleTest {
 					.description(DESCRIPTION)
 					.documents(DOCUMENTS)
 					.id(ID)
+					.campaignId(CAMPAIGN_ID)
 					.name(NAME)
 					.notes(NOTES)
 					.participants(PARTICIPANTS)
 				.build();
 		
 		assertEquals(ID, 			role.getId());
+		assertEquals(CAMPAIGN_ID, 	role.getCampaignId());
 		assertEquals(NAME, 			role.getName());
 		assertEquals(DESCRIPTION, 	role.getDescription());
 		assertEquals(CREATED, 		role.getCreated());
@@ -65,6 +68,7 @@ class RoleTest {
 				.build();
 	
 		assertEquals(ID, 			updatedRole.getId());
+		assertEquals(CAMPAIGN_ID, 	updatedRole.getCampaignId());
 		assertEquals(NAME, 			updatedRole.getName());
 		assertEquals(DESCRIPTION, 	updatedRole.getDescription());
 		assertEquals(CREATED, 		updatedRole.getCreated());

@@ -3,6 +3,8 @@ package com.arenella.recruit.campaigns.adapters;
 import com.arenella.recruit.adapters.events.CandidateDeletedEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageCreatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageReadEvent;
 import com.arenella.recruit.adapters.events.RecruiterCreatedEvent;
 import com.arenella.recruit.adapters.events.RecruiterDeletedEvent;
 import com.arenella.recruit.adapters.events.RecruiterNoOpenSubscriptionEvent;
@@ -75,4 +77,17 @@ public interface CampaignsExternalEventListener {
 	* @param candidateCreatedEvent
 	*/
 	public void listenFor(CandidateCreatedEvent candidateCreatedEvent);
+	
+	/**
+	* Listens for an event stating that an Instant message was created
+	* @param imMessageCreatedEvent - Details of the IM
+	*/
+	public void listenFor(IMMessageCreatedEvent imMessageCreatedEvent);
+	
+	/**
+	* Listens for an event stating that an Instant message was read
+	* @param imMessageReadEvent - Details of the IM
+	*/
+	public void listenFor(IMMessageReadEvent imMessageReadEvent);
+	
 }

@@ -6,7 +6,7 @@
 			<button class="btn btn-secondary campaign-selectionbox-addcampaign-btn" (click)="addCampaign()">+</button>
 		</div>
 		<div class="campaign-selection-panel">
-			<div *ngFor="let campaign of campaigns" (click)="selectCampaign(campaign)">
+			<div *ngFor="let campaign of campaigns" (click)="selectCampaign(campaign)" class="campaigns-notifications-{{campaign.hasUnreadNotifications}}">
 				<div *ngIf="getCampaignNameFormatted(campaign.name).length <= 25" class="campaign-selection">{{getCampaignNameFormatted(campaign.name)}}</div>
 				<div *ngIf="getCampaignNameFormatted(campaign.name).length > 25" class="campaign-selection campaign-selection-small-text">{{getCampaignNameFormatted(campaign.name)}}</div>
 			</div>
@@ -23,10 +23,11 @@
 		<div class="campaign-selection-panel">
 			<div *ngIf="selectedCampaign !== undefined">
 				
-				<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length <= 25" class="campaign-selection campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
-				<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length > 25"  class="campaign-selection campaign-selection-small-text campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
-		
-				<div *ngFor="let role of selectedCampaign.roles">
+				<div class="campaigns-notifications-{{selectedCampaign.hasUnreadNotifications}}">
+					<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length <= 25" class="campaign-selection campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
+					<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length > 25"  class="campaign-selection campaign-selection-small-text campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
+				</div>
+				<div *ngFor="let role of selectedCampaign.roles" class="campaigns-notifications-{{role.hasUnreadNotifications}}">
 					<div *ngIf="getCampaignNameFormatted(role.name).length <= 25" class="campaign-selection role-selection role-selected-{{selectedRole && role.id == selectedRole.id}}" (click)="selectRole(role)">{{getCampaignNameFormatted(role.name)}}</div>
 					<div *ngIf="getCampaignNameFormatted(role.name).length > 25"  class="campaign-selection campaign-selection-small-text role-selection role-selected-{{selectedRole && role.id == selectedRole.id}}" (click)="selectRole(role)">{{getCampaignNameFormatted(role.name)}}</div>
 				</div>
