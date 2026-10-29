@@ -33,6 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
+import com.arenella.recruit.messaging.adapters.MessagingExternalEventPublisher;
 import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.dao.PrivateChatDao;
@@ -60,6 +61,9 @@ class PrivateChatServiceImplTest {
 	
 	@Mock
 	private GrantedAuthority							mockGrantedAuthority;
+	
+	@Mock
+	private MessagingExternalEventPublisher 			mockPublisher;
 	
 	@InjectMocks
 	private PrivateChatServiceImpl 						service;

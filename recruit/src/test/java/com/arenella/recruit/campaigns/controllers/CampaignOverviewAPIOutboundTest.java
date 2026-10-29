@@ -59,6 +59,7 @@ class CampaignOverviewAPIOutboundTest {
 		 
 		Campaign campaign = Campaign
 				.builder()
+				.id(ID)
 				.build();
 			
 		CampaignOverviewAPIOutbound overview = CampaignOverviewAPIOutbound
