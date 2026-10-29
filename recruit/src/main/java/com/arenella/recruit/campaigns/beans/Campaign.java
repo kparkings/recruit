@@ -13,6 +13,8 @@ import java.util.UUID;
 */
 public class Campaign {
 
+	public enum CampaignNotificationType {IM }
+	
 	private UUID 				id;
 	private String 				name;
 	private String 				description;
@@ -24,8 +26,7 @@ public class Campaign {
 	private Set<Note> 			notes			= new LinkedHashSet<>();
 	private Set<Appointment> 	appointments	= new LinkedHashSet<>();
 	private Set<Document> 		documents		= new LinkedHashSet<>();
-	//Role level should also have ListingIds ?? Possibly as part of its attribute list. 1 listing per role.
-
+	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values

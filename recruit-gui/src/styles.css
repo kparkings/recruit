@@ -72,6 +72,10 @@
 		cursor:pointer;
 	}
 	
+	 .dropdown-item-icon{
+	 	min-width:100px;
+	 }
+	
 	.dropdown-item-preauth{
 		min-width:20px;
 	}
@@ -344,8 +348,7 @@
 	
 	.mobile-menu-bar-icon{
 		color:#002549;
-		margin-left:10px;
-		padding:10px;
+		margin-right:10px;
 		font-size:36px;
 		text-decoration: none;
 	}

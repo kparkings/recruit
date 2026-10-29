@@ -24,4 +24,12 @@ public interface ParticipationEntityDao extends ListCrudRepository<Participation
 		return this.findById(id).map(ParticipationEntity::fromEntity);
 	}
 	
+	/**
+	* Persists a Participation
+	* @param participation - Participation to persist
+	*/
+	default void saveParticipation(Participation participation) {
+		this.save(ParticipationEntity.toEntity(participation));
+	}
+	
 }

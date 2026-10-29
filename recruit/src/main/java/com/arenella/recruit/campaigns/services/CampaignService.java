@@ -1,13 +1,20 @@
 package com.arenella.recruit.campaigns.services;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
+
+import jakarta.transaction.Transactional;
 
 /**
 * Defines services for working with Campaigns 
@@ -132,4 +139,146 @@ public interface CampaignService {
 	*/
 	void deleteDocument(UUID documentId, String currentUser);
 
+	/**
+	* Adds a Role to an existing Campaign
+	* @param campaignId		- Unique id of the Campaign to add the Role to
+	* @param name			- Name of the Role
+	* @param description	- Description of the Role
+	* @param currentUser	- Id of the authenticated User
+	 */
+	void addRole(UUID campaignId, String name, String description, String currentUser);
+
+	/**
+	* Deletes a Campaign and all its Roles and associated objects
+	* @param campaignId - Id of Campaign to Delete
+	* @param currentUser	- Id of the authenticated User
+	*/
+	void deleteCampaign(UUID campaignId, String name);
+
+	/**
+	* Deletes a Role and all its Roles and associated objects
+	* @param roleId 		- Id of Role to Delete
+	* @param currentUser	- Id of the authenticated User
+	*/
+	void deleteRole(UUID roleId, String name);
+
+	/**
+	* Adds a Candidate to a Campaign/Role
+	* @param campaignId		- Campaign to add Candidate to
+	* @param roleId			- If Role level Role to add Candidate to
+	* @param candidateId	- Id of Candidate to add to the Campaign / Role
+	* @param currentUser	- Id of authenticated User
+	*/
+	void addCandidateToCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
+
+	
+	/**
+	* Deletes a Candidate form a Campaign/Role
+	* @param campaignId		- Campaign to delete the Candidate from
+	* @param roleId			- If Role level Role to delete the Candidate from
+	* @param candidateId	- Id of Candidate to remove from the Campaign / Role
+	* @param currentUser	- Id of authenticated User
+	*/
+	void deleteCandidateFromCampaign(UUID campaignId, UUID roleId, String candidateId, String currentUser);
+
+	/**
+	* Returns Document matching documentID
+	* @param documentId		- Document to retrieve
+	* @param currentUser	- Id of authenticated Use
+	*/
+	Document fetchDocumentById(UUID documentId, String currentUser);
+
+	/**
+	* Adds an External Candidate to a Campaign or Role
+	* @param campaignId - Id of Campaign to add Candidate to
+	* @param roleId 	- Id of Role to add Candidate to
+	* @param candidate	- Candidate Details
+	* @param currentUser	- Id of authenticated User		
+	*/
+	void addExternalCandidateToCampaiginOrRole(UUID campaignId, UUID roleId, Candidate candidate, String currentUser);
+
+	/**
+	* Sends an external email message to specified external candidates. These are candidates that have no profile in 
+	* the system but who have been added to a campaign by a recruiter for a campaigin or role
+	* @param campaignId		- Id of the Campaign the message is associated with
+	* @param roleId			- Id of the role ( optional ) the message is associated with
+	* @param candidateIds	- Id's of external candidates to send message to
+	* @param message		- Message to be sent
+	* @param currentUser	- Id of authenticated user
+	*/
+	void messageExternalCampaignCandidates(UUID campaignId, UUID roleId, Set<String> candidateIds, String message, String currentUser);
+
+	/**
+	* Marks an External Candidates as either having rejected the request to add them to a Campaign/Role or not having responsed within the 
+	* time frame. In either case the user details are anonymized and they are marked as deleted.
+	* @param externalCandidateId - Id of the External Candidate
+	*/
+	@Transactional
+	void rejectExternalCandidateConnectionRequest(UUID externalCandidateId);
+
+	/**
+	* Marks an External Candidate as having agreed to their details being added to the system
+	* @param externalCandidateId - Id of the External Candidate
+	*/
+	void acceptExternalCandidateConnectionRequest(UUID externalCandidateId);
+
+	/**
+	* Returns whether or not the current user has access to Campaigin
+	* features or not
+	* @param currentUser - Id of authenticated User
+	* @return Whether or not user has access to Campaign features
+	*/
+	boolean hasAccess(String currentUser);
+	
+	/**
+	* Returns External Candidates that have missed the cuttoff for agreeing to have their details stored
+	* in the Recruiters Campaign/Role
+	* @param cuttOff - Date before which we consider an external candidate not to have replied
+	* @return External Candidates who didn't respond to the request for authorization request in time
+	*/
+	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationCuttoff(LocalDateTime cuttOff);
+		
+	/**
+	* Retrieves candidates that need to be sent an email asking to extend the recruiters authorization to keep them 
+	* in the system as an external Candidate for a specific Campaign/Role
+	* @param cuttoff - Cut off for sending the email. Last email needs to be be before the cutt off and the last time permission was given must also be before the cutt off
+	* @return Candidates requiring an email asking for extended authorization
+	*/
+	public Set<Candidate> fetchExternalCandidatesThatRequireAnnualRenewalAuthorizationEmail(LocalDateTime cuttoff);
+
+	/**
+	* Retrieves candidates that were sent and email asking to extend the authorization to retain them as an external Candidate
+	* for a Campaign/Role but did not reply before the cuttoff
+	* @param cuttoffRenewalEmail - 
+	* @param cuttoff - If the candidates has provided permission after this cuttoff then they wont be included
+	* @return Candidates requiring deletion because authroization was not given in time
+	*/
+	@Transactional
+	public Set<Candidate> fetchExternalCandidatesThatMissedAuthorisationAnnualRenewalCuttoff(LocalDateTime cuttoffRenewalEmail, LocalDateTime cuttoff);
+
+	/**
+	* Sends an email asking the External candidate if their details for a specific Campaign/Role can be kept for another year
+	* @param extCandidate - Details of External Candidate
+	* @param campaign	  - Id of the Campaign the user is part of as an External Candidate
+	* @param role	  	  - Id of the Role the user is part of as an External Candidate
+	*/
+	public void sendExternalCandiateDataRenentionRenewalMessageSendEmailCommand(Candidate candidate, UUID campaignId, UUID roleId);
+
+	/**
+	* Returns all Instant messaging notification where the current user is a Recruiter involved in the
+	* Chat. 
+	* @param currentUser - Currently authenticated User
+	* @return All IM notification for IM chat's involving the current user
+	*/
+	public Set<IMNotification> fetchIMNotificationsForRecruiter(Principal currentUser);
+
+	/**
+	* Returns all the notification related to the Campaign or one of its Roles where the current recruiter 
+	* is the Recruiter in the Chat
+	* @param currentUser - Currently authenticated User
+	* @param campaignId  - ID of Campaign Notification need to be related to
+	* @return All IM notification for the Campaign and its Roles where the currentUser is part of the Chat the notification relates to
+	*/
+	public Set<IMNotification> fetchRecruitersIMNotificationsForCampaign(Principal currentUser, UUID campaignId);
+	
 } 

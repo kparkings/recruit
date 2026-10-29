@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Contact;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 
 /**
 * API Outbound representation of a Campaign with full details. 
@@ -19,6 +20,7 @@ public class CampaignAPIOutbound {
 	private String 							name;
 	private String 							description;
 	private CampaignLogo 					logo;
+	private Set<RoleAPIOutbound>			roles			= new LinkedHashSet<>();
 	private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
 	private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
 	private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
@@ -36,12 +38,14 @@ public class CampaignAPIOutbound {
 		this.description 	= builder.description;
 		this.logo 			= builder.logo;
 		
+		this.roles.clear();
 		this.candidates.clear();
 		this.participations.clear(); 
 		this.notes.clear();
 		this.appointments.clear();
 		this.documents.clear();
 		
+		this.roles.addAll(builder.roles);
 		this.candidates.addAll(builder.candidates);
 		this.participations.addAll(builder.participations); 
 		this.notes.addAll(builder.notes);
@@ -81,6 +85,14 @@ public class CampaignAPIOutbound {
 	public Optional<CampaignLogo> getLogo(){
 		return Optional.ofNullable(this.logo);
 	}
+
+	/**
+	* Returns Campaign level Candidates. 
+	* @return
+	*/
+	public Set<RoleAPIOutbound> getRoles(){
+		return this.roles;
+	} 
 	
 	/**
 	* Returns Campaign level Candidates. 
@@ -139,6 +151,7 @@ public class CampaignAPIOutbound {
 		private String 							name;
 		private String 							description;
 		private CampaignLogo 					logo;
+		private Set<RoleAPIOutbound>			roles			= new LinkedHashSet<>();
 		private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
 		private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
 		private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
@@ -151,7 +164,7 @@ public class CampaignAPIOutbound {
 		* @param contacts - Collection of all Contacts referenced in the Campaigns Participations
 		* @return Builder
 		*/
-		public CampaignAPIOutboundBuilder from(Campaign campaign, Set<Contact> contacts) {
+		public CampaignAPIOutboundBuilder from(Campaign campaign, Set<Contact> contacts, Set<IMNotification> imNotifications) {
 			
 			this.id 			= campaign.getId();
 			this.name 			= campaign.getName();
@@ -163,10 +176,11 @@ public class CampaignAPIOutbound {
 				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build());
 			});
 			
-			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.roles.addAll(campaign.getRoles().stream().map(r -> RoleAPIOutbound.builder().from(r, contacts, imNotifications).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c, imNotifications, false).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(campaign.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(campaign.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
-			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
+			this.documents.addAll(campaign.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getDocumentId(), d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));
 			
 			return this;
 		}

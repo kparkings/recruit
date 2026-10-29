@@ -2,6 +2,8 @@ package com.arenella.recruit.campaigns.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.campaigns.beans.Candidate;
@@ -41,7 +43,7 @@ class CandidateAPIOutboundTest {
 		
 		CandidateAPIOutbound outbound = CandidateAPIOutbound
 				.builder()
-					.from(candidate)
+					.from(candidate, Set.of(), false)
 				.build();
 		
 		assertEquals(ID, 					outbound.getId());
@@ -51,7 +53,7 @@ class CandidateAPIOutboundTest {
 		assertEquals(COUNTRY_CODE, 			outbound.getCountryCode());
 		assertEquals(JOB_TITLE, 			outbound.getJobTitle());
 		assertEquals(EMAIL, 				outbound.getEmail());
-		assertEquals(DELETED_FROM_SYSTEM, 	outbound.isDeleteFromSystem());
+		assertEquals(DELETED_FROM_SYSTEM, 	outbound.isDeletedFromSystem());
 		
 	}
 	

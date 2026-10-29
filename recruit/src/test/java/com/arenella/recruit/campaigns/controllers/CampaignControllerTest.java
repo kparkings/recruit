@@ -3,6 +3,8 @@ package com.arenella.recruit.campaigns.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -12,6 +14,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,6 +33,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Participation;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
+import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
@@ -49,6 +53,9 @@ class CampaignControllerTest {
 	
 	@Mock
 	private	Principal					mockPrincipal;
+	
+	@Mock
+	private MultipartFile				mockFile;
 	
 	@InjectMocks
 	private CampaignController 			controller;
@@ -98,9 +105,10 @@ class CampaignControllerTest {
 	
 	/**
 	* Tests adding a new Campaign 
+	* @throws Exception 
 	*/
 	@Test
-	void testAddCampaign() {
+	void testAddCampaign() throws Exception {
 		
 		final String 		userId 			= "rec1";
 		final String 		name 			= "";
@@ -114,11 +122,11 @@ class CampaignControllerTest {
 					.name(name)
 					.description(description)
 					.logo(logo)
-				.build(), mockPrincipal);
+				.build(), Optional.of(mockFile),  mockPrincipal);
 		
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
-		verify(this.mockCampaignService).addCampaign(name, description, logo, userId);
+		verify(this.mockCampaignService).addCampaign(eq(name), eq(description), any(), eq(userId));
 		
 	}
 	
@@ -389,27 +397,325 @@ class CampaignControllerTest {
 	}
 	
 	/**
-	* Tests retrieval of the Document requested by the documentId
+	* Tests adding a Role to an existing Campaign 
 	*/
-	//@Test
-	//void testFetchCampaignDocument() {
+	@Test
+	void testAddRole() {
 		
-	//	final UUID 				documentId 	= UUID.randomUUID();
-	//	final String 			userId 		= "rec1";
-	//	final String 			title		= "A title"; 
+		final UUID 		campaiginId 	= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		final String 	name 			= "Java developer";
+		final String 	desc 			= "Java developer role for 6 months";
 		
-	//	when(this.mockPrincipal.getName()).thenReturn(userId);
-	//	when(this.mockCampaignService.fetchCampaignDocument(documentId, userId)).thenReturn(Document.builder().title(title).build());
+		when(this.mockPrincipal.getName()).thenReturn(userId);
 		
-	//	ResponseEntity<CampaignDocumentAPIOutbound> response = this.controller.fetchCampaignDocument(documentId, mockPrincipal);
+		ResponseEntity<Void> response = this.controller.addRole(campaiginId, NewRoleAPIInbound
+				.builder()
+					.name(name)
+					.description(desc)
+				.build(), this.mockPrincipal);
 		
-	//	assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		
-	//	verify(this.mockCampaignService).fetchCampaignDocument(documentId, userId);
+		verify(this.mockCampaignService).addRole(campaiginId, name, desc, userId);
 		
-	//	assertNotNull(response.getBody());
-	//	assertEquals(title, response.getBody().title());
-		
-	//}
+	}
 	
+	/**
+	* Tests endpoint for deleting a Campaign 
+	*/
+	@Test
+	void testDeleteCampaign() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteCampaign(campaignId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteCampaign(campaignId, userId);
+		
+	}
+	
+	/**
+	* Tests endpoint for deleting a Campaign 
+	*/
+	@Test
+	void testDeleteRole() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final UUID 		roleId	 		= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteRole(campaignId, roleId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteRole(roleId, userId);
+		
+	}
+	
+	/**
+	* Tests adding a Candidate to a Campaign
+	*/
+	@Test
+	void  testAddCandidateToCampaign() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addCandidateToCampaign(campaignId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).addCandidateToCampaign(campaignId, null, candidateId, userId);
+		
+	}
+	
+	/**
+	* Tests adding a Candidate to a Campaign
+	*/
+	@Test
+	void  testAddCandidateToRole() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final UUID 		roleId	 		= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addCandidateToRole(campaignId, roleId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).addCandidateToCampaign(campaignId, roleId, candidateId, userId);
+		
+	}
+	
+	
+	
+	
+	
+	
+	/**
+	* Tests deleting a Candidate to a Campaign
+	*/
+	@Test
+	void  testDeleteCandidateFromCampaign() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteCandidateFromCampaign(campaignId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteCandidateFromCampaign(campaignId, null, candidateId, userId);
+		
+	}
+	
+	/**
+	* Tests deleting a Candidate from a Campaign
+	*/
+	@Test
+	void  testDeleteCandidateFromRole() {
+		
+		final UUID 		campaignId	 	= UUID.randomUUID();
+		final UUID 		roleId	 		= UUID.randomUUID();
+		final String 	candidateId		= "11";
+		final String 	userId 			= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.deleteCandidateFromRole(campaignId, roleId, candidateId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+		verify(this.mockCampaignService).deleteCandidateFromCampaign(campaignId, roleId, candidateId, userId);
+		
+	}
+
+	/**
+	* Tests retrieval of Document 
+	*/
+	@Test
+	void testGetDocumentAsPDF() throws Exception{
+		
+		final String 	userId 			= "rec1";
+		final UUID 		documentId 		= UUID.randomUUID();
+		final byte[]	data			= new byte[] {1,2,3,4,5};
+		final Document 	document = Document.builder().bytes(data).build();
+		
+		when(this.mockCampaignService.fetchDocumentById(documentId, userId)).thenReturn(document);
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		byte[] results = this.controller.getDocumentAsPDF(documentId, mockPrincipal);
+		
+		assertEquals(data.length, results.length);
+	}
+	
+	/**
+	* Tests the Endpoint for adding an External Candidate to a Campaign 
+	*/
+	@Test
+	void testAddExternalCandidateToCampaign() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		final NewExternalCandidateAPIInbound candidate = NewExternalCandidateAPIInbound
+				.builder()
+					.countryCode("nl")
+					.email("a@b.nl")
+					.firstName("peter")
+					.surname(userId)
+					.jobTitle("C# Developer")
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addExternalCandidateToCampaign(campaignId, candidate,  mockPrincipal);
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests the Endpoint for adding an External Candidate to a Campaign 
+	*/
+	@Test
+	void testAddExternalCandidateToRole() {
+		
+		final UUID 		campaignId 		= UUID.randomUUID();
+		final UUID 		roleId 			= UUID.randomUUID();
+		final String 	userId 			= "rec1";
+		final NewExternalCandidateAPIInbound candidate = NewExternalCandidateAPIInbound
+				.builder()
+					.countryCode("nl")
+					.email("a@b.nl")
+					.firstName("peter")
+					.surname(userId)
+					.jobTitle("C# Developer")
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.addExternalCandidateToRole(campaignId, roleId, candidate, mockPrincipal);
+		
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Test sending a Campaign level message to external candidates
+	*/
+	@Test
+	void testMessageExternalCandidatesForCampaigin() {
+		
+		final UUID 			campaignId 			= UUID.randomUUID();
+		final String 		userId 				= "rec1";
+		final String 		messageText 		= "some text";
+		final Set<String> 	externalCanidates 	= Set.of("c1","aah");
+		
+		final ExternaCandidatelMessageAPIInbound message = ExternaCandidatelMessageAPIInbound
+				.builder()
+				.message(messageText)
+				.candidateIds(externalCanidates)
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.messageExternalCandidatesForCampaigin(campaignId, message, mockPrincipal);
+		
+		verify(this.mockCampaignService).messageExternalCampaignCandidates(campaignId, null, externalCanidates, messageText, userId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
+	/**
+	* Test sending a Role level message to external candidates
+	*/
+	@Test
+	void testMessageExternalCandidatesForRole() {
+		
+		final UUID 			campaignId 			= UUID.randomUUID();
+		final UUID 			roleId	 			= UUID.randomUUID();
+		final String 		userId 				= "rec1";
+		final String 		messageText 		= "some text";
+		final Set<String> 	externalCanidates 	= Set.of("c1","aah");
+		
+		final ExternaCandidatelMessageAPIInbound message = ExternaCandidatelMessageAPIInbound
+				.builder()
+				.message(messageText)
+				.candidateIds(externalCanidates)
+				.build();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.messageExternalCandidatesForRole(campaignId, roleId, message, mockPrincipal);
+		
+		verify(this.mockCampaignService).messageExternalCampaignCandidates(campaignId, roleId, externalCanidates, messageText, userId);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+	}
+	
+	/**
+	* Tests refusing a Recruiters request to add an external candidate to a Campaign or Role
+	*/
+	@Test
+	void testRefuseExternalCandidateConnectionReuqest() {
+		
+		final UUID externalCandidateId = UUID.randomUUID();
+		
+		ResponseEntity<String> response = this.controller.refuseExternalCandidateConnectionReuqest(externalCandidateId);
+		
+		assertEquals(CampaignController.MSG_EXTERNAL_CANDIDATE_REQ_REJECTION, response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests refusing a Recruiters request to add an external candidate to a Campaign or Role
+	*/
+	@Test
+	void testAcceptExternalCandidateConnectionReuqest() {
+		
+		final UUID externalCandidateId = UUID.randomUUID();
+	
+		ResponseEntity<String> response = this.controller.acceptExternalCandidateConnectionReuqest(externalCandidateId);
+		
+		assertEquals(CampaignController.MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE, response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests endpoint to return if User has access to Campaigin features. This is to provide an indication to the FE. Actual valication
+	* is handled by the backend per request. But using this the FE can decided to show/hide features
+	*/
+	@Test
+	void testHasAccess() {
+		
+		final String 		userId 				= "rec1";
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		when(this.mockCampaignService.hasAccess(userId)).thenReturn(true);
+		
+		ResponseEntity<Boolean> response = this.controller.hasChatAccess(mockPrincipal);
+		
+		assertTrue(response.getBody());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
 }

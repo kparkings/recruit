@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
@@ -19,8 +20,11 @@ import com.arenella.recruit.campaigns.entities.CampaignEntity;
 @Repository
 public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 
-	@Query("SELECT CampaignEntity FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
+	@Query("SELECT c FROM CampaignEntity c JOIN c.participations p where p.contactId = :userId")
 	Set<CampaignEntity> fetchCampaignsWhereUserIsParticipant(String userId);
+	
+	@Query("SELECT c FROM CampaignEntity c JOIN c.candidates cc where cc.id = :candidateId")
+	Set<CampaignEntity> fetchCampaignEntitiesForCandidate(String candidateId);
 	
 	/**
 	* Returns Campaigns in which the User is a Participant. Only the basic information 
@@ -45,8 +49,18 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 	* Saves a Campaign
 	* @param campaign - Campaign to be persisted
 	*/
+	@Modifying
 	default void saveCampaign(Campaign campaign) {
 		this.save(CampaignEntity.toEntity(campaign));
+	}
+	
+	/**
+	* Returns Campaigns in which the Candidates one of the associated Candidates
+	* @param candidateId - Id of the Candidate
+	* @return Associated Campaigns
+	*/
+	default Set<Campaign> fetchCampaignsForCandidate(String candidateId) {
+		return this.fetchCampaignEntitiesForCandidate(candidateId).stream().map(CampaignEntity::fromEntity).collect(Collectors.toSet());
 	}
 
 }

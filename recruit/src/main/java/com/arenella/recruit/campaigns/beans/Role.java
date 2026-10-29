@@ -16,6 +16,7 @@ public class Role {
 	private String 				name;
 	private String 				description;
 	private LocalDateTime		created;
+	private UUID				campaignId;
 	private Set<Candidate>		candidates		= new LinkedHashSet<>();
 	private Set<Participation> 	participations	= new LinkedHashSet<>();
 	private Set<Note> 			notes			= new LinkedHashSet<>();
@@ -33,6 +34,7 @@ public class Role {
 		this.name 			= builder.name;
 		this.description 	= builder.description;
 		this.created 		= builder.created;
+		this.campaignId		= builder.campaignId;
 		
 		this.candidates.clear();
 		this.participations.clear();
@@ -54,6 +56,14 @@ public class Role {
 	*/
 	public UUID getId() {
 		return this.id;
+	}
+	
+	/**
+	* Returns the Id of the Campaigin the Role is associated with
+	* @return Id of the Campaign
+	*/
+	public UUID getCampaignId() {
+		return this.campaignId;
 	}
 	
 	/**
@@ -139,6 +149,7 @@ public class Role {
 		private String 				name;
 		private String 				description;
 		private LocalDateTime		created;
+		private UUID				campaignId;
 		private Set<Candidate>		candidates		= new LinkedHashSet<>();
 		private Set<Participation>  participations	= new LinkedHashSet<>();
 		private Set<Note> 			notes			= new LinkedHashSet<>();
@@ -155,6 +166,7 @@ public class Role {
 			this.name 			= role.name;
 			this.description 	= role.description;
 			this.created	 	= role.created;
+			this.campaignId 	= role.campaignId;
 			
 			this.candidates.clear();
 			this.participations.clear();
@@ -178,6 +190,16 @@ public class Role {
 		*/
 		public RoleBuilder id (UUID id) {
 			this.id = id;
+			return this;
+		}
+		
+		/**
+		* Sets the Id of the Campaign the Role is associated wtih
+		* @param campaignId - Id of the Campaigin
+		* @return Builder
+		*/
+		public RoleBuilder campaignId (UUID campaignId) {
+			this.campaignId = campaignId;
 			return this;
 		}
 		

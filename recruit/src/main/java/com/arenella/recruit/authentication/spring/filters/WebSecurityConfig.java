@@ -89,6 +89,7 @@ public class WebSecurityConfig {
             	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/countries")).permitAll()
             	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/geo-zone")).permitAll()
             	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/languages")).permitAll()
+            	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/public/campaign/**")).permitAll()
             	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/public/function-count/**")).permitAll()
             	.requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/candidate/public/search-history")).permitAll()
             	.anyRequest().authenticated()

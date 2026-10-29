@@ -154,8 +154,8 @@ export class PrivateMessagingComponent {
 		},1000);
 	}
 	
-	private scheduleContactListRefresh = window.setInterval(()=> {},1000);
-	public hasUnreadMessagesTracker:boolean = false;
+	private scheduleContactListRefresh 				= window.setInterval(()=> {},1000);
+	public hasUnreadMessagesTracker:boolean 		= false;
 
 	public getHasUnreadMessagesTracker():boolean{
 		return this.hasUnreadMessagesTracker;
@@ -164,11 +164,12 @@ export class PrivateMessagingComponent {
 	public startChatContactListPolling():void{
 		this.scheduleContactListRefresh = window.setInterval(()=> {
 			this.fetchChats();		
-			//this.hasUnreadMessagesTracker = this.hasUnreadMessages();
 		},20000);
 	}
 	
-	
+	/**
+	* Returns whether there is at least 1 unread chat message  
+	*/
 	public hasUnreadMessages():boolean{
 		
 		let hasUnreadMessages:boolean = false;
@@ -438,6 +439,8 @@ export class PrivateMessagingComponent {
 	*/
 	public sendMessage():void{
 		
+		//this.setScrollOn();
+		this.initialPollPerformed = false;
 		let msg:string = this.messageForm.get('newMessage')?.value;
 		
 		this.messageForm = new UntypedFormGroup({
@@ -525,12 +528,23 @@ export class PrivateMessagingComponent {
 		
 	}
 	
+	private initialPollPerformed:boolean = false;
+	
 	public setScrollOff():void{
 		this.scrollOff = true;
+		
+		if (this.initialPollPerformed == true) {
+			window.clearInterval(this.scheduleOpenChatRefresh);
+			
+		} else {
+			this.initialPollPerformed = true;
+		}
 	}
 	
 	public setScrollOn():void{
 		this.scrollOff = false;
+		this.initialPollPerformed = false;
+		this.startReplyScheduler();
 	}
 	
 	/**

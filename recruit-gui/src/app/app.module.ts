@@ -2,7 +2,7 @@ import { APP_INITIALIZER, NgModule, inject, provideAppInitializer }		from '@angu
 import { BrowserModule }					from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }	from '@angular/forms';
 import { AppRoutingModule }					from './app-routing.module';
-import { AppComponent }							from './app.component';
+import { AppComponent }						from './app.component';
 import { NewCandidateComponent }			from './new-candidate/new-candidate.component';
 import { provideHttpClient, HttpClient }	from '@angular/common/http';
 import { LoginUserComponent }				from './login-user/login-user.component';
@@ -54,6 +54,9 @@ import { CandidateStatisticsComponent } 	from './candidate-statistics/candidate-
 import { PrivateMessagingComponent } 		from './private-messaging/private-messaging.component';
 import { CandidateMiniOverviewComponent } 	from './candidate-mini-overview/candidate-mini-overview.component'
 import { PublicPostsComponent } 			from './newsfeed/public-posts/public-posts.component';
+import { CampaignsComponent } 				from './campaigns/campaigns.component';
+import { SelectionboxComponent } 			from './campaigns/selectionbox/selectionbox.component';
+
 import { Observable } from 'rxjs';
 
 @NgModule({
@@ -94,7 +97,9 @@ import { Observable } from 'rxjs';
 	CandidateMiniOverviewComponent,
 	PublicPostsComponent,
 	PricingComponent,
-	FeaturesComponent
+	FeaturesComponent,
+	CampaignsComponent,
+	SelectionboxComponent
   ],
   imports: [
     BrowserModule,

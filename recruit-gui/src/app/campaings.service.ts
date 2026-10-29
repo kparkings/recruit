@@ -1,0 +1,759 @@
+import { HttpClient, HttpHeaders } 					from '@angular/common/http';
+import { Injectable }	 							from '@angular/core';
+import { Observable } 								from 'rxjs';
+import { environment } 								from './../environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+/**
+* Services and Objects for interacting with Campaigns. For example a 
+* recruitent campaing for a particular Client with various roles and 
+* the candidates and information related to the Role. 
+*/
+export class CampaingsService {
+  
+	constructor(private httpClient: HttpClient){}
+	
+	httpOptions = {
+		headers: new HttpHeaders({ 'Content-Type': 'application/json' }), withCredentials: true
+	};
+	
+	/**
+	* Returns an overview of all the current Users Campaigins
+	*/
+	public fetchCampaignsForUser(): Observable<Array<CampaignOverview>>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign';
+
+	  	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Returns a specific Campaigin
+	* @param campaiginId - Unique Id of the Campaigin to return
+	*/
+	public fetchCampaign(campaignId:string): Observable<Campaign>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
+
+	  	return this.httpClient.get<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Creates a new Campaign
+	* @param name 			- Name of the Campaign
+	* @param description  	- Description of the Campaigin
+	* @param logo 			- Optional logo to identify the Campaign 
+	*/
+	public addNewCampaign(name:string, description:string, logo:File | undefined):Observable<void>{
+		
+		let command:CommandAddCampaign = new CommandAddCampaign(name, description);
+		
+		const backendUrl:string = environment.backendUrl +'campaign';
+		
+		var fd = new FormData();
+		fd.append("command", new Blob([JSON.stringify(command)], { type: 'application/json' }));
+		if (logo) {
+			fd.append('logo', logo);
+		}
+		
+					
+		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds a Role to an existing Campaign 
+	*/
+	public addNewRole(campaignId:string, name:string, description:string):Observable<void>{
+		
+		let command:CommandAddRole = new CommandAddRole(name, description);
+				
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role';
+
+		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+		
+	}
+
+	/**
+	* Deletes a Role from a Campaign 
+	*/
+	public deleteCampaign(campaignId:string):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+		
+	/**
+	* Deletes a Role from a Campaign 
+	*/
+	public deleteRole(campaignId:string, roleId:string):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Creates a new Participation for a Campaigin
+	* @param contacId 	- Id of Contact that will be participating in the Campaigin
+	* @param campaignId - Id of the Campaign the Contact will be participating in
+	* @param roleId 	- If role Level the Id of the Role the Participation relates to
+	* @param type 		- Type of participation the Contact will have in the Campaign
+	*/
+	public addParticipation(contactId:string, campaignId:string, roleId:string, type:string):Observable<void>{
+		
+		let command:CommandAddParticipation = new CommandAddParticipation(contactId, campaignId, roleId, type);
+		
+		const backendUrl:string = environment.backendUrl +'campaign/participant';
+
+		return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+	
+	}
+	
+	/**
+	* Deletes an existing Participation
+	* @param participationId - Id of the Participation to Delete 
+	*/
+	public deleteParticipation(participationId:string):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/participant/'+participationId;
+
+		return this.httpClient.delete<void>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Adds a Note to a Campaign
+	* @param campaignId - Campaigin to add the Note to
+	* @param roleId		- If Note is for a specific Role the Id of the Role
+	* @param title		- Title of the Note
+	* @param text		- Note content 
+	*/
+	public addNote(campaignId:string, roleId:string|undefined, title:string, text:string):Observable<void>{
+			
+			let command:CommandAddNote = new CommandAddNote(campaignId, roleId, title, text);
+					
+			const backendUrl:string = environment.backendUrl +'campaign/note';
+
+			return this.httpClient.post<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Update an existing Note in a Campaign
+	* @param noteId		- Id of the Note to be updates
+	* @param title		- Title of the Note
+	* @param text		- Note content 
+	*/
+	public updateNote(noteId:string, title:string, text:string):Observable<void>{
+			
+			let command:CommandUpdateNote = new CommandUpdateNote(title, text);
+			
+			const backendUrl:string = environment.backendUrl +'campaign/note/'+noteId;
+
+			return this.httpClient.put<any>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Delete an existing Note from a Campaign
+	* @param noteId		- Id of the Note to be updates
+	*/
+	public deleteNote(noteId:string):Observable<void>{
+			
+		const backendUrl:string = environment.backendUrl +'campaign/note/'+noteId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Adds an Appointment to a Campaign
+	* @param campaignId 	- Campaigin to add the Note to
+	* @param roleId			- If Note is for a specific Role the Id of the Role
+	* @param name			- Name of the Appointment
+	* @param description	- Description of the Apppointment
+	* @param videoLink		- If Video appointment, the link
+	* @param phoneNumber 	- If Phone appointment, the number
+	* @param when			- When the Appointment will take place
+	*/
+	public addAppointment(campaignId:string,
+					roleId:string,
+					name:string,
+					description:string,
+					videoLink:string,
+					phoneNumber:string,
+					when:Date):Observable<void>{
+			
+			let command:CommandAddAppointment = new CommandAddAppointment(campaignId, roleId, name,  description, videoLink, phoneNumber, when);
+			
+			const backendUrl:string = environment.backendUrl +'campaign/appointment';
+
+			return this.httpClient.post<void>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Updates an Appointment in a Campaign
+	* @param appointmentId 	- Id of the Appointment to be updated
+	* @param campaignId 	- Campaigin to add the Note to
+	* @param roleId			- If Note is for a specific Role the Id of the Role
+	* @param name			- Name of the Appointment
+	* @param description	- Description of the Apppointment
+	* @param videoLink		- If Video appointment, the link
+	* @param phoneNumber 	- If Phone appointment, the number
+	* @param when			- When the Appointment will take place
+	*/
+	public updateAppointment(
+					appointmentId:string,
+					name:string,
+					description:string,
+					videoLink:string,
+					phoneNumber:string,
+					when:Date):Observable<void>{
+			
+			let command:CommandUpdateAppointment = new CommandUpdateAppointment(name, description, videoLink, phoneNumber, when);
+					
+			const backendUrl:string = environment.backendUrl +'campaign/appointment/'+appointmentId;
+
+			return this.httpClient.put<void>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	/**
+	* Sends a request to message multiple Users with the same Message
+	* @param recipientIds 	- Ids of recipients to send the message to
+	* @param message 		- Message to send to the recipients 
+	*/
+	public sendMultiRecipientMessage(recipients:Array<string>, message:string):Observable<void>{
+		
+		let command:SendMultiRecipientMessageCommand = new SendMultiRecipientMessageCommand(recipients, message);
+		
+		const backendUrl:string = environment.backendUrl +'privatechat/message';
+
+		return this.httpClient.put<void>(backendUrl, command, this.httpOptions);
+		
+	}
+	
+	
+	/**
+	* Deletes an existing Appointment from a Campaign
+	* @param appointmentId - Id of the Appointment to delete
+	*/
+	public deleteAppointment(appointmentId:string):Observable<void>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/appointment/'+appointmentId;
+
+		return this.httpClient.delete<void>(backendUrl, this.httpOptions);
+		
+	}
+	
+	/**
+	* Adds a Document to an existing Campaign
+	* @param campaignId 	- Id of the Campaigin to add the Document to
+	* @param roleId 		- If Role specific the Role to add the Document to
+	* @param title			- The title of the Document
+	* @param type			- Document type ( i.e jped / pdf )
+	* @param documentFile 	- Actual document File 
+	*/
+	public addDocument( campaignId:string,
+						roleId:string,
+						title:string,
+						type:string,
+						documentFile:File): Observable<any>{
+							
+		let command:CommandAddDocument = new CommandAddDocument(campaignId, roleId, title, type);
+		
+		const backendUrl:string = environment.backendUrl + 'campaign/document';
+		
+		var fd = new FormData();
+		fd.append('documentFile', documentFile);
+		fd.append("document", new Blob([JSON.stringify(command)], { type: 'application/json' }));
+			
+		return this.httpClient.post<any>(backendUrl, fd, {headers: new HttpHeaders({ }), withCredentials: true});
+
+	}
+	
+	/**
+	* Deletes a Document from an existing Campaign
+	* @param documentId 	- Id of the Document to delete
+	*/
+	public deleteDocument( documentId:string): Observable<any>{
+
+		const backendUrl:string = environment.backendUrl +'campaign/document/'+documentId;
+
+		return this.httpClient.delete<any>(backendUrl, this.httpOptions);
+
+	}
+	
+	/**
+	* Adds a Candidate to a Campaign
+	* @param campaignId 	- Id of the Campaign to add the Candidate to
+	* @param candidateId 	- Id of the Candidate to add the Campaign
+	*/
+	public addCandidateToCampaign(campaignId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/candidate/'+candidateId;
+
+		return this.httpClient.put<any>(backendUrl, {}, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds a Candidate to a Role
+	* @param campaignId 	- Id of the Campaign to add the Candidate to
+	* @param roleId 		- Id of the Role  to add the Candidate to
+	* @param candidateId 	- Id of the Candidate to add the Campaign
+	*/
+	public addCandidateToRole(campaignId:string, roleId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/candidate/'+candidateId;
+
+		return this.httpClient.put<any>(backendUrl, {}, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+
+	/**
+	* Deletes a Candidate from a Campaign
+	* @param campaignId 	- Id of the Campaign to add the Candidate to
+	* @param candidateId 	- Id of the Candidate to add the Campaign
+	*/
+	public deleteCandidateFromCampaign(campaignId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/candidate/'+candidateId;
+
+		return this.httpClient.delete<any>(backendUrl, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+
+	/**
+	* Deletes a Candidate from a Role
+	* @param campaignId 	- Id of the Campaign to delete the Candidate from
+	* @param roleId 		- Id of the Role to delte the Candidate from
+	* @param candidateId 	- Id of the Candidate to delete from the Campaign
+	*/
+	public deleteCandidateFromRole(campaignId:string, roleId:string, candidateId:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/candidate/'+candidateId;
+
+		return this.httpClient.delete<any>(backendUrl, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds an External Candidate to a Campaign
+	* @oaran campaignId  - Id of Campaign to add Candidate to 
+	* @oaran firstName   - First name of the Candidate
+	* @oaran surname	 - Surname of the Candidate
+	* @oaran countryCode - Country code of where the Candidate lives
+	* @oaran jobTitle    - Candidates role
+	* @oaran email       - Email for the Candidate
+	*/
+	public addExternalCandidateToCampaign(campaignId:string, 
+								firstName:string,
+								surname:string,
+								countryCode:string,
+								jobTitle:string,
+								email:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId;
+
+		let command:CreateExternalCandidateCommand = new CreateExternalCandidateCommand(firstName, surname, countryCode, jobTitle, email);
+		
+		return this.httpClient.post<any>(backendUrl,command, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Adds an External Candidate to a Role
+	* @oaran campaignId  - Id of Campaign to add Candidate to
+	* @oaran roleId  	 - Id of Role to add Candidate to 
+	* @oaran firstName   - First name of the Candidate
+	* @oaran surname	 - Surname of the Candidate
+	* @oaran countryCode - Country code of where the Candidate lives
+	* @oaran jobTitle    - Candidates role
+	* @oaran email       - Email for the Candidate
+	*/
+	public addExternalCandidateToRole(campaignId:string, 
+								roleId:string, 	
+								firstName:string,
+								surname:string,
+								countryCode:string,
+								jobTitle:string,
+								email:string): Observable<any>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/'+campaignId + '/role/' + roleId;
+
+		let command:CreateExternalCandidateCommand = new CreateExternalCandidateCommand(firstName, surname, countryCode, jobTitle, email);
+		
+		return this.httpClient.post<any>(backendUrl, command, {headers: new HttpHeaders({ }), withCredentials: true});	
+		
+	}
+	
+	/**
+	* Sends a command to the backend to message selected External Candiadtes 
+	*/
+	public messageExternalCandidates(campaignId:string, roleId:string|undefined, candidateIds:Array<string>, message:string):Observable<any>{
+		
+		let backendUrl:string = "";
+		
+		if (roleId == undefined) {
+			backendUrl =  environment.backendUrl +'campaign/'+campaignId+'/externalMessage';
+		} else {
+			backendUrl =  environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/externalMessage';	
+		}
+		
+		let command:ExternalCandidateMessage = new ExternalCandidateMessage(candidateIds, message);
+				
+		return this.httpClient.post<any>(backendUrl, command, {headers: new HttpHeaders({ }), withCredentials: true});	
+				
+	}
+	
+	/**
+	* Returns whether or not the Recruiter has access to the Private Chat functinality 
+	*/
+	public hasChatAccess():Observable<boolean>{
+		
+		const backendUrl:string = environment.backendUrl +'campaign/hasAccess';
+		  
+		return this.httpClient.get<any>(backendUrl, this.httpOptions);
+		
+	}
+	
+}
+
+/**
+* Command to create a new Campaign
+*/
+export class CommandAddCampaign{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public name:string,
+				public description:string){}
+		//		public logo:CampaignLogo){}
+}
+
+/**
+* Command to add an Appointment to a Campaign
+*/
+export class CommandAddAppointment{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public campaignId:string,
+				public roleId:string,
+				public name:string,
+				public description:string,
+				public videoLink:string,
+				public phoneNumber:string,
+				public when:Date) {}
+	
+}
+
+/**
+* Command to add a Document to a Campaign
+*/
+export class CommandAddDocument{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public campaignId:string,
+				public roleId:string,
+				public title:string,
+				public type:string){}
+	
+}
+
+/**
+* Command to add a Note to a Campaign
+*/
+export class CommandAddNote{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public campaignId:string,
+				public roleId:string|undefined,
+				public title:string,
+				public text:string){}
+	
+}
+
+/**
+* Command to add a Participation to a Campaign
+*/
+export class CommandAddParticipation{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public contactId:string,
+				public campaignId:string, 
+				public roleId:string,
+				public type:string){}
+	
+}
+
+/**
+* Command to update an existing Appointment in a Campaign
+*/
+export class CommandUpdateAppointment{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public name:string,
+				public description:string,
+				public videoLink:string,
+				public phoneNumber:string,
+				public when:Date){}
+	
+}
+
+/**
+* Command to update and existing Note in a Campaign
+*/
+export class CommandUpdateNote{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public title:string, 
+				public text:string){}
+	
+}
+
+/**
+* Command to add role to existing Campaign
+*/
+export class CommandAddRole{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public name:string, 
+				public description:string){}
+}
+
+/**
+* Class represents a Logo that can be added to visually identify a 
+* Campaign. For example if the Campaign is for a Bank, the Bank's 
+* Logo. 
+*/
+export class CampaignLogo{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public imageBytes:any, public format:string){}
+}
+
+
+/**
+* Appointment 
+*/
+export class Appointment{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public name:string,
+				public description:string,
+				public videoLink:string,
+				public phoneNumber:string,
+				public when:Date){}
+	
+}
+
+/*
+* Campaign overview. Light version of Campaigin without
+* Child objects
+*/
+export class CampaignOverview{
+	
+	constructor(public id:string,
+				public name:string,
+				public description:string,
+				public logo:CampaignLogo,
+				public hasUnreadNotifications:boolean){}
+}
+
+/**
+* Campaign 
+*/
+export class Campaign{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string,
+				public name:string,
+				public description:string,
+				public logo:CampaignLogo,
+				public candidates:Array<Candidate>,
+				public participations:Array<Participation>,
+				public notes:Array<Note>,
+				public appointments:Array<Appointment>,
+				public documents:Array<Document>,
+				public roles:Array<Role>,
+				public hasUnreadNotifications:boolean){}
+	
+}
+
+/**
+* Role 
+*/
+export class Document{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string, public title:string, public type:string, public created:Date){}
+	
+}
+
+/**
+* Role 
+*/
+export class Role{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string,
+				public name:string,
+				public description:string,
+				private created:Date,
+				public candidates:Array<Candidate>,
+				public participations:Array<Participation>,
+				public notes:Array<Note>,
+				public appointments:Array<Appointment>,
+				public documents:Array<Document>,
+				public hasUnreadNotifications:boolean){}
+	
+}
+
+/**
+* Candidate 
+*/
+export class Candidate{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string,
+				public type:string,
+				public firstName:string,
+				public surname:string,
+				public countryCode:string,
+				public jobTitle:string,
+				public email:string,
+				public deletedFromSystem:boolean,
+				public hasUnreadIMmessage:boolean){}
+	
+}
+
+/**
+* Participation 
+*/
+export class Participation{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public participationId:string,
+				public contact:Contact,
+				public campaignId:string,
+				public roleId:string| undefined,
+				public type:string){}
+	
+}
+	
+/**
+* Note 
+*/
+export class Note{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public id:string,
+				public campaignId:string,
+				public roleId:string,
+				public created:Date,
+				public title:string,
+				public text:string){}
+	
+}	
+
+/**
+* Consact 
+*/
+export class Contact{
+	
+	/**
+	* Constructor
+	*/
+	constructor(public contactId:string, public firstName:string, public surname:string){}
+}		
+
+/**
+* Command to send to backend to request a message is sent to multiple
+* Recipients 
+*/
+export class SendMultiRecipientMessageCommand{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public recipientIds:Array<string>, public message:string){
+		
+	}
+	
+}
+
+/**
+* Command to send to backend to add an External Candidate to a Campaign 
+* or Role
+*/
+export class CreateExternalCandidateCommand{
+	
+	/**
+	* Constructor 
+	*/
+	constructor(public firstName:string,
+				public surname:string,
+				public countryCode:string,
+				public jobTitle:string,
+				public email:string){}
+				
+}
+
+/**
+* Command to send to backend to send a message to selected External candiadtes.
+* These are candidates not registered on the platform but who have been added 
+* by a recruiter to a Campaign or Role
+*/
+export class ExternalCandidateMessage{
+	
+	/**
+	* Constructor 
+	* @param candiadteIds 	- Ids of Candidates to receive a message
+	* @param message 		- Nessage to send to the Candidates
+	*/
+	constructor(public candidateIds:Array<string>, public message:string){
+	}
+
+}

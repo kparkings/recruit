@@ -8,6 +8,8 @@ import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -32,6 +34,7 @@ public class ParticipationEntity {
 	private UUID 			roleId;
 	
 	@Column(name="type")
+	@Enumerated(EnumType.STRING)
 	private ParticipantType type;
 	
 	/**

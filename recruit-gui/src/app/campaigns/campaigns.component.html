@@ -1,0 +1,530 @@
+
+<div style="margin-top:20px;">
+
+
+	<div style="width:610px;float:left">
+		<app-selectionbox (selectedCampaignEmitter)="handleCampaignSelectedEmitterEvent($event)" (selectedRoleEmitter)="handleRoleSelectedEmitterEvent($event)"></app-selectionbox>
+	</div>
+	
+	
+	<div class="campaign-box" *ngIf="campaign !== undefined && role == undefined && !showInlineCVView">
+	
+		<div class="campaign-box-header">
+			<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()">{{'campaign-delete-campaign' | translate}}</button>
+			<h3>{{campaign.name}}</h3>
+			<pre style="color:white;white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{campaign.description}}</pre>
+		</div>
+		
+		
+		<div style="width:100%;clear:both;">
+		
+		
+			<div style="cursor:pointer;" (click)="toggleShowParticipants()">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-participations' | translate}}</span>  [{{getCampaignLevelParticipation().length}}]</h5>
+				<mat-icon class="campaign-arrow"  *ngIf="showParticipants">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showParticipants">arrow_drop_down</mat-icon>
+			</div>
+	
+			<div style="clear:both;margin-top:20px;" *ngIf="showParticipants">
+				<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()">{{'campaign-add-participant' | translate}}</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()" *ngIf="currentUserAdminForSelectedObject()">{{'campaign-delete-participant' | translate}}</button>
+				<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of getCampaignLevelParticipation()" (click)="selectParticipation(participation)">
+					{{getParticipationNameFormatted(participation)}} 
+					<br>
+					{{participation.type}}
+				</div>
+			</div>
+		</div>
+		
+		<div style="width:100%;clear:both;">
+			<div (click)="toggleShowCandidates()" style="cursor:pointer">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-candidates' | translate}}</span>  [{{campaign.candidates.length}}]</h5>
+				<mat-icon class="campaign-arrow" *ngIf="showCandidates">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow" *ngIf="!showCandidates">arrow_drop_down</mat-icon>
+			</div>
+			
+			<div style="clear:both;margin-top:20px;" *ngIf="showCandidates">
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="selectAllCandidates()">{{'campaign-select-all' | translate}}</button>
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="deselectAllCandidates()">{{'campaign-deselect-all' | translate}}</button>
+				<div class="candidate-table">
+					<table class="campaign-candidate-table" >
+						<tr>
+							<th>{{'campaign-name' | translate}}</th>
+							<th>{{'campaign-title' | translate}}</th>
+							<th>{{'campaign-options' | translate}}</th>
+						</tr>
+						<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
+							<td>
+								<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
+								{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
+							</td>
+							<td>{{candidate.candidate.jobTitle}}</td>
+							<td>
+								<div *ngIf="candidate.candidate.type != 'EXTERNAL'" class="chat-icon material-icons public-chat-option campaign-candidate-notification-{{candidate.candidate.hasUnreadIMmessage}}" (click)="openChat(candidate.candidate)">chat</div>
+								<div *ngIf="candidate.candidate.type == 'EXTERNAL' && candidate.candidate.deletedFromSystem == false" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				
+				<div style="margin-bottom:10px;">
+					<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">{{'campaign-remove-candidates' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">{{'campaign-message-candidates' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showAddExternalCandidateBox()">{{'campaign-add-external-candidate' | translate}}</button>
+				</div>
+				<div style="clear:both;margin-bottom:10px;"></div>
+			</div>
+			
+		</div>
+		
+		<div style="width:100%;clear:both;">
+			<div style="cursor:pointer;" (click)="toggleShowNotes()">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-notes' | translate}}</span>  [{{getCampaignLevelNotes().length}}]</h5>
+				<mat-icon class="campaign-arrow"  *ngIf="showParticipants">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showParticipants">arrow_drop_down</mat-icon>
+			</div>
+	
+			<div style="clear:both;margin-top:20px;" *ngIf="showNotes">
+				<table style="width:100%;">
+					<tr  *ngFor="let note of getCampaignLevelNotes()" style="cursor:pointer" (click)="showNote(note)">
+						<td style="width:50px;"><mat-icon>assignment</mat-icon></td>
+						<td>{{note.title}}</td>		
+					</tr>
+				</table>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()">{{'campaign-add-note' | translate}}</button>
+			</div>
+			<div style="clear:both;"></div>
+		</div>
+		
+		<div style="width:100%;clear:both;">
+			<div style="cursor:pointer;" (click)="toggleShowDocuments()">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-documents' | translate}}</span>  [{{campaign.documents.length}}]</h5>
+				<mat-icon class="campaign-arrow"  *ngIf="showDocuments">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showDocuments">arrow_drop_down</mat-icon>
+			</div>
+	
+			<div style="clear:both;margin-top:20px;" *ngIf="showDocuments">
+				<table style="width:100%;">
+					<tr  *ngFor="let document of campaign.documents" style="cursor:pointer"  (click)="showDocument(document)">
+						<td style="width:50px;"><mat-icon>assignment</mat-icon></td>
+						<td>{{document.title}}</td>		
+					</tr>
+				</table>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddDocumentModal()" style="float:right;">{{'campaign-add-document' | translate}}</button>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+		
+	</div>
+	
+		<div class="campaign-box" *ngIf="role !== undefined && !showInlineCVView">
+		<div class="role-box-header">
+			<button class="btn btn-secondary campaign-btn" (click)="showConfirmDeleteModal()" style="float:right;" *ngIf="currentUserAdminForSelectedObject()">{{'campaign-delete-role' | translate}}</button>
+			<h3>{{role.name}}</h3>
+			<pre style="white-space:pre-line;font-family: Roboto, 'Helvetica Neue', sans-serif;">{{role.description}}</pre>
+		</div>
+		
+		<div>
+			
+			<div (click)="toggleShowParticipants()" style="cursor:pointer">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-participations' | translate}}</span>  [{{role.participations.length}}]</h5>
+				<mat-icon class="campaign-arrow" *ngIf="showParticipants">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow" *ngIf="!showParticipants">arrow_drop_down</mat-icon>
+			</div>
+			<div style="clear:both;margin-top:20px;" *ngIf="showParticipants">
+				<button class="btn btn-secondary campaign-btn" (click)="showAddParticipantBox()">{{'campaign-add-participant' | translate}}</button>
+				<button class="btn btn-secondary campaign-btn" (click)="deleteParticipation()">{{'campaign-delete-participant' | translate}}</button>
+				<div class="participant-block {{getSelectedParticipantCSSClass(participation)}}" *ngFor="let participation of role.participations" (click)="selectParticipation(participation)">
+					{{getParticipationNameFormatted(participation)}} 
+					<br>
+					{{participation.type}}
+				</div>
+			</div>
+			
+			
+		</div>
+		
+		<div style="width:100%;clear:both;">
+			<div (click)="toggleShowCandidates()"  style="cursor:pointer">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-candidates' | translate}}</span>  [{{role.candidates.length}}]</h5>
+				<mat-icon class="campaign-arrow"  *ngIf="showCandidates">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showCandidates">arrow_drop_down</mat-icon>
+			</div>
+			
+			<div style="clear:both;margin-top:20px;" *ngIf="showCandidates">
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="selectAllCandidates()">{{'campaign-select-all' | translate}}</button>
+				<button class="btn btn-secondary campaign-btn campaing_candidate_btn_selectall" (click)="deselectAllCandidates()">{{'campaign-deselect-all' | translate}}</button>
+				<div class="candidate-table">
+					<table class="campaign-candidate-table">
+						<tr>
+							<th>{{'campaign-name' | translate}}</th>
+							<th>{{'campaign-title' | translate}}</th>
+							<th>{{'campaign-options' | translate}}</th>
+						</tr>
+						<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
+							<td>
+							<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
+							{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
+							</td>
+							<td>{{candidate.candidate.jobTitle}}</td>
+							<td>
+								<div *ngIf="candidate.candidate.type != 'EXTERNAL'" class="chat-icon material-icons public-chat-option" (click)="openChat(candidate.candidate)">chat</div>
+								<div *ngIf="candidate.candidate.type == 'EXTERNAL' && candidate.candidate.deletedFromSystem == false" class="chat-icon material-icons public-chat-option" (click)="showExternalCandidateMessageBox(candidate.candidate)">email</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div style="margin-bottom:10px;">
+					<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">{{'campaign-remove-candidates' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">{{'campaign-message-candidates' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn" (click)="showAddExternalCandidateBox()">{{'campaign-add-external-candidate' | translate}}</button>
+				</div>
+				<div style="clear:both;margin-bottom:10px;"></div>
+			</div>
+			
+		<div style="width:100%;clear:both;">
+			<div style="cursor:pointer;" (click)="toggleShowNotes()">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-notes' | translate}}</span>  [{{role.notes.length}}]</h5>
+				<mat-icon class="campaign-arrow"  *ngIf="showNotes">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showNotes">arrow_drop_down</mat-icon>
+			</div>
+	
+			<div style="clear:both;margin-top:20px;" *ngIf="showNotes">
+				<table style="width:100%;">
+					<tr  *ngFor="let note of role.notes" style="cursor:pointer"  (click)="showNote(note)">
+						<td style="width:50px;"><mat-icon>assignment</mat-icon></td>
+						<td>{{note.title}}</td>		
+					</tr>
+				</table>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddNotModal()">{{'campaign-add-note' | translate}}</button>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+		
+		<div style="width:100%;clear:both;">
+			<div style="cursor:pointer;" (click)="toggleShowDocuments()">
+				<h5 style="float:left;"><span class="campaigin-section-hdr">{{'campaign-documents' | translate}}</span>  [{{role.documents.length}}]</h5>
+				<mat-icon class="campaign-arrow"  *ngIf="showDocuments">arrow_drop_up</mat-icon>
+				<mat-icon class="campaign-arrow"  *ngIf="!showDocuments">arrow_drop_down</mat-icon>
+			</div>
+	
+			<div style="clear:both;margin-top:20px;" *ngIf="showDocuments">
+				<table style="width:100%;">
+					<tr  *ngFor="let document of role.documents" style="cursor:pointer"  (click)="showDocument(document)">
+						<td style="width:50px;"><mat-icon>assignment</mat-icon></td>
+						<td>{{document.title}}</td>		
+					</tr>
+				</table>
+				<button class="btn btn-secondary campaign-btn" (click)="showAddDocumentModal()">{{'campaign-add-document' | translate}}</button>
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+		
+		</div>
+		
+	</div>
+	
+</div>
+
+
+<div style="float:left;padding-top:20px;padding-left:20px;width:55%;" *ngIf="showInlineCVView">
+	<div class="action-buttons">
+		<button class="btn btn-secondary arenella-btn" (click)="deleteDocument()">{{'delete' | translate}}</button>
+		<button class="btn btn-secondary arenella-btn" (click)="closeDocument()">{{'arenella-suggestions-inlinecv-btn-back' | translate}}</button>
+	</div>		
+	<object id="content"  class="document-inline" [attr.data]="trustedResourceUrl"></object>
+</div>
+
+<!-- Confirm Delete Box -->
+<dialog #confirmDelete>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'campaign-confirm-delete' | translate}}</h4>
+		<div class="filter-close-box" (click)="confirmDelete.close()">X</div>
+	</div>
+	<div class="modal-body" style="height:160px;">
+		<p>{{'campaign-please-confirm-delete' | translate}}.</p>
+		<p>{{'campaign-actions-cannot-be-undone' | translate}}</p>
+		<div class="campaign-popup-buttons">
+			<button class="btn btn-secondary campaign-popup-button" (click)="handleCancelDelete()">{{'cancel-btn' | translate}}</button>
+			<button class="btn btn-secondary campaign-popup-button" (click)="handleConfirmDelete()">{{'confirm-btn' | translate}}</button>
+		</div>
+	</div> 
+</dialog>
+
+<!-- Add Note Box -->
+<dialog #addNote>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 *ngIf="!note" class="modal-title">{{'campaign-add-note' | translate}}</h4>
+		<h4 *ngIf="note" class="modal-title">{{note.title}}</h4>
+		<div class="filter-close-box" (click)="addNote.close()">X</div>
+	</div>
+	<div class="modal-body" style="width:700px;height:430px;">
+		
+		<div *ngIf="note" style="text-align:left;">
+			
+			
+			<div *ngIf="editNote">
+				<div style="width:550px;margin: 0 auto;text-align:left;">
+					<form [formGroup]="addNoteForm">
+						<table style="margin-top:20px;margin-bottom:20px;width:550px;">
+							<tr>
+								<th style="padding-right:15px;font-weight:bold;">{{'TITLE' | translate}}</th>
+							</tr>
+							<tr>
+								<td><input type="text" value=""  style="width:100%;" formControlName="title"/></td>
+							</tr>
+							<tr>
+								<th style="padding-right:15px;font-weight:bold;">{{'BODY' | translate}}</th>
+							</tr>
+							<tr>
+								<td>
+									<textarea formControlName="text" style="width:100%; height:240px;"></textarea>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+			
+			
+			<div style="border:1px solid black;padding:10px;margin-bottom:20px;" *ngIf="!editNote">
+				<pre style="padding:5px;white-space: pre-line; font-family: Roboto, 'Helvetica Neue', sans-serif; overflow:overflow-y;height:300px;margin-bottom:20px;bborder:1px solid green">{{note.text}}</pre>
+			</div>
+			<div class="campaign-popup-buttons" style="margin-left:0px;	">
+				<button class="btn btn-secondary campaign-popup-button" (click)="addNote.close()"  *ngIf="currentUserAdminForSelectedObject()">{{'CLOSE' | translate}}</button>
+				<button class="btn btn-secondary campaign-popup-button" (click)="deleteNote()" 	  *ngIf="currentUserAdminForSelectedObject()">{{'delete' | translate}}</button>
+				<button class="btn btn-secondary campaign-popup-button" (click)="toggleEditNote()" *ngIf="currentUserAdminForSelectedObject() && !editNote" >{{'EDIT' | translate}}</button>
+				<button class="btn btn-secondary campaign-popup-button" (click)="updateNote()" 	  *ngIf="currentUserAdminForSelectedObject() && editNote" >{{'UPDATE' | translate}}</button>
+			</div>
+			<div style="clear:both;margin-top:10px;margin-bottom:10px;">
+				
+			</div>
+			
+		</div>
+		
+		<div *ngIf="!note">
+			<div style="width:550px;margin: 0 auto;text-align:left;">
+				<form [formGroup]="addNoteForm">
+					<table style="margin-top:20px;margin-bottom:20px;width:550px;">
+						<tr>
+							<th style="padding-right:15px;font-weight:bold;">{{'TITLE' | translate}}</th>
+						</tr>
+						<tr>
+							<td><input type="text" value=""  style="width:100%;" formControlName="title"/></td>
+						</tr>
+						<tr>
+							<th style="padding-right:15px;font-weight:bold;">{{'BODY' | translate}}</th>
+						</tr>
+						<tr>
+							<td>
+								<textarea formControlName="text" style="width:100%;"></textarea>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		
+			<div class="campaign-popup-buttons" style="margin-left:0px;">
+				<button class="btn btn-secondary campaign-popup-button" (click)="closeAddNotModal()">{{'cancel-btn' | translate}}</button>
+				<button class="btn btn-secondary campaign-popup-button" (click)="handleAddNote()">{{'confirm-btn' | translate}}</button>
+			</div>
+		</div>
+		
+	</div> 
+</dialog>
+
+<!-- Add Participant Box -->
+<dialog #addParticipant style="height:350px;">
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'campaigns-add-participant' | translate}}</h4>
+		<div class="filter-close-box" (click)="addParticipant.close()">X</div>
+	</div>
+	
+	<div class="modal-body" style="height:250px;" *ngIf="errMshActive">
+		<h3>{{'campaigns-unable-to-add-participant' | translate}}</h3>
+		<p>{{'campaigns-unable-to-add-participant-text1' | translate}}</p>
+		<p>{{'campaigns-unable-to-add-participant-text2' | translate}}</p>
+	</div>
+	
+	<div class="modal-body campaigns-add-participant-desc" *ngIf="!errMshActive">
+		<p>{{'campaigns-add-participant-line1' | translate}}</p>
+		<p>{{'campaigns-add-participant-line2' | translate}}</p>
+		
+		<div class="campaigns-add-participant-options">
+			<form [formGroup]="newParticipantForm">
+				<table style="margin-top:20px;margin-bottom:20px;">
+					<tr>
+						<td style="padding-right:15px;font-weight:bold;width:250px;">{{'USERID' | translate}}</td>
+						<td><input type="text" value=""  style="width:150px" formControlName="userId"/></td>
+					</tr>
+					<tr>
+						<td style="padding-right:15px;font-weight:bold;">{{'ROLE' | translate}}</td>
+						<td>
+							<select style="width:150px" formControlName="role">
+								<option></option>
+								<option value="ADMIN">{{'ADMIN' | translate}}</option>
+								<option value="EDIT">{{'EDIT' | translate}}</option>
+								<option value="VIEW">{{'VIEW' | translate}}</option>
+							</select>	
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>	
+		<div class="campaign-popup-buttons">
+			<button class="btn btn-secondary campaign-popup-button" (click)="handleCancelAddParticipant()">{{'cancel-btn' | translate}}</button>
+			<button class="btn btn-secondary campaign-popup-button" (click)="handleAddParticipant()">{{'confirm-btn' | translate}}</button>
+		</div>
+		
+	</div> 
+</dialog>
+
+<!-- Add Document Box -->
+<dialog #addDocument>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 *ngIf="!note" class="modal-title">{{'campaigns-message-box-document-title' | translate}}</h4>
+		<div class="filter-close-box" (click)="addDocument.close()">X</div>
+	</div>
+	<div class="modal-body campaign-box-document-body">
+		<div>
+			<form [formGroup]="addDocumentForm">
+				<table class="campaign-box-document-form-table">
+					<tr>
+						<th class="campaign-box-document-form-table-name">{{'campaigns-message-box-document-doc-name' | translate}}</th>
+						<td><input type="text" formControlName="title"></td>
+					</tr>
+					<tr>
+						<th class="campaign-box-document-form-table-document-filesize">{{'campaigns-message-box-document-file-size' | translate}}</th>
+						<td>
+							<input class="email-input" type="file" accept=".pdf" (change)="uploadDocumentFile($event)"> 
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+		<div class="campaign-popup-buttons" style="margin-top:30px;">
+			<button class="btn btn-secondary campaign-popup-button" (click)="closeAddDocumentModal()">{{'cancel-btn' | translate}}</button>
+			<button class="btn btn-secondary campaign-popup-button" (click)="handleAddDocument()">{{'confirm-btn' | translate}}</button>
+		</div>
+	</div> 
+</dialog>
+
+<!-- Mass Message Box -->
+<dialog #massMessageBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'campaigns-message-box-title' | translate}}</h4>
+		<div class="filter-close-box" (click)="massMessageBox.close()">X</div>
+	</div>
+	<div class="modal-body campaign-box-messages-body">
+		<div>
+			<!--  
+			<div style="float:left;width:15%;">
+				<div style="background:grey">
+					{{'campaigns-message-box-body-variables-title' | translate}}
+				</div>
+				<ul class="modal-body campaign-box-messages-body-variables">
+					<li>#firstname</li>
+					<li>#surname</li>
+					<li>#date</li>
+					<li>#time</li>		
+				</ul>
+			</div>
+			-->
+			<div class="modal-body campaign-box-messages-body-textarea-panel">
+				<form [formGroup]="addMassMessageForm">
+					<textarea formControlName="message" class="modal-body campaign-box-messages-body-textarea"></textarea>
+				</form>
+			</div>
+		</div>
+		<div class="campaign-popup-buttons">
+			<button class="btn btn-secondary campaign-popup-button" (click)="handleCancelMassMessageBox()">{{'cancel-btn' | translate}}</button>
+			<button class="btn btn-secondary campaign-popup-button" (click)="messageCandidates()">{{'SEND' | translate}}</button>
+		</div>	
+	</div> 
+</dialog>
+
+<!-- Add External Candidate Box -->
+<dialog #addExternalCandidateBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">{{'campaigns-add-external-candidate-title' | translate}}</h4>
+		<div class="filter-close-box" (click)="addExternalCandidateBox.close()">X</div>
+	</div>
+	<div class="modal-body campaign-box-external-candidates-body">
+		<div>
+			<div class="modal-body campaign-box-external-candidates-body-desc">
+				<p>{{'campaigns-add-external-candidate-body-text1' | translate}}</p>
+				<p>{{'campaigns-add-external-candidate-body-text2-a' | translate}}  <b>{{'campaigns-add-external-candidate-body-text2-b' | translate}}</b> {{'campaigns-add-external-candidate-body-text2-c' | translate}}</p>
+				<p>{{'campaigns-add-external-candidate-body-text3'  | translate}}</p>
+				<p>{{'campaigns-add-external-candidate-body-text4' | translate}}</p>
+				<ul>
+					<li>{{'campaigns-add-external-candidate-body-text4-a' | translate}}</li>
+					<li>{{'campaigns-add-external-candidate-body-text4-b' | translate}}</li>
+				</ul>
+			</div>
+			<div class="modal-body campaign-box-external-candidates-body-form">
+				<div style="margin-bottom:30px;">
+					<form [formGroup]="newExternalCandidateForm">
+						<table class="campaign-ext-candidate-table">
+							<tr>
+								<th>{{'campaigns-add-external-candidate-form-firstname' | translate}}</th>
+								<td><input type="text" value="" formControlName="firstName"/></td>
+							</tr>
+							<tr>
+								<th>{{'campaigns-add-external-candidate-form-surname' | translate}}</th>
+								<td><input type="text" value="" formControlName="surname"/></td>
+							</tr>
+							<tr>
+								<th>{{'campaigns-add-external-candidate-form-country' | translate}}</th>
+								<td>
+									<select formControlName="countryCode" class="new-candidate-country-list">
+										<option></option>
+										<option *ngFor="let country of countries" value="{{country.name}}">{{country.name | translate}}</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>{{'campaigns-add-external-candidate-form-job-title' | translate}}</th>
+								<td><input type="text" value="" formControlName="jobTitle"/></td>
+							</tr>
+							<tr>
+								<th>{{'EMAIL' | translate}}</th>
+								<td><input type="text" value="" formControlName="email"/></td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div class="modal-buttons campaign-box-external-candidates-body-buttons">
+					<button class="btn btn-secondary campaign-btn" (click)="handleCancelAddExternalCandidateBox()">{{'cancel-btn' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn" (click)="handleAddExternalCandidate()">{{'ADD' | translate}}</button>
+				</div>
+			</div>
+		</div>
+		
+	</div> 
+</dialog>
+
+<!--External Message Box -->
+<dialog #externalCandidateMessageBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Message</h4>
+		<div class="filter-close-box" (click)="externalCandidateMessageBox.close()">X</div>
+	</div>
+	<div class="modal-body campaign-box-external-message-body">
+		<div class="campaign-box-external-message-body-content">
+			<form [formGroup]="externalMessageForm">
+				<textarea formControlName="message" class="campaign-box-external-message-body-content-textarea"></textarea>
+			</form>
+		</div>
+		<div class="modal-buttons" class="campaign-box-external-message-body-buttons">
+			<button class="btn btn-secondary campaign-btn" (click)="closeExternalMessageBox()">{{'cancel-btn' | translate}}</button>
+			<button class="btn btn-secondary campaign-btn" (click)="handleMessageExternalCandidate()">>{{'SEND' | translate}}</button>
+		</div>
+	</div>
+</dialog>

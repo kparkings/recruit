@@ -1,6 +1,9 @@
 package com.arenella.recruit.campaigns.controllers;
 
+import java.util.Set;
+
 import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
 
 /**
@@ -16,6 +19,7 @@ public class CandidateAPIOutbound {
 	private String 	jobTitle;
 	private String 	email;
 	private boolean deletedFromSystem;
+	private boolean hasUnreadIMmessage;
 	
 	/**
 	* Constructor based upon a Builder
@@ -30,6 +34,7 @@ public class CandidateAPIOutbound {
 		this.jobTitle 			= builder.jobTitle;
 		this.email 				= builder.email;
 		this.deletedFromSystem 	= builder.deletedFromSystem;
+		this.hasUnreadIMmessage = builder.hasUnreadIMmessage;
 	}
 	
 	/**
@@ -100,8 +105,17 @@ public class CandidateAPIOutbound {
 	* longer in the system
 	* @return is the Candidate has been deleted from the System
 	*/
-	public boolean isDeleteFromSystem() {
+	public boolean isDeletedFromSystem() {
 		return deletedFromSystem;
+	}
+	
+	/**
+	* Returns if there is a message sent by the Candidate that is yet 
+	* to be read by the recruiter
+	* @return whether there is an unread IM message
+	*/
+	public boolean getHasUnreadIMmessage() {
+		return this.hasUnreadIMmessage;
 	}
 	
 	/**
@@ -125,13 +139,14 @@ public class CandidateAPIOutbound {
 		private String 	jobTitle;
 		private String 	email;
 		private boolean deletedFromSystem;
+		private boolean hasUnreadIMmessage;
 		
 		/**
 		* Populates the Builder with values from a Candidate 
 		* @param candiate - Initialization values
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder from (Candidate candidate) {
+		public CandidateAPIOutboundBuilder from (Candidate candidate, Set<IMNotification> imNotifications, boolean isRoleLevelCandidate) {
 			
 			this.id 				= candidate.getId();
 			this.type 				= candidate.getType();
@@ -141,6 +156,14 @@ public class CandidateAPIOutbound {
 			this.jobTitle 			= candidate.getJobTitle();
 			this.email 				= candidate.getEmail();
 			this.deletedFromSystem 	= candidate.isDeleteFromSystem();
+			
+			imNotifications.stream().filter(notification -> !isRoleLevelCandidate && notification.getRoleId().isEmpty() && notification.getCandidateId().equals(candidate.getId())).findAny().ifPresent(_ -> 
+				this.hasUnreadIMmessage = true
+			);
+			
+			imNotifications.stream().filter(notification -> isRoleLevelCandidate && notification.getRoleId().isPresent() && notification.getCandidateId().equals(candidate.getId())).findAny().ifPresent(_ -> 
+				this.hasUnreadIMmessage = true
+			);
 			
 			return this;
 		}

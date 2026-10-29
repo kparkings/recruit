@@ -64,8 +64,8 @@ public class PrivateChatController {
 	public ResponseEntity<PrivateChatAPIOutbound> fetchPrivateChatById(@PathVariable("chatId") UUID chatId, Principal principal) {
 		
 		PrivateChat 		chat		= this.privateChatService.getChat(chatId, principal);
-		ChatParticipant 	sender 		= this.participantService.fetchById(chat.getSenderId()).orElseThrow(()    -> new IllegalStateException());
-		ChatParticipant 	recipient 	= this.participantService.fetchById(chat.getRecipientId()).orElseThrow(() -> new IllegalStateException());
+		ChatParticipant 	sender 		= this.participantService.fetchById(chat.getSenderId()).orElseThrow(IllegalStateException::new);
+		ChatParticipant 	recipient 	= this.participantService.fetchById(chat.getRecipientId()).orElseThrow(IllegalStateException::new);
 		
 		return ResponseEntity.ok(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient));
 		
@@ -82,13 +82,13 @@ public class PrivateChatController {
 		
 		Set<PrivateChatAPIOutbound> chats = new LinkedHashSet<>();
 		
-		this.privateChatService.getUsersChats(principal).stream().forEach(chat -> {
-			this.participantService.fetchById(chat.getSenderId()).ifPresent(sender -> {
-				this.participantService.fetchById(chat.getRecipientId()).ifPresent(recipient -> {
-					chats.add(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient));
-				});
-			});
-		});
+		this.privateChatService.getUsersChats(principal).stream().forEach(chat -> 
+			this.participantService.fetchById(chat.getSenderId()).ifPresent(sender -> 
+				this.participantService.fetchById(chat.getRecipientId()).ifPresent(recipient -> 
+					chats.add(PrivateChatAPIOutbound.fromDomain(chat, sender, recipient))
+				)
+			)
+		);
 		
 		return ResponseEntity.ok(chats);
 	}
@@ -136,6 +136,19 @@ public class PrivateChatController {
 	@PutMapping(path="privatechat/{chatId}/message", produces="application/json")
 	public ResponseEntity<Void> doAddMessageToChat(@PathVariable("chatId") UUID chatId, @RequestBody ChatMessageAPIInbound message, Principal principal) {
 		this.privateChatService.addMessage(chatId, message.getMessage(), principal);
+		return ResponseEntity.ok().build();
+	}
+	
+	/**
+	* Sends a private message to multiple Users
+	* @param multiMessage - Contains message and list of Users to message
+	* @param principal    - Authenticated User
+	* @return 
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@PutMapping(path="privatechat/message", produces="application/json")
+	public ResponseEntity<Void> messageMultipleUsers(@RequestBody MultiUserChatMessageAPIInbound multiMessage, Principal principal) {
+		this.privateChatService.messageMultipleUsers(multiMessage.getRecipientIds(), multiMessage.getMessage(), principal);
 		return ResponseEntity.ok().build();
 	}
 	

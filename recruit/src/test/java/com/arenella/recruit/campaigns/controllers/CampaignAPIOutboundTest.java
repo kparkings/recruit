@@ -57,7 +57,7 @@ class CampaignAPIOutboundTest {
 		
 		CampaignAPIOutbound outbound = CampaignAPIOutbound
 				.builder()
-					.from(campaign, Set.of(new Contact("rec1", "", "", "", SubscriptionType.CREDIT)))
+					.from(campaign, Set.of(new Contact("rec1", "", "", "", SubscriptionType.CREDIT)), Set.of())
 				.build();
 		
 		assertEquals(ID, 			outbound.getId());

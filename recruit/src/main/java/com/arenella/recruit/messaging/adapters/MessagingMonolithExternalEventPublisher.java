@@ -2,6 +2,9 @@ package com.arenella.recruit.messaging.adapters;
 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.IMMessageCreatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageReadEvent;
+import com.arenella.recruit.campaigns.adapters.CampaignsExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 
@@ -21,9 +24,12 @@ import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
 public class MessagingMonolithExternalEventPublisher implements MessagingExternalEventPublisher{
 	
 	private MessagingEmailServiceExternalEventListener 		emailServiceExternalEventListener;
+	
+	private CampaignsExternalEventListener campaignsExternalEventListener;
 
-	public MessagingMonolithExternalEventPublisher(MessagingEmailServiceExternalEventListener emailServiceExternalEventListener) {
+	public MessagingMonolithExternalEventPublisher(MessagingEmailServiceExternalEventListener emailServiceExternalEventListener, CampaignsExternalEventListener campaignsExternalEventListener) {
 		this.emailServiceExternalEventListener = emailServiceExternalEventListener;
+		this.campaignsExternalEventListener = campaignsExternalEventListener;
 	}
 	
 	/**
@@ -32,6 +38,22 @@ public class MessagingMonolithExternalEventPublisher implements MessagingExterna
 	@Override
 	public void publishSendEmailCommand(RequestSendEmailCommand command) {
 		this.emailServiceExternalEventListener.listenForSendEmailCommand(command);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishEvent(IMMessageCreatedEvent imMessageCreatedEvent) {
+		this.campaignsExternalEventListener.listenFor(imMessageCreatedEvent);
+	}
+
+	/**
+	* Refer to the ExternalEventPublisher interface for details 
+	*/
+	@Override
+	public void publishEvent(IMMessageReadEvent imMessageReadEvent) {
+		this.campaignsExternalEventListener.listenFor(imMessageReadEvent);
 	}
 	
 }

@@ -3251,7 +3251,7 @@ databaseChangeLog:
            schemaName: campaigns
            columns:
              - column:
-                 name: id
+                 name: candidates_id
                  type: varchar
                  constraints:
                    primaryKey: true
@@ -3271,15 +3271,15 @@ databaseChangeLog:
            schemaName: campaigns
            columns:
              - column:
-                 name: id
-                 type: uuid
+                 name: candidates_id
+                 type: varchar
                  constraints:
                    primaryKey: true
                    nullable: false
-                   foreignKeyName: fk_campaigns_rol
-                   references: campaigns.roles(id)
+                   foreignKeyName: fk_rol_can
+                   references: campaigns.candidates(id)
              - column:
-                 name: campaign_id
+                 name: role_id
                  type: uuid
                  constraints:
                    primaryKey: true
@@ -3320,3 +3320,77 @@ databaseChangeLog:
                  type: varchar
                  constraints:
                    nullable: false
+  - changeSet:
+      id: addColumn-campaigin-candidates
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: candidates
+            schemaName: campaigns
+            columns:
+            - column:
+                name: created
+                type: timestamp
+                constraints:
+                  nullable: false
+            - column:
+                name: ext_candidate_last_candidate_data_retention_confirmation
+                type: timestamp
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_data_retention_renewal_sent
+                type: timestamp
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_created_by
+                type: varchar
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_campaign_id
+                type: uuid
+                constraints:
+                  nullable: true
+            - column:
+                name: ext_candidate_role_id
+                type: uuid
+                constraints:
+                  nullable: true
+  - changeSet:
+      id: addTable-campaigns-im-notifications
+      author: kevin
+      changes:
+       - createTable:
+            tableName: im_notifications
+            schemaName: campaigns
+            columns:
+            - column:
+                name: id
+                type: uuid
+                constraints:
+                   primaryKey: true
+                   nullable: false 
+            - column:
+                name: campaign_id
+                type: uuid
+                constraints:
+                   nullable: false 
+            - column:
+                name: role_id
+                type: uuid
+                constraints:
+                   nullable: true 
+            - column:
+                name: recruiter_id
+                type: varchar
+                constraints:
+                   nullable: false 
+            - column:
+                name: candidate_id
+                type: varchar
+                constraints:
+                   nullable: false 
+
+           

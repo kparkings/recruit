@@ -23,12 +23,7 @@ export class EmailService {
 	public updateUnseenEmails():void{
 		if (sessionStorage.getItem("userId")) {
 			this.fetchEmails().subscribe(emails => {
-				console.log("AA " + emails.length);
-				console.log("BB " + emails.filter(a => !a.viewed).length);
-				//this.unseenEmails.next(emails.filter(a => !a.viewed).length);
-				
 				this.unseenEmails = emails.filter(a => !a.viewed).length;
-				
 			});
 		}
 	}

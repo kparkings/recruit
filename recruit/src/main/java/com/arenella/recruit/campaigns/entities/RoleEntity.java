@@ -43,9 +43,6 @@ public class RoleEntity {
 	@Column(name="created")
 	private LocalDateTime				created;
 	
-	//@CollectionTable(schema="campaigns", name="role_candidates", joinColumns=@JoinColumn(name="role_id"))
-	//@Column(name="id")
-	
 	@ElementCollection(targetClass=CandidateEntity.class, fetch=FetchType.LAZY)
 	@CollectionTable(schema="campaigns", name="role_candidates", joinColumns=@JoinColumn(name="role_id"))
 	@Column(name="id")
@@ -62,6 +59,13 @@ public class RoleEntity {
 	
 	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
 	private Set<DocumentEntity> 		documents		= new LinkedHashSet<>();
+	
+	/**
+	* Default constructor 
+	*/
+	public RoleEntity() {
+		//Hibernate
+	}
 	
 	/**
 	* Constructor based upon a Builder
@@ -395,6 +399,7 @@ public class RoleEntity {
 		return Role
 				.builder()
 				.id(entity.getId())
+				.campaignId(entity.getCampaignId())
 				.name(entity.getName())
 				.description(entity.getDescription())
 				.created(entity.getCreated())

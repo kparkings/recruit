@@ -16,6 +16,7 @@ import com.arenella.recruit.adapters.events.CandidateUpdateEvent;
 import com.arenella.recruit.adapters.events.CandidateUpdatedEvent;
 import com.arenella.recruit.adapters.events.ContactRequestEvent;
 import com.arenella.recruit.authentication.adapters.AuthenticationExternalEventListener;
+import com.arenella.recruit.campaigns.adapters.CampaignsExternalEventListener;
 import com.arenella.recruit.curriculum.adapters.CurriculumExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.MessagingEmailServiceExternalEventListener;
 import com.arenella.recruit.emailservice.adapters.RequestSendEmailCommand;
@@ -29,7 +30,7 @@ import com.arenella.recruit.messaging.adapters.MessagingMessagingServiceExternal
 import com.arenella.recruit.newsfeed.adapters.NewsFeedExternalEventListener;
 
 /**
-* An implementation of ExternalEventPublisher optimised to work when the 
+* An implementation of ExternalEventPublisher optimized to work when the 
 * external services are physically located in the same Monolith.
 * 
 * Here we are calling we are connecting to the other services directly. If the 
@@ -58,6 +59,9 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	@Autowired
 	private MessagingMessagingServiceExternalEventListener	messagingMessagingServiceExternalEventListener;
 	
+	@Autowired
+	private CampaignsExternalEventListener					campaignsExternalEventListener;
+	
 	/**
 	* Refer to ExternalEventPublisher for details 
 	*/
@@ -83,6 +87,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		this.curriculumExternalEventListener.listenForCandidateCreatedEvent(event);
 		this.emailServiceExternalEventListener.listenForCandidateCreatedEvent(event);
 		this.messagingMessagingServiceExternalEventListener.listenForCandidateCreatedEvent(event);
+		this.campaignsExternalEventListener.listenFor(event);
 	}
 
 	/**
@@ -93,9 +98,9 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		
 		Map<String,Object> alerts = new HashMap<>();
 		
-		command.getMatchesByAlert().keySet().stream().forEach(key -> {
-			alerts.put(key, command.getMatchesByAlert().get(key));
-		});
+		command.getMatchesByAlert().keySet().stream().forEach(key -> 
+			alerts.put(key, command.getMatchesByAlert().get(key))
+		);
 	
 		Map<String, Object> model = new HashMap<>();
 		model.put("alerts", alerts);
@@ -139,6 +144,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	@Override
 	public void publishCandidateAccountUpdatedEvent(CandidateUpdatedEvent event) {
 		this.emailServiceExternalEventListener.listenForCandidateUpdatedEvent(event);
+		this.campaignsExternalEventListener.listenFor(event);
 	}
 
 	/**
@@ -159,6 +165,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 		this.curriculumExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		this.authenticationExternalEventListener.listenForCandidteDeletedEvent(candidateDeletedEvent);
 		this.messagingMessagingServiceExternalEventListener.listenForCandidateDeletedEvent(candidateDeletedEvent);
+		this.campaignsExternalEventListener.listenFor(candidateDeletedEvent);
 	}
 
 	/**
@@ -212,6 +219,7 @@ public class MonolithExternalEventPublisher implements ExternalEventPublisher{
 	public void publishCandidateUpdateEvent(CandidateUpdateEvent candidateUpdateEvent) {
 		this.newsFeedExternalEventListener.listenForEventCandidateUpdate(candidateUpdateEvent);
 		this.messagingMessagingServiceExternalEventListener.listenForCandidateUpdateEvent(candidateUpdateEvent);
+		this.campaignsExternalEventListener.listenFor(candidateUpdateEvent);
 	}
 	
 	

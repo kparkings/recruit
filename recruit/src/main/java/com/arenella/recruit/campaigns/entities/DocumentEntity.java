@@ -42,6 +42,13 @@ public class DocumentEntity {
 	private LocalDateTime 	created;
 	
 	/**
+	* Default constructor 
+	*/
+	public DocumentEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/

@@ -1,8 +1,10 @@
 package com.arenella.recruit.campaigns.controllers;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -22,7 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignLogo;
+import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
+import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
+import com.arenella.recruit.campaigns.beans.Document;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
 
@@ -31,7 +38,10 @@ import com.arenella.recruit.campaigns.services.CampaignService;
 */
 @RestController
 public class CampaignController {
-
+	
+	public static final String MSG_EXTERNAL_CANDIDATE_REQ_REJECTION = "Thank you. The recruiter has been informed you do not wish them to store your details relating to this role and your imformation has been removed from the system.";
+	public static final String MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE = "Thank you for your confirmation.";
+	
 	private final CampaignService 			campaignService;
 	private final CampaignContactService 	contactService;
 	
@@ -54,9 +64,11 @@ public class CampaignController {
 	@GetMapping(path="campaign")
 	public ResponseEntity<Set<CampaignOverviewAPIOutbound>> fetchCampaignsForUser(Principal currentUser) {
 		
+		Set<UUID> imNotificationCampaignIds = this.campaignService.fetchIMNotificationsForRecruiter(currentUser).stream().map(IMNotification::getCampaignId).collect(Collectors.toSet());
+		
 		LinkedHashSet<CampaignOverviewAPIOutbound> campaigns = this.campaignService.fetchCampaignsForUser(currentUser.getName())
 				.stream()
-				.map(c -> CampaignOverviewAPIOutbound.builder().from(c).build()).collect(Collectors.toCollection(LinkedHashSet::new));
+				.map(c -> CampaignOverviewAPIOutbound.builder().from(c,imNotificationCampaignIds).build()).collect(Collectors.toCollection(LinkedHashSet::new));
 		
 		return new ResponseEntity<>(campaigns,  HttpStatus.OK);
 
@@ -75,7 +87,9 @@ public class CampaignController {
 		Campaign 		campaign 	= this.campaignService.fetchCampaignById(campaignId, currentUser.getName());
 		Set<Contact> 	contacts 	= this.contactService.fetchContactsById(campaign.getParticipations().stream().map(p -> p.getContactId()).collect(Collectors.toSet()));
 		
-		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts).build(), HttpStatus.OK);
+		Set<IMNotification> imNotifications = this.campaignService.fetchRecruitersIMNotificationsForCampaign(currentUser, campaignId);
+		
+		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts, imNotifications).build(), HttpStatus.OK);
 	}
 	
 	/**
@@ -84,10 +98,59 @@ public class CampaignController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PostMapping(path="campaign")
-	public ResponseEntity<Void> addNewCampaign(@RequestBody NewCampaignAPIInbound campaign, Principal currentUser) {
-		this.campaignService.addCampaign(campaign.getName(), campaign.getDescription(), campaign.getLogo().orElse(null), currentUser.getName());
+	@PostMapping(path="campaign",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> addNewCampaign(@RequestPart("command") NewCampaignAPIInbound campaign, @RequestPart("logo") Optional<MultipartFile> logo, Principal currentUser) throws Exception{
+		
+		byte[] logoBytes = logo.isPresent()  ? logo.get().getBytes() : null;
+		
+		CampaignLogo logoX = Optional.of(logo).map(_ -> new CampaignLogo(logoBytes,PHOTO_FORMAT.jpeg)).orElse(null);
+		
+		this.campaignService.addCampaign(campaign.getName(), campaign.getDescription(), Optional.ofNullable(logoX).orElse(null), currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	/**
+	* Deletes a Campaign and all its associated data
+	* @param campaiginId - Id of Campaign to delete
+	* @param currentUser - currently logged in User
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}")
+	public ResponseEntity<Void> deleteCampaign(@PathVariable("campaignId")UUID campaignId, Principal currentUser) {
+		
+		this.campaignService.deleteCampaign(campaignId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	* Adds a Role to an existing Campaign
+	* @param campaignId - Id of the Campaign to add the Role to
+	* @param command	- Details of the new Campaign
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/role")
+	public ResponseEntity<Void> addRole(@PathVariable("campaignId") UUID campaignId, @RequestBody NewRoleAPIInbound command, Principal currentUser) {
+		
+		this.campaignService.addRole(campaignId, command.getName(), command.getDescription(), currentUser.getName());
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	
+	}	
+	
+	/**
+	* Deletes a Role and all its associated data
+	* @param roleId - Id of Role to delete
+	* @param currentUser - currently logged in User
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}/role/{roleId}")
+	public ResponseEntity<Void> deleteRole(@PathVariable("campaignId")UUID campaignId, @PathVariable("roleId")UUID roleId, Principal currentUser) {
+		
+		this.campaignService.deleteRole(roleId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	/**
@@ -103,7 +166,6 @@ public class CampaignController {
 		this.campaignService.addParticipationToCampaign(participation.getContactId(), participation.getCampaignId(), participation.getRoleId().orElse(null), participation.getType(), currentUser.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
 	
 	/**
 	* Deletes an existing Participation from a Campaign or Role
@@ -212,8 +274,8 @@ public class CampaignController {
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
 	@PostMapping(path="campaign/document",consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<Void> addDocument(@RequestPart("document") AddDocumentAPIInbound document, @RequestPart("documentBytes")MultipartFile documentBytes, Principal principal) throws IOException{
-		this.campaignService.addDocument(document.getCampaignId(), document.getRoleId().orElse(null), document.getTitle(), document.getType(), documentBytes.getBytes(), principal.getName());
+	public ResponseEntity<Void> addDocument(@RequestPart("document") AddDocumentAPIInbound document, @RequestPart("documentFile")MultipartFile documentFile, Principal principal) throws IOException{
+		this.campaignService.addDocument(document.getCampaignId(), document.getRoleId().orElse(null), document.getTitle(), document.getType(), documentFile.getBytes(), principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);	
 	}
 	
@@ -231,16 +293,187 @@ public class CampaignController {
 	}
 	
 	/**
-	* Retrieves the bytes for a specific Document
-	* @param documentId - Id of the document to retrieve
-	* @param principal  - Currently authenticated User
-	* @return Bytes of Document
+	* Adds a Candidate to a Campaign
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
 	*/
-	//@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	//@GetMapping(path="campaign/document/{documentId}")
-	//public ResponseEntity<CampaignDocumentAPIOutbound> fetchCampaignDocument(@PathVariable("documentId") UUID documentId, Principal principal) {
-	//	Document document = this.campaignService.fetchCampaignDocument(documentId, principal.getName());
-	//	return new ResponseEntity<>(new CampaignDocumentAPIOutbound(document.getTitle(), document.getType(), document.getBytes(), document.getCreated()), HttpStatus.OK);
-	//}
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(path="campaign/{campaignId}/candidate/{candidateId}")
+	public ResponseEntity<Void> addCandidateToCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.addCandidateToCampaign(campaignId, null, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	/**
+	* Adds a Candidate to a Role
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param roleId			- Id of the Role to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(path="campaign/{campaignId}/role/{roleId}/candidate/{candidateId}")
+	public ResponseEntity<Void> addCandidateToRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.addCandidateToCampaign(campaignId, roleId, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	/**
+	* Deletes a Candidate from a Campaign
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}/candidate/{candidateId}")
+	public ResponseEntity<Void> deleteCandidateFromCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.deleteCandidateFromCampaign(campaignId, null, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	/**
+	* Deletes a Candidate from a Role
+	* @param campaignId		- Id of the Campaign to add the Candidate to
+	* @param roleId			- Id of the Role to add the Candidate to
+	* @param candidateId	- Id of the Candidate to add to the Campaign
+	* @return ReponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@DeleteMapping(path="campaign/{campaignId}/role/{roleId}/candidate/{candidateId}")
+	public ResponseEntity<Void> deleteCandidateFromRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("candidateId") String candidateId, Principal currentUser){
+		this.campaignService.deleteCandidateFromCampaign(campaignId, roleId, candidateId, currentUser.getName());
+		return new ResponseEntity<>(HttpStatus.OK);	
+	}
+	
+	/**
+	* Returns the bytes of a Document
+	* @param documentId - Id of the Document to retrieve
+	* @param principal  - Currently authenticated User
+	* @return bytes of Document
+	* @throws Exception
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@GetMapping(value = "/campaign/document/{documentId}", produces = MediaType.APPLICATION_PDF_VALUE)
+	public byte[] getDocumentAsPDF(@PathVariable("documentId")UUID documentId, Principal principal) throws Exception{
+		
+		Document 				document 		= this.campaignService.fetchDocumentById(documentId, principal.getName());
+		byte[] 					fileBytes 		= null;
+		ByteArrayOutputStream 	stream;
+		
+		fileBytes 	= document.getBytes();
+		stream 		= new ByteArrayOutputStream(fileBytes.length);
+		stream.write(fileBytes);
+		
+		return stream.toByteArray();
+	}
+	
+	/**
+	* Adds an External Candidate to a Campaign
+	* @param campaignId 		- Id of Campaign to add the Candidate to
+	* @param externalCandidate 	- Contains details of the Candidate
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}")
+	public ResponseEntity<Void> addExternalCandidateToCampaign(@PathVariable("campaignId")UUID campaignId, @RequestBody NewExternalCandidateAPIInbound externalCandidate, Principal principal){
+		
+		Candidate candidate = Candidate
+				.builder()
+				.firstName(externalCandidate.getFirstName())
+				.surname(externalCandidate.getSurname())
+				.email(externalCandidate.getEmail())
+				.jobTitle(externalCandidate.getJobTitle())
+				.countryCode(externalCandidate.getCountryCode())
+				.build();
+		
+		this.campaignService.addExternalCandidateToCampaiginOrRole(campaignId, null, candidate, principal.getName());
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);	
+	}
+	
+	/**
+	* Adds an External Candidate to a Role
+	* @param campaignId 		- Id of Campaign to add the Candidate to
+	* @param roleId 			- Id of Role to add the Candidate to
+	* @param externalCandidate 	- Contains details of the Candidate
+	* @return
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/role/{roleId}")
+	public ResponseEntity<Void> addExternalCandidateToRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId,@RequestBody NewExternalCandidateAPIInbound externalCandidate, Principal principal){
+		
+		Candidate candidate = Candidate
+				.builder()
+				.firstName(externalCandidate.getFirstName())
+				.surname(externalCandidate.getSurname())
+				.email(externalCandidate.getEmail())
+				.jobTitle(externalCandidate.getJobTitle())
+				.countryCode(externalCandidate.getCountryCode())
+				.build();
+		
+		this.campaignService.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, principal.getName());
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	/**
+	* Sends message to selected external candidates
+	* @param campaignId			- Id of Campaign message is associated with
+	* @param messageDetails		- Details of message and recipients
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/externalMessage")
+	public ResponseEntity<Void> messageExternalCandidatesForCampaigin(@PathVariable("campaignId")UUID campaignId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails, Principal principal){
+		this.campaignService.messageExternalCampaignCandidates(campaignId, null, messageDetails.getCandidateIds(), messageDetails.getMessage(), principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	* Determines if User has access to the Campaign features
+	* @param principal - currently logged in user
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') OR hasRole('RECRUITER')")
+	@GetMapping(path="campaign/hasAccess", produces="application/json")
+	public ResponseEntity<Boolean> hasChatAccess(Principal principal) {
+		return ResponseEntity.ok(this.campaignService.hasAccess(principal.getName()));
+	}
+	
+	/**
+	* Sends message to selected external candidates
+	* @param campaignId			- Id of Campaign message is associated with
+	* @param roleId				- Id of the Role message is associated with
+	* @param messageDetails		- Details of message and recipients
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PostMapping(path="campaign/{campaignId}/role/{roleId}/externalMessage")
+	public ResponseEntity<Void> messageExternalCandidatesForRole(@PathVariable("campaignId")UUID campaignId , @PathVariable("roleId") UUID roleId, @RequestBody ExternaCandidatelMessageAPIInbound messageDetails, Principal principal){
+		this.campaignService.messageExternalCampaignCandidates(campaignId, roleId, messageDetails.getCandidateIds(), messageDetails.getMessage(), principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	/**
+	* Endpoint allows an external candidate to refuse their request to add them to a Campaign or Role
+	* @param externalCandidateId - Id of the external candidate
+	* @return Message informing external candidate their refusal was successful
+	*/
+	@GetMapping(path="/public/campaign/refuse-ecr/{externalCandidateId}")
+	public ResponseEntity<String> refuseExternalCandidateConnectionReuqest(@PathVariable("externalCandidateId")UUID externalCandidateId){
+		this.campaignService.rejectExternalCandidateConnectionRequest(externalCandidateId);
+		return ResponseEntity.ok().body(MSG_EXTERNAL_CANDIDATE_REQ_REJECTION);
+	}
+	
+	/**
+	* Endpoint for an External Candidate to send agreement for their details to be stored
+	* @param externalCandidateId - Id of external candidate being confirmed
+	* @return Message informing external candidate their accpetance was successful
+	*/
+	@GetMapping(path="/public/campaign/accept-ecr/{externalCandidateId}")
+	public ResponseEntity<String> acceptExternalCandidateConnectionReuqest(@PathVariable("externalCandidateId")UUID externalCandidateId){
+		this.campaignService.acceptExternalCandidateConnectionRequest(externalCandidateId);
+		return ResponseEntity.ok().body(MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE);
+	}
 	
 }

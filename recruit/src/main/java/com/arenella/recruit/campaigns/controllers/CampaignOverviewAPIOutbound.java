@@ -1,6 +1,7 @@
 package com.arenella.recruit.campaigns.controllers;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
@@ -15,16 +16,18 @@ public class CampaignOverviewAPIOutbound {
 	private String 				name;
 	private String 				description;
 	private CampaignLogo 		logo;
+	private boolean				hasUnreadNotifications;
 
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/
 	public CampaignOverviewAPIOutbound(CampaignOverviewAPIOutboundBuilder builder) {
-		this.id 			= builder.id;
-		this.name 			= builder.name;
-		this.description 	= builder.description;
-		this.logo 			= builder.logo;
+		this.id 					= builder.id;
+		this.name 					= builder.name;
+		this.description 			= builder.description;
+		this.logo 					= builder.logo;
+		this.hasUnreadNotifications = builder.hasUnreadNotifications;
 	}
 	
 	/**
@@ -60,6 +63,15 @@ public class CampaignOverviewAPIOutbound {
 	}
 	
 	/**
+	* Returns whether or not there is at least one unreadNotification associated with
+	* the Campaign or one of its Children.
+	* @return whether or not there is an unread notification
+	*/
+	public boolean getHasUnreadNotifications() {
+		return this.hasUnreadNotifications;
+	}
+	
+	/**
 	* Returns a builder for the class
 	* @return Builder
 	*/
@@ -76,18 +88,19 @@ public class CampaignOverviewAPIOutbound {
 		private String 				name;
 		private String 				description;
 		private CampaignLogo 		logo;
+		private boolean				hasUnreadNotifications;
 		
 		/**
 		* Populates builder with the values from the Campaign
 		* @param campaign - Existing Campaign
 		* @return Builder
 		*/
-		public CampaignOverviewAPIOutboundBuilder from(Campaign campaign) {
+		public CampaignOverviewAPIOutboundBuilder from(Campaign campaign, Set<UUID> imNotificationCampaignIds) {
 			
-			this.id 			= campaign.getId();
-			this.name 			= campaign.getName();
-			this.description 	= campaign.getDescription();
-			
+			this.id 					= campaign.getId();
+			this.name 					= campaign.getName();
+			this.description 			= campaign.getDescription();
+			this.hasUnreadNotifications = imNotificationCampaignIds.contains(id);
 			campaign.getLogo().ifPresent(campaignLogo -> this.logo = campaignLogo);
 			
 			return this;

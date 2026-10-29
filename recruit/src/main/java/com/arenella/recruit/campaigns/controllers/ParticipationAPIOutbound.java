@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaigns.controllers;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Contact;
@@ -14,6 +15,8 @@ public class ParticipationAPIOutbound {
 	private UUID					participationId;
 	private ContactAPIOutbound 		contact;
 	private ParticipantType 		type;
+	private UUID					campaignId;
+	private UUID					roleId;
 	
 	/**
 	* Constructor based upon a Builder
@@ -23,13 +26,15 @@ public class ParticipationAPIOutbound {
 		this.participationId 	= builder.participationId;
 		this.contact 			= builder.contact;
 		this.type 				= builder.type;
+		this.campaignId			= builder.campaignId;
+		this.roleId				= builder.roleId;
 	}
 	
 	/**
 	* Returns the Unique Id of the Participation
 	* @return
 	*/
-	public UUID getParticipanttionId() {
+	public UUID getParticipationId() {
 		return this.participationId;
 	}
 	
@@ -51,6 +56,22 @@ public class ParticipationAPIOutbound {
 	}
 	
 	/**
+	* Returns the Id of the Campaign the Participant is associated with 
+	* @return Id of the Campaign
+	*/
+	public UUID getCampaignId() {
+		return this.campaignId;
+	}
+	
+	/**
+	* If a Role level Participation returns the Id of the Role
+	* @return Role
+	*/
+	public Optional<UUID> getRoleId(){
+		return Optional.ofNullable(this.roleId);
+	}
+	
+	/**
 	* Returns a Builder for the Class 
 	* @return Builder
 	*/
@@ -66,18 +87,22 @@ public class ParticipationAPIOutbound {
 		private UUID					participationId;
 		private ContactAPIOutbound 		contact;
 		private ParticipantType 		type;
+		private UUID					campaignId;
+		private UUID					roleId;
 		
 		/**
 		* Populated the builder with values origination from the Domain 
 		* objects
 		* @param participation - Domain representation of the Participation
 		* @param contact       - Domain representation of the Contact involved in the Participation
-		* @return
+		* @return Builder
 		*/
 		public ParticipationAPIOutboundBuilder from(Participation participation, Contact contact) {
-			this.participationId = participation.getParticipationId();
-			this.contact = new ContactAPIOutbound(contact.firstName(), contact.surname());
-			this.type = participation.getType();
+			this.participationId 	= participation.getParticipationId();
+			this.contact 			= new ContactAPIOutbound(contact.id(), contact.firstName(), contact.surname());
+			this.type 				= participation.getType();
+			this.campaignId 		= participation.getCampaignId();
+			this.roleId 			= participation.getRoleId().orElse(null);
 			return this;
 		}
 		
@@ -108,6 +133,26 @@ public class ParticipationAPIOutbound {
 		*/ 
 		public ParticipationAPIOutboundBuilder type(ParticipantType type) {
 			this.type = type;
+			return this;
+		}
+		
+		/**
+		* Sets the id of the Campaign the participation is associated with 
+		* @param campaignId - Unique id of the Campaign
+		* @return Builder
+		*/
+		public ParticipationAPIOutboundBuilder campaignId(UUID campaignId) {
+			this.campaignId = campaignId;
+			return this;
+		}
+		
+		/**
+		* Sets the Role the Participant is associated with
+		* @param roleId - Unique id of the Role
+		* @return Builder
+		*/
+		public ParticipationAPIOutboundBuilder roleId(UUID roleId) {
+			this.roleId = roleId;
 			return this;
 		}
 		

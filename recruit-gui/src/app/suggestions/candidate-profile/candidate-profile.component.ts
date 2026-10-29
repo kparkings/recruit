@@ -15,6 +15,8 @@ import { CandidateServiceService } 											from 'src/app/candidate-service.se
 import { Router } 															from '@angular/router';
 import { AppComponent } 													from 'src/app/app.component';
 import { CurrentUserAuth } 													from 'src/app/current-user-auth';
+import { CampaingsService, Campaign, Role, Participation}					from 'src/app/campaings.service';
+import { SelectionboxComponent} 											from '../../campaigns/selectionbox/selectionbox.component'
 
 /**
 * Candidate profile showing canidates details and options to interact with 
@@ -40,7 +42,9 @@ export class CandidateProfileComponent {
 	@ViewChild('contactBox', {static:true})				contactDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('confirmDeleteModal', {static:true})		confirmDeleteDialogBox!: ElementRef<HTMLDialogElement>;
  	@ViewChild('notesBox', { static: true }) 			notesDialogBox!: ElementRef<HTMLDialogElement>;
-	
+	@ViewChild('campaignsBox', { static: true }) 		campaignsDialogBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild(SelectionboxComponent) 					public selectionBox!:SelectionboxComponent;
+		
 	public currentUserAuth:CurrentUserAuth 				= new CurrentUserAuth();
 	public candidateIsRemoved:boolean					= false;
 	public contactCandidateView:string 					= 'message';
@@ -61,11 +65,12 @@ export class CandidateProfileComponent {
 	*/
 	constructor(private readonly emailService:				EmailService, 
 				private readonly curriculumService:			CurriculumService,
-				private readonly creditsService:				CreditsService,
-				private readonly sanitizer: 					DomSanitizer,
+				private readonly creditsService:			CreditsService,
+				private readonly sanitizer: 				DomSanitizer,
 				private readonly candidateNavService:		CandidateNavService,
-				public candidateService:			CandidateServiceService,
-				private readonly router:						Router,
+				public readonly candidateService:			CandidateServiceService,
+				public readonly CampaingsService:			CampaingsService,
+				private readonly router:					Router,
 				private readonly appComponent:				AppComponent){
 					
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl('');
@@ -137,6 +142,22 @@ export class CandidateProfileComponent {
 	}
 	
 	/**
+	* Opens the Campaigns Dialog box to allow the User to add 
+	* a Candidate to a Campaign 
+	*/
+	public showCampaignsSelectionBox():void{
+		
+		this.CampaingsService.hasChatAccess().subscribe(res => {
+			if (res == true) {
+				this.campaignsDialogBox.nativeElement.showModal();
+			} else  {
+				this.appComponent.openNoChatAccessBox();
+			}
+		});
+		
+	}
+	
+	/**
 	* Updates the current Saved Candidate
 	*/
 	public updateSavedCandidate():void{
@@ -197,7 +218,7 @@ export class CandidateProfileComponent {
 		
 		let emailRequest:EmailRequest = new EmailRequest();
 		
-		emailRequest.title = this.sendMessageGroup.get('title')?.value;;
+		emailRequest.title = this.sendMessageGroup.get('title')?.value;
 		emailRequest.message = this.sendMessageGroup.get('message')?.value;;
 		
 		this.emailService.sendCandidateContactEmail(emailRequest,this.candidateProfile.candidateId).subscribe(body => {
@@ -520,6 +541,55 @@ export class CandidateProfileComponent {
 	*/
 	public isAuthenticatedAsCandidate():boolean {
 		return sessionStorage.getItem('isCandidate') === 'true';
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private selboxCampaign:Campaign|undefined;
+	private selboxRole:Role|undefined;
+	
+	/**
+	* When a new Campaign is selected an event is emmited. This is the 
+	* handler for that emitted event 
+	*/
+	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
+		this.selboxCampaign = campaign;
+	}
+
+	/**
+	* When a new Role is selected an event is emmited. This is the 
+	* handler for that emitted event 
+	*/
+	public handleRoleSelectedEmitterEvent(role:Role):void{
+		this.selboxRole = role;
+	}
+	
+	/**
+	* Adds candidate to Campaign or Role 
+	*/
+	public handleCandidateAddedEvent():void{
+		
+		if (this.selboxCampaign == undefined) {
+			return;
+		}
+		
+		if (this.selboxRole == undefined) {
+			this.CampaingsService.addCandidateToCampaign(this.selboxCampaign.id, this.candidateProfile.candidateId).subscribe(res => {
+				this.campaignsDialogBox.nativeElement.close();
+			});	
+		} else {
+			this.CampaingsService.addCandidateToRole(this.selboxCampaign.id, this.selboxRole.id, this.candidateProfile.candidateId).subscribe(res => {
+				this.campaignsDialogBox.nativeElement.close();
+			});
+		}
+		
 	}
 	
 }

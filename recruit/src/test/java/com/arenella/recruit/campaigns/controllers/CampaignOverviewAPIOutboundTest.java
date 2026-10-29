@@ -1,8 +1,10 @@
 package com.arenella.recruit.campaigns.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -37,13 +39,15 @@ class CampaignOverviewAPIOutboundTest {
 		
 		CampaignOverviewAPIOutbound overview = CampaignOverviewAPIOutbound
 				.builder()
-					.from(campaign)
+					.from(campaign, Set.of())
 				.build();
 		
 		assertEquals(ID, 			overview.getId());
 		assertEquals(NAME, 			overview.getName());
 		assertEquals(DESCRIPTION, 	overview.getDescription());
 		assertEquals(LOGO, 			overview.getLogo().get());
+		
+		assertFalse(overview.getHasUnreadNotifications());
 		
 	}
 	
@@ -55,14 +59,16 @@ class CampaignOverviewAPIOutboundTest {
 		 
 		Campaign campaign = Campaign
 				.builder()
+				.id(ID)
 				.build();
 			
 		CampaignOverviewAPIOutbound overview = CampaignOverviewAPIOutbound
 				.builder()
-					.from(campaign)
+					.from(campaign, Set.of())
 				.build();
 			
 		assertTrue(overview.getLogo().isEmpty());
+		assertFalse(overview.getHasUnreadNotifications());
 			
 	}
 	

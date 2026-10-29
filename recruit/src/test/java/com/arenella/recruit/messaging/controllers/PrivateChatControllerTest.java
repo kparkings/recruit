@@ -3,6 +3,8 @@ package com.arenella.recruit.messaging.controllers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anySet;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -293,16 +295,31 @@ class PrivateChatControllerTest {
 	/**
 	* Tests marking existing message as deleted 
 	*/
+	@Test
 	void testDeleteMessage() {
 		
 		final UUID chatId 		= UUID.randomUUID();
 		final UUID messageId 	= UUID.randomUUID();
 		
-		when(this.mockPrincipal.getName()).thenReturn("1234");
-		
 		ResponseEntity<Void> response = controller.doDeleteMessageFromChat(chatId, messageId, mockPrincipal);
 		
 		verify(this.mockPrivateChatService).deleteMessage(chatId, messageId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests endpoint for sending request to message multiple Users
+	*/
+	@Test
+	void testMessageMultipleUsers() {
+		
+		final String message = "a Message";
+		
+		ResponseEntity<Void> response = controller.messageMultipleUsers(MultiUserChatMessageAPIInbound.builder().message(message).build(), mockPrincipal);
+		
+		verify(this.mockPrivateChatService).messageMultipleUsers(anySet(), eq(message), eq(mockPrincipal));
 		
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		

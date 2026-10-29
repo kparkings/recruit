@@ -14,10 +14,12 @@ import com.arenella.recruit.campaigns.beans.Note;
 */
 class NoteAPIOutboundTest {
 
-	private static final UUID			ID 			= UUID.randomUUID();
-	private static final LocalDateTime 	CREATED 	= LocalDateTime.of(2026, 3, 28, 19, 8, 9);
-	private static final String 		TITLE 		= "Meeting Notes";
-	private static final String 		TEXT 		= "Client wants Quarkus experience";
+	private static final UUID			ID 				= UUID.randomUUID();
+	private static final UUID			CAMPAIGN_ID 	= UUID.randomUUID();
+	private static final UUID			ROLE_ID 		= UUID.randomUUID();
+	private static final LocalDateTime 	CREATED 		= LocalDateTime.of(2026, 3, 28, 19, 8, 9);
+	private static final String 		TITLE 			= "Meeting Notes";
+	private static final String 		TEXT 			= "Client wants Quarkus experience";
 
 	/**
 	* Tests construction via a Builder 
@@ -28,12 +30,16 @@ class NoteAPIOutboundTest {
 		NoteAPIOutbound note = NoteAPIOutbound
 				.builder()
 					.id(ID)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 					.created(CREATED)
 					.title(TITLE)
 					.text(TEXT)
 				.build();
 		
 		assertEquals(ID, note.getId());
+		assertEquals(CAMPAIGN_ID, note.getCampaignId());
+		assertEquals(ROLE_ID, note.getRoleId().get());
 		assertEquals(CREATED, note.getCreated());
 		assertEquals(TITLE, note.getTitle().get());
 		assertEquals(TEXT, note.getText());
@@ -50,6 +56,8 @@ class NoteAPIOutboundTest {
 		Note noteDomain = Note
 				.builder()
 					.id(ID)
+					.campaignId(CAMPAIGN_ID)
+					.roleId(ROLE_ID)
 					.created(CREATED)
 					.title(TITLE)
 					.text(TEXT)
@@ -61,6 +69,8 @@ class NoteAPIOutboundTest {
 				.build();
 		
 		assertEquals(ID, note.getId());
+		assertEquals(CAMPAIGN_ID, note.getCampaignId());
+		assertEquals(ROLE_ID, note.getRoleId().get());
 		assertEquals(CREATED, note.getCreated());
 		assertEquals(TITLE, note.getTitle().get());
 		assertEquals(TEXT, note.getText());

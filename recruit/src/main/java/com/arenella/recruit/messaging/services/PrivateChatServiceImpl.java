@@ -2,13 +2,19 @@ package com.arenella.recruit.messaging.services;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
+import com.arenella.recruit.adapters.events.IMMessageCreatedEvent;
+import com.arenella.recruit.adapters.events.IMMessageReadEvent;
 import com.arenella.recruit.authentication.spring.filters.ClaimsUsernamePasswordAuthenticationToken;
+import com.arenella.recruit.messaging.adapters.MessagingExternalEventPublisher;
 import com.arenella.recruit.messaging.beans.ChatMessage;
 import com.arenella.recruit.messaging.beans.PrivateChat;
 import com.arenella.recruit.messaging.beans.PrivateChat.PrivateChatBuilder;
@@ -26,13 +32,16 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	public static final String ERR_MSG_CANNOT_DEL_MESSAGE = "Cannot delete message";
 	
 	private PrivateChatDao privateChatDao;
+	private MessagingExternalEventPublisher publisher;
 
 	/**
 	* Constructor
 	* @param privateChatDao - DAO for persisting/retrieving Chat data
+	* @param publisher		- Event Publisher for IM related Events
 	*/
-	public PrivateChatServiceImpl(PrivateChatDao privateChatDao) {
+	public PrivateChatServiceImpl(PrivateChatDao privateChatDao, MessagingExternalEventPublisher publisher) {
 		this.privateChatDao = privateChatDao;
+		this.publisher 		= publisher;
 	}
 	
 	/**
@@ -126,6 +135,15 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	
 		this.privateChatDao.saveChat(updatedChat.build());
 		
+		/**
+		* Works because at present at present Only recruiters can Open a chat. Therefore a Recruiter will always be the Sender 
+		* in the Sender/Recipient combination. In this case we want to send the event when a Recruiter has viewed an IM from 
+		* a Candidate. 
+		*/
+		if (chat.getSenderId().equals(user.getName())) {
+			this.publisher.publishEvent(IMMessageReadEvent.builder().senderId(chat.getRecipientId()).recipientId(chat.getSenderId()).build());
+		}
+		
 	}
 	
 	/**
@@ -159,7 +177,10 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		
 		this.canChat(user, true);
 		
-		this.privateChatDao.fetchUserChats(user.getName()).forEach(c -> privateChatDao.deleteById(c.getId()));
+		this.privateChatDao.fetchUserChats(user.getName()).forEach(c -> {
+			privateChatDao.deleteById(c.getId());
+			this.publisher.publishEvent(IMMessageReadEvent.builder().senderId(c.getSenderId()).recipientId(c.getRecipientId()).build());
+		});
 	}
 	
 	/**
@@ -167,7 +188,10 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	*/
 	@Override
 	public void systemDeleteChatsForUser(String userId) {
-		this.privateChatDao.fetchUserChats(userId).forEach(c -> privateChatDao.deleteById(c.getId()));
+		this.privateChatDao.fetchUserChats(userId).forEach(c -> {
+			privateChatDao.deleteById(c.getId());
+			this.publisher.publishEvent(IMMessageReadEvent.builder().senderId(c.getSenderId()).recipientId(c.getRecipientId()).build());
+		});
 	}
 	
 	/**
@@ -199,6 +223,7 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 				.build());
 		
 		this.privateChatDao.saveChat(chat);
+		this.publisher.publishEvent(IMMessageCreatedEvent.builder().senderId(user.getName()).recipientId(recipientId).build());
 	}
 
 	/**
@@ -226,6 +251,7 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 		chat.deleteReply(messageId);
 		
 		this.privateChatDao.saveChat(chat);
+		this.publisher.publishEvent(IMMessageReadEvent.builder().senderId(user.getName()).recipientId(chat.getRecipientId()).build());
 	
 	}
 	
@@ -255,6 +281,61 @@ public class PrivateChatServiceImpl implements PrivateChatService{
 	@Override
 	public Set<PrivateChat> getUnblockedChatsBeforeCuttoff(LocalDateTime cuttoff) {
 		return this.privateChatDao.getUnblockedChatsBeforeCuttoff(cuttoff);
+	}
+	
+	/**
+	* Refer to the PrivateChatService for details 
+	*/
+	@Override
+	public void messageMultipleUsers(Set<String> recipientIds, String message, Principal user) {
+		
+		Set<String> 		newChats 		= new LinkedHashSet<>();
+		Set<PrivateChat> 	existingChats 	= new LinkedHashSet<>();
+		
+		this.getUsersChats(user).forEach(chat -> {
+			if (recipientIds.contains(chat.getRecipientId()) || recipientIds.contains(chat.getSenderId())) {
+				existingChats.add(chat);
+			}
+		});
+		
+		Stream<String> existingChatUserIds = Stream.concat(
+				existingChats.stream().map(ec -> ec.getRecipientId()), 
+				existingChats.stream().map(ec -> ec.getSenderId()));
+		
+		Set<String> existingIds = existingChatUserIds.collect(Collectors.toSet());
+		
+		recipientIds.stream().forEach(rId -> {
+			if(!existingIds.contains(rId)) {
+				newChats.add(rId);
+			}
+		});
+		
+		//Create new Chats and send message
+		newChats.stream().forEach(newChat -> {
+			try {
+				UUID chatId = saveChat(PrivateChat
+						.builder()
+							.created(LocalDateTime.now())
+							.id(UUID.randomUUID())
+							.recipientId(newChat)
+							.senderId(user.getName())
+						.build(), user);
+				this.addMessage(chatId, message, user);
+			}catch(Exception e) {
+				e.printStackTrace(); //Temp. Decide whether to pass back summary of success/failure messages
+			}
+		});
+		
+		
+		//Send message to existing chats
+		existingChats.stream().forEach(chat -> {
+			try {
+				this.addMessage(chat.getId(), message, user);
+			}catch(Exception e) {
+				e.printStackTrace(); //Temp. Decide whether to pass back summary of success/failure messages
+			}
+		});
+		
 	}
 	
 	/**

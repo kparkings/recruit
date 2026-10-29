@@ -8,6 +8,7 @@ import { PopupsService }					from './popups.service';
 import { CandidateNavService } 				from './candidate-nav.service';
 import { CreditsService } 					from './credits.service';
 import { ListingService }					from './listing.service';
+import { CampaingsService }					from './campaings.service';
 import { TranslateService} 					from "@ngx-translate/core";
 import { CurrentUserAuth }					from './current-user-auth';
 import { PrivateMessagingComponent }		from './private-messaging/private-messaging.component';
@@ -80,6 +81,7 @@ export class AppComponent {
 				private readonly listingService:			ListingService,
 				private readonly sanitizer:					DomSanitizer, 
 				private readonly curriculumService:			CurriculumService,
+				private readonly campaignService:			CampaingsService,
 				private readonly publicMessagingService:	PublicMessagingService,
 			){
 		
@@ -124,23 +126,22 @@ export class AppComponent {
 		
 		this.privateChat.startChatContactListPolling();
 		
-		//if(sessionStorage.getItem("loggedIn") == "true") {
-		//	console.log("STARTING NOTIFICATION SCHEDULRE")
-		//	this.runNotificationScheduler();
-		//} else {
-		//	console.log("NOT  !!  STARTING NOTIFICATION SCHEDULRE")
-		//}
-	
+		if (sessionStorage.getItem("loggedIn") == "true") {
+			this.runNotificationScheduler();
+		}
+
 	}
 	
 	public runNotificationScheduler():void{
 
 		this.refreshUnreadNewsFeedNotifications();	
 		this.hasUnreadNewsFeedItems();
+		this.fetchHasUnreadCampaignMessages();
 	
 		this.scheduleOpenChatRefresh = window.setInterval(()=> {
 			this.refreshUnreadNewsFeedNotifications();		
-			this.hasUnreadNewsFeedItems();
+			this.hasUnreadNewsFeedItems()
+			this.fetchHasUnreadCampaignMessages();
 		},30000);
 					
 	}
@@ -194,9 +195,8 @@ export class AppComponent {
 		this.hasUnreadNewsFeedItems();
 		this.privateChat.fetchChats();
 		this.emailService.updateUnseenEmails();
-		//this.emailService.fetchUnseenEmailsCount().subscribe(val => {
-		//	this.unseenEmails = val;
-		//});
+		this.fetchHasUnreadCampaignMessages();
+
 	}
 	
 	/**
@@ -242,6 +242,22 @@ export class AppComponent {
 	public navToSuggestions():void{
 		this.candidateNavService.reset();
 		this.router.navigate(['suggestions']);
+	}
+	
+	/**
+	* Navigates to the Campaigns page
+	*/
+	public navToCampaigns():void{
+		
+		this.campaignService.hasChatAccess().subscribe(res => {
+			if (res == true) {
+				this.candidateNavService.reset();
+				this.router.navigate(['campaigns']);
+			} else  {
+				this.openNoChatAccessBox();
+			}
+		});
+		
 	}
 	
 	/**
@@ -465,6 +481,27 @@ export class AppComponent {
 		}
 		
 		return false;
+		
+	}
+	
+	/**
+	* Returns true if there are unread messages from a Candidate in one or 
+	* more of the Recruiters Campaign/Roles 
+	*/
+	public hasUnreadCampaignMessages:boolean = false;
+	
+	public fetchHasUnreadCampaignMessages():void{
+		
+		this.campaignService.fetchCampaignsForUser().subscribe(campaignOverviews => {
+			
+			if (campaignOverviews.filter(co => co.hasUnreadNotifications).length > 0 ){
+				this.hasUnreadCampaignMessages = true;
+			} else {
+				this.hasUnreadCampaignMessages = false;		
+			}
+			
+		});
+		
 		
 	}
 	
