@@ -20,13 +20,14 @@ public class CampaignAPIOutbound {
 	private String 							name;
 	private String 							description;
 	private CampaignLogo 					logo;
-	private Set<RoleAPIOutbound>			roles			= new LinkedHashSet<>();
-	private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
-	private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
-	private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
-	private Set<AppointmentAPIOutbound> 	appointments	= new LinkedHashSet<>();
-	private Set<DocumentAPIOutbound> 		documents		= new LinkedHashSet<>();
-
+	private Set<RoleAPIOutbound>			roles					= new LinkedHashSet<>();
+	private Set<CandidateAPIOutbound>		candidates				= new LinkedHashSet<>();
+	private Set<ParticipationAPIOutbound> 	participations			= new LinkedHashSet<>(); 
+	private Set<NoteAPIOutbound> 			notes					= new LinkedHashSet<>();
+	private Set<AppointmentAPIOutbound> 	appointments			= new LinkedHashSet<>();
+	private Set<DocumentAPIOutbound> 		documents				= new LinkedHashSet<>();
+	private boolean							hasUnreadNotifications; 
+	
 	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
@@ -51,6 +52,8 @@ public class CampaignAPIOutbound {
 		this.notes.addAll(builder.notes);
 		this.appointments.addAll(builder.appointments);
 		this.documents.addAll(builder.documents);
+		
+		this.hasUnreadNotifications = builder.hasUnreadNotifications;
 		
 	}
 	
@@ -135,6 +138,15 @@ public class CampaignAPIOutbound {
 	}
 	
 	/**
+	* Returns if there are unread notifications at the Campaign level. This ignores
+	* unread notification in the Roles
+	* @return if there are unread notifications
+	*/
+	public boolean getHasUnreadNotifications() {
+		return this.hasUnreadNotifications;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder
 	*/
@@ -151,12 +163,13 @@ public class CampaignAPIOutbound {
 		private String 							name;
 		private String 							description;
 		private CampaignLogo 					logo;
-		private Set<RoleAPIOutbound>			roles			= new LinkedHashSet<>();
-		private Set<CandidateAPIOutbound>		candidates		= new LinkedHashSet<>();
-		private Set<ParticipationAPIOutbound> 	participations	= new LinkedHashSet<>(); 
-		private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
-		private Set<AppointmentAPIOutbound> 	appointments	= new LinkedHashSet<>();
-		private Set<DocumentAPIOutbound> 		documents		= new LinkedHashSet<>();
+		private Set<RoleAPIOutbound>			roles					= new LinkedHashSet<>();
+		private Set<CandidateAPIOutbound>		candidates				= new LinkedHashSet<>();
+		private Set<ParticipationAPIOutbound> 	participations			= new LinkedHashSet<>(); 
+		private Set<NoteAPIOutbound> 			notes					= new LinkedHashSet<>();
+		private Set<AppointmentAPIOutbound> 	appointments			= new LinkedHashSet<>();
+		private Set<DocumentAPIOutbound> 		documents				= new LinkedHashSet<>();
+		private boolean							hasUnreadNotifications; 
 
 		/**
 		* Populates the Builder with values from the Domain objects
@@ -175,6 +188,8 @@ public class CampaignAPIOutbound {
 			campaign.getParticipations().stream().forEach(participation -> {
 				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build());
 			});
+			
+			imNotifications.stream().filter(n -> n.getRoleId().isEmpty() && n.getCampaignId().equals(id)).findAny().ifPresent(_ -> this.hasUnreadNotifications = true);
 			
 			this.roles.addAll(campaign.getRoles().stream().map(r -> RoleAPIOutbound.builder().from(r, contacts, imNotifications).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c, imNotifications, false).build()).collect(Collectors.toCollection(LinkedHashSet::new)));

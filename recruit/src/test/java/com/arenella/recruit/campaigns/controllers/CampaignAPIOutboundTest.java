@@ -1,6 +1,7 @@
 package com.arenella.recruit.campaigns.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -14,6 +15,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
+import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Note;
 import com.arenella.recruit.campaigns.beans.Participation;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
@@ -24,16 +26,16 @@ import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 */
 class CampaignAPIOutboundTest {
 
-	private static final UUID 				ID				= UUID.randomUUID();
-	private static final String 			NAME			= "ABN AMRO";
-	private static final String 			DESCRIPTION		= "Campaign for IT roles for the Client ABN Amro";
-	private static final CampaignLogo 		LOGO			= new CampaignLogo(new byte[] {}, PHOTO_FORMAT.jpeg);
-	private static final LocalDateTime		CREATED			= LocalDateTime.of(2026, 3,27,17,49,11);
-	private static final Set<Candidate>		CANDIDATES		= Set.of(Candidate.builder().build());
-	private static final Set<Participation> PARTICIPANTS	= Set.of(Participation.builder().contactId("rec1").build());
-	private static final Set<Note> 			NOTES			= Set.of(Note.builder().build());
-	private static final Set<Appointment> 	APPOINTMENTS	= Set.of(Appointment.builder().build());
-	private static final Set<Document> 		DOCUMENTS		= Set.of(Document.builder().build());
+	private static final UUID 				ID						= UUID.randomUUID();
+	private static final String 			NAME					= "ABN AMRO";
+	private static final String 			DESCRIPTION				= "Campaign for IT roles for the Client ABN Amro";
+	private static final CampaignLogo 		LOGO					= new CampaignLogo(new byte[] {}, PHOTO_FORMAT.jpeg);
+	private static final LocalDateTime		CREATED					= LocalDateTime.of(2026, 3,27,17,49,11);
+	private static final Set<Candidate>		CANDIDATES				= Set.of(Candidate.builder().id("12").build());
+	private static final Set<Participation> PARTICIPANTS			= Set.of(Participation.builder().contactId("rec1").build());
+	private static final Set<Note> 			NOTES					= Set.of(Note.builder().build());
+	private static final Set<Appointment> 	APPOINTMENTS			= Set.of(Appointment.builder().build());
+	private static final Set<Document> 		DOCUMENTS				= Set.of(Document.builder().build());
 	
 	/**
 	* Test construction via Builder
@@ -57,7 +59,7 @@ class CampaignAPIOutboundTest {
 		
 		CampaignAPIOutbound outbound = CampaignAPIOutbound
 				.builder()
-					.from(campaign, Set.of(new Contact("rec1", "", "", "", SubscriptionType.CREDIT)), Set.of())
+					.from(campaign, Set.of(new Contact("rec1", "", "", "", SubscriptionType.CREDIT)), Set.of(IMNotification.builder().candidateId("12").campaignId(ID).build()))
 				.build();
 		
 		assertEquals(ID, 			outbound.getId());
@@ -70,6 +72,9 @@ class CampaignAPIOutboundTest {
 		assertEquals(1, outbound.getNotes().size());
 		assertEquals(1, outbound.getAppointments().size());
 		assertEquals(1, outbound.getDocuments().size());
+		
+		assertTrue(outbound.getHasUnreadNotifications());
+		
 	}
 	
 }

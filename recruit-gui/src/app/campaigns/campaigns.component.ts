@@ -150,15 +150,10 @@ export class CampaignsComponent {
 	*/
 	public showDocument(document:Document):void {
 		this.document = document;
-		
-
-	//	http://127.0.0.1:8080/curriculum-test/74.pdf
 		let url = environment.backendUrl + 'campaign/document/'+document.id; 
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		this.showInlineCVView = true;
-		
 	}
-	
 	
 	/**
 	* Closes the addNote  box 
@@ -646,6 +641,13 @@ export class CampaignsComponent {
 	public openChat(candidate:Candidate):void{
 		this.appComponent.privateChat.showContactsItemView();
 		this.appComponent.privateChat.openChat(candidate.id);	
+		
+		setTimeout(() => {
+			this.selectionBox.refreshCampaign();
+			this.appComponent.refreschUnreadNotifications();
+		}, 5000);
+		
+		
 	}
 	
 	/**
