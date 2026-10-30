@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
+import com.arenella.recruit.campaign.dao.CandidateGroupEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
@@ -85,6 +86,9 @@ class CampaignServiceImplTest {
 	
 	@Mock
 	private CampaignExternalEventPublisher 		mockEventPublisher;
+	
+	@Mock
+	private CandidateGroupEntityDao				mockCandidateGroupDao;
 	
 	@InjectMocks
 	private CampaignServiceImpl 				service;

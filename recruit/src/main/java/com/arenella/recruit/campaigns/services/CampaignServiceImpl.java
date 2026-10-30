@@ -16,6 +16,7 @@ import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.CampaignIMNotificationDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
+import com.arenella.recruit.campaign.dao.CandidateGroupEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
 import com.arenella.recruit.campaign.dao.DocumentEntityDao;
 import com.arenella.recruit.campaign.dao.NoteEntityDao;
@@ -29,6 +30,8 @@ import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
+import com.arenella.recruit.campaigns.beans.CandidateGroup.Group;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 import com.arenella.recruit.campaigns.beans.Document;
@@ -81,6 +84,7 @@ public class CampaignServiceImpl implements CampaignService{
 	private final CandidateEntityDao				candidateDao;
 	private final CampaignExternalEventPublisher 	eventPublisher;
 	private final CampaignIMNotificationDao 		imNotificationDao;
+	private final CandidateGroupEntityDao			candidateGroupDao;
 	
 	/**
 	* Constructor
@@ -94,6 +98,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param candidateDao		- For working with Candidates
 	* @param eventPublisher		- For publishing events/commands to external services
 	* @param imNotificationDao	- For working with IM Noficiation's relating to the Campaign
+	* @oaram candidateGroupDao	- For working with CandidateGroups
 	*/
 	public CampaignServiceImpl(
 			CampaignDao 					campaignDao, 
@@ -106,7 +111,8 @@ public class CampaignServiceImpl implements CampaignService{
 			RoleDao							roleDao,
 			CandidateEntityDao				candidateDao,
 			CampaignExternalEventPublisher 	eventPublisher,
-			CampaignIMNotificationDao		imNotificationDao) {
+			CampaignIMNotificationDao		imNotificationDao,
+			CandidateGroupEntityDao			candidateGroupDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
@@ -118,6 +124,7 @@ public class CampaignServiceImpl implements CampaignService{
 		this.candidateDao		= candidateDao;
 		this.eventPublisher		= eventPublisher;
 		this.imNotificationDao  = imNotificationDao;
+		this.candidateGroupDao 	= candidateGroupDao;
 	}
 	
 	/**
@@ -576,8 +583,10 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		if (Optional.ofNullable(role).isEmpty()) {
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidate(candidate).build());
+			this.candidateGroupDao.saveGrouping(CandidateGroup.builder().id(UUID.randomUUID()).campaignId(campaignId).candidateId(candidateId).group(Group.GROUP0).build());
 		}else {
 			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
+			this.candidateGroupDao.saveGrouping(CandidateGroup.builder().id(UUID.randomUUID()).campaignId(campaignId).roleId(roleId).candidateId(candidateId).group(Group.GROUP0).build());
 		}
 		
 	}
@@ -606,17 +615,28 @@ public class CampaignServiceImpl implements CampaignService{
 		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		AtomicBoolean isExternalCandiadte = new AtomicBoolean();
-		//4. Add Candidate to Campaign or role
+		
+		
 		if (Optional.ofNullable(role).isEmpty()) {
 			campaign.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(_ -> 
 				isExternalCandiadte.set(true)
 			);
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidates(campaign.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build());
+		
+			this.candidateGroupDao.findCandidateGroupsForCampaign(campaignId)
+				.stream().filter(g -> g.getCandidateId().equals(candidateId))
+				.findAny().ifPresent(group -> this.candidateGroupDao.deleteById(group.getId()));
+				
 		} else {
 			role.getCandidates().stream().filter(c -> c.getId().equals(candidateId) && c.getType() == Type.EXTERNAL).findAny().ifPresent(_ -> 
 				isExternalCandiadte.set(true)
 			);
 			this.roleDao.saveRole(Role.builder().from(role).candidates(role.getCandidates().stream().filter(c -> !c.getId().equals(candidateId)).collect(Collectors.toSet())).build(), campaignId);
+		
+			this.candidateGroupDao.findCandidateGroupsForCampaign(campaignId)
+				.stream().filter(g -> g.getCandidateId().equals(candidateId) && g.getRoleId().isPresent() && g.getRoleId().get().equals(roleId))
+				.findAny().ifPresent(group -> this.candidateGroupDao.deleteById(group.getId()));
+			
 		}
 		
 		if (isExternalCandiadte.get()) {
@@ -696,8 +716,10 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		if (Optional.ofNullable(role).isEmpty()) {
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).candidate(candidate).build());
+			this.candidateGroupDao.saveGrouping(CandidateGroup.builder().id(UUID.randomUUID()).campaignId(campaignId).candidateId(candidate.getId()).group(Group.GROUP0).build());
 		}else {
 			this.roleDao.saveRole(Role.builder().from(role).candidate(candidate).build(), campaignId);
+			this.candidateGroupDao.saveGrouping(CandidateGroup.builder().id(UUID.randomUUID()).campaignId(campaignId).roleId(roleId).candidateId(candidate.getId()).group(Group.GROUP0).build());
 		}
 		
 	}
@@ -842,17 +864,9 @@ public class CampaignServiceImpl implements CampaignService{
 	*/
 	@Override
 	public void acceptExternalCandidateConnectionRequest(UUID externalCandidateId) {
-		
 		this.candidateDao.findCandidateById(externalCandidateId.toString()).ifPresent(candidate -> 
 			this.candidateDao.saveCandidate(Candidate.builder().from(candidate).deletedFromSystem(false).lastDataRetentionConfirmation(LocalDateTime.now()).build())
 		);
-		
-		// TODO 
-		// 
-		// Need email to ask for 1 year renewal
-		// Need scheduled job to
-			// 1. check for 7 day with no response ( delete external candidates ) using request_sent field
-			// 2. Send renewal email after 1 year and set request_sent field
 	}
 	
 	/**
