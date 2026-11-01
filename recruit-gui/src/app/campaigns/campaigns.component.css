@@ -263,4 +263,42 @@
 	color:black;
 }
 
+.campaign-group-icon{
+	height:18px;
+	width:18px;
+	background:grey;
+	border-radius:50%;
+	display:inline-block;
+}
 
+.campaign-group-GROUP0{
+	background:grey;
+}
+
+.campaign-group-GROUP1{
+	background:orange;
+}
+
+.campaign-group-GROUP2{
+	background:navy;
+}
+
+.campaign-group-GROUP3{
+	background:purple;
+}
+.campaign-group-GROUP4{
+	background:black;
+}
+.campaign-group-GROUP5{
+	background:teal;
+}
+.campaign-group-GROUP6{
+	background:red;
+}
+
+.campaign-btn-small{
+	margin-right:10px;
+	float:right;
+	min-width:0px;
+	width:100px;
+}

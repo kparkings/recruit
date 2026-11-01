@@ -21,6 +21,12 @@ public interface CandidateGroupEntityDao extends ListCrudRepository<CandidateGro
 	@Query("from CandidateGroupEntity where campaignId = :campaignId")
 	Set<CandidateGroupEntity> fetchGroupEntituesForCampaigin(UUID campaignId);
 	
+	@Query("from CandidateGroupEntity where campaignId = :campaignId and candidateId = :candidateId")
+	Set<CandidateGroupEntity> fetchCandidateGroupEntitiesForCampaigin(UUID campaignId, String candidateId);
+	
+	@Query("from CandidateGroupEntity where campaignId = :campaignId and roleId = :roleId and candidateId = :candidateId")
+	Set<CandidateGroupEntity> fetchCandidateGroupEntitiesForRole(UUID campaignId, UUID roleId, String candidateId);
+	
 	/**
 	* Returns the Grouping matching the Id
 	* @param id - Id of the Grouping
@@ -45,6 +51,21 @@ public interface CandidateGroupEntityDao extends ListCrudRepository<CandidateGro
 	*/
 	default Set<CandidateGroup> findCandidateGroupsForCampaign(UUID campaignId) {
 		return this.fetchGroupEntituesForCampaigin(campaignId).stream().map(CandidateGroupEntity::fromEntity).collect(Collectors.toSet());
+	}
+	
+	/**
+	* Fetches a CandidateGroup
+	* @param campaignId  - Id of the Campaign the Candidate is part of
+	* @param roleId	     - If Role based, Id of Role the Candidate is part of
+	* @param candidateId - Unique Id of the Candidates
+	* @return If found the CandidateGroup
+	*/
+	default Optional<CandidateGroup> fetchCandidateGroup(UUID campaignId, Optional<UUID> roleId,String candidateId) {
+		if(roleId.isPresent()) {
+			return this.fetchCandidateGroupEntitiesForRole(campaignId, roleId.get(), candidateId).stream().map(CandidateGroupEntity::fromEntity).findAny();
+		} else {
+			return this.fetchCandidateGroupEntitiesForCampaigin(campaignId, candidateId).stream().map(CandidateGroupEntity::fromEntity).findAny();
+		}
 	}
 	
 }

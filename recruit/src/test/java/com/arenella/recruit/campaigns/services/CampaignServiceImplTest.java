@@ -42,6 +42,7 @@ import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
 import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
 import com.arenella.recruit.campaigns.beans.Contact.SubscriptionType;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
@@ -3605,6 +3606,8 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 
 	}
 	
@@ -3628,6 +3631,8 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 		
 	}
 	
@@ -3658,6 +3663,8 @@ class CampaignServiceImplTest {
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
+		verify(this.mockCandidateGroupDao, never()).deleteById(any());
+		
 	}
 	
 	/**
@@ -3684,6 +3691,8 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 		
 	}
 	
@@ -3715,6 +3724,8 @@ class CampaignServiceImplTest {
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
+		verify(this.mockCandidateGroupDao, never()).deleteById(any());
+		
 	}
 	
 	/**
@@ -3733,6 +3744,7 @@ class CampaignServiceImplTest {
 				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
 				.build();
 		
+		when(this.mockCandidateGroupDao.findCandidateGroupsForCampaign(campaignId)).thenReturn(Set.of(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		
@@ -3740,6 +3752,8 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockCandidateDao, never()).deleteById(candidateId);
 		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		verify(this.mockCandidateGroupDao).deleteById(any());
 		
 	}
 	
@@ -3764,6 +3778,7 @@ class CampaignServiceImplTest {
 				.role(role)
 				.build();
 		
+		when(this.mockCandidateGroupDao.findCandidateGroupsForCampaign(campaignId)).thenReturn(Set.of(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).roleId(roleId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
@@ -3772,6 +3787,8 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockCandidateDao, never()).deleteById(candidateId);
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		
+		verify(this.mockCandidateGroupDao).deleteById(any());
 		
 	}
 	
@@ -3796,6 +3813,7 @@ class CampaignServiceImplTest {
 				.role(role)
 				.build();
 		
+		when(this.mockCandidateGroupDao.findCandidateGroupsForCampaign(campaignId)).thenReturn(Set.of(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).roleId(roleId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
@@ -3803,6 +3821,7 @@ class CampaignServiceImplTest {
 		this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		verify(this.mockCandidateGroupDao).deleteById(any());
 	
 	}
 	
@@ -3828,6 +3847,7 @@ class CampaignServiceImplTest {
 				.role(role)
 				.build();
 		
+		when(this.mockCandidateGroupDao.findCandidateGroupsForCampaign(campaignId)).thenReturn(Set.of(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).roleId(roleId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
@@ -3836,6 +3856,7 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockCandidateDao).deleteById(candidateId);
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		verify(this.mockCandidateGroupDao).deleteById(any());
 		
 	}
 	
@@ -3865,6 +3886,7 @@ class CampaignServiceImplTest {
 				.role(role)
 				.build();
 		
+		when(this.mockCandidateGroupDao.findCandidateGroupsForCampaign(campaignId)).thenReturn(Set.of(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).roleId(roleId).build()));
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
@@ -3873,6 +3895,7 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockCandidateDao).deleteById(candidateId);
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		verify(this.mockCandidateGroupDao).deleteById(any());
 	
 	}
 	
@@ -4145,6 +4168,8 @@ class CampaignServiceImplTest {
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 
+		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
+		
 	}
 	
 	/**
@@ -4168,6 +4193,8 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
 		
 	}
 	
@@ -4199,6 +4226,8 @@ class CampaignServiceImplTest {
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
+		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
+		
 	}
 	
 	/**
@@ -4225,6 +4254,8 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
 		
 	}
 	
@@ -4256,6 +4287,8 @@ class CampaignServiceImplTest {
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
+		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
+		
 	}
 	
 	/**
@@ -4281,6 +4314,8 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
 		verify(this.mockCampaignDao).saveCampaign(any(Campaign.class));
+		
+		verify(this.mockCandidateGroupDao).saveGrouping(any());
 		
 	}
 	
@@ -4312,6 +4347,8 @@ class CampaignServiceImplTest {
 		
 		verify(this.mockCandidateDao).saveCandidate(any(Candidate.class));
 		verify(this.mockRoleDao).saveRole(any(Role.class), any(UUID.class));
+		
+		verify(this.mockCandidateGroupDao).saveGrouping(any());
 		
 	}
 	

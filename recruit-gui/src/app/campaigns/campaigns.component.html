@@ -55,6 +55,7 @@
 						</tr>
 						<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
 							<td>
+								<span class="campaign-group-icon campaign-group-{{candidate.candidate.group}}" (click)="showCandidateGroupSelectionBoxSingle(candidate)"></span>
 								<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
 								{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
 							</td>
@@ -71,6 +72,7 @@
 					<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">{{'campaign-remove-candidates' | translate}}</button>
 					<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">{{'campaign-message-candidates' | translate}}</button>
 					<button class="btn btn-secondary campaign-btn" (click)="showAddExternalCandidateBox()">{{'campaign-add-external-candidate' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn campaign-btn-small" (click)="showCandidateGroupSelectionBox()"> Group</button>
 				</div>
 				<div style="clear:both;margin-bottom:10px;"></div>
 			</div>
@@ -163,8 +165,9 @@
 						</tr>
 						<tr *ngFor="let candidate of wrappedCandidates" class="candidate-block">
 							<td>
-							<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
-							{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
+								<span class="campaign-group-icon campaign-group-{{candidate.candidate.group}}" (click)="showCandidateGroupSelectionBoxSingle(candidate)"></span>
+								<input type="checkbox" [checked]="candidate.selected" (click)="toggleCandidateSelect(candidate)" name="selected_{{candidate.candidate.id}}" class="campaign_candidate_select">
+								{{candidate.candidate.firstName}} {{candidate.candidate.surname}}
 							</td>
 							<td>{{candidate.candidate.jobTitle}}</td>
 							<td>
@@ -178,6 +181,7 @@
 					<button class="btn btn-secondary campaign-btn" (click)="deleteCandidates()" *ngIf="currentUserAdminForSelectedObject()">{{'campaign-remove-candidates' | translate}}</button>
 					<button class="btn btn-secondary campaign-btn" (click)="showMassMessageBox()">{{'campaign-message-candidates' | translate}}</button>
 					<button class="btn btn-secondary campaign-btn" (click)="showAddExternalCandidateBox()">{{'campaign-add-external-candidate' | translate}}</button>
+					<button class="btn btn-secondary campaign-btn campaign-btn-small" (click)="showCandidateGroupSelectionBox()"> Group</button>
 				</div>
 				<div style="clear:both;margin-bottom:10px;"></div>
 			</div>
@@ -526,5 +530,39 @@
 			<button class="btn btn-secondary campaign-btn" (click)="closeExternalMessageBox()">{{'cancel-btn' | translate}}</button>
 			<button class="btn btn-secondary campaign-btn" (click)="handleMessageExternalCandidate()">>{{'SEND' | translate}}</button>
 		</div>
+	</div>
+</dialog>
+
+<!--Group selection Box -->
+<dialog #groupSelectionBox>
+	<!--  Options -->
+	<div class="modal-header">
+		<h4 class="modal-title">Group</h4>
+		<div class="filter-close-box" (click)="groupSelectionBox.close()">X</div>
+	</div>
+	<div class="modal-body">
+		<div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP0" (click)="updateGroup('GROUP0')"></span>
+			</div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP1" (click)="updateGroup('GROUP1')"></span>
+			</div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP2" (click)="updateGroup('GROUP2')"></span>
+			</div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP3" (click)="updateGroup('GROUP3')"></span>
+			</div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP4" (click)="updateGroup('GROUP4')"></span>
+			</div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP5" (click)="updateGroup('GROUP5')"></span>
+			</div>
+			<div>
+				<span class="campaign-group-icon campaign-group-GROUP6" (click)="updateGroup('GROUP6')"></span>
+			</div>
+		</div>	
 	</div>
 </dialog>

@@ -21,7 +21,7 @@ import jakarta.persistence.Id;
 */
 public class CandidateGroup {
 
-	public enum Group {GROUP0, GROUP1, GROUP2, GROUP3, GROUP4, GROUP5}
+	public enum Group {GROUP0, GROUP1, GROUP2, GROUP3, GROUP4, GROUP5, GROUP6}
 	
 	@Id
 	@Column(name="id")
@@ -112,6 +112,21 @@ public class CandidateGroup {
 		private UUID roleId;
 		private String candidateId;
 		private Group group;
+		
+		/**
+		* Populates builder with values form 
+		* existing CandidateGroup
+		* @param candidateGroup - contains initialization values
+		* @return Builder
+		*/
+		public CandidateGroupBuilder from(CandidateGroup candidateGroup) {
+			this.id = candidateGroup.id;
+			this.campaignId = candidateGroup.campaignId;
+			this.roleId = candidateGroup.roleId;
+			this.candidateId = candidateGroup.candidateId;
+			this.group = candidateGroup.group;
+			return this;
+		}
 		
 		/**
 		* Sets the unique Id of the Grouping

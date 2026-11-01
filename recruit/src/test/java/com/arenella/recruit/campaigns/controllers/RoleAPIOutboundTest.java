@@ -58,7 +58,7 @@ class RoleAPIOutboundTest {
 		
 		Contact contact = new Contact("11", "daffy", "boo", "1@1.nl", SubscriptionType.PAID);
 		
-		RoleAPIOutbound outbound = RoleAPIOutbound.builder().from(role, Set.of(contact), Set.of(NOTIFICATION)).build();
+		RoleAPIOutbound outbound = RoleAPIOutbound.builder().from(role, Set.of(contact), Set.of(NOTIFICATION), Set.of()).build();
 		
 		assertEquals(ID, 			outbound.getId());
 		assertEquals(NAME, 			outbound.getName());

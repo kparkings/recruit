@@ -27,11 +27,13 @@ import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Candidate;
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
+import com.arenella.recruit.campaigns.services.CandidateGroupService;
 
 /**
 * Rest API for working with Campaign's 
@@ -44,15 +46,18 @@ public class CampaignController {
 	
 	private final CampaignService 			campaignService;
 	private final CampaignContactService 	contactService;
+	private final CandidateGroupService		candidateGroupService;
 	
 	/**
 	* Constructor
-	* @param campaignService - Services for interacting with Campaigin's
-	* @param contactService  - Services for interacting with Contact's
+	* @param campaignService 		- Services for interacting with Campaigin's
+	* @param contactService  		- Services for interacting with Contact's
+	* @param candidateGroupService 	- Services for interacting with CandidateGroup's
 	*/
-	public CampaignController(CampaignService campaignService, CampaignContactService contactService) {
-		this.campaignService 	= campaignService;
-		this.contactService 	= contactService;
+	public CampaignController(CampaignService campaignService, CampaignContactService contactService, CandidateGroupService	candidateGroupService) {
+		this.campaignService 		= campaignService;
+		this.contactService 		= contactService;
+		this.candidateGroupService 	= candidateGroupService;
 	}
 	
 	/**
@@ -88,8 +93,9 @@ public class CampaignController {
 		Set<Contact> 	contacts 	= this.contactService.fetchContactsById(campaign.getParticipations().stream().map(p -> p.getContactId()).collect(Collectors.toSet()));
 		
 		Set<IMNotification> imNotifications = this.campaignService.fetchRecruitersIMNotificationsForCampaign(currentUser, campaignId);
-		
-		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts, imNotifications).build(), HttpStatus.OK);
+		Set<CandidateGroup> candidateGroups = this.candidateGroupService.fetchCandidateGroupsForCampaign(campaignId);
+				
+		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts, imNotifications, candidateGroups).build(), HttpStatus.OK);
 	}
 	
 	/**
@@ -474,6 +480,36 @@ public class CampaignController {
 	public ResponseEntity<String> acceptExternalCandidateConnectionReuqest(@PathVariable("externalCandidateId")UUID externalCandidateId){
 		this.campaignService.acceptExternalCandidateConnectionRequest(externalCandidateId);
 		return ResponseEntity.ok().body(MSG_EXTERNAL_CANDIDATE_REQ_ACCEPTANCE);
+	}
+	
+	/**
+	* Updates selected Campaign Candidates groups
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(path="/campaign/{campaignId}/groups/")
+	public ResponseEntity<Void> updateCampaignGroups(@RequestBody UpdateGroupAPIInbound updateGroupCommand, @PathVariable("campaignId")UUID campaignId, Principal principal) {
+		
+		updateGroupCommand.getCandidateIds().stream().forEach(candidateId -> {
+			this.candidateGroupService.saveGandidateGroup(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).group(updateGroupCommand.getGroup()).build(), principal.getName());
+		});
+		
+		return ResponseEntity.ok().build(); 
+	}
+	
+	/**
+	* Updates selected Campaign Candidates groups
+	* @return ResponseEntity
+	*/
+	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
+	@PutMapping(path="/campaign/{campaignId}/role/{roleId}/groups/")
+	public ResponseEntity<Void> updateRoleGroups(@RequestBody UpdateGroupAPIInbound updateGroupCommand, @PathVariable("campaignId")UUID campaignId, @PathVariable("roleId")UUID roelId, Principal principal) {
+		
+		updateGroupCommand.getCandidateIds().stream().forEach(candidateId -> {
+			this.candidateGroupService.saveGandidateGroup(CandidateGroup.builder().candidateId(candidateId).campaignId(campaignId).roleId(roelId).group(updateGroupCommand.getGroup()).build(), principal.getName());
+		});
+		
+		return ResponseEntity.ok().build(); 
 	}
 	
 }

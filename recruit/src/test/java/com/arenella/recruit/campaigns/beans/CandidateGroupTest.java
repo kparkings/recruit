@@ -25,7 +25,7 @@ class CandidateGroupTest {
 	@Test
 	void testConstruction() {
 		
-		CandidateGroup entity = CandidateGroup.
+		CandidateGroup group = CandidateGroup.
 			builder()
 				.id(ID)
 				.campaignId(CAMPAIGN_ID)
@@ -34,11 +34,46 @@ class CandidateGroupTest {
 				.group(GROUP)
 			.build();
 		
-		assertEquals(ID, 			entity.getId());
-		assertEquals(CAMPAIGN_ID, 	entity.getCampaignId());
-		assertEquals(ROLE_ID, 		entity.getRoleId().get());
-		assertEquals(CANDIDATE_ID,  entity.getCandidateId());
-		assertEquals(GROUP, 		entity.getGroup());
+		assertEquals(ID, 			group.getId());
+		assertEquals(CAMPAIGN_ID, 	group.getCampaignId());
+		assertEquals(ROLE_ID, 		group.getRoleId().get());
+		assertEquals(CANDIDATE_ID,  group.getCandidateId());
+		assertEquals(GROUP, 		group.getGroup());
+		
+	}
+	
+	/**
+	* Tests construction via a builder using existing instance
+	* to populate the Builder
+	*/
+	@Test
+	void testConstructionFromExisting() {
+		
+		CandidateGroup group = CandidateGroup.
+			builder()
+				.id(ID)
+				.campaignId(CAMPAIGN_ID)
+				.roleId(ROLE_ID)
+				.candidateId(CANDIDATE_ID)
+				.group(GROUP)
+			.build();
+		
+		assertEquals(ID, 			group.getId());
+		assertEquals(CAMPAIGN_ID, 	group.getCampaignId());
+		assertEquals(ROLE_ID, 		group.getRoleId().get());
+		assertEquals(CANDIDATE_ID,  group.getCandidateId());
+		assertEquals(GROUP, 		group.getGroup());
+		
+		CandidateGroup newGroup = CandidateGroup.
+				builder()
+				.from(group)
+				.build();
+			
+			assertEquals(ID, 			newGroup.getId());
+			assertEquals(CAMPAIGN_ID, 	newGroup.getCampaignId());
+			assertEquals(ROLE_ID, 		newGroup.getRoleId().get());
+			assertEquals(CANDIDATE_ID,  newGroup.getCandidateId());
+			assertEquals(GROUP, 		newGroup.getGroup());
 		
 	}
 	

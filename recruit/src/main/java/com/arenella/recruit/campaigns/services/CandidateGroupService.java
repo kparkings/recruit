@@ -1,6 +1,7 @@
 package com.arenella.recruit.campaigns.services;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.CandidateGroup;
@@ -12,9 +13,10 @@ public interface CandidateGroupService {
 
 	/**
 	* Fetches all groupings for a given Campaign
-	* @param campaignId - Id of the Campaign
+	* @param campaignId - Id of the 
+	* @return CandidateGroups for the Campaign
 	*/
-	public void fetchCandidateGroupsForCampaign(UUID campaignId);
+	public Set<CandidateGroup> fetchCandidateGroupsForCampaign(UUID campaignId);
 	
 	/**
 	* Deletes a grouping with the given Id

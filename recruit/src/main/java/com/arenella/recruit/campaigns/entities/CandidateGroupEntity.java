@@ -8,6 +8,8 @@ import com.arenella.recruit.campaigns.beans.CandidateGroup.Group;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -33,6 +35,7 @@ public class CandidateGroupEntity {
 	@Column(name="candidate_id")
 	private String candidateId;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name="candidate_group")
 	private Group group;
 	

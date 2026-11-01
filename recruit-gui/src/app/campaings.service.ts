@@ -428,11 +428,37 @@ export class CampaingsService {
 		
 	}
 	
+	/**
+	* Updates the Candidates group 
+	*/
+	public updateGroupsForCampaign(selectedCandidatesids:Array<string>, campaignId:string, roleId:string | undefined, groupId:string):Observable<any>{
+				  
+		let command:UpdateGroups = new UpdateGroups(selectedCandidatesids, groupId);
+							
+		let backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/groups/';
+
+		if(roleId) {
+			backendUrl = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/groups/';
+		}
+		
+		return this.httpClient.put<void>(backendUrl, command, this.httpOptions);
+		
+	}
+	
 }
 
 /**
 * Command to create a new Campaign
 */
+export class UpdateGroups{
+	/**
+		* Constructor 
+		*/
+		constructor(public candidateIds:Array<string>,
+					public group:string){}
+		
+}
+
 export class CommandAddCampaign{
 	
 	/**
@@ -440,7 +466,7 @@ export class CommandAddCampaign{
 	*/
 	constructor(public name:string,
 				public description:string){}
-		//		public logo:CampaignLogo){}
+	
 }
 
 /**
@@ -661,7 +687,8 @@ export class Candidate{
 				public jobTitle:string,
 				public email:string,
 				public deletedFromSystem:boolean,
-				public hasUnreadIMmessage:boolean){}
+				public hasUnreadIMmessage:boolean,
+				public group:string){}
 	
 }
 

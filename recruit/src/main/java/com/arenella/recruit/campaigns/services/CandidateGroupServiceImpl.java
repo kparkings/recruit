@@ -1,6 +1,7 @@
 package com.arenella.recruit.campaigns.services;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class CandidateGroupServiceImpl implements CandidateGroupService{
 	private CampaignService 		campaignService;
 	
 	/**
+	* DO NOT EXPOSE VIA API 
 	* Constructor
 	* @param candidateGroupDao  - Repository for CandidateGroups
 	* @param campaignService	- Services for working with Campaigns
@@ -35,14 +37,16 @@ public class CandidateGroupServiceImpl implements CandidateGroupService{
 	}
 	
 	/**
+	* DO NOT EXPOSE VIA API
 	* Refer to the CandidateGroupService interface for details 
 	*/
 	@Override
-	public void fetchCandidateGroupsForCampaign(UUID campaignId) {
-		this.candidateGroupDao.findCandidateGroupsForCampaign(campaignId);
+	public Set<CandidateGroup> fetchCandidateGroupsForCampaign(UUID campaignId) {
+		return this.candidateGroupDao.findCandidateGroupsForCampaign(campaignId);
 	}
 
 	/**
+	* DO NOT EXPOSE VIA API 
 	* Refer to the CandidateGroupService interface for details 
 	*/
 	@Override
@@ -51,6 +55,7 @@ public class CandidateGroupServiceImpl implements CandidateGroupService{
 	}
 
 	/**
+	* DO NOT EXPOSE VIA API 
 	* Refer to the CandidateGroupService interface for details 
 	*/
 	@Override
@@ -64,36 +69,41 @@ public class CandidateGroupServiceImpl implements CandidateGroupService{
 	@Override
 	public void saveGandidateGroup(CandidateGroup group, String currentUser) {
  	
-		this.securityCheckHasAccessToCampaignOrRole(group.getId(), currentUser);
+		Optional<CandidateGroup> candidateGroup = this.candidateGroupDao.fetchCandidateGroup(group.getCampaignId(), group.getRoleId(), group.getCandidateId());
 		
-		this.candidateGroupDao.saveGrouping(group);
+		candidateGroup.ifPresent(cg -> {
+			this.securityCheckHasAccessToCampaignOrRole(cg, currentUser);			
+			this.candidateGroupDao.saveGrouping(CandidateGroup.builder().from(cg).group(group.getGroup()).build());
+		});
 		
 	}
 	
 	/**
 	* 
-	* @param groupId - Id of the Group to perform security check on
-	* @param currentUser - If request originated from an end user the id of the currently authenticated User
+	* @param CandidateGroup - Group to perform security check on
+	* @param currentUser 	- If request originated from an end user the id of the currently authenticated User
 	*/
-	private void securityCheckHasAccessToCampaignOrRole(UUID groupId, String currentUser) {
+	private void securityCheckHasAccessToCampaignOrRole(CandidateGroup group, String currentUser) {
 		
 		if (Optional.ofNullable(currentUser).isEmpty()) {
 			return;
 		}
 		
-		CandidateGroup 	group 		= this.candidateGroupDao.fetchGroupingById(groupId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_GROUP));
 		Campaign 		campaign 	= this.campaignService.fetchCampaignById(group.getCampaignId(), currentUser);
 		
-		if (group.getRoleId().isEmpty()) {
-			campaign.getParticipations().stream().filter(p -> p.getContactId().equals(currentUser) && (p.getType().equals(ParticipantType.ADMIN) ||p.getType().equals(ParticipantType.EDIT)) ).findAny().orElseThrow(() -> new IllegalArgumentException(ERR_MSG_USER_NOT_PARTICIPANT));	
-		}
+		boolean authorizedAtCampaignLevel = campaign.getParticipations().stream().filter(p -> p.getContactId().equals(currentUser) && (p.getType().equals(ParticipantType.ADMIN) ||p.getType().equals(ParticipantType.EDIT)) ).findAny().isPresent();	
+		boolean authorizedAtRoleLevel = false;
 		
 		if (group.getRoleId().isPresent()) {
 			
 			Role role = campaign.getRoles().stream().filter(r -> r.getId().equals(group.getRoleId().get())).findAny().orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
 			
-			role.getParticipations().stream().filter(p -> p.getContactId().equals(currentUser) && (p.getType().equals(ParticipantType.ADMIN) ||p.getType().equals(ParticipantType.EDIT)) ).findAny().orElseThrow(() -> new IllegalArgumentException(ERR_MSG_USER_NOT_PARTICIPANT));
+			authorizedAtRoleLevel = role.getParticipations().stream().filter(p -> p.getContactId().equals(currentUser) && (p.getType().equals(ParticipantType.ADMIN) ||p.getType().equals(ParticipantType.EDIT)) ).findAny().isPresent();
 			
+		}
+		
+		if (!authorizedAtCampaignLevel && !authorizedAtRoleLevel) {
+			throw new  IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE);
 		}
 		
 	}

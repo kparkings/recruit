@@ -38,6 +38,7 @@ import com.arenella.recruit.campaigns.beans.Document.DocumentType;
 import com.arenella.recruit.campaigns.beans.Participation.ParticipantType;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
 import com.arenella.recruit.campaigns.services.CampaignService;
+import com.arenella.recruit.campaigns.services.CandidateGroupService;
 
 /**
 * Unit tests for the CampaignController class 
@@ -56,6 +57,9 @@ class CampaignControllerTest {
 	
 	@Mock
 	private MultipartFile				mockFile;
+	
+	@Mock
+	private CandidateGroupService		mockCandidateGroupService;
 	
 	@InjectMocks
 	private CampaignController 			controller;
