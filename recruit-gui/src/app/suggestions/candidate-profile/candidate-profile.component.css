@@ -133,3 +133,7 @@ suggestion-perception-excellent{
 	margin-left:10px;
 	width:300px;
 }
+
+.non-mobile-only-element{
+	display:inline-block;
+}
