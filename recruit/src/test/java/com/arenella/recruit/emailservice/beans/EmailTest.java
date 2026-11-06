@@ -46,6 +46,7 @@ class EmailTest {
 	private final EmailRecipient<UUID>		emailRecip2					= new EmailRecipient<UUID>(recip2Id, contactId2, ContactType.SYSTEM);
 	private final Set<EmailRecipient<UUID>> recipients					= Set.of(emailRecip1,emailRecip2);
 	private final Set<EmailAttachment>		attachments					= Set.of(EmailAttachment.builder().build());
+	private final String					externalReference			= "fdds";
 	
 	/**
 	* Sets up test env
@@ -78,6 +79,7 @@ class EmailTest {
 					.status(this.status)
 					.title(this.title)
 					.attachments(attachments)
+					.externalReference(externalReference)
 				.build();
 		
 		assertEquals(id, 						email.getId());
@@ -114,6 +116,8 @@ class EmailTest {
 		assertEquals(firstNameRecip2, recipient2FirstName);
 		
 		assertEquals(attachments, email.getAttachments());
+		
+		assertEquals(externalReference, email.getExternalReference().orElse(null));
 		
 	}
 	

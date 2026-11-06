@@ -3,6 +3,7 @@ package com.arenella.recruit.emailservice.adapters;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class RequestSendEmailCommand {
 	private Map<String,Object>			model						= new HashMap<>();
 	private boolean						persistable					= false;
 	private Set<Attachment>				attachments					= new LinkedHashSet<>();
+	private String						externalReference;
 	
 	/**
 	* Returns the title for the Email
@@ -86,6 +88,15 @@ public class RequestSendEmailCommand {
 	}
 	
 	/**
+	* Returns an Optional external reference. This could be an id or a group id. 
+	* It would usually be added by the service that created the Email
+	* @return Optional external reference
+	*/
+	public Optional<String> getExternalReference(){
+		return Optional.ofNullable(this.externalReference);
+	}
+	
+	/**
 	* Returns whether the email should be persisted to the DB
 	* - True  - If service is stopped email will not be lost but data stored in email body in DB
 	* - False - If service is stopped email is lost bug no senstive data in email stored in DB 
@@ -100,14 +111,15 @@ public class RequestSendEmailCommand {
 	* @param builder
 	*/
 	public RequestSendEmailCommand(RequestSendEmailCommandBuilder builder) {
-		this.title 			= builder.title;
-		this.emailType 		= builder.emailType;
-		this.sender 		= builder.sender;
-		this.recipients 	= builder.recipients;
-		this.topic			= builder.topic;
-		this.model			= builder.model;
-		this.persistable	= builder.persistable;
-		this.attachments	= builder.attachments;
+		this.title 				= builder.title;
+		this.emailType 			= builder.emailType;
+		this.sender 			= builder.sender;
+		this.recipients 		= builder.recipients;
+		this.topic				= builder.topic;
+		this.model				= builder.model;
+		this.persistable		= builder.persistable;
+		this.attachments		= builder.attachments;
+		this.externalReference 	= builder.externalReference;
 	}
 	
 	/**
@@ -132,6 +144,7 @@ public class RequestSendEmailCommand {
 		private Map<String,Object>			model						= new HashMap<>();
 		private boolean						persistable					= false;
 		private Set<Attachment>				attachments					= new LinkedHashSet<>();
+		private String						externalReference;
 		
 		/**
 		* Sets the Title of the Email
@@ -212,6 +225,17 @@ public class RequestSendEmailCommand {
 		public RequestSendEmailCommandBuilder attachments(Set<Attachment> attachments) {
 			this.attachments.clear();
 			this.attachments.addAll(attachments);
+			return this;
+		}
+		
+		/**
+		* Sets an optional external Reference. This can be used in combination with the
+		* Email type for an external service to obtain specific groups of Emails
+		* @param externalReference - Reference assigned by an external service. 
+		* @return Builder
+		*/
+		public RequestSendEmailCommandBuilder externalReference(String externalReference) {
+			this.externalReference = externalReference;
 			return this;
 		}
 		

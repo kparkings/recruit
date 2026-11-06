@@ -348,6 +348,7 @@ public class ListingServiceImpl implements ListingService{
 			
 			builder
 				.listingName(listing.getTitle())
+				.listingId(listing.getListingId())
 				.message(contactRequest.getMessage())
 				.recruiterId(listing.getOwnerId())
 				.candidateId(contactRequest.getCandidateId());

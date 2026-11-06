@@ -64,6 +64,7 @@ public class MonolithListingExternalEventPublisher implements ExternalEventPubli
 						.title("Reaction To Job Posting " + command.getListingName())
 						.topic(EmailTopic.LISTING_RECRUITER_CONTACT_REQUEST)
 						.attachments(this.buildAttachment(command.getFileType(), command.getFile()))
+						.externalReference(command.getListingId().toString())
 					.build();
 		
 		this.emailServiceListener.listenForSendEmailCommand(cInt);

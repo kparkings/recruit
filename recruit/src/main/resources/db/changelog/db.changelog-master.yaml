@@ -3425,4 +3425,17 @@ databaseChangeLog:
                 name: candidate_group
                 type: varchar
                 constraints:
-                   nullable: false           
+                   nullable: false  
+  - changeSet:
+      id: addColumn-email_externalref
+      author: kevin
+      changes:
+        - addColumn:
+            tableName: email
+            schemaName: email
+            columns:
+            - column:
+                name: external_reference
+                type: varchar
+                constraints:
+                  nullable: true           

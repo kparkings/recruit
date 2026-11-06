@@ -2,6 +2,7 @@ package com.arenella.recruit.emailservice.entity;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -57,6 +58,9 @@ public class EmailEntity {
 	@Column(name="status")
 	@Enumerated(EnumType.STRING)
 	private Status 					status;
+	
+	@Column(name="external_reference")
+	private String externalReference;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumns({
@@ -161,6 +165,15 @@ public class EmailEntity {
 	}
 	
 	/**
+	* Returns an Optional external reference. This could be an id or a group id. 
+	* It would usually be added by the service that created the Email
+	* @return Optional external reference
+	*/
+	public Optional<String> getExternalReference(){
+		return Optional.ofNullable(this.externalReference);
+	}
+	
+	/**
 	* Constructor 
 	*/
 	public EmailEntity() {
@@ -183,6 +196,7 @@ public class EmailEntity {
 		this.body 					= builder.body;
 		this.status 				= builder.status;
 		this.attachments			= builder.attachments;
+		this.externalReference		= builder.externalReference;
 	}
 	
 	/**
@@ -210,6 +224,7 @@ public class EmailEntity {
 		private String 						body;
 		private Status 						status;
 		private Set<EmailAttachmentEntity> 	attachments					= new LinkedHashSet<>(); 
+		private String externalReference;
 		
 		/**
 		* Sets the unique Id of the email
@@ -324,6 +339,17 @@ public class EmailEntity {
 		}
 		
 		/**
+		* Sets an optional external Reference. This can be used in combination with the
+		* Email type for an external service to obtain specific groups of Emails
+		* @param externalReference - Reference assigned by an external service. 
+		* @return Builder
+		*/
+		public EmailEntityBuilder externalReference(String externalReference) {
+			this.externalReference = externalReference;
+			return this;
+		}
+		
+		/**
 		* Returns an initialized Email object
 		* @return Initialized Email object
 		*/
@@ -353,6 +379,7 @@ public class EmailEntity {
 					.status(email.getStatus())
 					.title(email.getTitle())
 					.attachments(email.getAttachments().stream().map(EmailAttachmentEntity::convertFromDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
+					.externalReference(email.getExternalReference().orElse(null))
 				.build();
 		
 	}
@@ -377,6 +404,7 @@ public class EmailEntity {
 					.status(entity.getStatus())
 					.title(entity.getTitle())
 					.attachments(entity.getAttachments().stream().map(EmailAttachmentEntity::convertToDomain).collect(Collectors.toCollection(LinkedHashSet::new)))
+					.externalReference(entity.getExternalReference().orElse(null))
 				.build();
 	}
 	
