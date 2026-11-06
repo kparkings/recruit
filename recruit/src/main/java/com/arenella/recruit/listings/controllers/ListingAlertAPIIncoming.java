@@ -5,8 +5,6 @@ import java.util.Set;
 
 import com.arenella.recruit.listings.beans.Listing;
 import com.arenella.recruit.listings.beans.ListingAlert;
-//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonPOJOBuilder;
 

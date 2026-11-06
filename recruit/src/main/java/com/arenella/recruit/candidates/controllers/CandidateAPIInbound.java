@@ -19,8 +19,6 @@ import com.arenella.recruit.candidates.enums.COUNTRY;
 import com.arenella.recruit.candidates.enums.FREELANCE;
 import com.arenella.recruit.candidates.enums.FUNCTION;
 import com.arenella.recruit.candidates.enums.PERM;
-//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonPOJOBuilder;
 /**
@@ -45,7 +43,7 @@ public class CandidateAPIInbound {
 	private boolean 				available					= true;
 	private Set<String> 			skills						= new LinkedHashSet<>();
 	private Set<Language> 			languages					= new LinkedHashSet<>();
-	private String 					comments;
+	//private String 					comments;
 	private String 					introduction;
 	private DAYS_ON_SITE			daysOnSite;
 	private Rate					rateContract;
@@ -72,7 +70,7 @@ public class CandidateAPIInbound {
 		this.freelance 					= builder.freelance;
 		this.yearsExperience 			= builder.yearsExperience;
 		this.available 					= builder.available;
-		this.comments					= builder.comments;
+		//this.comments					= builder.comments;
 		this.introduction				= builder.introduction;
 		this.daysOnSite					= builder.daysOnSite;
 		this.rateContract				= builder.rateContract;
@@ -206,9 +204,9 @@ public class CandidateAPIInbound {
 	* Returns comments relating to the Candidate
 	* @return Comment about the candidate
 	*/
-	public String getComments() {
-		return this.comments;
-	}
+	//public String getComments() {
+	//	return this.comments;
+	//}
 	
 	/**
 	* Returns the introduction to the Candidate
@@ -307,7 +305,7 @@ public class CandidateAPIInbound {
 		private boolean 				available					= true;
 		private Set<String> 			skills						= new LinkedHashSet<>();
 		private Set<Language> 			languages					= new LinkedHashSet<>();
-		private String 					comments;
+		//private String 					comments;
 		private String 					introduction;
 		private DAYS_ON_SITE			daysOnSite;
 		private Rate					rateContract;
@@ -465,10 +463,10 @@ public class CandidateAPIInbound {
 		* @param comments - additional notes/comments
 		* @return Builder
 		*/
-		public CandidateAPIInboundBuilder comments(String comments) {
-			this.comments = comments;
-			return this;
-		}
+		//public CandidateAPIInboundBuilder comments(String comments) {
+		//	this.comments = comments;
+		//	return this;
+		//}
 		
 		/**
 		* Sets an introduction about the Candidate and their experience
@@ -586,7 +584,7 @@ public class CandidateAPIInbound {
 					.yearsExperience(candiateAPIInbound.getYearsExperience())
 					.skills(candiateAPIInbound.getSkills())
 					.languages(candiateAPIInbound.getLanguages().stream().map(lang -> Language.builder().language(lang.getLanguage()).level(lang.getLevel()).build()).collect(Collectors.toCollection(HashSet::new)))
-					.comments(candiateAPIInbound.getComments())
+					//.comments(candiateAPIInbound.getComments())
 					.introduction(candiateAPIInbound.getIntroduction())
 					.availableFromDate(candiateAPIInbound.getAvailableFromDate())
 					.daysOnSite(candiateAPIInbound.getDaysOnSite())

@@ -4,8 +4,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.arenella.recruit.campaigns.beans.Document.DocumentType;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Command to create new Document. This contains the metadata. The bytes are 

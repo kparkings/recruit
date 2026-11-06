@@ -3,8 +3,8 @@ package com.arenella.recruit.campaigns.controllers;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * A command to send a message to selected 

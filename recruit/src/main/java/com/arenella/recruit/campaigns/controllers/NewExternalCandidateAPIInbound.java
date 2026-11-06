@@ -1,7 +1,7 @@
 package com.arenella.recruit.campaigns.controllers;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Class represents a request to add a new External Candidate to a Campaign or Role

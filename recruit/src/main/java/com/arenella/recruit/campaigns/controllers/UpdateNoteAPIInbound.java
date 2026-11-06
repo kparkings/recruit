@@ -2,8 +2,8 @@ package com.arenella.recruit.campaigns.controllers;
 
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Command to add a Note to an existing 

@@ -10,8 +10,9 @@ import com.arenella.recruit.candidates.beans.Candidate.Photo;
 import com.arenella.recruit.candidates.beans.Candidate.Photo.PHOTO_FORMAT;
 import com.arenella.recruit.candidates.beans.PendingCandidate;
 import com.arenella.recruit.candidates.controllers.CandidateUpdateRequestAPIInbound.Rate;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 @JsonDeserialize(builder=PendingCandidateAPIInbound.PendingCandidateAPIInboundBuilder.class)
 public class PendingCandidateAPIInbound {

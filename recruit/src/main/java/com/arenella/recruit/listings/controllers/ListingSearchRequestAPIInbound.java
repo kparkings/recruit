@@ -13,8 +13,6 @@ import tools.jackson.databind.annotation.JsonPOJOBuilder;
 import com.arenella.recruit.listings.beans.Listing.Country;
 import com.arenella.recruit.listings.beans.Listing.LISTING_AGE;
 import com.arenella.recruit.listings.beans.Listing.listing_type;
-//import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-//import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Details the filers to apply to search results of Listing's 

@@ -7,6 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import jakarta.annotation.PostConstruct;
+import tools.jackson.databind.json.JsonMapper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,6 @@ import com.arenella.recruit.candidates.controllers.CandidateSearchRequest;
 import com.arenella.recruit.candidates.dao.CandidateSearchAlertMatchDao;
 import com.arenella.recruit.candidates.enums.RESULT_ORDER;
 import com.arenella.recruit.candidates.utils.CandidateSuggestionUtil.suggestion_accuracy;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
 * Utility for performing tests of CandidateSearchEvents against 
@@ -38,7 +38,7 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	private CandidateService 					candidateService;
 	private CandidateSearchAlertMatchDao		matchDao;
 	private ExternalEventPublisher				commandPublisher;
-	private ObjectMapper						objectMapper;
+	private JsonMapper						objectMapper;
 	
 	/**
 	* Constructor
@@ -50,7 +50,7 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 	public AlertTestUtilImpl(CandidateService 					candidateService,
 							 CandidateSearchAlertMatchDao		matchDao,
 							 ExternalEventPublisher				commandPublisher,
-							 ObjectMapper						objectMapper) {
+							 JsonMapper						objectMapper) {
 		
 		this.candidateService	= candidateService;
 		this.matchDao 			= matchDao;
@@ -134,7 +134,7 @@ public class AlertTestUtilImpl implements AlertTestUtil{
 				
 				try {
 					
-					CandidateSearchRequest searchRequest = objectMapper.treeToValue(alert.getSearchRequest(), CandidateSearchRequest.class);
+					CandidateSearchRequest searchRequest = objectMapper.readValue(alert.getSearchRequest().toString(), CandidateSearchRequest.class);
 					
 					CandidateFilterOptions filterOptions = 
 							CandidateSearchRequest

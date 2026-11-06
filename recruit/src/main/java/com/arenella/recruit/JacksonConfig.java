@@ -12,7 +12,11 @@ public class JacksonConfig {
 	@Bean
 	public JsonMapperBuilderCustomizer customizer() {
 	    return builder -> builder
-	        .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
+	        .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+	        .disable(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES);
+	    
+	    
 	}
 	
+
 }
