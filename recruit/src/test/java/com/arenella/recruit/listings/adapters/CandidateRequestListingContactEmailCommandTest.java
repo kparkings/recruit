@@ -2,6 +2,8 @@ package com.arenella.recruit.listings.adapters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -16,6 +18,7 @@ class CandidateRequestListingContactEmailCommandTest {
 	private static final String	MESSAGE			= "a message";
 	private static final byte[]	FILE			= new byte[]{};
 	private static final String	FILE_TYPE		= "pdf";
+	private static final UUID 	LISTING_ID		= UUID.randomUUID();
 	
 	/**
 	* Tests construction via the builder
@@ -33,6 +36,7 @@ class CandidateRequestListingContactEmailCommandTest {
 						.message(MESSAGE)
 						.recruiterId(RECRUITER_ID)
 						.candidateId(CANDIDATE_ID)
+						.listingId(LISTING_ID)
 					.build();
 		
 		assertEquals(RECRUITER_ID, 	command.getRecruiterId());
@@ -41,6 +45,7 @@ class CandidateRequestListingContactEmailCommandTest {
 		assertEquals(MESSAGE, 		command.getMessage());
 		assertEquals(FILE, 			command.getFile());
 		assertEquals(FILE_TYPE, 	command.getFileType());
+		assertEquals(LISTING_ID, 	command.getListingId());
 	}
 	
 }

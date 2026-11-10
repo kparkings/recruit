@@ -21,5 +21,9 @@
 	.notesbox{
 		width:90%;
 	}
+	
+	.non-mobile-only-element {
+        display: none;
+    }
 
 }

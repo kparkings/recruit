@@ -29,14 +29,15 @@ class RequestSendEmailCommandTest {
 	@Test
 	void testConstructionViaBuilder() {
 		
-		final EmailType 				emailType 	= EmailType.EXTERN;
-		final Map<String,Object> 		model 		= Map.of();
-		final boolean 					persistable = true;
-		final Set<EmailRecipient<UUID>> recipients 	= new HashSet<>();
-		final Sender<String> 			sender 		= new Sender<>("id", "", SenderType.SYSTEM,"admin@arenella-ict.com");
-		final String 					title 		= "aTitle";
-		final EmailTopic 				topic 		= EmailTopic.ACCOUNT_CREATED;
-		final Set<Attachment>			attachments = Set.of(new Attachment("doc", "aCV", new byte[] {2}));
+		final EmailType 				emailType 			= EmailType.EXTERN;
+		final Map<String,Object> 		model 				= Map.of();
+		final boolean 					persistable 		= true;
+		final Set<EmailRecipient<UUID>> recipients 			= new HashSet<>();
+		final Sender<String> 			sender 				= new Sender<>("id", "", SenderType.SYSTEM,"admin@arenella-ict.com");
+		final String 					title 				= "aTitle";
+		final EmailTopic 				topic 				= EmailTopic.ACCOUNT_CREATED;
+		final Set<Attachment>			attachments 		= Set.of(new Attachment("doc", "aCV", new byte[] {2}));
+		final String 					externalReference 	= "ffg";
 		
 		RequestSendEmailCommand command = 
 				RequestSendEmailCommand
@@ -49,16 +50,18 @@ class RequestSendEmailCommandTest {
 						.title(title)
 						.topic(topic)
 						.attachments(attachments)
+						.externalReference(externalReference)
 					.build();
 		
-		assertEquals(emailType, 	command.getEmailType());
-		assertEquals(model, 		command.getModel());
-		assertEquals(persistable, 	command.isPersistable());
-		assertEquals(recipients,	command.getRecipients());
-		assertEquals(sender, 		command.getSender());
-		assertEquals(title, 		command.getTitle());
-		assertEquals(topic, 		command.getTopic());
-		assertEquals(attachments, 	command.getAttachments());
+		assertEquals(emailType, 		command.getEmailType());
+		assertEquals(model, 			command.getModel());
+		assertEquals(persistable, 		command.isPersistable());
+		assertEquals(recipients,		command.getRecipients());
+		assertEquals(sender, 			command.getSender());
+		assertEquals(title, 			command.getTitle());
+		assertEquals(topic, 			command.getTopic());
+		assertEquals(attachments, 		command.getAttachments());
+		assertEquals(externalReference, command.getExternalReference().orElse(null));
 	}
 	
 }

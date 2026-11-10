@@ -55,6 +55,7 @@ class EmailEntityTest {
 	private final EmailAttachment				attachment2Domain			= EmailAttachment.builder().attachmentId(UUID.randomUUID()).emailId(UUID.randomUUID()).fileBytes(new byte[] {2}).fileType(FileType.pdf).build();
 	private final Set<EmailAttachment>			attachmentsDomain			= Set.of(attachment1Domain, attachment2Domain);
 	
+	private final String						externalReference			= "wadadad";
 	
 	/**
 	* Sets up test environment 
@@ -87,6 +88,7 @@ class EmailEntityTest {
 					.status(this.status)
 					.title(this.title)
 					.attachments(attachments)
+					.externalReference(externalReference)
 				.build();
 		
 		assertEquals(id, 						email.getId());
@@ -124,6 +126,8 @@ class EmailEntityTest {
 		assertTrue(email.getAttachments().contains(attachment1));
 		assertTrue(email.getAttachments().contains(attachment2));
 		
+		assertEquals(externalReference, email.getExternalReference().orElse(null));
+		
 	}
 	
 	/**
@@ -146,6 +150,7 @@ class EmailEntityTest {
 					.status(this.status)
 					.title(this.title)
 					.attachments(attachmentsDomain)
+					.externalReference(externalReference)
 				.build();
 		
 		EmailEntity entity = EmailEntity.convertToEntity(email);
@@ -195,6 +200,8 @@ class EmailEntityTest {
 			&&  a.getFileType()		== attachment2Domain.getFileType()
 			).findAny().orElseThrow();
 		
+		assertEquals(externalReference, entity.getExternalReference().orElse(null));
+		
 	}
 	
 	/**
@@ -217,6 +224,7 @@ class EmailEntityTest {
 					.status(this.status)
 					.title(this.title)
 					.attachments(attachments)
+					.externalReference(externalReference)
 				.build();
 		
 		Email email = EmailEntity.convertFromEntity(entity);
@@ -265,6 +273,8 @@ class EmailEntityTest {
 			&&  a.getFileBytes()	== attachment2.getFileBytes()
 			&&  a.getFileType()		== attachment2.getFileType()
 			).findAny().orElseThrow();
+		
+		assertEquals(externalReference, email.getExternalReference().orElse(null));
 
 	}
 }

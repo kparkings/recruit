@@ -2,6 +2,7 @@ package com.arenella.recruit.emailservice.beans;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,6 +48,7 @@ public class Email {
 	private Status 						status						= Status.DRAFT;
 	private boolean						persistable					= false;
 	private Set<EmailAttachment>		attachments					= new LinkedHashSet<>();
+	private String externalReference;
 		
 	/**
 	* Returns the unique Id of the email
@@ -138,6 +140,15 @@ public class Email {
 	}
 	
 	/**
+	* Returns an Optional external reference. This could be an id or a group id. 
+	* It would usually be added by the service that created the Email
+	* @return Optional external reference
+	*/
+	public Optional<String> getExternalReference(){
+		return Optional.ofNullable(this.externalReference);
+	}
+	
+	/**
 	* Whether or not the Email can be persisted to the DB
 	* @return Whether or not the Email can be persisted to the DB
 	*/
@@ -195,6 +206,7 @@ public class Email {
 		this.status 				= builder.status;
 		this.persistable			= builder.persistable;
 		this.attachments			= builder.attachments;
+		this.externalReference		= builder.externalReference;
 	}
 	
 	/**
@@ -223,6 +235,8 @@ public class Email {
 		private Status 						status						= Status.DRAFT;
 		private boolean						persistable					= false;
 		private Set<EmailAttachment>		attachments					= new LinkedHashSet<>();
+		private String externalReference;
+		
 		/**
 		* Sets the unique Id of the email
 		* @param id - Sets the unique ID of the email
@@ -343,6 +357,17 @@ public class Email {
 		*/
 		public EmailBuilder attachments(Set<EmailAttachment> attachments) {
 			this.attachments = attachments;
+			return this;
+		}
+		
+		/**
+		* Sets an optional external Reference. This can be used in combination with the
+		* Email type for an external service to obtain specific groups of Emails
+		* @param externalReference - Reference assigned by an external service. 
+		* @return Builder
+		*/
+		public EmailBuilder externalReference(String externalReference) {
+			this.externalReference = externalReference;
 			return this;
 		}
 		

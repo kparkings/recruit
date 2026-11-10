@@ -1,5 +1,7 @@
 package com.arenella.recruit.listings.adapters;
 
+import java.util.UUID;
+
 /**
 * Command to send a request for an email to be sent
 * to the owner of a Listing
@@ -8,6 +10,7 @@ package com.arenella.recruit.listings.adapters;
 public class CandidateRequestListingContactEmailCommand {
 
 	private String		recruiterId;
+	private UUID		listingId;
 	private String		listingName;
 	private String		candidateId;
 	private String		message;
@@ -21,6 +24,7 @@ public class CandidateRequestListingContactEmailCommand {
 	public CandidateRequestListingContactEmailCommand(CandidateRequestListingContactEmailCommandBuilder builder) {
 		
 		this.recruiterId 	=	builder.recruiterId; 
+		this.listingId		= 	builder.listingId;
 		this.listingName 	=	builder.listingName;
 		this.candidateId 	=	builder.candidateId;
 		this.message		=	builder.message;
@@ -81,6 +85,14 @@ public class CandidateRequestListingContactEmailCommand {
 	}
 	
 	/**
+	* Returns the Id of the Listing
+	* @return Id of the Listing
+	*/
+	public UUID getListingId() {
+		return this.listingId;
+	}
+	
+	/**
 	* Returns a builder for the RequestListingContactEmailCommand class
 	* @return
 	*/
@@ -95,6 +107,7 @@ public class CandidateRequestListingContactEmailCommand {
 	public static class CandidateRequestListingContactEmailCommandBuilder {
 	
 		private String		recruiterId;
+		private UUID		listingId;
 		private String		listingName;
 		private String		candidateId;
 		private String		message;
@@ -158,6 +171,16 @@ public class CandidateRequestListingContactEmailCommand {
 		*/
 		public CandidateRequestListingContactEmailCommandBuilder fileType(String fileType) {
 			this.fileType = fileType;
+			return this;
+		}
+		
+		/**
+		* Sets the Id of the Listing
+		* @param listingId - Id of the Listing
+		* @return Builder
+		*/
+		public CandidateRequestListingContactEmailCommandBuilder listingId(UUID listingId) {
+			this.listingId = listingId;
 			return this;
 		}
 		

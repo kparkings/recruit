@@ -24,6 +24,7 @@ export class CampaignsComponent {
 	@ViewChild('massMessageBox',				{static:true}) 		public massMessageBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('addExternalCandidateBox', 		{static:true}) 		public addExternalCandidateBox!: ElementRef<HTMLDialogElement>;
 	@ViewChild('externalCandidateMessageBox', 	{static:true}) 		public externalCandidateMessageBox!: ElementRef<HTMLDialogElement>;
+	@ViewChild('groupSelectionBox', 			{static:true}) 		public groupSelectionBox!: ElementRef<HTMLDialogElement>;
 	
 	@Input() 	trustedResourceUrl: 	SafeResourceUrl;
 	
@@ -150,15 +151,10 @@ export class CampaignsComponent {
 	*/
 	public showDocument(document:Document):void {
 		this.document = document;
-		
-
-	//	http://127.0.0.1:8080/curriculum-test/74.pdf
 		let url = environment.backendUrl + 'campaign/document/'+document.id; 
 		this.trustedResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 		this.showInlineCVView = true;
-		
 	}
-	
 	
 	/**
 	* Closes the addNote  box 
@@ -172,6 +168,13 @@ export class CampaignsComponent {
 	*/
 	public closeAddExternalCandidateModal():void {
 		this.addExternalCandidateBox.nativeElement.close();
+	}
+	
+	/**
+	* Closes the groupSelectionBox  
+	*/
+	public closeCandidateGroupSelectionBox():void{
+		this.groupSelectionBox.nativeElement.close();
 	}
 	
 	/**
@@ -236,6 +239,47 @@ export class CampaignsComponent {
 				this.closeAddExternalCandidateModal();	
 				this.selectionBox.refreshCampaign();		
 			});
+		}
+		
+	}
+	
+	
+	
+	public candidateToUpdateForGroup:SelectableCandidate | undefined;
+	
+	/**
+	* Sets the Candiadte whose Group is being changed. This is the version where a single 
+	* Candidate is being updated and not a multiple selected update of the group 
+	*/
+	public showCandidateGroupSelectionBoxSingle(candidate:SelectableCandidate):void {
+		this.candidateToUpdateForGroup = candidate;
+		this.showCandidateGroupSelectionBox();
+	}
+	
+	/**
+	* Updates the selected candidates groups 
+	*/
+	public updateGroup(groupId:string):void{
+		
+		let roleId  			= this.role ? this.role.id : undefined;
+		
+		if (!this.campaign || !this.campaign.id) {
+			return;
+		}
+		
+		if (this.candidateToUpdateForGroup) {
+			this.campaignService.updateGroupsForCampaign([this.candidateToUpdateForGroup.candidate.id], this.campaign.id, roleId, groupId).subscribe(res => {
+						this.closeCandidateGroupSelectionBox();
+						this.selectionBox.refreshCampaign();	
+						this.candidateToUpdateForGroup = undefined;
+					});
+		} else {
+			let selectedCandidatesids:Array<string> = this.wrappedCandidates.filter(wc => wc.selected == true).map(wc => wc.candidate.id);
+			this.campaignService.updateGroupsForCampaign(selectedCandidatesids, this.campaign.id, roleId, groupId).subscribe(res => {
+				this.closeCandidateGroupSelectionBox();
+				this.selectionBox.refreshCampaign();	
+				this.candidateToUpdateForGroup = undefined;
+			});	
 		}
 		
 	}
@@ -340,6 +384,13 @@ export class CampaignsComponent {
 		this.externalCandidate = candidate;
 		this.errMshActive = false;
 		this.externalCandidateMessageBox.nativeElement.showModal();
+	}
+	
+	/**
+	* Opens the candidate group selection popup 
+	*/
+	public showCandidateGroupSelectionBox():void{
+		this.groupSelectionBox.nativeElement.showModal();
 	}
 	
 	/**
@@ -646,6 +697,13 @@ export class CampaignsComponent {
 	public openChat(candidate:Candidate):void{
 		this.appComponent.privateChat.showContactsItemView();
 		this.appComponent.privateChat.openChat(candidate.id);	
+		
+		setTimeout(() => {
+			this.selectionBox.refreshCampaign();
+			this.appComponent.refreschUnreadNotifications();
+		}, 5000);
+		
+		
 	}
 	
 	/**
@@ -693,9 +751,11 @@ export class CampaignsComponent {
 	*/
 	private isGreater(one:SelectableCandidate, two:SelectableCandidate):number{
 		
-		let oneVal:string = one.candidate.firstName+one.candidate.surname;
-		let twoVal:string = two.candidate.firstName+two.candidate.surname;
-				
+		//let oneVal:string = one.candidate.firstName+one.candidate.surname;
+		//let twoVal:string = two.candidate.firstName+two.candidate.surname;
+		let oneVal:string = one.candidate.group;
+		let twoVal:string = two.candidate.group;
+						
 		
 		if(oneVal > twoVal){
 			return 1;
@@ -713,6 +773,7 @@ export class CampaignsComponent {
 	*/
 	public selectAllCandidates():void{
 		this.wrappedCandidates.forEach(c => c.selected = true);
+		this.candidateToUpdateForGroup = undefined;
 	}
 	
 	/**
@@ -720,6 +781,7 @@ export class CampaignsComponent {
 	*/
 	public deselectAllCandidates():void{
 		this.wrappedCandidates.forEach(c => c.selected = false);
+		this.candidateToUpdateForGroup = undefined;
 	}
 	
 	/**
@@ -728,6 +790,7 @@ export class CampaignsComponent {
 	*/
 	public toggleCandidateSelect(candidate:SelectableCandidate):void{
 		candidate.selected = !candidate.selected;
+		this.candidateToUpdateForGroup = undefined;
 	}
 	
 	/**

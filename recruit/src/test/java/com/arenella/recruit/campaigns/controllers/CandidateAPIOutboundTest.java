@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
+import com.arenella.recruit.campaigns.beans.CandidateGroup.Group;
 
 /**
 * Unit tests for the CandidateAPIOutbound class 
@@ -43,7 +45,7 @@ class CandidateAPIOutboundTest {
 		
 		CandidateAPIOutbound outbound = CandidateAPIOutbound
 				.builder()
-					.from(candidate, Set.of(), false)
+					.from(candidate, Set.of(), false, Set.of())
 				.build();
 		
 		assertEquals(ID, 					outbound.getId());
@@ -54,6 +56,42 @@ class CandidateAPIOutboundTest {
 		assertEquals(JOB_TITLE, 			outbound.getJobTitle());
 		assertEquals(EMAIL, 				outbound.getEmail());
 		assertEquals(DELETED_FROM_SYSTEM, 	outbound.isDeletedFromSystem());
+		assertEquals(Group.GROUP0, 			outbound.getGroup());
+		
+	}
+	
+	/**
+	* Tests Construction based upon a Builder when the CandidateGroup is present
+	*/
+	@Test
+	void testConstructorCandidateGroupProvided() {
+		
+		Candidate candidate = Candidate
+				.builder()
+					.id(ID)
+					.type(TYPE)
+					.firstName(FIRST_NAME)
+					.surname(SURNAME)
+					.countryCode(COUNTRY_CODE)
+					.jobTitle(JOB_TITLE)
+					.email(EMAIL)
+					.deletedFromSystem(DELETED_FROM_SYSTEM)
+				.build();
+		
+		CandidateAPIOutbound outbound = CandidateAPIOutbound
+				.builder()
+					.from(candidate, Set.of(), false, Set.of(CandidateGroup.builder().candidateId(ID).group(Group.GROUP3).build()))
+				.build();
+		
+		assertEquals(ID, 					outbound.getId());
+		assertEquals(TYPE, 					outbound.getType());
+		assertEquals(FIRST_NAME, 			outbound.getFirstName());
+		assertEquals(SURNAME, 				outbound.getSurname());
+		assertEquals(COUNTRY_CODE, 			outbound.getCountryCode());
+		assertEquals(JOB_TITLE, 			outbound.getJobTitle());
+		assertEquals(EMAIL, 				outbound.getEmail());
+		assertEquals(DELETED_FROM_SYSTEM, 	outbound.isDeletedFromSystem());
+		assertEquals(Group.GROUP3, 			outbound.getGroup());
 		
 	}
 	

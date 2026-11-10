@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
 import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Role;
@@ -22,6 +23,7 @@ public class RoleAPIOutbound {
 	private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
 	private Set<AppointmentAPIOutbound> 	appointments	= new LinkedHashSet<>();
 	private Set<DocumentAPIOutbound> 		documents		= new LinkedHashSet<>();
+	private boolean hasUnreadNotifications;
 
 	/**
 	* Constructor based upon a Builder
@@ -43,6 +45,8 @@ public class RoleAPIOutbound {
 		this.notes.addAll(builder.notes);
 		this.appointments.addAll(builder.appointments);
 		this.documents.addAll(builder.documents);
+		
+		this.hasUnreadNotifications = builder.hasUnreadNotifications;
 		
 	}
 	
@@ -111,6 +115,15 @@ public class RoleAPIOutbound {
 	}
 	
 	/**
+	* Returns whether there are unread notification for at least one 
+	* Candidate associated with the Role
+	* @return if there are unread notification
+	*/
+	public boolean getHasUnreadNotifications() {
+		return this.hasUnreadNotifications;
+	}
+	
+	/**
 	* Returns a Builder for the Class
 	* @return Builder
 	*/
@@ -131,6 +144,7 @@ public class RoleAPIOutbound {
 		private Set<NoteAPIOutbound> 			notes			= new LinkedHashSet<>();
 		private Set<AppointmentAPIOutbound> 	appointments	= new LinkedHashSet<>();
 		private Set<DocumentAPIOutbound> 		documents		= new LinkedHashSet<>();
+		private boolean hasUnreadNotifications;
 
 		/**
 		* Populates the Builder with values from the Domain objects
@@ -138,17 +152,19 @@ public class RoleAPIOutbound {
 		* @param contacts - Collection of all Contacts referenced in the Campaigns Participations
 		* @return Builder
 		*/
-		public RoleAPIOutboundBuilder from(Role role, Set<Contact> contacts, Set<IMNotification> imNotifications) {
+		public RoleAPIOutboundBuilder from(Role role, Set<Contact> contacts, Set<IMNotification> imNotifications, Set<CandidateGroup> candidateGroups) {
 			
 			this.id 			= role.getId();
 			this.name 			= role.getName();
 			this.description 	= role.getDescription();
 			
-			role.getParticipations().stream().forEach(participation -> {
-				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build());
-			});
+			role.getParticipations().stream().forEach(participation -> 
+				this.participations.add(ParticipationAPIOutbound.builder().from(participation, contacts.stream().filter(c -> c.id().equals(participation.getContactId())).findFirst().orElseThrow()).build())
+			);
 			
-			this.candidates.addAll(role.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c, imNotifications, true).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
+			imNotifications.stream().filter(n -> n.getRoleId().isPresent() && n.getRoleId().get().equals(this.id)).findAny().ifPresent(_ -> this.hasUnreadNotifications = true);
+			
+			this.candidates.addAll(role.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c, imNotifications, true, candidateGroups).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.notes.addAll(role.getNotes().stream().map(n -> NoteAPIOutbound.builder().from(n).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.appointments.addAll(role.getAppointments().stream().map(a -> AppointmentAPIOutbound.builder().from(a).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.documents.addAll(role.getDocuments().stream().map(d -> new DocumentAPIOutbound(d.getDocumentId(), d.getTitle(), d.getType(), d.getCreated())).collect(Collectors.toCollection(LinkedHashSet::new)));

@@ -23,16 +23,12 @@
 	}
 	
 	.contact-button {
-    	background: grey;
-	}
-	
-	.contact-button {
 		color:white;
-		background:darkgrey;
+		background:green;
 	}
 	
 	.contact-button:hover {
-		background:grey;
+		background:green;
 		cursor:pointer
 	}
 	

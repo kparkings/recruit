@@ -23,7 +23,7 @@
 		<div class="campaign-selection-panel">
 			<div *ngIf="selectedCampaign !== undefined">
 				
-				<div class="campaigns-notifications-{{selectedCampaign.hasUnreadNotifications}}">
+				<div class="campaigns-notifications-{{selectedCampaign.hasUnreadNotifications}}" class="campaigns-notifications-{{selectedCampaign.hasUnreadNotifications}}">
 					<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length <= 25" class="campaign-selection campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
 					<div *ngIf="getCampaignNameFormatted(selectedCampaign.name).length > 25"  class="campaign-selection campaign-selection-small-text campaign-selected-{{selectedRole == undefined}}" (click)="selectCampaign(selectedCampaign)">{{getCampaignNameFormatted(selectedCampaign.name)}}</div>
 				</div>

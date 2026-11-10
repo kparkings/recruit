@@ -5,6 +5,8 @@ import java.util.Set;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
+import com.arenella.recruit.campaigns.beans.CandidateGroup.Group;
 
 /**
 * APIOutbound representation of a Candidate 
@@ -20,6 +22,7 @@ public class CandidateAPIOutbound {
 	private String 	email;
 	private boolean deletedFromSystem;
 	private boolean hasUnreadIMmessage;
+	private Group	group;
 	
 	/**
 	* Constructor based upon a Builder
@@ -35,6 +38,7 @@ public class CandidateAPIOutbound {
 		this.email 				= builder.email;
 		this.deletedFromSystem 	= builder.deletedFromSystem;
 		this.hasUnreadIMmessage = builder.hasUnreadIMmessage;
+		this.group 				= builder.group;
 	}
 	
 	/**
@@ -97,6 +101,15 @@ public class CandidateAPIOutbound {
 	}
 	
 	/**
+	* Returns the Group the Candidate has been placed 
+	* in for the Campaign or Role
+	* @return
+	*/
+	public Group getGroup() {
+		return this.group;
+	}
+	
+	/**
 	* If a Candidate has deleted their profile form the 
 	* system we need to delete their details. Their Candidate 
 	* record will be updated to remove identifying details but the 
@@ -140,13 +153,14 @@ public class CandidateAPIOutbound {
 		private String 	email;
 		private boolean deletedFromSystem;
 		private boolean hasUnreadIMmessage;
+		private Group	group;
 		
 		/**
 		* Populates the Builder with values from a Candidate 
 		* @param candiate - Initialization values
 		* @return Builder
 		*/
-		public CandidateAPIOutboundBuilder from (Candidate candidate, Set<IMNotification> imNotifications, boolean isRoleLevelCandidate) {
+		public CandidateAPIOutboundBuilder from (Candidate candidate, Set<IMNotification> imNotifications, boolean isRoleLevelCandidate, Set<CandidateGroup> candidateGroups) {
 			
 			this.id 				= candidate.getId();
 			this.type 				= candidate.getType();
@@ -156,6 +170,7 @@ public class CandidateAPIOutbound {
 			this.jobTitle 			= candidate.getJobTitle();
 			this.email 				= candidate.getEmail();
 			this.deletedFromSystem 	= candidate.isDeleteFromSystem();
+			this.group				= candidateGroups.stream().filter(cg -> cg.getCandidateId().equals(candidate.getId())).findAny().map(sg -> sg.getGroup()).orElse(Group.GROUP0);
 			
 			imNotifications.stream().filter(notification -> !isRoleLevelCandidate && notification.getRoleId().isEmpty() && notification.getCandidateId().equals(candidate.getId())).findAny().ifPresent(_ -> 
 				this.hasUnreadIMmessage = true
