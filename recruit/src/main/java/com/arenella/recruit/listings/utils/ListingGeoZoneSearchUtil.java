@@ -4,11 +4,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.stereotype.Component;
 
 import com.arenella.recruit.listings.beans.Listing;
+import jakarta.annotation.PostConstruct;
 
 /**
 * Util to return supported Countries in a Geo zone 

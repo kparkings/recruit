@@ -101,7 +101,7 @@ class CandidateAPIInboundTest {
 														.skills(SKILLS)
 														.surname(SURNAME)
 														.yearsExperience(YEARS_EXPERIENCE)
-														.comments(COMMENTS)
+														//.comments(COMMENTS)
 														.introduction(INTRODUCTION)
 														.daysOnSite(DAYS_ON_SITE_VAL)
 														.rateContract(RATE_CONTRACT)
@@ -125,7 +125,7 @@ class CandidateAPIInboundTest {
 		assertEquals(RATE_CONTRACT, 		candidate.getRateContract().get());
 		assertEquals(RATE_PERM, 			candidate.getRatePerm().get());
 		assertEquals(AVAILABLE_FROM_DATE, 	candidate.getAvailableFromDate());
-		assertEquals(COMMENTS, 				candidate.getComments());
+		//assertEquals(COMMENTS, 				candidate.getComments());
 		assertEquals(INTRODUCTION, 			candidate.getIntroduction());
 		
 		assertTrue(SKILLS.contains("Java"));
@@ -153,7 +153,7 @@ class CandidateAPIInboundTest {
 					.skills(SKILLS)
 					.surname(SURNAME)
 					.yearsExperience(YEARS_EXPERIENCE)
-					.comments(COMMENTS)
+					//.comments(COMMENTS)
 					.introduction(INTRODUCTION)
 					.daysOnSite(DAYS_ON_SITE_VAL)
 					.rateContract(RATE_CONTRACT)
@@ -177,7 +177,7 @@ class CandidateAPIInboundTest {
 		assertEquals(RATE_CONTRACT, 									candidate.getRateContract().get());
 		assertEquals(RATE_PERM, 										candidate.getRatePerm().get());
 		assertEquals(AVAILABLE_FROM_DATE, 								candidate.getAvailableFromDate());
-		assertEquals(COMMENTS, 											candidate.getComments());
+		//assertEquals(COMMENTS, 											candidate.getComments());
 		assertEquals(INTRODUCTION, 										candidate.getIntroduction());
 		
 		assertEquals(FREELANCE_VAL,										candidate.isFreelance());

@@ -725,7 +725,7 @@ public class CandidateServiceImpl implements CandidateService{
 		final boolean 	isAdmin			= roleManager.isAdmin();
 		final boolean 	isRecruiter		= roleManager.isRecruiter();
 		final boolean 	isCandidate		= roleManager.isCandidate();
-			
+		
 		if (isCandidate && !candidate.getCandidateId().equals(userId)) {
 			throw new IllegalArgumentException("Cannot update another Candidates Profile");
 		}
