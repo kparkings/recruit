@@ -298,6 +298,7 @@ export class NewCandidateComponent implements OnInit {
 				candidate.functions.push(f.id);
 			}
 		});
+		candidate.functions = candidate.functions.filter(f => f != null);
 		
 		this.selectedIndustries.forEach(i => {
 					if (i) {

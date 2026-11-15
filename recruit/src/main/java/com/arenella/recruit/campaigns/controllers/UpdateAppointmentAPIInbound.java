@@ -3,8 +3,8 @@ package com.arenella.recruit.campaigns.controllers;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Command to add a new Appointment to a Campaign 

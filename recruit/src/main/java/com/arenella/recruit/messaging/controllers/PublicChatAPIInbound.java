@@ -4,8 +4,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.arenella.recruit.messaging.beans.PublicChat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * API Inbound representation of PublicChat 

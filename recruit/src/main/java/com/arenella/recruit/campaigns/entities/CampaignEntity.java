@@ -52,24 +52,24 @@ public class CampaignEntity {
 	@Enumerated(EnumType.STRING)
 	private PHOTO_FORMAT 		logoFormat;
 	
-	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.DETACH, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.DETACH, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<RoleEntity>		roles		= new LinkedHashSet<>();
 	
-	@ElementCollection(targetClass=CandidateEntity.class, fetch=FetchType.LAZY)
+	@ElementCollection(targetClass=CandidateEntity.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="campaigns", name="campaign_candidates", joinColumns=@JoinColumn(name="campaign_id"))
 	@Column(name="id")
 	private Set<CandidateEntity>		candidates		= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<ParticipationEntity> 	participations	= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<NoteEntity> 			notes			= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<AppointmentEntity> 	appointments	= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "campaignId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<DocumentEntity> 		documents		= new LinkedHashSet<>();
 	
 	/**

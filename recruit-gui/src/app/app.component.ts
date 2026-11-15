@@ -126,13 +126,13 @@ export class AppComponent {
 		
 		this.privateChat.startChatContactListPolling();
 		
-		if(sessionStorage.getItem("loggedIn") == "true") {
+		if (sessionStorage.getItem("loggedIn") == "true") {
 			this.runNotificationScheduler();
 		}
-	
+
 	}
 	
-	private runNotificationScheduler():void{
+	public runNotificationScheduler():void{
 
 		this.refreshUnreadNewsFeedNotifications();	
 		this.hasUnreadNewsFeedItems();

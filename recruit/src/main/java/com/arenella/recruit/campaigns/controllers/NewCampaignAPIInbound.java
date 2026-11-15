@@ -3,8 +3,9 @@ package com.arenella.recruit.campaigns.controllers;
 import java.util.Optional;
 
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonPOJOBuilder;
 
 /**
 * Class represents a new Campaign. It is the representation 

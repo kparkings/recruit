@@ -3425,7 +3425,7 @@ databaseChangeLog:
                 name: candidate_group
                 type: varchar
                 constraints:
-                   nullable: false  
+                   nullable: false             
   - changeSet:
       id: addColumn-email_externalref
       author: kevin
@@ -3438,7 +3438,7 @@ databaseChangeLog:
                 name: external_reference
                 type: varchar
                 constraints:
-                  nullable: true  
+                  default: true
   - changeSet:
       id: campaignlisting
       author: kparkings

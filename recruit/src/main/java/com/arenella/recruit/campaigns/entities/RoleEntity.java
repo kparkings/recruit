@@ -43,21 +43,21 @@ public class RoleEntity {
 	@Column(name="created")
 	private LocalDateTime				created;
 	
-	@ElementCollection(targetClass=CandidateEntity.class, fetch=FetchType.LAZY)
+	@ElementCollection(targetClass=CandidateEntity.class, fetch=FetchType.EAGER)
 	@CollectionTable(schema="campaigns", name="role_candidates", joinColumns=@JoinColumn(name="role_id"))
 	@Column(name="id")
 	private Set<CandidateEntity>		candidates		= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<ParticipationEntity> 	participations	= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<NoteEntity> 			notes			= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<AppointmentEntity> 		appointments	= new LinkedHashSet<>();
 	
-	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.LAZY)
+	@OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
 	private Set<DocumentEntity> 		documents		= new LinkedHashSet<>();
 	
 	/**

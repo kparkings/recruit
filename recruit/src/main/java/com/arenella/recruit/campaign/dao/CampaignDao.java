@@ -1,5 +1,6 @@
 package com.arenella.recruit.campaign.dao;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +13,8 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CandidateGroup;
+import com.arenella.recruit.campaigns.beans.CandidateGroup.Group;
 import com.arenella.recruit.campaigns.entities.CampaignEntity;
 
 /**
@@ -63,4 +66,32 @@ public interface CampaignDao extends ListCrudRepository<CampaignEntity, UUID>{
 		return this.fetchCampaignEntitiesForCandidate(candidateId).stream().map(CampaignEntity::fromEntity).collect(Collectors.toSet());
 	}
 
+	default Set<CandidateGroup> wtf() {
+		
+		Set<CandidateGroup> groups = new HashSet<>();
+		
+		this.findAll().stream().forEach(campaignEntity -> {
+			
+			this.fetchCampaign(campaignEntity.getId()).ifPresent(campaign -> {
+				
+				campaign.getCandidates().stream().forEach(candidate -> {
+					groups.add(CandidateGroup.builder().campaignId(campaign.getId()).candidateId(candidate.getId()).id(UUID.randomUUID()).group(Group.GROUP0).build());
+				});
+				
+				campaign.getRoles().stream().forEach(role -> {
+					role.getCandidates().stream().forEach(candidate -> {
+						groups.add(CandidateGroup.builder().campaignId(campaign.getId()).candidateId(candidate.getId()).id(UUID.randomUUID()).roleId(role.getId()).group(Group.GROUP0).build());
+				
+					});
+				});
+				
+			});
+			
+			
+		});
+		
+		return groups;
+
+	}
+	
 }

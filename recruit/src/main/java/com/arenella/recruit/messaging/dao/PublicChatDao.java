@@ -35,7 +35,7 @@ public interface PublicChatDao extends ListCrudRepository<PublicChatEntity, UUID
 	@Query("from PublicChatEntity where ownerId = :ownerId")
 	List<PublicChatEntity> findChatsForUser(String ownerId);
 	
-	@Query("from PublicChatEntity p join p.likes l where l in (:ownerId)")
+	@Query("select p from PublicChatEntity p join p.likes l where l in (:ownerId)")
 	List<PublicChatEntity> findChatsLikedByUser(String ownerId);
 	
 	/**
