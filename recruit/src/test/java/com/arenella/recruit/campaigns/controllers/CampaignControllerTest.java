@@ -722,4 +722,79 @@ class CampaignControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		
 	}
+	
+	/**
+	* Tests endpoint for associating a Listing with a Campaign 
+	*/
+	@Test
+	void testAssociateListingWithCampaign() {
+		
+		final String 		userId 				= "rec1";
+		final UUID 			campaignId			= UUID.randomUUID();
+		final UUID 			listingId			= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.associateListingWithCampaign(campaignId, listingId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests endpoint for associating a Listing with a Role 
+	*/
+	@Test
+	void testAssociateListingWithRole() {
+		
+		final String 		userId 				= "rec1";
+		final UUID 			campaignId			= UUID.randomUUID();
+		final UUID 			listingId			= UUID.randomUUID();
+		final UUID 			roleId			= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.associateListingWithRole(campaignId, listingId, roleId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests endpoint for disassociating a Listing with a Campaign 
+	*/
+	@Test
+	void testDisassociateListingWithCampaign() {
+		
+		final String 		userId 				= "rec1";
+		final UUID 			campaignId			= UUID.randomUUID();
+		final UUID 			listingId			= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.disassociateListingWithCampaign(campaignId, listingId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
+	/**
+	* Tests endpoint for disassociating a Listing with a Role 
+	*/
+	@Test
+	void testDisassociateListingWithRole() {
+		
+		final String 		userId 				= "rec1";
+		final UUID 			campaignId			= UUID.randomUUID();
+		final UUID 			roleId				= UUID.randomUUID();
+		final UUID 			campaignListingId	= UUID.randomUUID();
+		
+		when(this.mockPrincipal.getName()).thenReturn(userId);
+		
+		ResponseEntity<Void> response = this.controller.disassociateListingWithRole(campaignId, roleId, campaignListingId, mockPrincipal);
+		
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		
+	}
+	
 }

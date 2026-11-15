@@ -930,7 +930,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* Refer to the CampaignService interface for details
 	*/
 	@Override
-	public void associateListingWithCampaigin(UUID listingId, UUID campaignId, UUID roleId, String currentUser) {
+	public void associateListingWithCampaign(UUID listingId, UUID campaignId, UUID roleId, String currentUser) {
 
 		Campaign 	campaign;
 		
@@ -975,7 +975,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* Refer to the CampaignService interface for details
 	*/
 	@Override
-	public void disassociateListingWithCampaigin(UUID campaignListingId, UUID campaignId, UUID roleId, String currentUser) {
+	public void disassociateListingWithCampaign(UUID campaignListingId, UUID campaignId, UUID roleId, String currentUser) {
 		
 		Campaign 	campaign;
 		
@@ -993,9 +993,7 @@ public class CampaignServiceImpl implements CampaignService{
 		// 4. Check is admin or edit participant 
 		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
-		if(this.campaignListingDao.existsById(campaignListingId)) {
-			this.campaignListingDao.deleteById(campaignListingId);
-		}
+		this.campaignListingDao.deleteById(campaignListingId);
 		
 		
 		//2. TODO: When email table is created we need to remove the emails

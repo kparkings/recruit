@@ -39,6 +39,7 @@ import com.arenella.recruit.campaigns.adapters.CampaignExternalEventPublisher;
 import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailCommand;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignListing;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
@@ -4746,6 +4747,563 @@ class CampaignServiceImplTest {
 		assertEquals("java developer", 		anonymizedCandidate.getJobTitle());
 		assertFalse(anonymizedCandidate.isDeleteFromSystem());
 		assertFalse(anonymizedCandidate.getLastDataRetentionConfirmation().isEmpty());
+		
+	}
+	
+	/**
+	* Test case where loggedInUser does not have a paid subscription and cannot
+	* use Campaign features  
+	*/
+	@Test
+	void testAssociateListingWithCampaignLoggedInUserNotPaidUser() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where an attempt is made to add a Listing association to a Campaign
+	* that doesn't exist 
+	*/
+	@Test
+	void testAssociateListingWithCampaignUnknownCampaign() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing association to a Campaign 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testAssociateListingWithCampaignNotAdminOrEditForCampaign() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Association to a Campaign 
+	* and the User is an Admin at Campaign level 
+	*/
+	@Test
+	void testAssociateListingWithCampaignIsAdminAdminCampaign() {
+		
+		final ArgumentCaptor<CampaignListing>	argCaptCampaign = ArgumentCaptor.forClass(CampaignListing.class);
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(false);
+		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		
+		this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao).saveCampaignListing(any(CampaignListing.class));
+		
+		CampaignListing campaignListing = argCaptCampaign.getValue();
+		
+		assertEquals(listingId, 		campaignListing.getListingId());
+		assertEquals(campaignId, 		campaignListing.getCampaignId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Association to a Campaign 
+	* and the User is an Admin at Campaign level but the Association already exists
+	* and must not be duplicated
+	*/
+	@Test
+	void testAssociateListingWithCampaignIsAdminCampaignAssociationAlreadyExists() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(true);
+		
+		this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao, never()).saveCampaignListing(any(CampaignListing.class));
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing association to a Campaign 
+	* and the User is an Edit at Campaign level 
+	*/
+	@Test
+	void testAssociateListingWithCampaignUserIsEditCampaign() {
+		
+		final ArgumentCaptor<CampaignListing>	argCaptCampaign = ArgumentCaptor.forClass(CampaignListing.class);
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(false);
+		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		
+		this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao).saveCampaignListing(any(CampaignListing.class));
+		
+		CampaignListing campaignListing = argCaptCampaign.getValue();
+		
+		assertEquals(listingId, 		campaignListing.getListingId());
+		assertEquals(campaignId, 		campaignListing.getCampaignId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Associated to a Role 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testAssociateListingWithCampaignUserNotAdminOrEditForCampaign() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().roleId(roleId).contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Association to a Role 
+	* and the loggedIn User is Admin at Role level
+	*/
+	@Test
+	void testAssociateListingWithCampaignUserIsAdminAtRoleLevel() {
+		
+		final ArgumentCaptor<CampaignListing>	argCaptCampaign = ArgumentCaptor.forClass(CampaignListing.class);
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role 		role					= Role
+				.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+			.build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(role)
+				.build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		
+		this.service.associateListingWithCampaign(listingId, campaignId, roleId, loggedInUserId);
+	
+		verify(this.mockCampaignListingDao).saveCampaignListing(any(CampaignListing.class));
+		
+		CampaignListing campaignListing = argCaptCampaign.getValue();
+		
+		assertEquals(listingId, 		campaignListing.getListingId());
+		assertEquals(campaignId, 		campaignListing.getCampaignId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Note to a Role 
+	* and the loggedIn User is Edit at Role level
+	*/
+	@Test
+	void testAssociateListingWithCampaignUserIsEditAtRoleLevel() {
+		
+		final ArgumentCaptor<CampaignListing>	argCaptCampaign = ArgumentCaptor.forClass(CampaignListing.class);
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role 		role					= Role
+				.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+			.build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(role)
+				.build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		
+		this.service.associateListingWithCampaign(listingId, campaignId, roleId, loggedInUserId);
+	
+		verify(this.mockCampaignListingDao).saveCampaignListing(any(CampaignListing.class));
+		
+		CampaignListing campaignListing = argCaptCampaign.getValue();
+		
+		assertEquals(listingId, 		campaignListing.getListingId());
+		assertEquals(campaignId, 		campaignListing.getCampaignId());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Associated to a Role 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testAssociateListingWithCampaignUserNotAdminOrEditForRole() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role 		role					= Role
+				.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+			.build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().roleId(roleId).contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, roleId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Test case where loggedInUser does not have a paid subscription and cannot
+	* use Campaign features  
+	*/
+	@Test
+	void testDisassociateListingWithCampaignLoggedInUserNotPaidUser() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.CREDIT);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where an attempt is made to remove a Listing association to a Campaign
+	* that doesn't exist 
+	*/
+	@Test
+	void testDisassociateListingWithCampaignUnknownCampaign() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_CAMPAIGN, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to remove a Listing association to a Campaign 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testDisassociateListingWithCampaignNotAdminOrEditForCampaign() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to remove a Listing Association to a Campaign 
+	* and the User is an Admin at Campaign level 
+	*/
+	@Test
+	void testDisassociateListingWithCampaignIsAdminAdminCampaign() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao).deleteById(id);
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing association to a Campaign 
+	* and the User is an Edit at Campaign level 
+	*/
+	@Test
+	void testDisassociateListingWithCampaignUserIsEditCampaign() {
+			
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao).deleteById(id);
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Associated to a Role 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testDisassociateListingWithCampaignUserNotAdminOrEditForCampaign() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().roleId(roleId).contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Association to a Role 
+	* and the loggedIn User is Admin at Role level
+	*/
+	@Test
+	void testDisassociateListingWithCampaignUserIsAdminAtRoleLevel() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role 		role					= Role
+				.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+			.build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(role)
+				.build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		this.service.disassociateListingWithCampaign(id, campaignId, roleId, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao).deleteById(id);
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Note to a Role 
+	* and the loggedIn User is Edit at Role level
+	*/
+	@Test
+	void testDisassociateListingWithCampaignUserIsEditAtRoleLevel() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role 		role					= Role
+				.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.EDIT).build())
+			.build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.role(role)
+				.build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		this.service.disassociateListingWithCampaign(id, campaignId, roleId, loggedInUserId);
+		
+		verify(this.mockCampaignListingDao).deleteById(id);
+		
+	}
+	
+	/**
+	* Tests case where attempt is made to add a Listing Associated to a Role 
+	* but the loggedIn User is nether and Admin or Edit user 
+	*/
+	@Test
+	void testDisassociateListingWithCampaignUserNotAdminOrEditForRole() {
+		
+		final UUID 		id						= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final UUID		roleId					= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Role 		role					= Role
+				.builder()
+				.id(roleId)
+				.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+			.build();
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().roleId(roleId).contactId(loggedInUserId).type(ParticipantType.VIEW).build())
+				.build();
+		
+		when(this.mockRoleDao.fetchRoleById(roleId)).thenReturn(Optional.of(role));
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.disassociateListingWithCampaign(id, campaignId, roleId, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	

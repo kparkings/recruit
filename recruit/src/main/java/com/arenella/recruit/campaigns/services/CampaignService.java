@@ -288,7 +288,7 @@ public interface CampaignService {
 	* @param roleId     	- If Role level the Id of the Role the listing is associated with
 	* @param currentUser	- Id of authenticated user
 	*/
-	public void associateListingWithCampaigin(UUID listingId, UUID campaignId, UUID roleId,String currentUser);
+	public void associateListingWithCampaign(UUID listingId, UUID campaignId, UUID roleId,String currentUser);
 	
 	/**
 	* Remove the association of a Listing with a Campaign or Role 
@@ -297,6 +297,6 @@ public interface CampaignService {
 	* @param roleId     		- If Role level the Id of the Role the listing is associated with
 	* @param currentUser		- Id of authenticated user
 	*/
-	public void disassociateListingWithCampaigin(UUID campaignListingId, UUID campaignId, UUID roleId, String currentUser);
+	public void disassociateListingWithCampaign(UUID campaignListingId, UUID campaignId, UUID roleId, String currentUser);
 	
 } 
