@@ -33,6 +33,13 @@ public class CampaignListingEntity {
 	private UUID roleId;
 	
 	/**
+	* Default Constructor 
+	*/
+	public CampaignListingEntity() {
+		//Hibernate
+	}
+	
+	/**
 	* Constructor based upon a Builder
 	* @param builder - Contains initialization values
 	*/

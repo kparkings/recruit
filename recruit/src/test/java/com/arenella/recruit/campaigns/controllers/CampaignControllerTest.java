@@ -505,11 +505,6 @@ class CampaignControllerTest {
 		
 	}
 	
-	
-	
-	
-	
-	
 	/**
 	* Tests deleting a Candidate to a Campaign
 	*/

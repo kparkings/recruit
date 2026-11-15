@@ -39,7 +39,11 @@
 					<button (click)="showEditListing()" 	class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-edit' | translate}}</button>
 					<button (click)="showConfirmDelete()"   class="btn btn-secondary arenella-btn" *ngIf="!enabldeDeleteOption">{{'arenella-recruiter-listing-btn-delete' | translate}}</button>
 					<button (click)="performmDelete()" 	  	class="btn btn-secondary arenella-btn confirm-delete" *ngIf="enabldeDeleteOption">{{'arenella-recruiter-listing-btn-confirm' | translate}}</button>
+					<button (click)="pickCampaign()" 			class="btn btn-secondary arenella-btn" style="padding-top:6px;padding-bottom:-6px;height:38px;">
+						<div class="chat-icon material-icons" style="font-size:24px;">donut_small</div>
+					</button>
 					<button (click)="showList()" 			class="btn btn-secondary arenella-btn">{{'arenella-recruiter-listing-btn-back' | translate}}</button>
+					
 				</div>
 				
 				<app-candidate-info-box [config]="infoItemConfig"></app-candidate-info-box>
@@ -288,5 +292,16 @@
 			</div>
 			
 		</div>
+	</div>
+</dialog>
+
+<!-- Campaign Selection Box -->
+<dialog #campaignsBox>
+	<div class="modal-header">
+		<h4 class="modal-title">{{'arenella-suggestions-profile-box-campaigns-hdr' | translate}}</h4>
+ 		<div class="filter-close-box" (click)="campaignsBox.close()">X</div>
+	</div>
+	<div >
+		<app-selectionbox [showAddCandidateButton]="true" (selectedCampaignEmitter)="handleCampaignSelectedEmitterEvent($event)" (selectedRoleEmitter)="handleRoleSelectedEmitterEvent($event)" (addedCandidateEmitter)="handleCandidateAddedEvent()"></app-selectionbox>
 	</div>
 </dialog>

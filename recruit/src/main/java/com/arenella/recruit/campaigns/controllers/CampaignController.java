@@ -517,7 +517,7 @@ public class CampaignController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PutMapping(path="/campaign/{campaignId}/listing/{listingId}")
+	@PostMapping(path="/campaign/{campaignId}/listing/{listingId}")
 	public ResponseEntity<Void> associateListingWithCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("listingId") UUID listingId, Principal principal){
 		this.campaignService.associateListingWithCampaign(listingId, campaignId, null, principal.getName());
 		return ResponseEntity.ok().build(); 
@@ -528,8 +528,8 @@ public class CampaignController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PutMapping(path="/campaign/{campaignId}/role/{roleId}/listing/{listingId}")
-	public ResponseEntity<Void> associateListingWithRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("listingId") UUID listingId, @PathVariable("roleId") UUID roleId, Principal principal){
+	@PostMapping(path="/campaign/{campaignId}/role/{roleId}/listing/{listingId}")	
+	public ResponseEntity<Void> associateListingWithRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("listingId") UUID listingId, Principal principal){
 		this.campaignService.associateListingWithCampaign(listingId, campaignId, roleId, principal.getName());
 		return ResponseEntity.ok().build(); 
 	}
@@ -539,7 +539,7 @@ public class CampaignController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PutMapping(path="/campaign/{campaignId}/campaignlisting/{campaignListingId}")
+	@DeleteMapping(path="/campaign/{campaignId}/campaignlisting/{campaignListingId}")
 	public ResponseEntity<Void> disassociateListingWithCampaign(@PathVariable("campaignId") UUID campaignId, @PathVariable("campaignListingId") UUID campaignListingId, Principal principal){
 		this.campaignService.disassociateListingWithCampaign(campaignListingId, campaignId, null, principal.getName());
 		return ResponseEntity.ok().build(); 
@@ -550,7 +550,7 @@ public class CampaignController {
 	* @return ResponseEntity
 	*/
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_RECRUITER')")
-	@PutMapping(path="/campaign/{campaignId}/role/{roleId}/campaignlisting/{campaignListingId}")
+	@DeleteMapping(path="/campaign/{campaignId}/role/{roleId}/campaignlisting/{campaignListingId}")
 	public ResponseEntity<Void> disassociateListingWithRole(@PathVariable("campaignId") UUID campaignId, @PathVariable("roleId") UUID roleId, @PathVariable("campaignListingId") UUID campaignListingId, Principal principal){
 		this.campaignService.disassociateListingWithCampaign(campaignListingId, campaignId, null, principal.getName());
 		return ResponseEntity.ok().build(); 

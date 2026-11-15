@@ -445,6 +445,34 @@ export class CampaingsService {
 		
 	}
 	
+	/**
+	* Associates a listing with a Campaign or a Role 
+	*/
+	public associateListingWithCampaign(campaignId:string, roleId:string|null, listingId:string):Observable<void>{
+									
+		let backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/listing/' + listingId;
+
+		if (roleId != null) {	
+			backendUrl = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/listing/'+listingId;
+		}
+				
+		return this.httpClient.post<void>(backendUrl, null, this.httpOptions);
+	}
+	
+	/**
+	* Associates a listing with a Campaign or a Role 
+	*/
+	public disassociateListingWithCampaign(campaignId:string, roleId:string|null, campaignListingId:string):Observable<void>{
+									
+		let backendUrl:string = environment.backendUrl +'campaign/'+campaignId+'/listing/' + campaignListingId;
+
+		if (roleId != null) {	
+			backendUrl = environment.backendUrl +'campaign/'+campaignId+'/role/'+roleId+'/listing/'+campaignListingId;
+		}
+				
+		return this.httpClient.delete<void>(backendUrl, this.httpOptions);
+	}
+	
 }
 
 /**

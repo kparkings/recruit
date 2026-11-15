@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild }					from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef }		from '@angular/core';
 import { UntypedFormGroup, UntypedFormControl }			from '@angular/forms';
 import { ListingService }								from '../listing.service';
 import { RecruiterService }								from '../recruiter.service';
@@ -20,6 +20,8 @@ import { StaticDataService } 							from '../static-data.service';
 import { InfoItemBlock, InfoItemConfig, InfoItemRowKeyValue, InfoItemRowKeyValueFlag, InfoItemRowMultiValues, InfoItemRowSingleValue } from '../candidate-info-box/info-item';
 import { TranslateService } 							from '@ngx-translate/core';
 import { Country } 										from '../shared-domain-object/country';
+import { CampaingsService, Campaign, Role}				from 'src/app/campaings.service';
+import { AppComponent } 								from 'src/app/app.component';
 
 @Component({
     selector: 'app-recruiter-listings',
@@ -33,6 +35,7 @@ export class RecruiterListingsComponent implements OnInit {
 	@ViewChild('specUploadBox', { static: false }) 			private readonly specUploadBox:any;
 	@ViewChild('publicityBox', { static: false }) 			private readonly publicityBox:any;
 	@ViewChild('marketplaceBox', { static: false }) 		private readonly marketplaceBox:any;
+	@ViewChild('campaignsBox', { static: true }) 			campaignsDialogBox!: ElementRef<HTMLDialogElement>;
 	
 	public isMobile:boolean 							= false;
 	public recruiterProfile:RecruiterProfile 			= new RecruiterProfile();
@@ -89,8 +92,10 @@ export class RecruiterListingsComponent implements OnInit {
 				private readonly recruiterProfileService: 	RecruiterProfileService,
 				public 	router:								Router,
 				private readonly marketplaceService: 		RecruiterMarketplaceService,
-				private readonly creditsService:				CreditsService,
+				private readonly creditsService:			CreditsService,
+				public readonly CampaingsService:			CampaingsService,
 				private readonly staticDataService:			StaticDataService,
+				private readonly appComponent:				AppComponent,
 				private readonly translate:					TranslateService) {
 				
 				this.recruiterProfileService.fetchOwnRecruiterProfile().subscribe(rec => {
@@ -959,6 +964,62 @@ export class RecruiterListingsComponent implements OnInit {
 	public getFormattedJobTitle(title:string):string{
 		title = ""+title;
 		return title.length < 25 ? title : title.substring(0,25) + "...";
+	}
+	
+	/**
+	* Opens the Campaign selector to pick a Campaign or Role to associate 
+	* the listing with
+	*/
+	public pickCampaign():void {
+		
+		this.CampaingsService.hasChatAccess().subscribe(res => {
+			if (res == true) {
+				this.campaignsDialogBox.nativeElement.showModal();
+			} else  {
+				this.appComponent.openNoChatAccessBox();
+			}
+		});
+				
+	}
+	
+	private selboxCampaign:Campaign|undefined;
+	private selboxRole:Role|undefined;
+
+	/**
+	* When a new Campaign is selected an event is emmited. This is the 
+	* handler for that emitted event 
+	*/
+	public handleCampaignSelectedEmitterEvent(campaign:Campaign):void{
+		this.selboxCampaign = campaign;
+	}
+	
+	/**
+	* When a new Role is selected an event is emmited. This is the 
+	* handler for that emitted event 
+	*/
+	public handleRoleSelectedEmitterEvent(role:Role):void{
+		this.selboxRole = role;
+	}
+
+	/**
+	* Adds candidate to Campaign or Role 
+	*/
+	public handleCandidateAddedEvent():void{
+		
+		if (this.selboxCampaign == undefined) {
+			return;
+		}
+		
+		if (this.selboxRole == undefined) {
+			this.CampaingsService.associateListingWithCampaign(this.selboxCampaign.id, null, this.selectedListing.listingId).subscribe(res => {
+				this.campaignsDialogBox.nativeElement.close();
+			});	
+		} else {
+			this.CampaingsService.associateListingWithCampaign(this.selboxCampaign.id, this.selboxRole.id, this.selectedListing.listingId).subscribe(res => {
+				this.campaignsDialogBox.nativeElement.close();
+			});
+		}
+		
 	}
 	
 }

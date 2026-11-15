@@ -17,10 +17,10 @@ import com.arenella.recruit.campaigns.entities.CampaignEntity;
 public interface CampaignListingDao extends ListCrudRepository<CampaignListingEntity, UUID>{
 
 	@Query("FROM CampaignListingEntity where campaignId = :campaignId and roleId is null and listingId = :listingId")
-	Set<CampaignEntity> fetchAssociationsForCampaign(UUID campaignId, UUID listingId);
+	Set<CampaignListingEntity> fetchAssociationsForCampaign(UUID campaignId, UUID listingId);
 	
 	@Query("FROM CampaignListingEntity where campaignId = :campaignId and roleId = :roleId and listingId = :listingId")
-	Set<CampaignEntity> fetchAssociationsForRole(UUID campaignId, UUID roleId, UUID listingId);
+	Set<CampaignListingEntity> fetchAssociationsForRole(UUID campaignId, UUID roleId, UUID listingId);
 	
 	/**
 	* Returns whether or not the association already exists
