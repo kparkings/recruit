@@ -3438,4 +3438,33 @@ databaseChangeLog:
                 name: external_reference
                 type: varchar
                 constraints:
-                  nullable: true           
+                  nullable: true  
+  - changeSet:
+      id: campaignlisting
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: campaign_listings
+            schemaName: campaigns
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: listing_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: campaign_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: uuid
+                  constraints:
+                    nullable: true

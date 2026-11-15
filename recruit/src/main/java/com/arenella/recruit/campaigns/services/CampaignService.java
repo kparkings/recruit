@@ -281,4 +281,22 @@ public interface CampaignService {
 	*/
 	public Set<IMNotification> fetchRecruitersIMNotificationsForCampaign(Principal currentUser, UUID campaignId);
 	
+	/**
+	* Associated a Listing with a Campaign or Role 
+	* @param listingId  	- Id of the Listing to be associated with a Campaigin or a ROle
+	* @param campaignId 	- Id of the Campaign the Listing is associated with
+	* @param roleId     	- If Role level the Id of the Role the listing is associated with
+	* @param currentUser	- Id of authenticated user
+	*/
+	public void associateListingWithCampaigin(UUID listingId, UUID campaignId, UUID roleId,String currentUser);
+	
+	/**
+	* Remove the association of a Listing with a Campaign or Role 
+	* @param campaignListingId  - Id of the association to be removed
+	* @param campaignId 		- Id of the Campaign the Listing is associated with
+	* @param roleId     		- If Role level the Id of the Role the listing is associated with
+	* @param currentUser		- Id of authenticated user
+	*/
+	public void disassociateListingWithCampaigin(UUID campaignListingId, UUID campaignId, UUID roleId, String currentUser);
+	
 } 

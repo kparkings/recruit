@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.CampaignIMNotificationDao;
+import com.arenella.recruit.campaign.dao.CampaignListingDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.CandidateGroupEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
@@ -28,6 +29,7 @@ import com.arenella.recruit.campaigns.adapters.ExternalCandiateDataRetentionRene
 import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailCommand;
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignListing;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.CandidateGroup;
@@ -85,6 +87,7 @@ public class CampaignServiceImpl implements CampaignService{
 	private final CampaignExternalEventPublisher 	eventPublisher;
 	private final CampaignIMNotificationDao 		imNotificationDao;
 	private final CandidateGroupEntityDao			candidateGroupDao;
+	private final CampaignListingDao				campaignListingDao;
 	
 	/**
 	* Constructor
@@ -112,7 +115,8 @@ public class CampaignServiceImpl implements CampaignService{
 			CandidateEntityDao				candidateDao,
 			CampaignExternalEventPublisher 	eventPublisher,
 			CampaignIMNotificationDao		imNotificationDao,
-			CandidateGroupEntityDao			candidateGroupDao) {
+			CandidateGroupEntityDao			candidateGroupDao,
+			CampaignListingDao				campaignListingDao) {
 		this.campaignDao 		= campaignDao;
 		this.contactDao 		= contactDao;
 		this.participationDao 	= participationDao;
@@ -125,6 +129,7 @@ public class CampaignServiceImpl implements CampaignService{
 		this.eventPublisher		= eventPublisher;
 		this.imNotificationDao  = imNotificationDao;
 		this.candidateGroupDao 	= candidateGroupDao;
+		this.campaignListingDao = campaignListingDao;
 	}
 	
 	/**
@@ -919,6 +924,82 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public Set<IMNotification> fetchRecruitersIMNotificationsForCampaign(Principal currentUser, UUID campaignId) {
 		return this.imNotificationDao.fetchIMNotificationForCampaign(currentUser.getName(), campaignId);
+	}
+	
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void associateListingWithCampaigin(UUID listingId, UUID campaignId, UUID roleId, String currentUser) {
+
+		Campaign 	campaign;
+		
+		//0. Check user has access to Campaigns
+		this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		// 1. Check campaign exists
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		// 2. Check Role exists if Role level		
+		if (Optional.ofNullable(roleId).isPresent()) {
+			this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		}
+
+		// 4. Check is admin or edit participant 
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		
+		
+		//.5 Check no existing association for Listing | Campaign | Role combination
+		
+		boolean exists = false;
+		
+		if(Optional.ofNullable(roleId).isPresent()) {
+			exists = this.campaignListingDao.campaignListingAssociationExists(campaignId, roleId, listingId);
+		} else {
+			exists = this.campaignListingDao.campaignListingAssociationExists(campaignId, listingId);
+		}
+		
+		if(!exists) {
+			this.campaignListingDao.saveCampaignListing(CampaignListing
+					.builder()
+						.id(UUID.randomUUID())
+						.listingId(listingId)
+						.campaignId(campaignId)
+						.roleId(roleId)
+					.build());
+		}
+		
+	}
+
+	/**
+	* Refer to the CampaignService interface for details
+	*/
+	@Override
+	public void disassociateListingWithCampaigin(UUID campaignListingId, UUID campaignId, UUID roleId, String currentUser) {
+		
+		Campaign 	campaign;
+		
+		//0. Check user has access to Campaigns
+		this.fetchAndValidateContactForCurrentUser(currentUser);
+		
+		// 1. Check campaign exists
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		
+		// 2. Check Role exists if Role level		
+		if (Optional.ofNullable(roleId).isPresent()) {
+			this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		}
+
+		// 4. Check is admin or edit participant 
+		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		
+		if(this.campaignListingDao.existsById(campaignListingId)) {
+			this.campaignListingDao.deleteById(campaignListingId);
+		}
+		
+		
+		//2. TODO: When email table is created we need to remove the emails
+		
 	}
 	
 	/**
