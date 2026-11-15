@@ -58,12 +58,12 @@ public class CampaignContactMigrationUtil {
 		
 	}
 	
-	@PostConstruct
+	//@PostConstruct
 	public void setupGroupForExistingCampaignCandidates() {
 		
-		this.campaignDao.wtf().stream().forEach(group -> {
-			this.candidateGroupEntityDao.saveGrouping(group);
-		});
+	//	this.campaignDao.wtf().stream().forEach(group -> {
+	//		this.candidateGroupEntityDao.saveGrouping(group);
+	//	});
 		
 	}
 	
