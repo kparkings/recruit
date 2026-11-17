@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.CampaignListingDao;
+import com.arenella.recruit.campaign.dao.CampaignListingRegistrationDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.CandidateGroupEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
@@ -40,6 +41,7 @@ import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailC
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignListing;
+import com.arenella.recruit.campaigns.beans.CampaignListingRegistration;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Candidate.Type;
@@ -95,6 +97,11 @@ class CampaignServiceImplTest {
 	
 	@Mock
 	private CampaignListingDao					mockCampaignListingDao;
+	
+	@Mock
+	private CampaignListingRegistrationDao		mockCampaignListingRegistrationDao;
+	
+	
 	
 	@InjectMocks
 	private CampaignServiceImpl 				service;
@@ -4844,6 +4851,7 @@ class CampaignServiceImplTest {
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(false);
 		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.of(new CampaignListingRegistration(listingId, loggedInUserId)));
 		
 		this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
 		
@@ -4876,6 +4884,7 @@ class CampaignServiceImplTest {
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(true);
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.of(new CampaignListingRegistration(listingId, loggedInUserId)));
 		
 		this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
 		
@@ -4905,6 +4914,7 @@ class CampaignServiceImplTest {
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(false);
 		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.of(new CampaignListingRegistration(listingId, loggedInUserId)));
 		
 		this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
 		
@@ -4973,6 +4983,7 @@ class CampaignServiceImplTest {
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.of(new CampaignListingRegistration(listingId, loggedInUserId)));
 		
 		this.service.associateListingWithCampaign(listingId, campaignId, roleId, loggedInUserId);
 	
@@ -5013,6 +5024,7 @@ class CampaignServiceImplTest {
 		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
 		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
 		doNothing().when(this.mockCampaignListingDao).saveCampaignListing(argCaptCampaign.capture());
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.of(new CampaignListingRegistration(listingId, loggedInUserId)));
 		
 		this.service.associateListingWithCampaign(listingId, campaignId, roleId, loggedInUserId);
 	
@@ -5056,6 +5068,68 @@ class CampaignServiceImplTest {
 		});
 		
 		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		
+	}
+	
+	/**
+	* Tests exception thrown if an attempt is made to associate a Listing with 
+	* a Campaign and the listing is unknown
+	*/
+	@Test
+	void testAssociateListingWithCampaignListingUknown() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(true);
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.empty());
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.UNKNOWN_LISTING, ex.getMessage());
+		
+		verify(this.mockCampaignListingDao, never()).saveCampaignListing(any(CampaignListing.class));
+		
+	}
+	
+	/**
+	* Tests exception thrown if an attempt is made to associate a Listing with 
+	* a Campaign when the listing exists but the current user is not the Listing owner
+	*/
+	@Test
+	void testAssociateListingWithCampaignListingOwnedByOtherUser() {
+		
+		final UUID 		listingId				= UUID.randomUUID();
+		final UUID		campaignId				= UUID.randomUUID();
+		final String 	loggedInUserId 			= "rec2";
+		final Contact 	loggedInUserContact 	= new Contact("rec2", "bilbo", "baggins", "bibo@bag.nl", SubscriptionType.PAID);
+		final Campaign	campaign				= Campaign
+				.builder()
+					.participation(Participation.builder().contactId(loggedInUserId).type(ParticipantType.ADMIN).build())
+				.build();
+		
+		when(this.mockCampaignDao.fetchCampaign(campaignId)).thenReturn(Optional.of(campaign));
+		when(this.mockContactDao.fetchContact(loggedInUserId)).thenReturn(Optional.of(loggedInUserContact));
+		when(this.mockCampaignListingDao.campaignListingAssociationExists(campaignId, listingId)).thenReturn(true);
+		when(this.mockCampaignListingRegistrationDao.findRegistrationById(listingId)).thenReturn(Optional.of(new CampaignListingRegistration(listingId, "anotherOwner")));
+		
+		IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
+		});
+		
+		assertEquals(CampaignServiceImpl.NOT_OWNER_LISTING, ex.getMessage());
+		
+		verify(this.mockCampaignListingDao, never()).saveCampaignListing(any(CampaignListing.class));
 		
 	}
 	

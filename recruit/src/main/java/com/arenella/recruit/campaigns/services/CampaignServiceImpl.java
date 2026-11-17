@@ -16,6 +16,7 @@ import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
 import com.arenella.recruit.campaign.dao.CampaignIMNotificationDao;
 import com.arenella.recruit.campaign.dao.CampaignListingDao;
+import com.arenella.recruit.campaign.dao.CampaignListingRegistrationDao;
 import com.arenella.recruit.campaign.dao.CandidateEntityDao;
 import com.arenella.recruit.campaign.dao.CandidateGroupEntityDao;
 import com.arenella.recruit.campaign.dao.ContactEntityDao;
@@ -30,6 +31,7 @@ import com.arenella.recruit.campaigns.adapters.ExternalCandiateMessageSendEmailC
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
 import com.arenella.recruit.campaigns.beans.CampaignListing;
+import com.arenella.recruit.campaigns.beans.CampaignListingRegistration;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.CandidateGroup;
@@ -74,6 +76,8 @@ public class CampaignServiceImpl implements CampaignService{
 	public static final String ERR_MSG_UNSUPPORTED_DOC_TYPE 				= "Document type not supported.";
 	public static final String ERR_MSG_UNASSOCIATED_CANDIDATE_CAMPAIGN 		= "Cant send message to External User not associated with the Campaign";
 	public static final String ERR_MSG_UNASSOCIATED_CANDIDATE_ROLE	 		= "Cant send message to External User not associated with the Role";
+	public static final String UNKNOWN_LISTING 								= "Unknown Listing";
+	public static final String NOT_OWNER_LISTING 							= "User is not owner of Listing";
 	
 	private final CampaignDao 						campaignDao;
 	private final ContactEntityDao 					contactDao;
@@ -88,20 +92,22 @@ public class CampaignServiceImpl implements CampaignService{
 	private final CampaignIMNotificationDao 		imNotificationDao;
 	private final CandidateGroupEntityDao			candidateGroupDao;
 	private final CampaignListingDao				campaignListingDao;
+	private final CampaignListingRegistrationDao	campaignListingRegistrationDao;
 	
 	/**
 	* Constructor
-	* @param campaignDao		- For working with Campaigns
-	* @param contactDao			- For working with Contacts
-	* @param participationDao	- For working with Paricipation's
-	* @param appointmentDao		- For working with Appointments
-	* @param documentDao		- For working with Documents
-	* @param fileSecurityParser	- To check file is of type specified
-	* @param roleDao			- For working with Roles
-	* @param candidateDao		- For working with Candidates
-	* @param eventPublisher		- For publishing events/commands to external services
-	* @param imNotificationDao	- For working with IM Noficiation's relating to the Campaign
-	* @oaram candidateGroupDao	- For working with CandidateGroups
+	* @param campaignDao					- For working with Campaigns
+	* @param contactDao						- For working with Contacts
+	* @param participationDao				- For working with Paricipation's
+	* @param appointmentDao					- For working with Appointments
+	* @param documentDao					- For working with Documents
+	* @param fileSecurityParser				- To check file is of type specified
+	* @param roleDao						- For working with Roles
+	* @param candidateDao					- For working with Candidates
+	* @param eventPublisher					- For publishing events/commands to external services
+	* @param imNotificationDao				- For working with IM Noficiation's relating to the Campaign
+	* @oaram candidateGroupDao				- For working with CandidateGroups
+	* @param campaignListingRegistrationDao - For working with Job board Listing registrations
 	*/
 	public CampaignServiceImpl(
 			CampaignDao 					campaignDao, 
@@ -116,20 +122,22 @@ public class CampaignServiceImpl implements CampaignService{
 			CampaignExternalEventPublisher 	eventPublisher,
 			CampaignIMNotificationDao		imNotificationDao,
 			CandidateGroupEntityDao			candidateGroupDao,
-			CampaignListingDao				campaignListingDao) {
-		this.campaignDao 		= campaignDao;
-		this.contactDao 		= contactDao;
-		this.participationDao 	= participationDao;
-		this.noteDao 			= noteDao;
-		this.appointmentDao		= appointmentDao;
-		this.documentDao  		= documentDao;
-		this.fileSecurityParser = fileSecurityParser;
-		this.roleDao			= roleDao;
-		this.candidateDao		= candidateDao;
-		this.eventPublisher		= eventPublisher;
-		this.imNotificationDao  = imNotificationDao;
-		this.candidateGroupDao 	= candidateGroupDao;
-		this.campaignListingDao = campaignListingDao;
+			CampaignListingDao				campaignListingDao,
+			CampaignListingRegistrationDao	campaignListingRegistrationDao) {
+		this.campaignDao 						= campaignDao;
+		this.contactDao 						= contactDao;
+		this.participationDao 					= participationDao;
+		this.noteDao 							= noteDao;
+		this.appointmentDao						= appointmentDao;
+		this.documentDao  						= documentDao;
+		this.fileSecurityParser 				= fileSecurityParser;
+		this.roleDao							= roleDao;
+		this.candidateDao						= candidateDao;
+		this.eventPublisher						= eventPublisher;
+		this.imNotificationDao  				= imNotificationDao;
+		this.candidateGroupDao 					= candidateGroupDao;
+		this.campaignListingDao 				= campaignListingDao;
+		this.campaignListingRegistrationDao 	= 	campaignListingRegistrationDao;
 	}
 	
 	/**
@@ -958,6 +966,16 @@ public class CampaignServiceImpl implements CampaignService{
 		} else {
 			exists = this.campaignListingDao.campaignListingAssociationExists(campaignId, listingId);
 		}
+		
+		//Need to check user adding Listing is owner and that the Listing exists
+		CampaignListingRegistration registration = this.campaignListingRegistrationDao.findRegistrationById(listingId).orElseThrow(() -> new IllegalArgumentException(UNKNOWN_LISTING));
+		
+		if (!registration.listingOwnerId().equals(currentUser)) {
+			throw new IllegalArgumentException(NOT_OWNER_LISTING);
+		}
+		
+		//Listing - listing Id, Owner {delete if listing removed }
+		//Email - listingId (external reference) -  {title body sendername senderemail}
 		
 		if(!exists) {
 			this.campaignListingDao.saveCampaignListing(CampaignListing

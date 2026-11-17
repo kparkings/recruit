@@ -3468,3 +3468,22 @@ databaseChangeLog:
                   type: uuid
                   constraints:
                     nullable: true
+  - changeSet:
+      id: campaignlistingRegistration
+      author: kparkings
+      changes:
+        - createTable:
+            tableName: listing_registrations
+            schemaName: campaigns
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: listing_owner_id
+                  type: varchar
+                  constraints:
+                    nullable: false
