@@ -1,4 +1,4 @@
-package com.arenella.recruit.campaign.dao;
+package com.arenella.recruit.campaigns.entities;
 
 import java.util.Optional;
 import java.util.UUID;

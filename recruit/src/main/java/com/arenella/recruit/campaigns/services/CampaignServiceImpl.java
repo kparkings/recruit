@@ -58,18 +58,12 @@ import com.arenella.recruit.campaigns.beans.Candidate.Type;
 @Service
 public class CampaignServiceImpl implements CampaignService{
 
-	public static final String ERR_MSG_UNKNOWN_CAMPAIGN 					= "Cannot retrieve unknown Campaign.";
 	public static final String ERR_MSG_USER_NOT_PARTICIPANT 				= "You are not a participant in the Campaign.";
-	public static final String ERR_MSG_CONTACT_NOT_FOUND 					= "Unknown Contact.";
-	public static final String ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE 	= "Only paid subscription users can perform this action.";
 	public static final String ERR_MSG_CAMPAIGN_NOT_FOUND 					= "Unknown Campaign.";
 	public static final String ERR_MSG_UNKNOWN_CANDIDATE					= "Unknown Candidate.";
 	public static final String ERR_MSG_CONTACT_ALREADY_PARTICIPANT 			= "Cannot add existing participant.";
 	public static final String ERR_MSG_NO_ADMIN_ROLE_FOR_USER				= "Only Admin Users can perform this action.";
 	public static final String ERR_MSG_UNKNOWN_PARTICIPATION				= "Unknown Participation.";
-	public static final String ERR_MSG_UNKNOWN_ROLE							= "Unknown Role";
-	public static final String ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT			= "An Admin Participant must be present after action taken.";
-	public static final String ERR_MSG_NO_ADMIN_RIGHTS						= "No rights to perform this action.";
 	public static final String ERR_MSG_UNKNOWN_NOTE 						= "Cannot retrieve unknown Note.";
 	public static final String ERR_MSG_UNKNOWN_APPOINTMENT 					= "Cannot retrieve unknown Appointment.";
 	public static final String ERR_MSG_UNKNOWN_DOCUMENT 					= "Cannot retrieve unknown Document.";
@@ -93,6 +87,7 @@ public class CampaignServiceImpl implements CampaignService{
 	private final CandidateGroupEntityDao			candidateGroupDao;
 	private final CampaignListingDao				campaignListingDao;
 	private final CampaignListingRegistrationDao	campaignListingRegistrationDao;
+	private final CampaignAuthUtility				campaignAuthUtil;
 	
 	/**
 	* Constructor
@@ -106,7 +101,7 @@ public class CampaignServiceImpl implements CampaignService{
 	* @param candidateDao					- For working with Candidates
 	* @param eventPublisher					- For publishing events/commands to external services
 	* @param imNotificationDao				- For working with IM Noficiation's relating to the Campaign
-	* @oaram candidateGroupDao				- For working with CandidateGroups
+	* @param candidateGroupDao				- For working with CandidateGroups
 	* @param campaignListingRegistrationDao - For working with Job board Listing registrations
 	*/
 	public CampaignServiceImpl(
@@ -123,7 +118,8 @@ public class CampaignServiceImpl implements CampaignService{
 			CampaignIMNotificationDao		imNotificationDao,
 			CandidateGroupEntityDao			candidateGroupDao,
 			CampaignListingDao				campaignListingDao,
-			CampaignListingRegistrationDao	campaignListingRegistrationDao) {
+			CampaignListingRegistrationDao	campaignListingRegistrationDao,
+			CampaignAuthUtility				campaignAuthUtil) {
 		this.campaignDao 						= campaignDao;
 		this.contactDao 						= contactDao;
 		this.participationDao 					= participationDao;
@@ -137,7 +133,8 @@ public class CampaignServiceImpl implements CampaignService{
 		this.imNotificationDao  				= imNotificationDao;
 		this.candidateGroupDao 					= candidateGroupDao;
 		this.campaignListingDao 				= campaignListingDao;
-		this.campaignListingRegistrationDao 	= 	campaignListingRegistrationDao;
+		this.campaignListingRegistrationDao 	= campaignListingRegistrationDao;
+		this.campaignAuthUtil					= campaignAuthUtil;
 	}
 	
 	/**
@@ -154,7 +151,7 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public Campaign fetchCampaignById(UUID campaignId, String currentUserId) {
 		
-		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		campaign.getParticipations().stream().filter(p -> p.getContactId().equals(currentUserId)).findAny().orElseThrow(() -> new IllegalArgumentException(ERR_MSG_USER_NOT_PARTICIPANT));
 		
@@ -169,7 +166,7 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		UUID 	campaignId 	= UUID.randomUUID();
 		
-		fetchAndValidateContactForCurrentUser(currentUserId);
+		campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Campaign campaign = Campaign
 				.builder()
@@ -196,11 +193,11 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void addParticipationToCampaign(String contactId, UUID campaignId, UUID roleId, ParticipantType type, String currentUserId) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_CAMPAIGN_NOT_FOUND));
 		
-		this.fetchContactFor(contactId);
+		this.campaignAuthUtil.fetchContactFor(contactId);
 		
 		AtomicBoolean isAdminAtRoleLevel = new AtomicBoolean(false);
 		
@@ -254,13 +251,13 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteParticipation(UUID participationId, String currentUserId) {
 	
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Participation 	participation 	= this.participationDao.fetchParticipationById(participationId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_PARTICIPATION));
-		Campaign 		campaign 		= this.campaignDao.fetchCampaign(participation.getCampaignId()).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign 		campaign 		= this.campaignDao.fetchCampaign(participation.getCampaignId()).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsAdminForParticipation(campaign, participation, currentUserId);
-		this.checkAtLeastOneAdminUserLeftAfterAction(campaign, participation);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminForParticipation(campaign, participation, currentUserId);
+		this.campaignAuthUtil.checkAtLeastOneAdminUserLeftAfterAction(campaign, participation);
 		
 		if (participation.getRoleId().isEmpty()) {
 			campaign = Campaign
@@ -289,10 +286,10 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void addNoteToCampaign(UUID campaignId, UUID roleId, String title, String text, String currentUserId) {
 		
-		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
 		
 		this.campaignDao.saveCampaign(Campaign
 				.builder()
@@ -316,12 +313,12 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void updateNote(UUID noteId, String title, String text, String currentUserId) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Note 		note 		= this.noteDao.fetchNoteById(noteId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_NOTE));
-		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
 		
 		this.campaignDao.saveCampaign(Campaign
 				.builder()
@@ -343,12 +340,12 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteNote(UUID noteId, String currentUserId) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Note 		note 		= this.noteDao.fetchNoteById(noteId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_NOTE));
-		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(note.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, note.getRoleId().orElse(null), currentUserId);
 		
 		if (note.getRoleId().isPresent()) {
 			note.getRoleId().ifPresent(roleId -> {
@@ -376,11 +373,11 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void addAppointment(UUID campaignId, UUID roleId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUserId) {
 	
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
-		Campaign 	campaign 	= this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 	
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
 		
 		Appointment appointment = Appointment
 				.builder()
@@ -408,12 +405,12 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void updateAppointment(UUID appointmentId, String name, String description, String phoneNumber, String videoLink, ZonedDateTime when, String currentUserId) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Appointment appointment = this.appointmentDao.fetchAppointmentById(appointmentId).orElseThrow(() 	 -> new IllegalArgumentException(ERR_MSG_UNKNOWN_APPOINTMENT));
-		Campaign 	campaign 	= this.campaignDao.fetchCampaign(appointment.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(appointment.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, appointment.getRoleId().orElse(null), currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, appointment.getRoleId().orElse(null), currentUserId);
 		
 		Appointment updatedAppointment = Appointment
 				.builder()
@@ -440,12 +437,12 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteAppointment(UUID appointmentId, String currentUserId) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Appointment appointment = this.appointmentDao.fetchAppointmentById(appointmentId).orElseThrow(() 	 -> new IllegalArgumentException(ERR_MSG_UNKNOWN_APPOINTMENT));
-		Campaign 	campaign 	= this.campaignDao.fetchCampaign(appointment.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign 	campaign 	= this.campaignDao.fetchCampaign(appointment.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, appointment.getRoleId().orElse(null), currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, appointment.getRoleId().orElse(null), currentUserId);
 		
 		this.appointmentDao.deleteById(appointmentId);
 		
@@ -457,11 +454,11 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void addDocument(UUID campaignId, UUID roleId, String title, DocumentType type, byte[] bytes, String currentUserId) {	
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
-		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUserId);
 		
 		if (!this.fileSecurityParser.isSafe(bytes)) {		
 			throw new IllegalArgumentException(ERR_MSG_UNSUPPORTED_DOC_TYPE);
@@ -486,17 +483,17 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteDocument(UUID documentId, String currentUserId) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
 		
 		Document document = this.documentDao.fetchDocumentById(documentId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_DOCUMENT));
-		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		Role role = null;
 		
 		if (document.getRoleId().isPresent()) {
 			role = campaign.getRoles().stream().filter(aRole -> aRole.getId().equals(document.getRoleId().get())).findFirst().get();
 		}
 		
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUserId);
 		
 		if (Optional.ofNullable(role).isEmpty()) {
 			this.campaignDao.saveCampaign(Campaign.builder().from(campaign).documents(campaign.getDocuments().stream().filter(d -> !d.getDocumentId().equals(documentId)).collect(Collectors.toSet())).build());
@@ -514,10 +511,10 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		final UUID roleId = UUID.randomUUID();
 		
-		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.fetchAndValidateContactForCurrentUser(currentUserId);
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, null, currentUserId);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUserId);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, null, currentUserId);
 		
 		this.roleDao.saveRole(Role
 			.builder()
@@ -543,7 +540,7 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteCampaign(UUID campaignId, String name) {
 		
-		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		campaign.getParticipations().stream().filter(p -> p.getContactId().equals(name) && p.getType() == ParticipantType.ADMIN).findFirst().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
 		
@@ -557,7 +554,7 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public void deleteRole(UUID roleId, String name) {
 		
-		Role role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+		Role role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		
 		role.getParticipations().stream().filter(p -> p.getContactId().equals(name) && p.getType() == ParticipantType.ADMIN).findFirst().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_NO_ADMIN_ROLE_FOR_USER));
 	
@@ -576,21 +573,21 @@ public class CampaignServiceImpl implements CampaignService{
 		Candidate 	candidate;
 		
 		//0. Check user has access to Campaigns
-		this.fetchAndValidateContactForCurrentUser(currentUser);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		// 1. Check campaign exists
-		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		// 2. Check Role exists if Role level		
 		if (Optional.ofNullable(roleId).isPresent()) {
-			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		}
 
 		// 3. Check candidate exists
 		candidate = this.candidateDao.findCandidateById(candidateId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_CANDIDATE));
 		
 		// 4. Check is admin or edit participant 
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		//5. Add Candidate to Campaign or role
 		
@@ -614,18 +611,18 @@ public class CampaignServiceImpl implements CampaignService{
 		Role 		role = null;
 		
 		//0. Check user has access to Campaigns
-		this.fetchAndValidateContactForCurrentUser(currentUser);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		// 1. Check campaign exists
-		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		// 2. Check Role exists if Role level		
 		if (Optional.ofNullable(roleId).isPresent()) {
-			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		}
 	
 		// 3. Check is admin or edit participant 
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		AtomicBoolean isExternalCandiadte = new AtomicBoolean();
 		
@@ -664,12 +661,12 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public Document fetchDocumentById(UUID documentId, String currentUser) {
 		
-		this.fetchAndValidateContactForCurrentUser(currentUser);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		Document document = this.documentDao.fetchDocumentById(documentId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_DOCUMENT));
-		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		Campaign campaign = this.campaignDao.fetchCampaign(document.getCampaignId()).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
-		this.checkLoggedInUserIsParticipantForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsParticipantForCampaignOrRole(campaign, document.getRoleId().orElse(null), currentUser);
 		
 		return document;
 		
@@ -685,18 +682,18 @@ public class CampaignServiceImpl implements CampaignService{
 		Role 		role = null;
 		
 		//0. Check user has access to Campaigns
-		this.fetchAndValidateContactForCurrentUser(currentUser);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		// 1. Check campaign exists
-		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		// 2. Check Role exists if Role level		
 		if (Optional.ofNullable(roleId).isPresent()) {
-			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		}
 
 		// 4. Check is admin or edit participant 
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		candidate = Candidate.builder()
 				.from(candidate)
@@ -709,7 +706,7 @@ public class CampaignServiceImpl implements CampaignService{
 		
 		this.candidateDao.saveCandidate(candidate);
 		
-		Contact recruiter = fetchContactFor(currentUser);
+		Contact recruiter = campaignAuthUtil.fetchContactFor(currentUser);
 		
 		EmailRecipient<UUID> recipient = new EmailRecipient<>(UUID.fromString(candidate.getId()), candidate.getId(), ContactType.EXTERNAL_CANDIDATE);
 		recipient.setFirstName(candidate.getFirstName());
@@ -791,18 +788,18 @@ public class CampaignServiceImpl implements CampaignService{
 		Set<Candidate> 		candidates 	= new HashSet<>();
 		
 		//0. Check user has access to Campaigns
-		Contact contact = this.fetchAndValidateContactForCurrentUser(currentUser);
+		Contact contact = this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		// 1. Check campaign exists
-		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		// 2. Check Role exists if Role level		
 		if (Optional.ofNullable(roleId).isPresent()) {
-			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			role = this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		}
 
 		// 4. Check is admin or edit participant 
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		//5. Check candidateIds are associated with specified campaign or role
 		if (Optional.ofNullable(roleId).isPresent()) {
@@ -888,7 +885,7 @@ public class CampaignServiceImpl implements CampaignService{
 	@Override
 	public boolean hasAccess(String currentUserId) {
 		
-		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
+		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_CONTACT_NOT_FOUND));
 		
 		return currentUser.subscriptionType() != SubscriptionType.CREDIT;
 		
@@ -943,18 +940,18 @@ public class CampaignServiceImpl implements CampaignService{
 		Campaign 	campaign;
 		
 		//0. Check user has access to Campaigns
-		this.fetchAndValidateContactForCurrentUser(currentUser);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		// 1. Check campaign exists
-		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		// 2. Check Role exists if Role level		
 		if (Optional.ofNullable(roleId).isPresent()) {
-			this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		}
 
 		// 4. Check is admin or edit participant 
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		
 		//.5 Check no existing association for Listing | Campaign | Role combination
@@ -998,18 +995,18 @@ public class CampaignServiceImpl implements CampaignService{
 		Campaign 	campaign;
 		
 		//0. Check user has access to Campaigns
-		this.fetchAndValidateContactForCurrentUser(currentUser);
+		this.campaignAuthUtil.fetchAndValidateContactForCurrentUser(currentUser);
 		
 		// 1. Check campaign exists
-		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(ERR_MSG_UNKNOWN_CAMPAIGN));
+		campaign = this.campaignDao.fetchCampaign(campaignId).orElseThrow(() -> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_CAMPAIGN));
 		
 		// 2. Check Role exists if Role level		
 		if (Optional.ofNullable(roleId).isPresent()) {
-			this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
+			this.roleDao.fetchRoleById(roleId).orElseThrow(()-> new IllegalArgumentException(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE));
 		}
 
 		// 4. Check is admin or edit participant 
-		this.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
+		this.campaignAuthUtil.checkLoggedInUserIsAdminOrEditForCampaignOrRole(campaign, roleId, currentUser);
 		
 		this.campaignListingDao.deleteById(campaignListingId);
 		
@@ -1018,119 +1015,4 @@ public class CampaignServiceImpl implements CampaignService{
 		
 	}
 	
-	/**
-	* Attempts to retrieve the Contact of the current user and validate that
-	* they have access to Campaigns
-	* @param currentUserId - Id of currently logged in User
-	* @return Contact for User
-	*/
-	private Contact fetchAndValidateContactForCurrentUser(String currentUserId) {
-		
-		Contact currentUser = this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
-		
-		if (currentUser.subscriptionType() == SubscriptionType.CREDIT) {
-			throw new RuntimeException(ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE);
-		}
-		
-		return currentUser;
-		
-	}
-	
-	/**
-	* Attempts to retrieve the Contact 
-	* @param contactId - Id of contact to retrieve
-	* @return Contact for User
-	*/
-	private Contact fetchContactFor(String currentUserId) {
-		return this.contactDao.fetchContact(currentUserId).orElseThrow(() ->new IllegalArgumentException(ERR_MSG_CONTACT_NOT_FOUND));
-	}
-	
-	/**
-	* Checks that loggedIn user is Admin or Edit either at the Role or Campaign level
-	* If not throws an Exception
-	*/
-	private void checkLoggedInUserIsAdminOrEditForCampaignOrRole(Campaign campaign, UUID roleId, String currentUserId) {
-		
-		AtomicBoolean adminAtCampaignLevel 	= new AtomicBoolean(campaign.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT)));
-		AtomicBoolean adminAtRoleLevel 		= new AtomicBoolean(false);
-	
-		Optional.ofNullable(roleId).ifPresent(rId -> 
-			campaign.getRoles().stream().filter(r -> r.getId() == rId).findAny().ifPresent(matchingRole ->
-				adminAtRoleLevel.set(matchingRole.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT)))
-			)
-		);
-	
-		if (!adminAtCampaignLevel.get() && !adminAtRoleLevel.get()) {
-			throw new IllegalArgumentException(ERR_MSG_NO_ADMIN_RIGHTS);
-		}
-		
-	}
-	
-	/**
-	* Checks that loggedIn user is Participant at the Role or Campaign level
-	* If not throws an Exception
-	*/
-	private void checkLoggedInUserIsParticipantForCampaignOrRole(Campaign campaign, UUID roleId, String currentUserId) {
-		
-		AtomicBoolean adminAtCampaignLevel 	= new AtomicBoolean(campaign.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT || p.getType() == ParticipantType.VIEW)));
-		AtomicBoolean adminAtRoleLevel 		= new AtomicBoolean(false);
-	
-		Optional.ofNullable(roleId).ifPresent(rId -> 
-			campaign.getRoles().stream().filter(r -> r.getId() == rId).findAny().ifPresent(matchingRole ->
-				adminAtRoleLevel.set(matchingRole.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && (p.getType() == ParticipantType.ADMIN || p.getType() == ParticipantType.EDIT|| p.getType() == ParticipantType.VIEW)))
-			)
-		);
-	
-		if (!adminAtCampaignLevel.get() && !adminAtRoleLevel.get()) {
-			throw new IllegalArgumentException(ERR_MSG_NO_ADMIN_RIGHTS);
-		}
-		
-	}
-	
-	/**
-	* Checks that loggedIn user is Admin either at the Role or Campaign level
-	* If not throws an Exception
-	*/
-	private void checkLoggedInUserIsAdminForParticipation(Campaign campaign, Participation participation, String currentUserId) {
-		
-		AtomicBoolean adminAtCampaignLevel 	= new AtomicBoolean(campaign.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && p.getType() == ParticipantType.ADMIN));
-		AtomicBoolean adminAtRoleLevel 		= new AtomicBoolean(false);
-	
-		participation.getRoleId().ifPresent(roleId -> {
-			Role role = campaign.getRoles().stream().filter(r -> r.getId() .equals(roleId)).findAny().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
-			adminAtRoleLevel.set(role.getParticipations().stream().anyMatch(p -> p.getContactId().equals(currentUserId) && p.getType() == ParticipantType.ADMIN));
-		});
-		
-		if (!adminAtCampaignLevel.get() && !adminAtRoleLevel.get()) {
-			throw new IllegalArgumentException(ERR_MSG_NO_ADMIN_RIGHTS);
-		}
-		
-	}
-	
-	/**
-	* Validates that if removing the participation then there would still be at least on Admin user at 
-	* either the Role or the Campaign Level. Otherwise throws an exception
-	* @param campaign
-	* @param participation
-	*/
-	private void checkAtLeastOneAdminUserLeftAfterAction(Campaign campaign, Participation participation) {
-	
-		AtomicBoolean adminAtCampaignLevelIfParticipantRemoved 	= new AtomicBoolean(campaign.getParticipations().stream().filter(p -> p.getRoleId().isEmpty()).anyMatch(p -> (p.getParticipationId() != participation.getParticipationId()) && p.getType() == ParticipantType.ADMIN));
-		AtomicBoolean adminAtRoleLevelIfParticipantRemoved 		= new AtomicBoolean(false);
-		
-		participation.getRoleId().ifPresent(roleId -> {
-			Role role = campaign.getRoles().stream().filter(r -> r.getId().equals(roleId)).findAny().orElseThrow(()-> new IllegalArgumentException(ERR_MSG_UNKNOWN_ROLE));
-			adminAtRoleLevelIfParticipantRemoved.set(role.getParticipations().stream().anyMatch(p -> p.getParticipationId() != participation.getParticipationId() && p.getType() == ParticipantType.ADMIN));
-		});
-		
-		if (!adminAtRoleLevelIfParticipantRemoved.get() && !adminAtCampaignLevelIfParticipantRemoved.get()) {
-			throw new IllegalStateException(ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT);
-		}
-		
-		if (!adminAtCampaignLevelIfParticipantRemoved.get()) {
-			throw new IllegalStateException(ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT);
-		}
-		
-	}
-
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.campaigns.beans.CampaignListing;
 import com.arenella.recruit.campaigns.entities.CampaignEntity;
+import com.arenella.recruit.campaigns.entities.CampaignListingEntity;
 
 /**
 * Repository for associating Listings with Campaigns and Roles

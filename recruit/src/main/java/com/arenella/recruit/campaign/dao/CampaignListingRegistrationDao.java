@@ -7,6 +7,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.campaigns.beans.CampaignListingRegistration;
+import com.arenella.recruit.campaigns.entities.CampaignListingRegistrationEntity;
 
 /**
 * Repository for interacting with CampaignListingRegistrations 

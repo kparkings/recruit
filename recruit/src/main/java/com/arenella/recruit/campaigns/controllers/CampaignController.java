@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignEmail;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CampaignLogo.PHOTO_FORMAT;
 import com.arenella.recruit.campaigns.beans.Candidate;
@@ -32,6 +33,7 @@ import com.arenella.recruit.campaigns.beans.Contact;
 import com.arenella.recruit.campaigns.beans.Document;
 import com.arenella.recruit.campaigns.beans.IMNotification;
 import com.arenella.recruit.campaigns.services.CampaignContactService;
+import com.arenella.recruit.campaigns.services.CampaignEmailService;
 import com.arenella.recruit.campaigns.services.CampaignService;
 import com.arenella.recruit.campaigns.services.CandidateGroupService;
 
@@ -47,6 +49,7 @@ public class CampaignController {
 	private final CampaignService 			campaignService;
 	private final CampaignContactService 	contactService;
 	private final CandidateGroupService		candidateGroupService;
+	private final CampaignEmailService		campaignEmailService;
 	
 	/**
 	* Constructor
@@ -54,10 +57,11 @@ public class CampaignController {
 	* @param contactService  		- Services for interacting with Contact's
 	* @param candidateGroupService 	- Services for interacting with CandidateGroup's
 	*/
-	public CampaignController(CampaignService campaignService, CampaignContactService contactService, CandidateGroupService	candidateGroupService) {
+	public CampaignController(CampaignService campaignService, CampaignContactService contactService, CandidateGroupService	candidateGroupService, CampaignEmailService campaignEmailService) {
 		this.campaignService 		= campaignService;
 		this.contactService 		= contactService;
 		this.candidateGroupService 	= candidateGroupService;
+		this.campaignEmailService	= campaignEmailService;
 	}
 	
 	/**
@@ -94,8 +98,9 @@ public class CampaignController {
 		
 		Set<IMNotification> imNotifications = this.campaignService.fetchRecruitersIMNotificationsForCampaign(currentUser, campaignId);
 		Set<CandidateGroup> candidateGroups = this.candidateGroupService.fetchCandidateGroupsForCampaign(campaignId);
+		Set<CampaignEmail> campaignEmails 	= this.campaignEmailService.fetchEmailsForCampaign(campaignId, currentUser.getName());
 				
-		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts, imNotifications, candidateGroups).build(), HttpStatus.OK);
+		return new ResponseEntity<>(CampaignAPIOutbound.builder().from(campaign, contacts, imNotifications, candidateGroups, campaignEmails).build(), HttpStatus.OK);
 	}
 	
 	/**

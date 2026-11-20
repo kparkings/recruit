@@ -9,6 +9,7 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import com.arenella.recruit.campaigns.beans.IMNotification;
+import com.arenella.recruit.campaigns.entities.IMNotificationEntity;
 
 /**
 * Repository for IMNotifications 

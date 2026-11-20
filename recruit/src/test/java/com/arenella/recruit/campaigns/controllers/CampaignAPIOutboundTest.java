@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.campaigns.beans.Appointment;
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignEmail;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.Candidate;
 import com.arenella.recruit.campaigns.beans.Contact;
@@ -36,6 +37,7 @@ class CampaignAPIOutboundTest {
 	private static final Set<Note> 			NOTES					= Set.of(Note.builder().build());
 	private static final Set<Appointment> 	APPOINTMENTS			= Set.of(Appointment.builder().build());
 	private static final Set<Document> 		DOCUMENTS				= Set.of(Document.builder().build());
+	private static final Set<CampaignEmail> EMAILS					= Set.of(CampaignEmail.builder().build());
 	
 	/**
 	* Test construction via Builder
@@ -59,7 +61,7 @@ class CampaignAPIOutboundTest {
 		
 		CampaignAPIOutbound outbound = CampaignAPIOutbound
 				.builder()
-					.from(campaign, Set.of(new Contact("rec1", "", "", "", SubscriptionType.CREDIT)), Set.of(IMNotification.builder().candidateId("12").campaignId(ID).build()), Set.of())
+					.from(campaign, Set.of(new Contact("rec1", "", "", "", SubscriptionType.CREDIT)), Set.of(IMNotification.builder().candidateId("12").campaignId(ID).build()), Set.of(), EMAILS)
 				.build();
 		
 		assertEquals(ID, 			outbound.getId());

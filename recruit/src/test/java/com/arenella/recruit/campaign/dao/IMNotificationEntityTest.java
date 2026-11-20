@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.campaigns.beans.IMNotification;
+import com.arenella.recruit.campaigns.entities.IMNotificationEntity;
 
 /**
 * Unit tests for the IMNotificationEntity class 

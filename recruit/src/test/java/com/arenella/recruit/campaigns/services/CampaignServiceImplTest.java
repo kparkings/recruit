@@ -18,12 +18,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.arenella.recruit.campaign.dao.AppointmentEntityDao;
 import com.arenella.recruit.campaign.dao.CampaignDao;
@@ -98,13 +100,22 @@ class CampaignServiceImplTest {
 	@Mock
 	private CampaignListingDao					mockCampaignListingDao;
 	
+	private CampaignAuthUtility					campaignAuthUtil;
+	
 	@Mock
 	private CampaignListingRegistrationDao		mockCampaignListingRegistrationDao;
 	
-	
-	
 	@InjectMocks
 	private CampaignServiceImpl 				service;
+	
+	/**
+	* Setup test env 
+	*/
+	@BeforeEach
+	void init() {
+		this.campaignAuthUtil = new CampaignAuthUtility(mockContactDao);
+		ReflectionTestUtils.setField(service, "campaignAuthUtil", campaignAuthUtil);
+	}
 	
 	/**
 	* Tests retrieval of campaigns for User 
@@ -207,7 +218,7 @@ class CampaignServiceImplTest {
 			this.service.addCampaign(name, description, logo, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
 		
 	}
 	
@@ -229,7 +240,7 @@ class CampaignServiceImplTest {
 			this.service.addCampaign(name, description, logo, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -303,7 +314,7 @@ class CampaignServiceImplTest {
 			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
 		
 		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
 		
@@ -329,7 +340,7 @@ class CampaignServiceImplTest {
 			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
 		
@@ -357,7 +368,7 @@ class CampaignServiceImplTest {
 			this.service.addParticipationToCampaign(contactId, campaignId, null, ParticipantType.VIEW, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_CONTACT_NOT_FOUND, ex.getMessage());
 		
 		verify(this.mockCampaignDao, never()).saveCampaign(any(Campaign.class));
 		
@@ -545,7 +556,7 @@ class CampaignServiceImplTest {
 			this.service.deleteParticipation(participationId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
 	}
 	
@@ -569,7 +580,7 @@ class CampaignServiceImplTest {
 			this.service.deleteParticipation(participationId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT, ex.getMessage());
 		
 	}
 	
@@ -608,7 +619,7 @@ class CampaignServiceImplTest {
 			this.service.deleteParticipation(participationId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_USER_WOULD_BE_LEFT, ex.getMessage());
 		
 	}
 	
@@ -711,7 +722,7 @@ class CampaignServiceImplTest {
 			this.service.deleteParticipation(participationId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -731,7 +742,7 @@ class CampaignServiceImplTest {
 			this.service.deleteParticipation(participationId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 
@@ -753,7 +764,7 @@ class CampaignServiceImplTest {
 			this.service.addNoteToCampaign(campaignId, null, "title", "text", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -799,7 +810,7 @@ class CampaignServiceImplTest {
 			this.service.addNoteToCampaign(campaignId, null, "title", "text", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -898,7 +909,7 @@ class CampaignServiceImplTest {
 			this.service.addNoteToCampaign(campaignId, null, "title", "text", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -1003,7 +1014,7 @@ class CampaignServiceImplTest {
 			this.service.updateNote(noteId, title, body, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1024,7 +1035,7 @@ class CampaignServiceImplTest {
 			this.service.deleteNote(noteId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1051,7 +1062,7 @@ class CampaignServiceImplTest {
 			this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1077,7 +1088,7 @@ class CampaignServiceImplTest {
 			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1098,7 +1109,7 @@ class CampaignServiceImplTest {
 			this.service.deleteAppointment(appointmentId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1123,7 +1134,7 @@ class CampaignServiceImplTest {
 			this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1144,7 +1155,7 @@ class CampaignServiceImplTest {
 			this.service.deleteDocument(documentId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -1265,7 +1276,7 @@ class CampaignServiceImplTest {
 			this.service.updateNote(noteId, title, body, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -1292,7 +1303,7 @@ class CampaignServiceImplTest {
 			this.service.deleteNote(noteId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 
@@ -1321,7 +1332,7 @@ class CampaignServiceImplTest {
 			this.service.updateNote(noteId, title, body, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -1348,7 +1359,7 @@ class CampaignServiceImplTest {
 			this.service.deleteNote(noteId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -1673,7 +1684,7 @@ class CampaignServiceImplTest {
 			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -1851,7 +1862,7 @@ class CampaignServiceImplTest {
 			this.service.updateAppointment(appointmentId, name, description, phoneNumber, videoLink, when, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2014,7 +2025,7 @@ class CampaignServiceImplTest {
 			this.service.deleteAppointment(appointmentId, currentUserId)
 		);
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2165,7 +2176,7 @@ class CampaignServiceImplTest {
 			this.service.deleteAppointment(appointmentId, currentUserId)
 		);
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2284,7 +2295,7 @@ class CampaignServiceImplTest {
 			this.service.addAppointment(campaignId, null, name, description, phoneNumber, videoLink, when, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2448,7 +2459,7 @@ class CampaignServiceImplTest {
 			this.service.addAppointment(campaignId, roleId, name, description, phoneNumber, videoLink, when, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2568,7 +2579,7 @@ class CampaignServiceImplTest {
 			this.service.addDocument(campaignId, null, title, type, bytes, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2597,7 +2608,7 @@ class CampaignServiceImplTest {
 			this.service.addDocument(campaignId, roleId, title, type, bytes, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 		
 	}
@@ -2867,7 +2878,7 @@ class CampaignServiceImplTest {
 			this.service.deleteDocument(documentId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -2893,7 +2904,7 @@ class CampaignServiceImplTest {
 			this.service.deleteDocument(documentId, currentUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 		
 	}
@@ -3068,7 +3079,7 @@ class CampaignServiceImplTest {
 			this.service.addRole(campaignId, "title", "text", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -3114,7 +3125,7 @@ class CampaignServiceImplTest {
 			this.service.addRole(campaignId, "title", "text", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -3185,7 +3196,7 @@ class CampaignServiceImplTest {
 			this.service.deleteRole(roleId, loggedInUserId)
 		);
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 	}
 	
 	/**
@@ -3248,20 +3259,6 @@ class CampaignServiceImplTest {
 		verify(this.mockRoleDao).deleteById(roleId);
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	/**
 	* Test no deletion if the Campaign does not exist
@@ -3360,7 +3357,7 @@ class CampaignServiceImplTest {
 			this.service.addCandidateToCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 
 	}
 	
@@ -3412,7 +3409,7 @@ class CampaignServiceImplTest {
 			this.service.addCandidateToCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
 	}
 	
@@ -3472,7 +3469,7 @@ class CampaignServiceImplTest {
 			this.service.addCandidateToCampaign(campaignId, null, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -3504,7 +3501,7 @@ class CampaignServiceImplTest {
 			this.service.addCandidateToCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -3617,7 +3614,7 @@ class CampaignServiceImplTest {
 			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 
@@ -3673,7 +3670,7 @@ class CampaignServiceImplTest {
 			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 		
@@ -3702,7 +3699,7 @@ class CampaignServiceImplTest {
 			this.service.deleteCandidateFromCampaign(campaignId, null, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 		
@@ -3734,7 +3731,7 @@ class CampaignServiceImplTest {
 			this.service.deleteCandidateFromCampaign(campaignId, roleId, candidateId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).deleteById(any());
 		
@@ -3929,7 +3926,7 @@ class CampaignServiceImplTest {
 			this.service.fetchDocumentById(documentId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -4059,7 +4056,7 @@ class CampaignServiceImplTest {
 			this.service.fetchDocumentById(documentId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -4178,7 +4175,7 @@ class CampaignServiceImplTest {
 			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 
 		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
 		
@@ -4236,7 +4233,7 @@ class CampaignServiceImplTest {
 			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
 		
@@ -4265,7 +4262,7 @@ class CampaignServiceImplTest {
 			this.service.addExternalCandidateToCampaiginOrRole(campaignId, null, candidate, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
 		
@@ -4297,7 +4294,7 @@ class CampaignServiceImplTest {
 			this.service.addExternalCandidateToCampaiginOrRole(campaignId, roleId, candidate, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 		verify(this.mockCandidateGroupDao, never()).saveGrouping(any());
 		
@@ -4381,7 +4378,7 @@ class CampaignServiceImplTest {
 			this.service.messageExternalCampaignCandidates(campaignId, roleId, Set.of(), "", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 
 	}
 	
@@ -4430,7 +4427,7 @@ class CampaignServiceImplTest {
 			this.service.messageExternalCampaignCandidates(campaignId, roleId, Set.of(), "", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_UNKNOWN_ROLE, ex.getMessage());
 		
 	}
 	
@@ -4456,7 +4453,7 @@ class CampaignServiceImplTest {
 			this.service.messageExternalCampaignCandidates(campaignId, null, Set.of(), "", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -4485,7 +4482,7 @@ class CampaignServiceImplTest {
 			this.service.messageExternalCampaignCandidates(campaignId, roleId, Set.of(), "", loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -4775,7 +4772,7 @@ class CampaignServiceImplTest {
 			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -4825,7 +4822,7 @@ class CampaignServiceImplTest {
 			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -4951,7 +4948,7 @@ class CampaignServiceImplTest {
 			this.service.associateListingWithCampaign(listingId, campaignId, null, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -5067,7 +5064,7 @@ class CampaignServiceImplTest {
 			this.service.associateListingWithCampaign(listingId, campaignId, roleId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -5151,7 +5148,7 @@ class CampaignServiceImplTest {
 			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_ADD_CAMPAIGN_FEATURE_UNAVAILABLE, ex.getMessage());
 		
 	}
 	
@@ -5201,7 +5198,7 @@ class CampaignServiceImplTest {
 			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -5279,7 +5276,7 @@ class CampaignServiceImplTest {
 			this.service.disassociateListingWithCampaign(id, campaignId, null, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	
@@ -5377,7 +5374,7 @@ class CampaignServiceImplTest {
 			this.service.disassociateListingWithCampaign(id, campaignId, roleId, loggedInUserId);
 		});
 		
-		assertEquals(CampaignServiceImpl.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
+		assertEquals(CampaignAuthUtility.ERR_MSG_NO_ADMIN_RIGHTS, ex.getMessage());
 		
 	}
 	

@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.arenella.recruit.campaigns.beans.Campaign;
+import com.arenella.recruit.campaigns.beans.CampaignEmail;
 import com.arenella.recruit.campaigns.beans.CampaignLogo;
 import com.arenella.recruit.campaigns.beans.CandidateGroup;
 import com.arenella.recruit.campaigns.beans.Contact;
@@ -170,6 +171,7 @@ public class CampaignAPIOutbound {
 		private Set<NoteAPIOutbound> 			notes					= new LinkedHashSet<>();
 		private Set<AppointmentAPIOutbound> 	appointments			= new LinkedHashSet<>();
 		private Set<DocumentAPIOutbound> 		documents				= new LinkedHashSet<>();
+		//private Set<CandidateEmailAPIOutbound> 	emails					= new LinkedHashSet<>();
 		private boolean							hasUnreadNotifications; 
 
 		/**
@@ -178,7 +180,7 @@ public class CampaignAPIOutbound {
 		* @param contacts - Collection of all Contacts referenced in the Campaigns Participations
 		* @return Builder
 		*/
-		public CampaignAPIOutboundBuilder from(Campaign campaign, Set<Contact> contacts, Set<IMNotification> imNotifications, Set<CandidateGroup> candidateGroups) {
+		public CampaignAPIOutboundBuilder from(Campaign campaign, Set<Contact> contacts, Set<IMNotification> imNotifications, Set<CandidateGroup> candidateGroups, Set<CampaignEmail> campaignEmails) {
 			
 			this.id 			= campaign.getId();
 			this.name 			= campaign.getName();
@@ -191,6 +193,8 @@ public class CampaignAPIOutbound {
 			});
 			
 			imNotifications.stream().filter(n -> n.getRoleId().isEmpty() && n.getCampaignId().equals(id)).findAny().ifPresent(_ -> this.hasUnreadNotifications = true);
+			
+			
 			
 			this.roles.addAll(campaign.getRoles().stream().map(r -> RoleAPIOutbound.builder().from(r, contacts, imNotifications, candidateGroups).build()).collect(Collectors.toCollection(LinkedHashSet::new)));
 			this.candidates.addAll(campaign.getCandidates().stream().map(c -> CandidateAPIOutbound.builder().from(c, imNotifications, false, candidateGroups).build()).collect(Collectors.toCollection(LinkedHashSet::new)));

@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 import com.arenella.recruit.campaigns.beans.CampaignListing;
+import com.arenella.recruit.campaigns.entities.CampaignListingEntity;
 
 /**
 * Unit tests for the CampaignListingEntity class 
